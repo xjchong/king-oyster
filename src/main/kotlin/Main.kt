@@ -24,8 +24,6 @@ fun main() {
     val world = WorldGenerator.generate(80, 24)
     val context = GameContext(world)
 
-    world.add(ActorFactory.player(), 5, 5)
-
     while (true) {
         WorldConsoleView.display(context.world)
         val player = world.update(context) ?: break

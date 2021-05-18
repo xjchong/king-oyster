@@ -79,6 +79,17 @@ class World<C : Context>(val width: Int, val height: Int) {
         return true
     }
 
+    fun removeAll(position: Position): List<Entity<C>>? {
+        val entities = entitiesForPosition[position]?.toList() ?: return null
+        val removedEntities = mutableListOf<Entity<C>>()
+
+        for (entity in entities) {
+            if (remove(entity)) removedEntities.add(entity)
+        }
+
+        return removedEntities
+    }
+
     fun update(context: C): Entity<C>? {
         do {
             val entity = updateableEntities.poll() ?: return null

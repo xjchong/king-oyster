@@ -22,6 +22,8 @@ data class Position(val x: Int = 0, val y: Int = 0) {
         return if (deltaX == 0 && deltaY == 0) this else copy(x = x + deltaX, y = y + deltaY)
     }
 
+    fun withRelative(delta: Position): Position = withRelative(delta.x, delta.y)
+
     fun north(): Position = withRelativeY(-1)
 
     fun east(): Position = withRelativeX(1)
