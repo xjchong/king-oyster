@@ -1,8 +1,8 @@
 package com.helloworldramen.kingoyster.consoleviews
 
-import com.helloworldramen.kingoyster.attributes.AppearanceInfo
+import com.helloworldramen.kingoyster.entities.attributes.AppearanceInfo
 import com.helloworldramen.kingoyster.models.Position
-import com.helloworldramen.kingoyster.models.World
+import com.helloworldramen.kingoyster.oyster.World
 
 object WorldConsoleView {
 

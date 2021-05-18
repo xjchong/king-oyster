@@ -6,11 +6,12 @@ class Entity(
     val attributes: List<Attribute> = listOf(),
     val facets: List<Facet> = listOf(),
     val behaviors: List<Behavior> = listOf(),
+    var requiresInput: Boolean = false,
     var nextUpdateTime: Int = 0
 ) {
 
-    fun respondToAction(action: Action): Boolean {
-        return facets.sumBy { if (it.respondToAction(action)) 1 else 0 } > 0
+    fun respondToAction(context: Context, action: Action): Boolean {
+        return facets.sumBy { if (it.respondToAction(context, action)) 1 else 0 } > 0
     }
 
     fun executeBehaviors(context: Context) {
