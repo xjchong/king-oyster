@@ -5,16 +5,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
+import kotlin.reflect.KClass
 
 object EventBus: CoroutineScope {
 
     override val coroutineContext: CoroutineContext = Dispatchers.Default
 
-    private val subscribersForEvent: MutableMap<Event, MutableList<EventBusSubscriber>> = mutableMapOf()
-    private val eventsForSubscriber: MutableMap<EventBusSubscriber, List<Event>> = mutableMapOf()
+    private val subscribersForEvent: MutableMap<KClass<out Event>, MutableList<EventBusSubscriber>> = mutableMapOf()
+    private val eventsForSubscriber: MutableMap<EventBusSubscriber, List<KClass<out Event>>> = mutableMapOf()
 
-    fun register(subscriber: EventBusSubscriber, vararg events: Event) {
+    fun register(subscriber: EventBusSubscriber, vararg events: KClass<out Event>) {
         eventsForSubscriber[subscriber] = events.toList()
+        events.forEach { event ->
+            subscribersForEvent.getOrPut(event) { mutableListOf() }.add(subscriber)
+        }
     }
 
     fun unregister(subscriber: EventBusSubscriber) {
@@ -25,7 +29,7 @@ object EventBus: CoroutineScope {
     }
 
     fun post(event: Event) {
-        subscribersForEvent[event]?.forEach {
+        subscribersForEvent[event::class]?.forEach {
             launch {
                 it.receiveEvent(event)
             }
