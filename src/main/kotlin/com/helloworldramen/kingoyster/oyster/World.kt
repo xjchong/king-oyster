@@ -90,6 +90,14 @@ class World<C : Context>(val width: Int, val height: Int) {
         return removedEntities
     }
 
+    fun clear() {
+        entitiesForPosition.values.forEach { it.clear() }
+        positionForEntity.clear()
+        allEntities.clear()
+        nextUpdateTimeForEntity.clear()
+        updateableEntities.clear()
+    }
+
     fun update(context: C): Entity<C>? {
         do {
             val entity = updateableEntities.poll() ?: return null
@@ -100,10 +108,13 @@ class World<C : Context>(val width: Int, val height: Int) {
                 continue
             }
 
+            if (entity.nextUpdateTime > NORMALIZE_TIME_THRESHOLD) {
+                normalizeTime()
+            }
+
             entity.executeBehaviors(context)
             updateableEntities.add(entity)
             nextUpdateTimeForEntity[entity] = entity.nextUpdateTime
-            normalizeTime()
         } while (updateableEntities.firstOrNull()?.requiresInput == false)
 
         return updateableEntities.firstOrNull()?.apply {
@@ -114,6 +125,7 @@ class World<C : Context>(val width: Int, val height: Int) {
     private fun normalizeTime() {
         updateableEntities.firstOrNull()?.let { firstEntity ->
             val normalizer = firstEntity.nextUpdateTime
+
             updateableEntities.forEach {
                 it.nextUpdateTime -= normalizer
                 nextUpdateTimeForEntity[it] = it.nextUpdateTime

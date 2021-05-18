@@ -1,5 +1,6 @@
 package com.helloworldramen.kingoyster.entities.facets
 
+import com.helloworldramen.kingoyster.entities.GameEntity
 import com.helloworldramen.kingoyster.entities.actions.Move
 import com.helloworldramen.kingoyster.game.GameContext
 import com.helloworldramen.kingoyster.oyster.Action
@@ -9,14 +10,19 @@ object Movable : Facet<GameContext> {
 
     private const val DEFAULT_MOVE_TIME = 100
 
-    override fun respondToAction(context: GameContext, action: Action): Boolean {
-        return if (action is Move) {
-            val (entity, position) = action
+    override fun respondToAction(facetOwner: GameEntity, action: Action): Boolean {
+        return when (action) {
+            is Move -> respondToMove(facetOwner, action)
+            else -> false
+        }
+    }
 
-            context.world.move(entity, position)
-            entity.nextUpdateTime += DEFAULT_MOVE_TIME
+    private fun respondToMove(facetOwner: GameEntity, action: Move): Boolean {
+        val (context, position) = action
 
-            true
-        } else false
+        context.world.move(facetOwner, position)
+        facetOwner.nextUpdateTime += DEFAULT_MOVE_TIME
+
+        return true
     }
 }

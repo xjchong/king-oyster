@@ -10,8 +10,8 @@ class Entity<C : Context>(
     var nextUpdateTime: Int = 0
 ) {
 
-    fun respondToAction(context: C, action: Action): Boolean {
-        return facets.sumBy { if (it.respondToAction(context, action)) 1 else 0 } > 0
+    fun respondToAction(action: Action): Boolean {
+        return facets.sumBy { if (it.respondToAction(this, action)) 1 else 0 } > 0
     }
 
     fun executeBehaviors(context: C) {
