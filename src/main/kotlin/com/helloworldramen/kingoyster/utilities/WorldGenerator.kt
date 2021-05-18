@@ -1,6 +1,5 @@
 package com.helloworldramen.kingoyster.utilities
 
-import com.helloworldramen.kingoyster.consoleviews.WorldConsoleView
 import com.helloworldramen.kingoyster.entities.GameEntity
 import com.helloworldramen.kingoyster.entities.factories.ActorFactory
 import com.helloworldramen.kingoyster.entities.factories.FeatureFactory

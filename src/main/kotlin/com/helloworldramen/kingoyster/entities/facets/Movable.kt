@@ -2,6 +2,7 @@ package com.helloworldramen.kingoyster.entities.facets
 
 import com.helloworldramen.kingoyster.entities.GameEntity
 import com.helloworldramen.kingoyster.entities.actions.Move
+import com.helloworldramen.kingoyster.entities.attributes.Impassable
 import com.helloworldramen.kingoyster.game.GameContext
 import com.helloworldramen.kingoyster.oyster.Action
 import com.helloworldramen.kingoyster.oyster.Facet
@@ -19,8 +20,13 @@ object Movable : Facet<GameContext> {
 
     private fun respondToMove(facetOwner: GameEntity, action: Move): Boolean {
         val (context, position) = action
+        val world = context.world
 
-        context.world.move(facetOwner, position)
+        if (world[position]?.any { it.hasAttribute(Impassable::class) } != false) {
+            return false
+        }
+
+        world.move(facetOwner, position)
         facetOwner.nextUpdateTime += DEFAULT_MOVE_TIME
 
         return true
