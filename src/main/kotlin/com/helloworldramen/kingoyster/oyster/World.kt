@@ -3,38 +3,38 @@ package com.helloworldramen.kingoyster.oyster
 import com.helloworldramen.kingoyster.models.Position
 import java.util.*
 
-class World(val width: Int, val height: Int) {
+class World<C : Context>(val width: Int, val height: Int) {
 
-    private val entitiesForPosition: MutableMap<Position, MutableList<Entity>> =
-        mutableMapOf<Position, MutableList<Entity>>().apply {
+    private val entitiesForPosition: MutableMap<Position, MutableList<Entity<C>>> =
+        mutableMapOf<Position, MutableList<Entity<C>>>().apply {
             Position(width - 1, height - 1).forEach {
                 this[it] = mutableListOf()
             }
         }
-    private val positionForEntity: MutableMap<Entity, Position> = mutableMapOf()
-    private val nextUpdateTimeForEntity: MutableMap<Entity, Int> = mutableMapOf()
+    private val positionForEntity: MutableMap<Entity<C>, Position> = mutableMapOf()
+    private val nextUpdateTimeForEntity: MutableMap<Entity<C>, Int> = mutableMapOf()
 
-    private val allEntities: MutableList<Entity> = mutableListOf()
-    private val updateableEntities: PriorityQueue<Entity> = PriorityQueue { o1, o2 ->
+    private val allEntities: MutableList<Entity<C>> = mutableListOf()
+    private val updateableEntities: PriorityQueue<Entity<C>> = PriorityQueue { o1, o2 ->
         (o2?.nextUpdateTime ?: 0) - (o1?.nextUpdateTime ?: 0)
     }
 
     private val currentTime: Int
         get() = updateableEntities.peek()?.nextUpdateTime ?: 0
 
-    operator fun get(position: Position): List<Entity>? = entitiesForPosition[position]
+    operator fun get(position: Position): List<Entity<C>>? = entitiesForPosition[position]
 
-    operator fun get(x: Int, y: Int): List<Entity>? = entitiesForPosition[Position(x, y)]
+    operator fun get(x: Int, y: Int): List<Entity<C>>? = entitiesForPosition[Position(x, y)]
 
-    operator fun get(entity: Entity): Position? = positionForEntity[entity]
+    operator fun get(entity: Entity<C>): Position? = positionForEntity[entity]
 
-    fun add(entity: Entity, position: Position? = null): Boolean {
+    fun add(entity: Entity<C>, position: Position? = null): Boolean {
         if (allEntities.contains(entity)) return false
 
         entity.nextUpdateTime = currentTime
         allEntities.add(entity)
 
-        if (entity.behaviors.isNotEmpty()) {
+        if (entity.behaviors.isNotEmpty() || entity.requiresInput) {
             nextUpdateTimeForEntity[entity] = entity.nextUpdateTime
             updateableEntities.add(entity)
         }
@@ -49,17 +49,23 @@ class World(val width: Int, val height: Int) {
         return true
     }
 
-    fun add(entity: Entity, x: Int, y: Int): Boolean = add(entity, Position(x, y))
+    fun add(entity: Entity<C>, x: Int, y: Int): Boolean = add(entity, Position(x, y))
 
-    fun move(entity: Entity, position: Position): Boolean {
+    fun move(entity: Entity<C>, position: Position): Boolean {
         val currentPosition = positionForEntity[entity] ?: return false
         if (currentPosition == position) return true
         if (entitiesForPosition[currentPosition]?.remove(entity) != true) return false
 
-        return add(entity, position)
+        return if (entitiesForPosition[position]?.add(entity) == true) {
+            positionForEntity[entity] = position
+            true
+        } else {
+            entitiesForPosition[currentPosition]?.add(entity)
+            false
+        }
     }
 
-    fun remove(entity: Entity): Boolean {
+    fun remove(entity: Entity<C>): Boolean {
         val currentPosition = positionForEntity[entity] ?: return false
         if (entitiesForPosition[currentPosition]?.remove(entity) != true) return false
 
@@ -73,7 +79,7 @@ class World(val width: Int, val height: Int) {
         return true
     }
 
-    fun update(context: Context): Entity? {
+    fun update(context: C): Entity<C>? {
         do {
             val entity = updateableEntities.poll() ?: return null
 
@@ -86,6 +92,7 @@ class World(val width: Int, val height: Int) {
             entity.executeBehaviors(context)
             updateableEntities.add(entity)
             nextUpdateTimeForEntity[entity] = entity.nextUpdateTime
+            normalizeTime()
         } while (updateableEntities.firstOrNull()?.requiresInput == false)
 
         return updateableEntities.firstOrNull()?.apply {
@@ -96,7 +103,10 @@ class World(val width: Int, val height: Int) {
     private fun normalizeTime() {
         updateableEntities.firstOrNull()?.let { firstEntity ->
             val normalizer = firstEntity.nextUpdateTime
-            updateableEntities.forEach { it.nextUpdateTime -= normalizer }
+            updateableEntities.forEach {
+                it.nextUpdateTime -= normalizer
+                nextUpdateTimeForEntity[it] = it.nextUpdateTime
+            }
         }
     }
 

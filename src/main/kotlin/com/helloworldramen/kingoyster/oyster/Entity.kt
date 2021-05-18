@@ -2,19 +2,19 @@ package com.helloworldramen.kingoyster.oyster
 
 import kotlin.reflect.KClass
 
-class Entity(
+class Entity<C : Context>(
     val attributes: List<Attribute> = listOf(),
-    val facets: List<Facet> = listOf(),
-    val behaviors: List<Behavior> = listOf(),
+    val facets: List<Facet<C>> = listOf(),
+    val behaviors: List<Behavior<C>> = listOf(),
     var requiresInput: Boolean = false,
     var nextUpdateTime: Int = 0
 ) {
 
-    fun respondToAction(context: Context, action: Action): Boolean {
+    fun respondToAction(context: C, action: Action): Boolean {
         return facets.sumBy { if (it.respondToAction(context, action)) 1 else 0 } > 0
     }
 
-    fun executeBehaviors(context: Context) {
+    fun executeBehaviors(context: C) {
         behaviors.forEach { it.execute(context, this) }
     }
 
@@ -26,11 +26,11 @@ class Entity(
         return attributes.any { klass.isInstance(it) }
     }
 
-    inline fun <reified F : Facet> hasFacet(klass: KClass<F>): Boolean {
+    inline fun <reified F : Facet<C>> hasFacet(klass: KClass<F>): Boolean {
         return facets.any { klass.isInstance(it) }
     }
 
-    inline fun <reified B : Behavior> hasBehavior(klass: KClass<B>): Boolean {
+    inline fun <reified B : Behavior<C>> hasBehavior(klass: KClass<B>): Boolean {
         return behaviors.any { klass.isInstance(it) }
     }
 }

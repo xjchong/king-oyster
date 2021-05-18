@@ -1,6 +1,6 @@
 package com.helloworldramen.kingoyster.oyster
 
-interface Behavior {
+interface Behavior<C : Context> {
 
-    fun execute(context: Context, entity: Entity)
+    fun execute(context: C, entity: Entity<C>)
 }

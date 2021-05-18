@@ -28,7 +28,7 @@ data class Position(val x: Int = 0, val y: Int = 0) {
 
     fun south(): Position = withRelativeY(1)
 
-    fun west(): Position = withRelativeY(-1)
+    fun west(): Position = withRelativeX(-1)
 
     fun neighbors(): List<Position> = listOf(north(), east(), south(), west())
 
