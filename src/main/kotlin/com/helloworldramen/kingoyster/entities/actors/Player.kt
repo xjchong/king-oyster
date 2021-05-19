@@ -4,6 +4,7 @@ import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.parts.InventoryPart
 import com.helloworldramen.kingoyster.parts.MovementPart
 import com.helloworldramen.kingoyster.parts.PhysicalPart
+import com.helloworldramen.kingoyster.parts.SensoryPart
 
 class Player : Entity(
     parts = listOf(
@@ -11,7 +12,10 @@ class Player : Entity(
         PhysicalPart(
             isPassable = false
         ),
-        MovementPart()
+        MovementPart(),
+        SensoryPart(
+            visionRange = 5
+        )
     ),
     requiresUpdate = true,
     requiresInput = true

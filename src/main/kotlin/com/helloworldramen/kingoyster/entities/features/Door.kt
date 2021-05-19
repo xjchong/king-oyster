@@ -6,7 +6,8 @@ import com.helloworldramen.kingoyster.parts.PortalPart
 
 class Door(isOpen: Boolean = false) : Entity(
     PhysicalPart(
-        isPassable = isOpen
+        isPassable = isOpen,
+        doesBlockVision = !isOpen
     ),
     PortalPart(isOpen)
 )

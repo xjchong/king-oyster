@@ -10,18 +10,19 @@ import com.helloworldramen.kingoyster.entities.features.Wall
 import com.helloworldramen.kingoyster.entities.items.Coin
 import com.helloworldramen.kingoyster.parts.InventoryPart
 import com.helloworldramen.kingoyster.parts.PortalPart
+import com.helloworldramen.kingoyster.parts.SensoryPart
 
 object WorldConsoleView {
 
     fun display(world: World, player: Entity) {
+        val visiblePositions = player.find(SensoryPart::class)?.visiblePositions ?: listOf()
+
         Position(world.width - 1, world.height - 1).forEach {
             if (it.x == 0) println()
 
-            world[it]?.lastOrNull()?.let { entity ->
-                print(entity.appearance())
-            } ?: run {
-                print('.')
-            }
+            val appearance = world[it]?.lastOrNull()?.appearance() ?: "."
+
+            print(if (visiblePositions.contains(it)) appearance else appearance.color(ANSIColor.BG_MAGENTA))
         }
         println()
         displayEntityStatus(player)

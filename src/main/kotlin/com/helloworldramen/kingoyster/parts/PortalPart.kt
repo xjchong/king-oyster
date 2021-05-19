@@ -20,7 +20,10 @@ class PortalPart(var isOpen: Boolean) : Part {
         if (isOpen) return false
 
         isOpen = true
-        partOwner.find(PhysicalPart::class)?.isPassable = true
+        partOwner.find(PhysicalPart::class)?.run {
+            isPassable = true
+            doesBlockVision = false
+        }
 
         return true
     }
@@ -29,7 +32,10 @@ class PortalPart(var isOpen: Boolean) : Part {
         if (!isOpen) return false
 
         isOpen = false
-        partOwner.find(PhysicalPart::class)?.isPassable = false
+        partOwner.find(PhysicalPart::class)?.run{
+            isPassable = false
+            doesBlockVision = true
+        }
 
         return true
     }

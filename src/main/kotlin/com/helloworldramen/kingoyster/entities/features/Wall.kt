@@ -5,6 +5,7 @@ import com.helloworldramen.kingoyster.parts.PhysicalPart
 
 class Wall : Entity(
     PhysicalPart(
-        isPassable = false
+        isPassable = false,
+        doesBlockVision = true
     )
 )

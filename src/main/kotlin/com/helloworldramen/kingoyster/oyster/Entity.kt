@@ -16,7 +16,7 @@ open class Entity (
     }
 
     fun update(context: Context) {
-        parts.forEach { it.update(context) }
+        parts.forEach { it.update(context, this) }
     }
 
     inline fun <reified P : Part> find(klass: KClass<P>): P? {

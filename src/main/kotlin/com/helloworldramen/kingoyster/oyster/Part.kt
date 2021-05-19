@@ -6,7 +6,7 @@ interface Part {
         return false
     }
 
-    fun update(context: Context) {
+    fun update(context: Context, partOwner: Entity) {
 
     }
 }
