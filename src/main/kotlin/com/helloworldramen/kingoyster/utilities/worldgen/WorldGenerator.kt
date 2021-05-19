@@ -3,9 +3,10 @@ package com.helloworldramen.kingoyster.utilities.worldgen
 import com.helloworldramen.kingoyster.oyster.Position
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.World
-import com.helloworldramen.kingoyster.entities.Player
-import com.helloworldramen.kingoyster.entities.Stairs
-import com.helloworldramen.kingoyster.entities.Wall
+import com.helloworldramen.kingoyster.entities.actors.Player
+import com.helloworldramen.kingoyster.entities.features.Stairs
+import com.helloworldramen.kingoyster.entities.features.Wall
+import com.helloworldramen.kingoyster.entities.items.Coin
 
 object WorldGenerator {
 
@@ -22,7 +23,7 @@ object WorldGenerator {
         strategy.generate(world)
         placeFeatures(world)
         placePlayer(world, player, playerPosition)
-        placeNonPlayerActors(world)
+        placeItems(world)
     }
 
     private fun placePlayer(world: World, player: Entity, position: Position? = null) {
@@ -35,7 +36,12 @@ object WorldGenerator {
         }
     }
 
-    private fun placeNonPlayerActors(world: World) {
+    private fun placeItems(world: World) {
+        repeat(10) {
+            world.randomEmptyPosition()?.let {
+                world.add(Coin.new(1, 100), it)
+            }
+        }
     }
 
     private fun placeFeatures(world: World) {

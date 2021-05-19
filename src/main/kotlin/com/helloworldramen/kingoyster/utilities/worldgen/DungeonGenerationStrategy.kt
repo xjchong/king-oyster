@@ -1,7 +1,7 @@
 package com.helloworldramen.kingoyster.utilities.worldgen
 
-import com.helloworldramen.kingoyster.entities.Door
-import com.helloworldramen.kingoyster.entities.Wall
+import com.helloworldramen.kingoyster.entities.features.Door
+import com.helloworldramen.kingoyster.entities.features.Wall
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Position
 import com.helloworldramen.kingoyster.oyster.World

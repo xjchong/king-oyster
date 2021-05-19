@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.entities
+package com.helloworldramen.kingoyster.entities.actors
 
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.parts.Movement

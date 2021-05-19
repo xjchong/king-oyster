@@ -1,13 +1,13 @@
 package com.helloworldramen.kingoyster.consoleviews
 
-import com.helloworldramen.kingoyster.entities.Door
+import com.helloworldramen.kingoyster.entities.features.Door
 import com.helloworldramen.kingoyster.oyster.Position
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.World
-import com.helloworldramen.kingoyster.entities.Player
-import com.helloworldramen.kingoyster.entities.Stairs
-import com.helloworldramen.kingoyster.entities.Wall
-import com.helloworldramen.kingoyster.parts.Physical
+import com.helloworldramen.kingoyster.entities.actors.Player
+import com.helloworldramen.kingoyster.entities.features.Stairs
+import com.helloworldramen.kingoyster.entities.features.Wall
+import com.helloworldramen.kingoyster.entities.items.Coin
 import com.helloworldramen.kingoyster.parts.Portal
 
 object WorldConsoleView {
@@ -25,15 +25,16 @@ object WorldConsoleView {
         println()
     }
 
-    private fun Entity.appearance(): Char {
+    private fun Entity.appearance(): String {
         return when (this) {
-            is Player -> '@'
-            is Wall -> '#'
-            is Stairs -> '<'
+            is Player -> "@".color(ANSIColor.YELLOW)
+            is Wall -> "#"
+            is Stairs -> "<"
+            is Coin -> "$".color(ANSIColor.YELLOW)
             is Door -> {
-                if (this.find(Portal::class)?.isOpen == false) '+' else '\''
+                (if (this.find(Portal::class)?.isOpen == false) "+" else "'").color(ANSIColor.BLUE)
             }
-            else -> '?'
+            else -> ""
         }
     }
 }
