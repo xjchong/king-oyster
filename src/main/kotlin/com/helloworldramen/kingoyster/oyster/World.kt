@@ -1,42 +1,41 @@
 package com.helloworldramen.kingoyster.oyster
 
-import com.helloworldramen.kingoyster.models.Position
 import java.util.*
 
-class World<C : Context>(val width: Int, val height: Int) {
+class World(val width: Int, val height: Int) {
 
-    private val entitiesForPosition: MutableMap<Position, MutableList<Entity<C>>> =
-        mutableMapOf<Position, MutableList<Entity<C>>>().apply {
+    private val entitiesForPosition: MutableMap<Position, MutableList<Entity>> =
+        mutableMapOf<Position, MutableList<Entity>>().apply {
             Position(width - 1, height - 1).forEach {
                 this[it] = mutableListOf()
             }
         }
-    private val positionForEntity: MutableMap<Entity<C>, Position> = mutableMapOf()
-    private val nextUpdateTimeForEntity: MutableMap<Entity<C>, Int> = mutableMapOf()
+    private val positionForEntity: MutableMap<Entity, Position> = mutableMapOf()
+    private val nextUpdateTimeForEntity: MutableMap<Entity, Int> = mutableMapOf()
 
-    private val allEntities: MutableList<Entity<C>> = mutableListOf()
-    private val updateableEntities: PriorityQueue<Entity<C>> = PriorityQueue { o1, o2 ->
+    private val allEntities: MutableList<Entity> = mutableListOf()
+    private val updateableEntities: PriorityQueue<Entity> = PriorityQueue { o1, o2 ->
         (o2?.nextUpdateTime ?: 0) - (o1?.nextUpdateTime ?: 0)
     }
 
     private val currentTime: Int
         get() = updateableEntities.peek()?.nextUpdateTime ?: 0
 
-    operator fun get(position: Position): List<Entity<C>>? = entitiesForPosition[position]
+    operator fun get(position: Position): List<Entity>? = entitiesForPosition[position]
 
-    operator fun get(x: Int, y: Int): List<Entity<C>>? = entitiesForPosition[Position(x, y)]
+    operator fun get(x: Int, y: Int): List<Entity>? = entitiesForPosition[Position(x, y)]
 
-    operator fun get(entity: Entity<C>): Position? = positionForEntity[entity]
+    operator fun get(entity: Entity): Position? = positionForEntity[entity]
 
-    fun add(entity: Entity<C>, position: Position? = null): Boolean {
+    fun add(entity: Entity, position: Position? = null): Boolean {
         if (allEntities.contains(entity)) return false
 
-        entity.nextUpdateTime = currentTime
         allEntities.add(entity)
 
-        if (entity.behaviors.isNotEmpty() || entity.requiresInput) {
-            nextUpdateTimeForEntity[entity] = entity.nextUpdateTime
+        if (entity.requiresUpdate) {
+            entity.nextUpdateTime = currentTime
             updateableEntities.add(entity)
+            nextUpdateTimeForEntity[entity] = entity.nextUpdateTime
         }
 
         if (position != null) {
@@ -49,9 +48,7 @@ class World<C : Context>(val width: Int, val height: Int) {
         return true
     }
 
-    fun add(entity: Entity<C>, x: Int, y: Int): Boolean = add(entity, Position(x, y))
-
-    fun move(entity: Entity<C>, position: Position): Boolean {
+    fun move(entity: Entity, position: Position): Boolean {
         val currentPosition = positionForEntity[entity] ?: return false
         if (currentPosition == position) return true
         if (entitiesForPosition[currentPosition]?.remove(entity) != true) return false
@@ -65,7 +62,7 @@ class World<C : Context>(val width: Int, val height: Int) {
         }
     }
 
-    fun remove(entity: Entity<C>): Boolean {
+    fun remove(entity: Entity): Boolean {
         val currentPosition = positionForEntity[entity] ?: return false
         if (entitiesForPosition[currentPosition]?.remove(entity) != true) return false
 
@@ -79,9 +76,9 @@ class World<C : Context>(val width: Int, val height: Int) {
         return true
     }
 
-    fun removeAll(position: Position): List<Entity<C>>? {
+    fun removeAll(position: Position): List<Entity>? {
         val entities = entitiesForPosition[position]?.toList() ?: return null
-        val removedEntities = mutableListOf<Entity<C>>()
+        val removedEntities = mutableListOf<Entity>()
 
         for (entity in entities) {
             if (remove(entity)) removedEntities.add(entity)
@@ -93,12 +90,12 @@ class World<C : Context>(val width: Int, val height: Int) {
     fun clear() {
         entitiesForPosition.values.forEach { it.clear() }
         positionForEntity.clear()
-        allEntities.clear()
+        updateableEntities.clear()
         nextUpdateTimeForEntity.clear()
         updateableEntities.clear()
     }
 
-    fun update(context: C): Entity<C>? {
+    fun update(context: Context): Entity? {
         do {
             val entity = updateableEntities.poll() ?: return null
 
@@ -112,13 +109,13 @@ class World<C : Context>(val width: Int, val height: Int) {
                 normalizeTime()
             }
 
-            entity.executeBehaviors(context)
+            entity.update(context)
             updateableEntities.add(entity)
             nextUpdateTimeForEntity[entity] = entity.nextUpdateTime
         } while (updateableEntities.firstOrNull()?.requiresInput == false)
 
         return updateableEntities.firstOrNull()?.apply {
-            executeBehaviors(context)
+            update(context)
         }
     }
 

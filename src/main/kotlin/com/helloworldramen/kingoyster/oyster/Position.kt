@@ -1,4 +1,7 @@
-package com.helloworldramen.kingoyster.models
+package com.helloworldramen.kingoyster.oyster
+
+import kotlin.math.max
+import kotlin.math.min
 
 data class Position(val x: Int = 0, val y: Int = 0) {
 
@@ -36,6 +39,27 @@ data class Position(val x: Int = 0, val y: Int = 0) {
 
     fun neighborsShuffled(): List<Position> = neighbors().shuffled()
 
+    fun range(otherPosition: Position): List<Position> {
+        val positions: MutableList<Position> = mutableListOf()
+
+        forRange(otherPosition) { positions.add(it) }
+
+        return positions
+    }
+
+    fun forRange(otherPosition: Position, action: (Position) -> Unit) {
+        val minX = min(x, otherPosition.x)
+        val maxX = max(x, otherPosition.x)
+        val minY = min(y, otherPosition.y)
+        val maxY = max(y, otherPosition.y)
+
+        (minY..maxY).forEach { _y ->
+            (minX..maxX).forEach { _x ->
+                action(Position(_x, _y))
+            }
+        }
+    }
+
     fun forEach(action: (Position) -> Unit) {
         (0..y).forEach { _y ->
             (0..x).forEach { _x ->
@@ -48,5 +72,9 @@ data class Position(val x: Int = 0, val y: Int = 0) {
         return mutableListOf<R>().apply {
             this@Position.forEach { add(transform(it)) }
         }
+    }
+
+    fun toList(): List<Position> {
+        return map { it }
     }
 }

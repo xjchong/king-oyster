@@ -1,6 +1,8 @@
 package com.helloworldramen.kingoyster.entities
 
-import com.helloworldramen.kingoyster.game.GameContext
 import com.helloworldramen.kingoyster.oyster.Entity
+import com.helloworldramen.kingoyster.parts.Ascendable
 
-typealias GameEntity = Entity<GameContext>
+class Stairs : Entity(
+    Ascendable
+)
