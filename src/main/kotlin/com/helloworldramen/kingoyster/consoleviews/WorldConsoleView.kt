@@ -8,11 +8,12 @@ import com.helloworldramen.kingoyster.entities.actors.Player
 import com.helloworldramen.kingoyster.entities.features.Stairs
 import com.helloworldramen.kingoyster.entities.features.Wall
 import com.helloworldramen.kingoyster.entities.items.Coin
+import com.helloworldramen.kingoyster.parts.InventoryPart
 import com.helloworldramen.kingoyster.parts.PortalPart
 
 object WorldConsoleView {
 
-    fun display(world: World) {
+    fun display(world: World, player: Entity) {
         Position(world.width - 1, world.height - 1).forEach {
             if (it.x == 0) println()
 
@@ -23,6 +24,11 @@ object WorldConsoleView {
             }
         }
         println()
+        displayEntityStatus(player)
+    }
+
+    private fun displayEntityStatus(entity: Entity) {
+        println("Gil: ${entity.find(InventoryPart::class)?.money ?: 0}")
     }
 
     private fun Entity.appearance(): String {

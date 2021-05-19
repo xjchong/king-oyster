@@ -5,6 +5,6 @@ import com.helloworldramen.kingoyster.oyster.Context
 import com.helloworldramen.kingoyster.oyster.Entity
 
 data class Ascend(
-    val context: Context,
+    override val context: Context,
     val user: Entity
 ) : Action

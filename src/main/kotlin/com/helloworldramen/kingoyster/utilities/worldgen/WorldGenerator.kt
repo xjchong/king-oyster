@@ -30,7 +30,7 @@ object WorldGenerator {
     private fun placePlayer(world: World, player: Entity, position: Position? = null) {
         if (position == null || world[position]?.isNotEmpty() != false) {
             world.randomEmptyPosition()?.let {
-                world.add(Player(), it)
+                world.add(player, it)
             }
         } else {
             world.add(player, position)

@@ -1,5 +1,8 @@
 package com.helloworldramen.kingoyster.actions
 
 import com.helloworldramen.kingoyster.oyster.Action
+import com.helloworldramen.kingoyster.oyster.Context
 
-object Open : Action
+data class Open(
+    override val context: Context
+) : Action

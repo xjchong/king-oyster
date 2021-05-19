@@ -1,6 +1,7 @@
 package com.helloworldramen.kingoyster.parts
 
 import com.helloworldramen.kingoyster.actions.Ascend
+import com.helloworldramen.kingoyster.consoleviews.WorldConsoleView
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.GameOver
 import com.helloworldramen.kingoyster.oyster.Action

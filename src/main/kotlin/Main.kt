@@ -1,5 +1,7 @@
 import com.helloworldramen.kingoyster.actions.Ascend
 import com.helloworldramen.kingoyster.actions.Move
+import com.helloworldramen.kingoyster.actions.Open
+import com.helloworldramen.kingoyster.actions.Take
 import com.helloworldramen.kingoyster.consoleviews.WorldConsoleView
 import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
@@ -9,6 +11,7 @@ import com.helloworldramen.kingoyster.oyster.Context
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.World
 import com.helloworldramen.kingoyster.parts.AscendablePart
+import com.helloworldramen.kingoyster.parts.ItemPart
 import com.helloworldramen.kingoyster.utilities.worldgen.DrunkGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
@@ -38,8 +41,8 @@ class ConsoleGameEngine : EventBusSubscriber {
         val context = Context(world)
 
         while (true) {
-            WorldConsoleView.display(context.world)
             val player = world.update(context) ?: break
+            WorldConsoleView.display(context.world, player)
 
             while (true) {
                 if (parseInput(context, player)) break
@@ -48,15 +51,35 @@ class ConsoleGameEngine : EventBusSubscriber {
     }
 
     private fun parseInput(context: Context, player: Entity): Boolean {
-        val currentPosition = context.world[player] ?: return false
+        val world = context.world
+        val currentPosition = world[player] ?: return false
 
         return when (readLine()) {
-            "north" -> player.respondToAction(Move(context, currentPosition.north()))
-            "east" -> player.respondToAction(Move(context, currentPosition.east()))
-            "south" -> player.respondToAction(Move(context, currentPosition.south()))
-            "west" -> player.respondToAction(Move(context, currentPosition.west()))
-            "ascend" -> {
-                val stairs = context.world[currentPosition]?.firstOrNull { it.has(AscendablePart::class) }
+            "take" -> {
+                val item = world[currentPosition]?.first {
+                    it.has(ItemPart::class)
+                }
+
+                item?.respondToAction(Take(context, player)) ?: false
+            }
+            "n" -> {
+                player.respondToAction(Move(context, currentPosition.north()))
+                        || world[currentPosition.north()]?.firstOrNull { it.respondToAction(Open(context)) } != null
+            }
+            "e" -> {
+                player.respondToAction(Move(context, currentPosition.east()))
+                        || world[currentPosition.east()]?.firstOrNull { it.respondToAction(Open(context)) } != null
+            }
+            "s" -> {
+                player.respondToAction(Move(context, currentPosition.south()))
+                        || world[currentPosition.south()]?.firstOrNull { it.respondToAction(Open(context)) } != null
+            }
+            "w" -> {
+                player.respondToAction(Move(context, currentPosition.west()))
+                        || world[currentPosition.west()]?.firstOrNull { it.respondToAction(Open(context)) } != null
+            }
+            "up" -> {
+                val stairs = world[currentPosition]?.firstOrNull { it.has(AscendablePart::class) }
                 stairs?.respondToAction(Ascend(context, player)) == true
             }
             else -> false

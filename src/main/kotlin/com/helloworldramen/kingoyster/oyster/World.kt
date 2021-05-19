@@ -92,7 +92,7 @@ class World(val width: Int, val height: Int) {
         positionForEntity.clear()
         updateableEntities.clear()
         nextUpdateTimeForEntity.clear()
-        updateableEntities.clear()
+        allEntities.clear()
     }
 
     fun update(context: Context): Entity? {

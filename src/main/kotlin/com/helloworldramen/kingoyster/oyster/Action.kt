@@ -1,3 +1,5 @@
 package com.helloworldramen.kingoyster.oyster
 
-interface Action
+interface Action {
+    val context: Context
+}
