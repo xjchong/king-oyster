@@ -10,7 +10,7 @@ import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.utilities.worldgen.DrunkGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
 
-object Ascendable : Part {
+object AscendablePart : Part {
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
         return when (action) {

@@ -8,7 +8,7 @@ import com.helloworldramen.kingoyster.eventbus.events.GameOver
 import com.helloworldramen.kingoyster.oyster.Context
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.World
-import com.helloworldramen.kingoyster.parts.Ascendable
+import com.helloworldramen.kingoyster.parts.AscendablePart
 import com.helloworldramen.kingoyster.utilities.worldgen.DrunkGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
@@ -33,7 +33,7 @@ class ConsoleGameEngine : EventBusSubscriber {
     }
 
     fun run() {
-        val world = World(80, 24)
+        val world = World(19, 19)
         WorldGenerator.repopulate(world, DungeonGenerationStrategy)
         val context = Context(world)
 
@@ -56,7 +56,7 @@ class ConsoleGameEngine : EventBusSubscriber {
             "south" -> player.respondToAction(Move(context, currentPosition.south()))
             "west" -> player.respondToAction(Move(context, currentPosition.west()))
             "ascend" -> {
-                val stairs = context.world[currentPosition]?.firstOrNull { it.has(Ascendable::class) }
+                val stairs = context.world[currentPosition]?.firstOrNull { it.has(AscendablePart::class) }
                 stairs?.respondToAction(Ascend(context, player)) == true
             }
             else -> false

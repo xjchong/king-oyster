@@ -1,15 +1,15 @@
 package com.helloworldramen.kingoyster.entities.actors
 
 import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.parts.Movement
-import com.helloworldramen.kingoyster.parts.Physical
+import com.helloworldramen.kingoyster.parts.MovementPart
+import com.helloworldramen.kingoyster.parts.PhysicalPart
 
 class Player : Entity(
     parts = listOf(
-        Physical(
+        PhysicalPart(
             isPassable = false
         ),
-        Movement()
+        MovementPart()
     ),
     requiresUpdate = true,
     requiresInput = true

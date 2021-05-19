@@ -21,7 +21,7 @@ object DungeonGenerationStrategy: WorldGenerationStrategy {
             clear()
             clear()
             fill(WALL_REGION_ID) { Wall() }
-            placeRooms(100, 7, 4, 2.0)
+            placeRooms(area() / 5, width / 4, height / 4, area() / 1000.0)
             placeCorridors(0.05)
             placeDoors(0.05, 12)
             removePillars(0.5)
@@ -215,5 +215,9 @@ object DungeonGenerationStrategy: WorldGenerationStrategy {
 
     private fun World.isOutOfBounds(position: Position): Boolean {
         return position.x <= 0 || position.y <= 0 || position.x >= width - 1 || position.y >= height - 1
+    }
+
+    private fun World.area(): Int {
+        return width * height
     }
 }

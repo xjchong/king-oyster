@@ -3,7 +3,7 @@ package com.helloworldramen.kingoyster.parts
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Part
 
-class Inventory(size: Int) : Part {
+class InventoryPart(size: Int) : Part {
 
     var contents: List<Entity> = listOf()
         private set
@@ -13,14 +13,14 @@ class Inventory(size: Int) : Part {
 
     fun add(entity: Entity): Boolean {
         // Add as money.
-        val moneyValue = entity.find(Money::class)?.value
+        val moneyValue = entity.find(MoneyPart::class)?.value
         if (moneyValue != null) {
             money += moneyValue
             return true
         }
 
         // Add as item.
-        if (entity.has(Item::class)) {
+        if (entity.has(ItemPart::class)) {
             contents = contents + listOf(entity)
             return true
         }

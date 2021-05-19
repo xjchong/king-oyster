@@ -1,11 +1,11 @@
 package com.helloworldramen.kingoyster.entities.items
 
 import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.parts.Money
+import com.helloworldramen.kingoyster.parts.MoneyPart
 import kotlin.random.Random
 
 class Coin private constructor(value: Int) : Entity(
-    Money(value = value)
+    MoneyPart(value = value)
 ) {
 
     companion object {

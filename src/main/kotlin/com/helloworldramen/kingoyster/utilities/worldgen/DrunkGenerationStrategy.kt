@@ -17,10 +17,7 @@ object DrunkGenerationStrategy : WorldGenerationStrategy {
         val worldArea = world.width * world.height
         val vectors = listOf(
             Position(0, 1), Position(0, -1),
-            Position(1, 0), Position(1, 0), Position(1, 0),
-            Position(1, 0), Position(1, 0), Position(1, 0),
-            Position(-1, 0), Position(-1, 0), Position(-1, 0),
-            Position(-1, 0), Position(-1, 0), Position(-1, 0)
+            Position(1, 0), Position(-1, 0)
         )
 
         world.removeAll(currentPosition)

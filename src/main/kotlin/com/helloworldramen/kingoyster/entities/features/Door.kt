@@ -1,12 +1,12 @@
 package com.helloworldramen.kingoyster.entities.features
 
 import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.parts.Physical
-import com.helloworldramen.kingoyster.parts.Portal
+import com.helloworldramen.kingoyster.parts.PhysicalPart
+import com.helloworldramen.kingoyster.parts.PortalPart
 
 class Door(isOpen: Boolean = false) : Entity(
-    Physical(
+    PhysicalPart(
         isPassable = isOpen
     ),
-    Portal(isOpen)
+    PortalPart(isOpen)
 )

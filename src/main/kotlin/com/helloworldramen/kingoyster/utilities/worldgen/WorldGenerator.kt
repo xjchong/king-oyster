@@ -7,6 +7,7 @@ import com.helloworldramen.kingoyster.entities.actors.Player
 import com.helloworldramen.kingoyster.entities.features.Stairs
 import com.helloworldramen.kingoyster.entities.features.Wall
 import com.helloworldramen.kingoyster.entities.items.Coin
+import kotlin.math.roundToInt
 
 object WorldGenerator {
 
@@ -37,16 +38,20 @@ object WorldGenerator {
     }
 
     private fun placeItems(world: World) {
-        repeat(10) {
-            world.randomEmptyPosition()?.let {
-                world.add(Coin.new(1, 100), it)
-            }
-        }
+        world.placeWithDensity(0.02) { Coin.new(1, 100) }
     }
 
     private fun placeFeatures(world: World) {
         world.randomEmptyPosition()?.let {
             world.add(Stairs(), it)
+        }
+    }
+
+    private fun World.placeWithDensity(percentage: Double, entityFn: () -> Entity) {
+        repeat((width * height * percentage).roundToInt()) {
+            randomEmptyPosition()?.let {
+                add(entityFn(), it)
+            }
         }
     }
 

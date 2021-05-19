@@ -8,7 +8,7 @@ import com.helloworldramen.kingoyster.entities.actors.Player
 import com.helloworldramen.kingoyster.entities.features.Stairs
 import com.helloworldramen.kingoyster.entities.features.Wall
 import com.helloworldramen.kingoyster.entities.items.Coin
-import com.helloworldramen.kingoyster.parts.Portal
+import com.helloworldramen.kingoyster.parts.PortalPart
 
 object WorldConsoleView {
 
@@ -32,7 +32,7 @@ object WorldConsoleView {
             is Stairs -> "<"
             is Coin -> "$".color(ANSIColor.YELLOW)
             is Door -> {
-                (if (this.find(Portal::class)?.isOpen == false) "+" else "'").color(ANSIColor.BLUE)
+                (if (this.find(PortalPart::class)?.isOpen == false) "+" else "'").color(ANSIColor.BLUE)
             }
             else -> ""
         }
