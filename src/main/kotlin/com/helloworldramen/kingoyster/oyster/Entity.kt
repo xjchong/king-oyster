@@ -2,7 +2,7 @@ package com.helloworldramen.kingoyster.oyster
 
 import kotlin.reflect.KClass
 
-open class Entity (
+class Entity (
     val name: String,
     val parts: List<Part>,
     var requiresUpdate: Boolean = false,

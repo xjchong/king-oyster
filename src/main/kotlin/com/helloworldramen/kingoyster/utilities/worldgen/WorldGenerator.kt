@@ -1,23 +1,22 @@
 package com.helloworldramen.kingoyster.utilities.worldgen
 
+import com.helloworldramen.kingoyster.entities.ActorFactory
+import com.helloworldramen.kingoyster.entities.FeatureFactory
+import com.helloworldramen.kingoyster.entities.ItemFactory
 import com.helloworldramen.kingoyster.oyster.Position
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.World
-import com.helloworldramen.kingoyster.entities.actors.Player
-import com.helloworldramen.kingoyster.entities.features.Stairs
-import com.helloworldramen.kingoyster.entities.features.Wall
-import com.helloworldramen.kingoyster.entities.items.Coin
 import kotlin.math.roundToInt
 
 object WorldGenerator {
 
     fun repopulate(world: World, strategy: WorldGenerationStrategy, existingPlayer: Entity? = null, playerPosition: Position? = null) {
-        val player = existingPlayer ?: Player()
+        val player = existingPlayer ?: ActorFactory.player()
 
         world.clear()
         world.apply {
             Position(width - 1, height - 1).forEach {
-                add(Wall(), it)
+                add(FeatureFactory.wall(), it)
             }
         }
 
@@ -38,12 +37,12 @@ object WorldGenerator {
     }
 
     private fun placeItems(world: World) {
-        world.placeWithDensity(0.02) { Coin.new(1, 100) }
+        world.placeWithDensity(0.02) { ItemFactory.coin(1, 100) }
     }
 
     private fun placeFeatures(world: World) {
         world.randomEmptyPosition()?.let {
-            world.add(Stairs(), it)
+            world.add(FeatureFactory.stairs(), it)
         }
     }
 

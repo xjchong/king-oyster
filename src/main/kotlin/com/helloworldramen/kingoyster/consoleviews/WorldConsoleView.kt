@@ -1,13 +1,8 @@
 package com.helloworldramen.kingoyster.consoleviews
 
-import com.helloworldramen.kingoyster.entities.features.Door
 import com.helloworldramen.kingoyster.oyster.Position
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.World
-import com.helloworldramen.kingoyster.entities.actors.Player
-import com.helloworldramen.kingoyster.entities.features.Stairs
-import com.helloworldramen.kingoyster.entities.features.Wall
-import com.helloworldramen.kingoyster.entities.items.Coin
 import com.helloworldramen.kingoyster.parts.*
 
 object WorldConsoleView {

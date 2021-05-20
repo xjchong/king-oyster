@@ -3,7 +3,6 @@ package com.helloworldramen.kingoyster.parts
 import com.helloworldramen.kingoyster.actions.Close
 import com.helloworldramen.kingoyster.actions.Open
 import com.helloworldramen.kingoyster.oyster.Action
-import com.helloworldramen.kingoyster.oyster.Context
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Part
 

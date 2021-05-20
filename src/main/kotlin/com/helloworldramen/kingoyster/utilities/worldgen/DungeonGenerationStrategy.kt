@@ -1,7 +1,6 @@
 package com.helloworldramen.kingoyster.utilities.worldgen
 
-import com.helloworldramen.kingoyster.entities.features.Door
-import com.helloworldramen.kingoyster.entities.features.Wall
+import com.helloworldramen.kingoyster.entities.FeatureFactory
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Position
 import com.helloworldramen.kingoyster.oyster.World
@@ -20,7 +19,7 @@ object DungeonGenerationStrategy: WorldGenerationStrategy {
         with(world) {
             clear()
             clear()
-            fill(WALL_REGION_ID) { Wall() }
+            fill(WALL_REGION_ID) { FeatureFactory.wall() }
             placeRooms(area() / 5, width / 4, height / 4, area() / 1000.0)
             placeCorridors(0.05)
             placeDoors(0.05, 12)
@@ -151,11 +150,11 @@ object DungeonGenerationStrategy: WorldGenerationStrategy {
 
             if (needsMerge) {
                 removeAll(pos)
-                add(Door(isDoorOpen), pos)
+                add(FeatureFactory.door(isDoorOpen), pos)
                 if (isDisjoint) mergedRegionIds.add(adjacentRegions)
             } else if (canCreateExtra) {
                 removeAll(pos)
-                add(Door(isDoorOpen), pos)
+                add(FeatureFactory.door(isDoorOpen), pos)
                 extraDoorsCount++
             }
         }
@@ -170,7 +169,7 @@ object DungeonGenerationStrategy: WorldGenerationStrategy {
     private fun World.removeDeadEnd(position: Position) {
         if (!isDeadEnd(position)) return
 
-        add(Wall(), position)
+        add(FeatureFactory.wall(), position)
         regionIds[position] = WALL_REGION_ID
 
         position.neighbors().forEach {
@@ -206,11 +205,11 @@ object DungeonGenerationStrategy: WorldGenerationStrategy {
     }
 
     private fun World.isWall(position: Position): Boolean {
-        return get(position)?.any { it is Wall } ?: false
+        return get(position)?.any { it.name == "wall" } ?: false
     }
 
     private fun World.isWallOrDoor(position: Position): Boolean {
-        return get(position)?.any { it is Wall || it is Door } ?: false
+        return get(position)?.any { it.name == "wall" || it.name == "door" } ?: false
     }
 
     private fun World.isOutOfBounds(position: Position): Boolean {
