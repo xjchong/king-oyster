@@ -6,8 +6,11 @@ import com.helloworldramen.kingoyster.parts.MoneyPart
 import kotlin.random.Random
 
 class Coin private constructor(value: Int) : Entity(
-    ItemPart(),
-    MoneyPart(value = value)
+    name = "coin",
+    parts = listOf(
+        ItemPart(),
+        MoneyPart(value = value)
+    )
 ) {
 
     companion object {

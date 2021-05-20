@@ -3,16 +3,15 @@ package com.helloworldramen.kingoyster.oyster
 import kotlin.reflect.KClass
 
 open class Entity (
-    val parts: List<Part> = listOf(),
+    val name: String,
+    val parts: List<Part>,
     var requiresUpdate: Boolean = false,
     var requiresInput: Boolean = false,
-    var nextUpdateTime: Int = 0
+    var nextUpdateTime: Int = 0,
 ) {
 
-    constructor(vararg parts: Part) : this(parts.toList())
-
     fun copy(): Entity {
-        return Entity(parts.map { it.copy() }, requiresUpdate, requiresInput, nextUpdateTime)
+        return Entity(name, parts.map { it.copy() }, requiresUpdate, requiresInput, nextUpdateTime)
     }
 
     fun respondToAction(action: Action): Boolean {

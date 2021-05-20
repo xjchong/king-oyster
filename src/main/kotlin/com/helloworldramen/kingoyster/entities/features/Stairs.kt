@@ -4,5 +4,8 @@ import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.parts.AscendablePart
 
 class Stairs : Entity(
-    AscendablePart()
+    name = "stairs",
+    parts = listOf(
+        AscendablePart()
+    )
 )

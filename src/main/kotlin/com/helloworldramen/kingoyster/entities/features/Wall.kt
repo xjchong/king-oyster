@@ -4,8 +4,11 @@ import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.parts.PhysicalPart
 
 class Wall : Entity(
-    PhysicalPart(
-        isPassable = false,
-        doesBlockVision = true
+    name = "wall",
+    parts = listOf(
+        PhysicalPart(
+            isPassable = false,
+            doesBlockVision = true
+        )
     )
 )

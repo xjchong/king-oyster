@@ -43,12 +43,12 @@ object WorldConsoleView {
     }
 
     private fun Entity.appearance(): String {
-        return when (this) {
-            is Player -> "@".color(ANSIColor.YELLOW)
-            is Wall -> "#"
-            is Stairs -> "<"
-            is Coin -> "$".color(ANSIColor.YELLOW)
-            is Door -> {
+        return when (name) {
+            "player" -> "@".color(ANSIColor.YELLOW)
+            "wall" -> "#"
+            "stairs" -> "<"
+            "coin" -> "$".color(ANSIColor.YELLOW)
+            "door" -> {
                 (if (this.find(PortalPart::class)?.isOpen == false) "+" else "'").color(ANSIColor.BLUE)
             }
             else -> "?"
