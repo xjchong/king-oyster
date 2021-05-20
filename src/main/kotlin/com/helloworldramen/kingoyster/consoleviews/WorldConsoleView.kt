@@ -10,7 +10,6 @@ object WorldConsoleView {
     fun display(world: World, player: Entity) {
         val visiblePositions = player.find(SensoryPart::class)?.visiblePositions ?: listOf()
         val worldMemory = player.find(MemoryPart::class)?.worldMemory ?: mapOf()
-        println(worldMemory)
 
         Position(world.width - 1, world.height - 1).forEach {
             if (it.x == 0) println()

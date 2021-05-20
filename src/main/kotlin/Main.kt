@@ -21,6 +21,8 @@ import kotlin.system.exitProcess
 
 class ConsoleGameEngine : EventBusSubscriber {
 
+    private val shouldLogTime: Boolean = true
+
     init {
         EventBus.register(this, GameOver::class)
     }
@@ -41,7 +43,9 @@ class ConsoleGameEngine : EventBusSubscriber {
         val context = Context(world)
 
         while (true) {
+            val startTime = System.nanoTime()
             val player = world.update(context) ?: break
+            println((System.nanoTime() - startTime) / 1000000.0)
             WorldConsoleView.display(context.world, player)
 
             while (true) {

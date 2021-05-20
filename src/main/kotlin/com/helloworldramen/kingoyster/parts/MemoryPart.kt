@@ -22,13 +22,11 @@ class MemoryPart() : Part {
 
     fun remember(context: Context, position: Position) {
         worldMemory = worldMemory.toMutableMap().apply {
-            val hm = context.world[position]?.filter {
+            this[position] = context.world[position]?.filter {
                 !it.has(MovementPart::class)
             }?.map {
                 it.copy()
             }
-            println(hm?.flatMap { it.parts }?.map { it::class })
-            this[position] = hm
         }
     }
 }
