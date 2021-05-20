@@ -11,6 +11,15 @@ class InventoryPart(val capacity: Int) : Part {
     var money: Int = 0
         private set
 
+    private constructor(capacity: Int, contents: List<Entity>, money: Int): this(capacity) {
+        this.contents = contents
+        this.money = money
+    }
+
+    override fun copy(): Part {
+        return InventoryPart(capacity, contents, money)
+    }
+
     fun put(entity: Entity): Boolean {
         // Add as money.
         val moneyValue = entity.find(MoneyPart::class)?.value

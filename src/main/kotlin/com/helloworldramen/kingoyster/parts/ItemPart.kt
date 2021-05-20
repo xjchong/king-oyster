@@ -5,7 +5,11 @@ import com.helloworldramen.kingoyster.oyster.Action
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Part
 
-object ItemPart : Part {
+class ItemPart : Part {
+
+    override fun copy(): Part {
+        return ItemPart()
+    }
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
         return when(action) {

@@ -8,21 +8,31 @@ import com.helloworldramen.kingoyster.entities.actors.Player
 import com.helloworldramen.kingoyster.entities.features.Stairs
 import com.helloworldramen.kingoyster.entities.features.Wall
 import com.helloworldramen.kingoyster.entities.items.Coin
-import com.helloworldramen.kingoyster.parts.InventoryPart
-import com.helloworldramen.kingoyster.parts.PortalPart
-import com.helloworldramen.kingoyster.parts.SensoryPart
+import com.helloworldramen.kingoyster.parts.*
 
 object WorldConsoleView {
 
     fun display(world: World, player: Entity) {
         val visiblePositions = player.find(SensoryPart::class)?.visiblePositions ?: listOf()
+        val worldMemory = player.find(MemoryPart::class)?.worldMemory ?: mapOf()
+        println(worldMemory)
 
         Position(world.width - 1, world.height - 1).forEach {
             if (it.x == 0) println()
 
-            val appearance = world[it]?.lastOrNull()?.appearance() ?: "."
+            val appearance = when {
+                visiblePositions.contains(it) -> {
+                    world[it]?.lastOrNull()?.appearance() ?: "."
+                }
+                worldMemory[it] != null -> {
+                    (worldMemory[it]?.lastOrNull()?.appearance() ?: ".").color(ANSIColor.BG_GREEN)
+                }
+                else -> {
+                    (world[it]?.lastOrNull()?.appearance() ?: ".").color(ANSIColor.BG_MAGENTA)
+                }
+            }
 
-            print(if (visiblePositions.contains(it)) appearance else appearance.color(ANSIColor.BG_MAGENTA))
+            print(appearance)
         }
         println()
         displayEntityStatus(player)
@@ -41,7 +51,7 @@ object WorldConsoleView {
             is Door -> {
                 (if (this.find(PortalPart::class)?.isOpen == false) "+" else "'").color(ANSIColor.BLUE)
             }
-            else -> ""
+            else -> "?"
         }
     }
 }

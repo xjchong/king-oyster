@@ -2,6 +2,8 @@ package com.helloworldramen.kingoyster.oyster
 
 interface Part {
 
+    fun copy(): Part
+
     fun respondToAction(partOwner: Entity, action: Action): Boolean {
         return false
     }

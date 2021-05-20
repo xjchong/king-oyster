@@ -1,10 +1,7 @@
 package com.helloworldramen.kingoyster.entities.actors
 
 import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.parts.InventoryPart
-import com.helloworldramen.kingoyster.parts.MovementPart
-import com.helloworldramen.kingoyster.parts.PhysicalPart
-import com.helloworldramen.kingoyster.parts.SensoryPart
+import com.helloworldramen.kingoyster.parts.*
 
 class Player : Entity(
     parts = listOf(
@@ -12,9 +9,10 @@ class Player : Entity(
         PhysicalPart(
             isPassable = false
         ),
+        MemoryPart(),
         MovementPart(),
         SensoryPart(
-            visionRange = 5
+            visionRange = 8
         )
     ),
     requiresUpdate = true,

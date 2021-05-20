@@ -11,6 +11,10 @@ open class Entity (
 
     constructor(vararg parts: Part) : this(parts.toList())
 
+    fun copy(): Entity {
+        return Entity(parts.map { it.copy() }, requiresUpdate, requiresInput, nextUpdateTime)
+    }
+
     fun respondToAction(action: Action): Boolean {
         return parts.sumBy { if (it.respondToAction(this, action)) 1 else 0 } > 0
     }

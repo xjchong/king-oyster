@@ -7,6 +7,10 @@ import com.helloworldramen.kingoyster.oyster.Part
 
 class MovementPart : Part {
 
+    override fun copy(): Part {
+        return MovementPart()
+    }
+
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
         return when(action) {
             is Move -> respondToMove(partOwner, action)

@@ -8,6 +8,10 @@ import com.helloworldramen.kingoyster.oyster.Part
 
 class PortalPart(var isOpen: Boolean) : Part {
 
+    override fun copy(): Part {
+        return PortalPart(isOpen)
+    }
+
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
         return when(action) {
             is Open -> respondToOpen(partOwner)

@@ -12,16 +12,27 @@ class SensoryPart(
     var visiblePositions: List<Position> = listOf()
         private set
 
+    private constructor(visionRange: Int, visiblePositions: List<Position>): this(visionRange) {
+        this.visiblePositions = visiblePositions.toList()
+    }
+
+    override fun copy(): Part {
+        return SensoryPart(visionRange, visiblePositions)
+    }
+
     override fun update(context: Context, partOwner: Entity) {
         val world = context.world
         val currentPosition = world[partOwner] ?: return
         val nextVisiblePositions: MutableList<Position> = mutableListOf()
+        val memoryPart = partOwner.find(MemoryPart::class)
 
         ShadowCasting.computeFOV(currentPosition.x, currentPosition.y, visionRange,
             isBlocking = { x, y ->
                 world[x, y]?.any { it.find(PhysicalPart::class)?.doesBlockVision == true } ?: false
             }, markVisible = { x, y ->
-                nextVisiblePositions.add(Position(x, y))
+                val visiblePosition = Position(x, y)
+                nextVisiblePositions.add(visiblePosition)
+                memoryPart?.remember(context, visiblePosition)
             })
 
         visiblePositions = nextVisiblePositions
