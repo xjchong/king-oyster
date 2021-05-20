@@ -4,6 +4,9 @@ import java.util.*
 
 class World(val width: Int, val height: Int) {
 
+    val currentTime: Int
+        get() = updateableEntities.peek()?.nextUpdateTime ?: 0
+
     private val entitiesForPosition: MutableMap<Position, MutableList<Entity>> =
         mutableMapOf<Position, MutableList<Entity>>().apply {
             Position(width - 1, height - 1).forEach {
@@ -17,9 +20,6 @@ class World(val width: Int, val height: Int) {
     private val updateableEntities: PriorityQueue<Entity> = PriorityQueue { o1, o2 ->
         (o2?.nextUpdateTime ?: 0) - (o1?.nextUpdateTime ?: 0)
     }
-
-    private val currentTime: Int
-        get() = updateableEntities.peek()?.nextUpdateTime ?: 0
 
     operator fun get(position: Position): List<Entity>? = entitiesForPosition[position]
 

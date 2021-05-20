@@ -51,9 +51,9 @@ class ConsoleGameEngine : EventBusSubscriber {
         val currentPosition = world[player] ?: return false
 
         fun performDirectionActions(position: Position): Boolean {
-            return player.respondToAction(Move(context, position)) ||
+            return player.respondToAction(Move(context, player, position)) ||
                     world[position].tryActions(
-                        Open(context), Attack(context, player)
+                        Open(context, player), Attack(context, player)
                     )
         }
 

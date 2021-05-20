@@ -15,7 +15,13 @@ class Entity (
     }
 
     fun respondToAction(action: Action): Boolean {
-        return parts.sumBy { if (it.respondToAction(this, action)) 1 else 0 } > 0
+        val didRespond = parts.sumBy { if (it.respondToAction(this, action)) 1 else 0 } > 0
+
+        if (didRespond) {
+            action.actor.nextUpdateTime += action.timeCost
+        }
+
+        return didRespond
     }
 
     fun update(context: Context) {

@@ -6,5 +6,8 @@ import com.helloworldramen.kingoyster.oyster.Entity
 
 data class Attack(
     override val context: Context,
-    val attacker: Entity
-) : Action
+    override val actor: Entity
+) : Action {
+
+    override val timeCost: Int = 100
+}

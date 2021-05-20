@@ -6,5 +6,8 @@ import com.helloworldramen.kingoyster.oyster.Entity
 
 data class Ascend(
     override val context: Context,
-    val user: Entity
-) : Action
+    override val actor: Entity
+) : Action {
+
+    override val timeCost: Int = 100
+}

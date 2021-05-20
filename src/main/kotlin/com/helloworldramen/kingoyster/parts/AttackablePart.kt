@@ -21,10 +21,10 @@ class AttackablePart : Part {
 
     private fun Entity.respondToAttack(action: Attack): Boolean {
         val (context, attacker) = action
-        val value = attacker.find(CombatPart::class)?.attackPotency ?: return false
+        val amount = attacker.find(CombatPart::class)?.attackPotency ?: return false
 
         respondToAction(Damage(
-            context, value
+            context, attacker, amount
         ))
 
         return true

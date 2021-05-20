@@ -6,5 +6,8 @@ import com.helloworldramen.kingoyster.oyster.Entity
 
 data class Take(
     override val context: Context,
-    val taker: Entity
-) : Action
+    override val actor: Entity
+) : Action {
+
+    override val timeCost: Int = 100
+}
