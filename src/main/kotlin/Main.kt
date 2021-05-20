@@ -1,18 +1,12 @@
-import com.helloworldramen.kingoyster.actions.Ascend
-import com.helloworldramen.kingoyster.actions.Move
-import com.helloworldramen.kingoyster.actions.Open
-import com.helloworldramen.kingoyster.actions.Take
+import com.helloworldramen.kingoyster.actions.*
 import com.helloworldramen.kingoyster.consoleviews.WorldConsoleView
 import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
-import com.helloworldramen.kingoyster.eventbus.events.GameOver
-import com.helloworldramen.kingoyster.oyster.Context
-import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.oyster.World
+import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
+import com.helloworldramen.kingoyster.oyster.*
 import com.helloworldramen.kingoyster.parts.AscendablePart
 import com.helloworldramen.kingoyster.parts.ItemPart
-import com.helloworldramen.kingoyster.utilities.worldgen.DrunkGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
 import kotlin.system.exitProcess
@@ -24,12 +18,12 @@ class ConsoleGameEngine : EventBusSubscriber {
     private val shouldLogTime: Boolean = true
 
     init {
-        EventBus.register(this, GameOver::class)
+        EventBus.register(this, GameOverEvent::class)
     }
 
     override fun receiveEvent(event: Event) {
         when(event) {
-            is GameOver -> {
+            is GameOverEvent -> {
                 println("GAME OVER")
                 EventBus.unregister(this)
                 exitProcess(0)
@@ -58,36 +52,42 @@ class ConsoleGameEngine : EventBusSubscriber {
         val world = context.world
         val currentPosition = world[player] ?: return false
 
+        fun performDirectionActions(position: Position): Boolean {
+            return player.respondToAction(Move(context, position)) ||
+                    world[position].tryActions(
+                        Open(context), Attack(context, player)
+                    )
+        }
+
         return when (readLine()) {
             "take" -> {
-                val item = world[currentPosition]?.first {
+                val item = world[currentPosition]?.last {
                     it.has(ItemPart::class)
                 }
 
                 item?.respondToAction(Take(context, player)) ?: false
             }
-            "n" -> {
-                player.respondToAction(Move(context, currentPosition.north()))
-                        || world[currentPosition.north()]?.firstOrNull { it.respondToAction(Open(context)) } != null
-            }
-            "e" -> {
-                player.respondToAction(Move(context, currentPosition.east()))
-                        || world[currentPosition.east()]?.firstOrNull { it.respondToAction(Open(context)) } != null
-            }
-            "s" -> {
-                player.respondToAction(Move(context, currentPosition.south()))
-                        || world[currentPosition.south()]?.firstOrNull { it.respondToAction(Open(context)) } != null
-            }
-            "w" -> {
-                player.respondToAction(Move(context, currentPosition.west()))
-                        || world[currentPosition.west()]?.firstOrNull { it.respondToAction(Open(context)) } != null
-            }
+            "n" -> performDirectionActions(currentPosition.north())
+            "e" -> performDirectionActions(currentPosition.east())
+            "s" -> performDirectionActions(currentPosition.south())
+            "w" -> performDirectionActions(currentPosition.west())
             "up" -> {
                 val stairs = world[currentPosition]?.firstOrNull { it.has(AscendablePart::class) }
                 stairs?.respondToAction(Ascend(context, player)) == true
             }
+            "quit" -> exitProcess(2)
             else -> false
         }
+    }
+
+    private fun List<Entity>?.tryActions(vararg actions: Action): Boolean {
+        if (this.isNullOrEmpty()) return false
+
+        return actions.firstOrNull { action ->
+            lastOrNull { entity ->
+                entity.respondToAction(action)
+            } != null
+        } != null
     }
 
 }

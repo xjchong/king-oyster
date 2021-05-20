@@ -1,9 +1,8 @@
 package com.helloworldramen.kingoyster.parts
 
 import com.helloworldramen.kingoyster.actions.Ascend
-import com.helloworldramen.kingoyster.consoleviews.WorldConsoleView
 import com.helloworldramen.kingoyster.eventbus.EventBus
-import com.helloworldramen.kingoyster.eventbus.events.GameOver
+import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.oyster.Action
 import com.helloworldramen.kingoyster.oyster.Context
 import com.helloworldramen.kingoyster.oyster.Part
@@ -28,7 +27,7 @@ class AscendablePart : Part {
         val (context, entity) = action
 
         if (++context.level > Context.MAX_WORLD_LEVEL) {
-            EventBus.post(GameOver(true))
+            EventBus.post(GameOverEvent(true))
         } else {
             entity.find(MemoryPart::class)?.clear()
             WorldGenerator.repopulate(context.world, DrunkGenerationStrategy, entity, context.world[entity])

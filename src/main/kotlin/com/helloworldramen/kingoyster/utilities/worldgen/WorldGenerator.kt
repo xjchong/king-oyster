@@ -23,6 +23,7 @@ object WorldGenerator {
         strategy.generate(world)
         placeFeatures(world)
         placePlayer(world, player, playerPosition)
+        placeEnemies(world)
         placeItems(world)
     }
 
@@ -33,6 +34,12 @@ object WorldGenerator {
             }
         } else {
             world.add(player, position)
+        }
+    }
+
+    private fun placeEnemies(world: World) {
+        world.placeWithDensity(0.02) {
+            ActorFactory.slime()
         }
     }
 

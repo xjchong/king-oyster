@@ -1,11 +1,40 @@
 package com.helloworldramen.kingoyster.consoleviews
 
+import com.helloworldramen.kingoyster.eventbus.Event
+import com.helloworldramen.kingoyster.eventbus.EventBus
+import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
+import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
+import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
+import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.oyster.Position
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.World
 import com.helloworldramen.kingoyster.parts.*
 
-object WorldConsoleView {
+object WorldConsoleView : EventBusSubscriber {
+
+    init {
+        EventBus.register(this,
+            DamageEvent::class,
+            DeathEvent::class,
+            GameOverEvent::class
+        )
+    }
+
+    override fun receiveEvent(event: Event) {
+        when (event) {
+            is DamageEvent -> {
+                val (_, target, value) = event
+                println("The ${target.name} takes $value damage.")
+            }
+            is DeathEvent -> {
+                println("The ${event.entity.name} dies.")
+            }
+            is GameOverEvent -> {
+                if (event.isVictory) println("Victory!") else println("Game over...")
+            }
+        }
+    }
 
     fun display(world: World, player: Entity) {
         val visiblePositions = player.find(SensoryPart::class)?.visiblePositions ?: listOf()
@@ -39,6 +68,7 @@ object WorldConsoleView {
     private fun Entity.appearance(): String {
         return when (name) {
             "player" -> "@".color(ANSIColor.YELLOW)
+            "slime" -> "s".color(ANSIColor.BRIGHT_GREEN)
             "wall" -> "#"
             "stairs" -> "<"
             "coin" -> "$".color(ANSIColor.YELLOW)
