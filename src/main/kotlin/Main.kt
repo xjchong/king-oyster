@@ -15,8 +15,6 @@ import kotlin.system.exitProcess
 
 class ConsoleGameEngine : EventBusSubscriber {
 
-    private val shouldLogTime: Boolean = true
-
     init {
         EventBus.register(this, GameOverEvent::class)
     }
