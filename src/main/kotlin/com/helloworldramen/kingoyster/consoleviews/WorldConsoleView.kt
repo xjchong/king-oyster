@@ -9,7 +9,7 @@ object WorldConsoleView {
 
     fun display(world: World, player: Entity) {
         val visiblePositions = player.find(SensoryPart::class)?.visiblePositions ?: listOf()
-        val worldMemory = player.find(MemoryPart::class)?.worldMemory ?: mapOf()
+        val worldMemory = player.find(MemoryPart::class)
 
         Position(world.width - 1, world.height - 1).forEach {
             if (it.x == 0) println()
@@ -18,7 +18,7 @@ object WorldConsoleView {
                 visiblePositions.contains(it) -> {
                     world[it]?.lastOrNull()?.appearance() ?: "."
                 }
-                worldMemory[it] != null -> {
+                worldMemory?.get(it) != null -> {
                     (worldMemory[it]?.lastOrNull()?.appearance() ?: ".").color(ANSIColor.BG_GREEN)
                 }
                 else -> {

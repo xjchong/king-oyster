@@ -30,6 +30,7 @@ class AscendablePart : Part {
         if (++context.level > Context.MAX_WORLD_LEVEL) {
             EventBus.post(GameOver(true))
         } else {
+            entity.find(MemoryPart::class)?.clear()
             WorldGenerator.repopulate(context.world, DrunkGenerationStrategy, entity, context.world[entity])
         }
 
