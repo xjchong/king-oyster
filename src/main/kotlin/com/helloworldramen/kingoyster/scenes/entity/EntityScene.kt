@@ -3,6 +3,8 @@ package com.helloworldramen.kingoyster.scenes.entity
 import com.helloworldramen.kingoyster.oyster.Context
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Position
+import com.helloworldramen.kingoyster.parts.ItemPart
+import com.helloworldramen.kingoyster.parts.MovementPart
 import com.helloworldramen.kingoyster.parts.PortalPart
 import godot.ColorRect
 import godot.Label
@@ -13,7 +15,6 @@ import godot.annotation.RegisterFunction
 import godot.core.NodePath
 import godot.core.Vector2
 import godot.extensions.getNodeAs
-import godot.global.GD
 
 @RegisterClass
 class EntityScene : Node2D() {
@@ -27,16 +28,15 @@ class EntityScene : Node2D() {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
-		setText()
-		setPosition()
+		if (entity.canChangeAppearance) setAppearance()
+		if (entity.canChangePosition) setPosition()
 	}
-
 
 	fun bind(context: Context, entity: Entity) {
 		this.context = context
 		this.entity = entity
 
-		setText()
+		setAppearance()
 		setPosition(shouldAnimate = false)
 	}
 
@@ -55,7 +55,7 @@ class EntityScene : Node2D() {
 			tween.run {
 				interpolateProperty(this@EntityScene, NodePath("position"),
 					initialVal = position, finalVal = calculateNodePosition(worldPosition),
-					0.2, easeType = Tween.EASE_IN_OUT
+					0.1, easeType = Tween.EASE_IN
 				)
 				start()
 			}
@@ -64,7 +64,7 @@ class EntityScene : Node2D() {
 		}
 	}
 
-	private fun setText() {
+	private fun setAppearance() {
 		label.text = when(entity.name) {
 			"player" -> "@"
 			"wall" -> "#"
@@ -81,6 +81,12 @@ class EntityScene : Node2D() {
 	private fun calculateNodePosition(worldPosition: Position): Vector2 {
 		return Vector2(worldPosition.x * 32, worldPosition.y * 32)
 	}
+
+	val Entity.canChangeAppearance: Boolean
+		get() = has(PortalPart::class)
+
+	val Entity.canChangePosition: Boolean
+		get() = has(MovementPart::class) || has(ItemPart::class)
 
 	companion object {
 		const val PATH = "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntityScene.tscn"

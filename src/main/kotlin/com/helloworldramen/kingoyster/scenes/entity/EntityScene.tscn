@@ -15,6 +15,7 @@ __meta__ = {
 [node name="ColorRect" type="ColorRect" parent="MarginContainer"]
 margin_right = 32.0
 margin_bottom = 32.0
+color = Color( 0.207843, 0.207843, 0.207843, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -23,8 +24,8 @@ __meta__ = {
 margin_top = 9.0
 margin_right = 32.0
 margin_bottom = 23.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "@"
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "."
 align = 1
 valign = 1
 __meta__ = {
