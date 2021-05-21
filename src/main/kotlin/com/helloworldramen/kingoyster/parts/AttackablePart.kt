@@ -23,6 +23,11 @@ class AttackablePart : Part {
         val (context, attacker) = action
         val amount = attacker.find(CombatPart::class)?.attackPotency ?: return false
 
+        // Don't allow entities with the same faction to hurt each other... for now.
+        if (find(FactionPart::class)?.faction == attacker.find(FactionPart::class)?.faction) {
+            return false
+        }
+
         respondToAction(Damage(
             context, attacker, amount
         ))

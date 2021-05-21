@@ -12,6 +12,7 @@ object ActorFactory {
             CombatPart(
                 attackPotency = 1
             ),
+            FactionPart(Faction.Player),
             HealthPart(
                 maxHealth = 10
             ),
@@ -37,6 +38,7 @@ object ActorFactory {
             CombatPart(
                 attackPotency = 1
             ),
+            FactionPart(Faction.Monster),
             HealthPart(
                 maxHealth = 2
             ),
