@@ -12,9 +12,11 @@ import godot.Node2D
 import godot.Tween
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
+import godot.core.Color
 import godot.core.NodePath
 import godot.core.Vector2
 import godot.extensions.getNodeAs
+import godot.global.GD
 
 @RegisterClass
 class EntityScene : Node2D() {
@@ -42,6 +44,10 @@ class EntityScene : Node2D() {
 
 	private fun setPosition(shouldAnimate: Boolean = true) {
 		val worldPosition = context.world[entity]
+		val baseZIndex = when {
+			entity.has(MovementPart::class) -> 100
+			else -> 50
+		}
 
 		if (worldPosition == null) {
 			visible = false
@@ -49,7 +55,7 @@ class EntityScene : Node2D() {
 		}
 
 		visible = true
-		zIndex = (100 + context.world[worldPosition]!!.indexOf(entity)).toLong()
+		zIndex = (baseZIndex + context.world[worldPosition]!!.indexOf(entity)).toLong()
 
 		if (shouldAnimate) {
 			tween.run {
@@ -65,17 +71,23 @@ class EntityScene : Node2D() {
 	}
 
 	private fun setAppearance() {
-		label.text = when(entity.name) {
-			"player" -> "@"
-			"wall" -> "#"
+		val (text, color)= when(entity.name) {
+			"player" -> Pair("@", Color.yellow)
+			"wall" -> Pair("#", Color.white)
 			"door" -> {
-				if (entity.find(PortalPart::class)?.isOpen == true) "'" else "+"
+				Pair(
+					if (entity.find(PortalPart::class)?.isOpen == true) "'" else "+",
+					Color.orange
+				)
 			}
-			"slime" -> "s"
-			"stairs" -> "<"
-			"coin" -> "$"
-			else -> "?"
+			"slime" -> Pair("s", Color.lightgreen)
+			"stairs" -> Pair("<", Color.white)
+			"coin" -> Pair("$", Color.cyan)
+			else -> Pair("?", Color.red)
 		}
+
+		label.text = text
+		label.set("custom_colors/font_color", color)
 	}
 
 	private fun calculateNodePosition(worldPosition: Position): Vector2 {

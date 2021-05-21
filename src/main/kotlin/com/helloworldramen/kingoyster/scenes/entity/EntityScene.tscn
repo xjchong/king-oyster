@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntityScene.kt" type="Script" id=1]
+[ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/fonts/small_pixel-7.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+font_data = ExtResource( 2 )
 
 [node name="EntityScene" type="Node2D"]
 script = ExtResource( 1 )
@@ -21,9 +26,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="MarginContainer"]
-margin_top = 9.0
 margin_right = 32.0
-margin_bottom = 23.0
+margin_bottom = 32.0
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "."
 align = 1
