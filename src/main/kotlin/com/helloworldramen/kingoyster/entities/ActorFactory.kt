@@ -32,6 +32,7 @@ object ActorFactory {
     fun slime() = Entity(
         name = "slime",
         parts = listOf(
+            AIPart(),
             AttackablePart(),
             CombatPart(
                 attackPotency = 1
