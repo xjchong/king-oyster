@@ -3,5 +3,5 @@ package com.helloworldramen.kingoyster.oyster
 interface Action {
     val context: Context
     val actor: Entity
-    val timeCost: Int
+    val timeFactor: Double
 }

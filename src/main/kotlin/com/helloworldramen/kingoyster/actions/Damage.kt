@@ -10,5 +10,5 @@ data class Damage(
     val amount: Int
 ) : Action {
 
-    override val timeCost: Int = 0
+    override val timeFactor: Double = 0.0
 }

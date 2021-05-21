@@ -11,5 +11,5 @@ data class Move(
     val position: Position
 ) : Action {
 
-    override val timeCost: Int = 100
+    override val timeFactor: Double = 1.0
 }

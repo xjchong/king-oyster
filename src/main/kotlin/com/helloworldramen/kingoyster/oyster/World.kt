@@ -4,8 +4,8 @@ import java.util.*
 
 class World(val width: Int, val height: Int) {
 
-    val currentTime: Int
-        get() = updateableEntities.peek()?.nextUpdateTime ?: 0
+    val currentTime: Double
+        get() = updateableEntities.peek()?.nextUpdateTime ?: 0.0
 
     private val entitiesForPosition: MutableMap<Position, MutableList<Entity>> =
         mutableMapOf<Position, MutableList<Entity>>().apply {
@@ -14,11 +14,11 @@ class World(val width: Int, val height: Int) {
             }
         }
     private val positionForEntity: MutableMap<Entity, Position> = mutableMapOf()
-    private val nextUpdateTimeForEntity: MutableMap<Entity, Int> = mutableMapOf()
+    private val nextUpdateTimeForEntity: MutableMap<Entity, Double> = mutableMapOf()
 
     private val allEntities: MutableList<Entity> = mutableListOf()
     private val updateableEntities: PriorityQueue<Entity> = PriorityQueue { o1, o2 ->
-        (o2?.nextUpdateTime ?: 0) - (o1?.nextUpdateTime ?: 0)
+        ((o1?.nextUpdateTime ?: 0.0) - (o2?.nextUpdateTime ?: 0.0)).toInt()
     }
 
     operator fun get(position: Position): List<Entity>? = entitiesForPosition[position]
@@ -32,7 +32,7 @@ class World(val width: Int, val height: Int) {
 
         allEntities.add(entity)
 
-        if (entity.requiresUpdate) {
+        if (entity.timeFactor > 0.0) {
             entity.nextUpdateTime = currentTime
             updateableEntities.add(entity)
             nextUpdateTimeForEntity[entity] = entity.nextUpdateTime
@@ -96,6 +96,7 @@ class World(val width: Int, val height: Int) {
     }
 
     fun update(context: Context): Entity? {
+        println(updateableEntities.map { Pair(it.name, it.nextUpdateTime)})
         do {
             val entity = updateableEntities.poll() ?: return null
 
@@ -110,6 +111,12 @@ class World(val width: Int, val height: Int) {
             }
 
             entity.update(context)
+
+            // If after updating the entity, its time didn't change, then assume it is waiting.
+            if (entity.nextUpdateTime == nextUpdateTimeForEntity[entity]) {
+                entity.nextUpdateTime += Entity.BASE_TIME_STEP * entity.timeFactor
+            }
+
             updateableEntities.add(entity)
             nextUpdateTimeForEntity[entity] = entity.nextUpdateTime
         } while (updateableEntities.firstOrNull()?.requiresInput == false)

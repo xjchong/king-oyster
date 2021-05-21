@@ -9,5 +9,5 @@ data class Open(
     override val actor: Entity
 ) : Action {
 
-    override val timeCost: Int = 0
+    override val timeFactor: Double = 1.0
 }

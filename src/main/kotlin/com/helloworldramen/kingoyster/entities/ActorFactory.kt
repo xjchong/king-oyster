@@ -25,7 +25,7 @@ object ActorFactory {
                 visionRange = 10
             )
         ),
-        requiresUpdate = true,
+        timeFactor = 1.0,
         requiresInput = true
     )
 
@@ -47,6 +47,6 @@ object ActorFactory {
                 visionRange = 4
             )
         ),
-        requiresUpdate = true
+        timeFactor = 1.0
     )
 }

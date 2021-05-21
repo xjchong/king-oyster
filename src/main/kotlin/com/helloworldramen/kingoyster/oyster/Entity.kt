@@ -5,20 +5,25 @@ import kotlin.reflect.KClass
 class Entity (
     val name: String,
     val parts: List<Part>,
-    var requiresUpdate: Boolean = false,
+    var timeFactor: Double = 0.0, // 0 means this entity needs no updates.
     var requiresInput: Boolean = false,
-    var nextUpdateTime: Int = 0,
+    var nextUpdateTime: Double = 0.0
 ) {
 
     fun copy(): Entity {
-        return Entity(name, parts.map { it.copy() }, requiresUpdate, requiresInput, nextUpdateTime)
+        return Entity(name, parts.map { it.copy() }, timeFactor, requiresInput, nextUpdateTime)
     }
 
     fun respondToAction(action: Action): Boolean {
+        // Actors shouldn't be able to perform actions if its not their turn yet.
+        if (action.context.world.currentTime < action.actor.nextUpdateTime) return false
+
         val didRespond = parts.sumBy { if (it.respondToAction(this, action)) 1 else 0 } > 0
 
         if (didRespond) {
-            action.actor.nextUpdateTime += action.timeCost
+            with (action.actor) {
+                nextUpdateTime += (BASE_TIME_STEP * timeFactor * action.timeFactor).toInt()
+            }
         }
 
         return didRespond
@@ -34,5 +39,9 @@ class Entity (
 
     inline fun <reified P : Part> has(klass: KClass<P>): Boolean {
         return parts.any { klass.isInstance(it) }
+    }
+
+    companion object {
+        const val BASE_TIME_STEP = 100
     }
 }
