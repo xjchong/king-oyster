@@ -4,7 +4,7 @@ import kotlin.reflect.KClass
 
 class Entity (
     val name: String,
-    val parts: List<Part>,
+    val parts: List<Part> = listOf(),
     var timeFactor: Double = 0.0, // 0 means this entity needs no updates.
     var requiresInput: Boolean = false,
     var nextUpdateTime: Double = 0.0
@@ -43,5 +43,9 @@ class Entity (
 
     companion object {
         const val BASE_TIME_STEP = 100
+
+        fun UNKNOWN(): Entity {
+            return Entity("unknown")
+        }
     }
 }

@@ -8,14 +8,26 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node2D",
+"class": "com_helloworldramen_kingoyster_scenes_entity_EntityScene",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntityScene.kt"
+}, {
+"base": "Node2D",
+"class": "com_helloworldramen_kingoyster_scenes_world_WorldScene",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/world/WorldScene.kt"
+} ]
 _global_script_class_icons={
-
+"com_helloworldramen_kingoyster_scenes_entity_EntityScene": "",
+"com_helloworldramen_kingoyster_scenes_world_WorldScene": ""
 }
 
 [application]
 
 config/name="king-oyster"
+run/main_scene="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/world/WorldScene.tscn"
 config/icon="res://icon.png"
 
 [rendering]
