@@ -15,11 +15,17 @@ class World(val width: Int, val height: Int) {
         }
     private val positionForEntity: MutableMap<Entity, Position> = mutableMapOf()
     private val nextUpdateTimeForEntity: MutableMap<Entity, Double> = mutableMapOf()
-
+    private val updateNumberForEntity: MutableMap<Entity, Long> = mutableMapOf()
     private val allEntities: MutableList<Entity> = mutableListOf()
-    private val updateableEntities: PriorityQueue<Entity> = PriorityQueue { o1, o2 ->
-        ((o1?.nextUpdateTime ?: 0.0) - (o2?.nextUpdateTime ?: 0.0)).toInt()
+
+    private val updateComparator = compareBy<Entity> {
+        it.nextUpdateTime
+    }.thenBy {
+        updateNumberForEntity[it] ?: 0L
     }
+    private val updateableEntities: PriorityQueue<Entity> = PriorityQueue(updateComparator)
+
+    private var nextUpdateNumber: Long = 0 // Use this to keep track of the number of updates. It should be normalized periodically.
 
     operator fun get(position: Position): List<Entity>? = entitiesForPosition[position]
 
@@ -36,6 +42,7 @@ class World(val width: Int, val height: Int) {
             entity.nextUpdateTime = currentTime
             updateableEntities.add(entity)
             nextUpdateTimeForEntity[entity] = entity.nextUpdateTime
+            updateNumberForEntity[entity] = nextUpdateNumber++
         }
 
         if (position != null) {
@@ -71,6 +78,7 @@ class World(val width: Int, val height: Int) {
         }
         updateableEntities.remove(entity)
         nextUpdateTimeForEntity.remove(entity)
+        updateNumberForEntity.remove(entity)
         allEntities.remove(entity)
 
         return true
@@ -92,7 +100,9 @@ class World(val width: Int, val height: Int) {
         positionForEntity.clear()
         updateableEntities.clear()
         nextUpdateTimeForEntity.clear()
+        updateNumberForEntity.clear()
         allEntities.clear()
+        nextUpdateNumber = 0
     }
 
     fun update(context: Context): Entity? {

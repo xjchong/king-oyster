@@ -111,7 +111,6 @@ class WorldScene : Node2D() {
 				}
 			}
 		}
-
 	}
 
 	private fun List<Entity>?.tryActions(vararg actions: Action): Boolean {
