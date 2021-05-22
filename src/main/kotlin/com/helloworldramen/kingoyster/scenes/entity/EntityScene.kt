@@ -9,7 +9,6 @@ import com.helloworldramen.kingoyster.parts.PortalPart
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
-import godot.core.Color
 import godot.core.NodePath
 import godot.core.Vector2
 import godot.extensions.getNodeAs
@@ -18,9 +17,7 @@ import godot.global.GD
 @RegisterClass
 class EntityScene : Node2D() {
 
-	private val colorRect: ColorRect by lazy { getNodeAs("MarginContainer/ColorRect")!! }
-	private val label: Label by lazy { getNodeAs("MarginContainer/Label")!! }
-	private val animatedSprite: AnimatedSprite by lazy { getNodeAs("MarginContainer/AnimatedSprite")!! }
+	private val entitySprite: EntitySprite by lazy { getNodeAs("EntitySprite")!! }
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
 
 	private var context: Context = Context.UNKNOWN()
@@ -28,7 +25,6 @@ class EntityScene : Node2D() {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
-		if (entity.canChangeAppearance) setAppearance()
 		if (entity.canChangePosition) setPosition()
 	}
 
@@ -36,7 +32,7 @@ class EntityScene : Node2D() {
 		this.context = context
 		this.entity = entity
 
-		setAppearance()
+		entitySprite.bind(entity)
 		setPosition(shouldAnimate = false)
 	}
 
@@ -68,44 +64,11 @@ class EntityScene : Node2D() {
 		}
 	}
 
-	private fun setAppearance() {
-		animatedSprite.visible = false
-
-		val (text, color)= when(entity.name) {
-			"player" -> {
-				animatedSprite.visible = true
-				animatedSprite.play("knight")
-				Pair("@", Color.yellow)
-			}
-			"wall" -> Pair("#", Color.white)
-			"door" -> {
-				Pair(
-					if (entity.find(PortalPart::class)?.isOpen == true) "'" else "+",
-					Color.orange
-				)
-			}
-			"slime" -> {
-				animatedSprite.visible = true
-				animatedSprite.play("slime")
-				Pair("s", Color.lightgreen)
-			}
-			"stairs" -> Pair("<", Color.white)
-			"coin" -> Pair("$", Color.cyan)
-			else -> Pair("?", Color.red)
-		}
-
-		label.text = text
-		label.set("custom_colors/font_color", color)
-	}
-
 	private fun calculateNodePosition(worldPosition: Position): Vector2 {
 		return Vector2(worldPosition.x * 32, worldPosition.y * 32)
 	}
 
-	val Entity.canChangeAppearance: Boolean
-		get() = has(PortalPart::class)
-
-	val Entity.canChangePosition: Boolean
+	private val Entity.canChangePosition: Boolean
 		get() = has(MovementPart::class) || has(ItemPart::class)
 
 	companion object {
