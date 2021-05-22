@@ -4,6 +4,7 @@ import com.helloworldramen.kingoyster.actions.*
 import com.helloworldramen.kingoyster.oyster.*
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.fog.FogScene
+import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
 import godot.InputEvent
@@ -28,11 +29,11 @@ class WorldScene : Node2D() {
 		val world = World(17, 17)
 		WorldGenerator.repopulate(world, DungeonGenerationStrategy)
 		context = Context(world)
+		player = world.update(context)
+		context.player = player
 
 		bind(context)
 		currentlyBoundLevel = context.level
-		player = world.update(context)
-		context.player = player
 	}
 
 	@RegisterFunction
@@ -98,6 +99,7 @@ class WorldScene : Node2D() {
 		Position(world.width - 1, world.height - 1).forEach { position ->
 			val floorScene = GD.load<PackedScene>(EntityScene.PATH)?.instance() as? EntityScene
 			val fogScene = GD.load<PackedScene>(FogScene.PATH)?.instance() as? FogScene
+			val memoryScene = GD.load<PackedScene>(MemoryScene.PATH)?.instance() as? MemoryScene
 
 			// Set up the floor at this position.
 			floorScene?.let {
@@ -110,6 +112,17 @@ class WorldScene : Node2D() {
 				addChild((it))
 				it.bind(context, position)
 				it.position = Vector2(position.x * 32, position.y * 32)
+				it.zIndex = 500
+			}
+
+			// Set up the memory at this position.
+			memoryScene?.let {
+				player?.let { player ->
+					addChild(it)
+					it.bind(player, position)
+				}
+				it.position = Vector2(position.x * 32, position.y * 32)
+				it.zIndex = 1000
 			}
 
 			// Add the entities for this position.

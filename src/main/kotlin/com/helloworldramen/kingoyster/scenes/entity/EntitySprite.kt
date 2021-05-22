@@ -16,14 +16,14 @@ class EntitySprite : Node2D() {
 	private val label: Label by lazy { getNodeAs("MarginContainer/Label")!! }
 	private val animatedSprite: AnimatedSprite by lazy { getNodeAs("MarginContainer/AnimatedSprite")!! }
 
-	private var entity: Entity = Entity.UNKNOWN()
+	private var entity: Entity? = null
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
-		if (entity.canChangeAppearance) updateAppearance()
+		if (entity?.canChangeAppearance == true) updateAppearance()
 	}
 
-	fun bind(entity: Entity) {
+	fun bind(entity: Entity?) {
 		this.entity = entity
 
 		updateAppearance()
@@ -32,7 +32,7 @@ class EntitySprite : Node2D() {
 	private fun updateAppearance() {
 		animatedSprite.visible = false
 
-		val (text, color)= when(entity.name) {
+		val (text, color)= when(entity?.name) {
 			"player" -> {
 				animatedSprite.visible = true
 				animatedSprite.play("knight")
@@ -41,7 +41,7 @@ class EntitySprite : Node2D() {
 			"wall" -> Pair("#", Color.white)
 			"door" -> {
 				Pair(
-					if (entity.find(PortalPart::class)?.isOpen == true) "'" else "+",
+					if (entity?.find(PortalPart::class)?.isOpen == true) "'" else "+",
 					Color.orange
 				)
 			}
@@ -52,6 +52,7 @@ class EntitySprite : Node2D() {
 			}
 			"stairs" -> Pair("<", Color.white)
 			"coin" -> Pair("$", Color.cyan)
+			null -> Pair(".", Color.white)
 			else -> Pair("?", Color.red)
 		}
 
