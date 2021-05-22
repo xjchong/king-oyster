@@ -13,12 +13,15 @@ import godot.core.NodePath
 import godot.core.Vector2
 import godot.extensions.getNodeAs
 import godot.global.GD
+import java.util.Timer
+import kotlin.concurrent.timerTask
 
 @RegisterClass
 class EntityScene : Node2D() {
 
 	private val entitySprite: EntitySprite by lazy { getNodeAs("EntitySprite")!! }
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
+	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
 
 	private var context: Context = Context.UNKNOWN()
 	private var entity: Entity = Entity.UNKNOWN()
@@ -34,6 +37,19 @@ class EntityScene : Node2D() {
 
 		entitySprite.bind(entity)
 		setPosition(shouldAnimate = false)
+	}
+
+	fun bump(position: Position) {
+		if (animationPlayer.isPlaying()) return
+		val currentPosition = context.world[entity] ?: return
+
+		when(position) {
+			currentPosition.north() -> animationPlayer.play("bump_north")
+			currentPosition.east() -> animationPlayer.play("bump_east")
+			currentPosition.south() -> animationPlayer.play("bump_south")
+			currentPosition.west() -> animationPlayer.play("bump_west")
+			else -> return
+		}
 	}
 
 	private fun setPosition(shouldAnimate: Boolean = true) {

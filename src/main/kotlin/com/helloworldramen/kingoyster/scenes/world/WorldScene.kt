@@ -22,6 +22,7 @@ class WorldScene : Node2D() {
 	var context: Context = Context.UNKNOWN()
 	private var currentlyBoundLevel = 0
 	private var player: Entity? = null
+	private var playerScene: EntityScene? = null
 
 	@RegisterFunction
 	override fun _ready() {
@@ -49,10 +50,14 @@ class WorldScene : Node2D() {
 		val currentPosition = world[player] ?: return
 
 		fun performDirectionActions(position: Position): Boolean {
-			return player.respondToAction(Move(context, player, position)) ||
-					world[position].tryActions(
-						Open(context, player), Attack(context, player)
-					)
+			return if (player.respondToAction(Move(context, player, position))) {
+				true
+			} else {
+				playerScene?.bump(position)
+				world[position].tryActions(
+					Open(context, player), Attack(context, player)
+				)
+			}
 		}
 
 		fun performStandingActions(): Boolean {
@@ -131,6 +136,10 @@ class WorldScene : Node2D() {
 				if (entityScene != null) {
 					addChild(entityScene)
 					entityScene.bind(context, entity)
+
+					if (entity.name == "player") {
+						playerScene = entityScene
+					}
 				}
 			}
 		}

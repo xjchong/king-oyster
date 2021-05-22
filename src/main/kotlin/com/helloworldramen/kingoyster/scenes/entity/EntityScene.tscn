@@ -1,7 +1,71 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntityScene.kt" type="Script" id=1]
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntitySprite.tscn" type="PackedScene" id=2]
+
+[sub_resource type="Animation" id=2]
+resource_name = "bump_east"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("EntitySprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.060705, 0.1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 10, 0 ), Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=1]
+resource_name = "bump_north"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("EntitySprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.060705, 0.1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -10 ), Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "bump_south"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("EntitySprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.060705, 0.1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, 10 ), Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "bump_west"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("EntitySprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.060705, 0.1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( -10, 0 ), Vector2( 0, 0 ) ]
+}
 
 [node name="EntityScene" type="Node2D"]
 script = ExtResource( 1 )
@@ -17,3 +81,9 @@ __meta__ = {
 [node name="EntitySprite" parent="." instance=ExtResource( 2 )]
 
 [node name="Tween" type="Tween" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/bump_east = SubResource( 2 )
+anims/bump_north = SubResource( 1 )
+anims/bump_south = SubResource( 3 )
+anims/bump_west = SubResource( 4 )
