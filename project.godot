@@ -15,12 +15,18 @@ _global_script_classes=[ {
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntityScene.kt"
 }, {
 "base": "Node2D",
+"class": "com_helloworldramen_kingoyster_scenes_fog_FogScene",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/fog/FogScene.kt"
+}, {
+"base": "Node2D",
 "class": "com_helloworldramen_kingoyster_scenes_world_WorldScene",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/world/WorldScene.kt"
 } ]
 _global_script_class_icons={
 "com_helloworldramen_kingoyster_scenes_entity_EntityScene": "",
+"com_helloworldramen_kingoyster_scenes_fog_FogScene": "",
 "com_helloworldramen_kingoyster_scenes_world_WorldScene": ""
 }
 
@@ -29,6 +35,13 @@ _global_script_class_icons={
 config/name="king-oyster"
 run/main_scene="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/world/WorldScene.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=544
+window/size/height=544
+window/stretch/mode="2d"
+window/stretch/aspect="expand"
 
 [rendering]
 

@@ -3,6 +3,7 @@ package com.helloworldramen.kingoyster.scenes.world
 import com.helloworldramen.kingoyster.actions.*
 import com.helloworldramen.kingoyster.oyster.*
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
+import com.helloworldramen.kingoyster.scenes.fog.FogScene
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
 import godot.InputEvent
@@ -12,6 +13,7 @@ import godot.PackedScene
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.Vector2
+import godot.extensions.instanceAs
 import godot.global.GD
 
 @RegisterClass
@@ -23,13 +25,14 @@ class WorldScene : Node2D() {
 
 	@RegisterFunction
 	override fun _ready() {
-		val world = World(19, 19)
+		val world = World(17, 17)
 		WorldGenerator.repopulate(world, DungeonGenerationStrategy)
 		context = Context(world)
 
 		bind(context)
 		currentlyBoundLevel = context.level
 		player = world.update(context)
+		context.player = player
 	}
 
 	@RegisterFunction
@@ -94,10 +97,18 @@ class WorldScene : Node2D() {
 
 		Position(world.width - 1, world.height - 1).forEach { position ->
 			val floorScene = GD.load<PackedScene>(EntityScene.PATH)?.instance() as? EntityScene
+			val fogScene = GD.load<PackedScene>(FogScene.PATH)?.instance() as? FogScene
 
 			// Set up the floor at this position.
 			floorScene?.let {
 				addChild(it)
+				it.position = Vector2(position.x * 32, position.y * 32)
+			}
+
+			// Set up the fog at this position.
+			fogScene?.let {
+				addChild((it))
+				it.bind(context, position)
 				it.position = Vector2(position.x * 32, position.y * 32)
 			}
 
