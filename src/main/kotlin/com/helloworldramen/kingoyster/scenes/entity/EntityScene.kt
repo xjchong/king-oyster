@@ -6,10 +6,7 @@ import com.helloworldramen.kingoyster.oyster.Position
 import com.helloworldramen.kingoyster.parts.ItemPart
 import com.helloworldramen.kingoyster.parts.MovementPart
 import com.helloworldramen.kingoyster.parts.PortalPart
-import godot.ColorRect
-import godot.Label
-import godot.Node2D
-import godot.Tween
+import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.Color
@@ -23,6 +20,7 @@ class EntityScene : Node2D() {
 
 	private val colorRect: ColorRect by lazy { getNodeAs("MarginContainer/ColorRect")!! }
 	private val label: Label by lazy { getNodeAs("MarginContainer/Label")!! }
+	private val animatedSprite: AnimatedSprite by lazy { getNodeAs("MarginContainer/AnimatedSprite")!! }
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
 
 	private var context: Context = Context.UNKNOWN()
@@ -40,6 +38,7 @@ class EntityScene : Node2D() {
 
 		setAppearance()
 		setPosition(shouldAnimate = false)
+		animatedSprite.play()
 	}
 
 	private fun setPosition(shouldAnimate: Boolean = true) {
@@ -71,6 +70,8 @@ class EntityScene : Node2D() {
 	}
 
 	private fun setAppearance() {
+		animatedSprite.visible = false
+
 		val (text, color)= when(entity.name) {
 			"player" -> Pair("@", Color.yellow)
 			"wall" -> Pair("#", Color.white)
@@ -80,7 +81,10 @@ class EntityScene : Node2D() {
 					Color.orange
 				)
 			}
-			"slime" -> Pair("s", Color.lightgreen)
+			"slime" -> {
+				animatedSprite.visible = true
+				Pair("s", Color.lightgreen)
+			}
 			"stairs" -> Pair("<", Color.white)
 			"coin" -> Pair("$", Color.cyan)
 			else -> Pair("?", Color.red)
