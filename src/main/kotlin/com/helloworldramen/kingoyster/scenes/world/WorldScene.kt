@@ -14,7 +14,6 @@ import godot.PackedScene
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.Vector2
-import godot.extensions.instanceAs
 import godot.global.GD
 
 @RegisterClass
@@ -64,16 +63,16 @@ class WorldScene : Node2D() {
 		}
 
 		val isValidInput = when {
-			inputEvent.isActionPressed("ui_up") -> {
+			inputEvent.isActionPressed("ui_up", true) -> {
 				performDirectionActions(currentPosition.north())
 			}
-			inputEvent.isActionPressed("ui_right") -> {
+			inputEvent.isActionPressed("ui_right", true) -> {
 				performDirectionActions(currentPosition.east())
 			}
-			inputEvent.isActionPressed("ui_down") -> {
+			inputEvent.isActionPressed("ui_down", true) -> {
 				performDirectionActions(currentPosition.south())
 			}
-			inputEvent.isActionPressed("ui_left") -> {
+			inputEvent.isActionPressed("ui_left", true) -> {
 				performDirectionActions(currentPosition.west())
 			}
 			inputEvent.isActionPressed("ui_accept") -> {
