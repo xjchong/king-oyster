@@ -38,7 +38,6 @@ class EntityScene : Node2D() {
 
 		setAppearance()
 		setPosition(shouldAnimate = false)
-		animatedSprite.play()
 	}
 
 	private fun setPosition(shouldAnimate: Boolean = true) {
@@ -73,7 +72,11 @@ class EntityScene : Node2D() {
 		animatedSprite.visible = false
 
 		val (text, color)= when(entity.name) {
-			"player" -> Pair("@", Color.yellow)
+			"player" -> {
+				animatedSprite.visible = true
+				animatedSprite.play("knight")
+				Pair("@", Color.yellow)
+			}
 			"wall" -> Pair("#", Color.white)
 			"door" -> {
 				Pair(
@@ -83,6 +86,7 @@ class EntityScene : Node2D() {
 			}
 			"slime" -> {
 				animatedSprite.visible = true
+				animatedSprite.play("slime")
 				Pair("s", Color.lightgreen)
 			}
 			"stairs" -> Pair("<", Color.white)

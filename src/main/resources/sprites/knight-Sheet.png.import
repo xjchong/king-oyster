@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/slime-Sheet.png-a7a77ea6903181dcdd76b12022b1cc0a.stex"
+path="res://.import/knight-Sheet.png-6ad78e7f973f883a36f74fdcebba844e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/world/slime-Sheet.png"
-dest_files=[ "res://.import/slime-Sheet.png-a7a77ea6903181dcdd76b12022b1cc0a.stex" ]
+source_file="res://src/main/resources/sprites/knight-Sheet.png"
+dest_files=[ "res://.import/knight-Sheet.png-6ad78e7f973f883a36f74fdcebba844e.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
