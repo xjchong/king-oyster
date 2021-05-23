@@ -20,6 +20,7 @@ import godot.global.GD
 @RegisterClass
 class EntityScene : Node2D(), EventBusSubscriber {
 
+	private val backgroundRect: ColorRect by lazy { getNodeAs("BackgroundRect")!! }
 	private val entitySprite: EntitySprite by lazy { getNodeAs("EntitySprite")!! }
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
 	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
@@ -58,6 +59,9 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 		entitySprite.bind(entity)
 		setPosition(shouldAnimate = false)
+
+		backgroundRect.visible = entity.name != "wall"
+		entitySprite.visible = entity.name != "wall"
 	}
 
 	fun animateBump(position: Position) {
