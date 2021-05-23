@@ -8,14 +8,17 @@ import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.oyster.Context
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Position
+import com.helloworldramen.kingoyster.parts.HealthPart
 import com.helloworldramen.kingoyster.parts.ItemPart
 import com.helloworldramen.kingoyster.parts.MovementPart
+import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.NodePath
 import godot.core.Vector2
 import godot.extensions.getNodeAs
+import godot.extensions.instanceAs
 import godot.global.GD
 
 @RegisterClass
@@ -34,7 +37,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		when (event) {
 			is DamageEvent -> {
 				if (event.target == entity) {
-					animateOnHit()
+					animateOnHit(event.value)
 				}
 			}
 			is DeathEvent -> {
@@ -87,8 +90,17 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		animationPlayer.play("pulse")
 	}
 
-	fun animateOnHit() {
-		animationPlayer.play("on_hit")
+	fun animateOnHit(amount: Int) {
+		val toastTextScene = GD.load<PackedScene>(ToastTextScene.PATH)?.instanceAs<ToastTextScene>()
+
+		toastTextScene?.let {
+			it.bind(amount.toString())
+			addChild(it)
+		}
+
+		if (entity.find(HealthPart::class)?.health ?: 0 > 0) {
+			animationPlayer.play("on_hit")
+		}
 	}
 
 	fun animateOnDeath() {
