@@ -43,6 +43,10 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		EventBus.register(this, DamageEvent::class)
 	}
 
+	override fun _onDestroy() {
+		EventBus.unregister(this)
+	}
+
 	@RegisterFunction
 	override fun _process(delta: Double) {
 		if (entity.canChangePosition) setPosition()
