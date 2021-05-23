@@ -52,10 +52,12 @@ class WorldScene : Node2D() {
 		fun performDirectionActions(position: Position): Boolean {
 			return if (player.respondToAction(Move(context, player, position))) {
 				true
+			} else if (world[position].tryActions(Open(context, player)) != null) {
+				true
 			} else {
 				sceneForEntity[player]?.animateBump(position)
 				world[position].tryActions(
-					Open(context, player), Attack(context, player)
+					Attack(context, player)
 				) != null
 			}
 		}
