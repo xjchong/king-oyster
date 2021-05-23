@@ -52,7 +52,7 @@ class EntitySprite : Node2D() {
 			}
 			"stairs" -> Pair("<", Color.white)
 			"coin" -> Pair("$", Color.cyan)
-			null -> Pair(".", Color.white)
+			null -> Pair(" ", Color.white)
 			else -> Pair("?", Color.red)
 		}
 
