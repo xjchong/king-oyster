@@ -106,11 +106,11 @@ class WorldScene : Node2D() {
 
 		sceneForEntity = mutableMapOf()
 		tileMap.clear()
+		tileMap.setOuterBorder(world)
 
 		Position(world.width - 1, world.height - 1).forEach { position ->
 			val floorScene = GD.load<PackedScene>(EntityScene.PATH)?.instance() as? EntityScene
 			val memoryScene = GD.load<PackedScene>(MemoryScene.PATH)?.instance() as? MemoryScene
-
 
 			// Set up the floor at this position.
 			floorScene?.let {
@@ -144,7 +144,9 @@ class WorldScene : Node2D() {
 			}
 		}
 
-		tileMap.updateBitmaskRegion(end = Vector2(1088, 544))
+		tileMap.updateBitmaskRegion(
+			start = Vector2(-TILE_SIZE, -TILE_SIZE),
+			end = Vector2(world.width * TILE_SIZE, world.height * TILE_SIZE))
 	}
 
 	private fun List<Entity>?.tryActions(vararg actions: Action): Entity? {
@@ -155,5 +157,21 @@ class WorldScene : Node2D() {
 		}
 
 		return null
+	}
+
+	private fun TileMap.setOuterBorder(world: World) {
+		for (x in (-1..world.width)) {
+			setCell(x.toLong(), (-1).toLong(), 0)
+			setCell(x.toLong(), world.height.toLong(), 0)
+		}
+
+		for (y in (0 until world.height)) {
+			setCell((-1).toLong(), y.toLong(), 0)
+			setCell(world.width.toLong(), y.toLong(), 0)
+		}
+	}
+
+	companion object {
+		const val TILE_SIZE = 32
 	}
 }
