@@ -161,7 +161,6 @@ __meta__ = {
 }
 
 [node name="EntitySprite" parent="." instance=ExtResource( 2 )]
-z_index = 500
 
 [node name="Tween" type="Tween" parent="."]
 
