@@ -36,15 +36,15 @@ object WorldConsoleView : EventBusSubscriber {
         }
     }
 
-    fun display(world: World, player: Entity) {
-        val visiblePositions = player.find(SensoryPart::class)?.visiblePositions ?: listOf()
-        val worldMemory = player.find(MemoryPart::class)
+    fun display(world: World, player: Entity? = null) {
+        val visiblePositions = player?.find(SensoryPart::class)?.visiblePositions ?: listOf()
+        val worldMemory = player?.find(MemoryPart::class)
 
         Position(world.width - 1, world.height - 1).forEach {
             if (it.x == 0) println()
 
             val appearance = when {
-                visiblePositions.contains(it) -> {
+                player == null || visiblePositions.contains(it) -> {
                     world[it]?.lastOrNull()?.appearance() ?: "."
                 }
                 worldMemory?.get(it) != null -> {
@@ -58,7 +58,10 @@ object WorldConsoleView : EventBusSubscriber {
             print(appearance)
         }
         println()
-        displayEntityStatus(player)
+
+        player?.let {
+            displayEntityStatus(it)
+        }
     }
 
     private fun displayEntityStatus(entity: Entity) {

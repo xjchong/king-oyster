@@ -1,6 +1,7 @@
 package com.helloworldramen.kingoyster.scenes.world
 
 import com.helloworldramen.kingoyster.actions.*
+import com.helloworldramen.kingoyster.consoleviews.WorldConsoleView
 import com.helloworldramen.kingoyster.oyster.*
 import com.helloworldramen.kingoyster.oyster.World
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
@@ -18,6 +19,7 @@ import godot.global.GD
 class WorldScene : Node2D() {
 
 	private val tileMap: TileMap by lazy { getNodeAs("TileMap")!! }
+	private val scenesBucket: Node2D by lazy { getNodeAs("ScenesBucket")!! }
 
 	var context: Context = Context.UNKNOWN()
 	private var currentlyBoundLevel = 0
@@ -32,16 +34,17 @@ class WorldScene : Node2D() {
 		player = world.update(context)
 		context.player = player
 
-		bind(context)
 		currentlyBoundLevel = context.level
+		bind(context)
 	}
 
 	@RegisterFunction
 	override fun _input(event: InputEvent) {
-		player?.let { parseInput(event, context, it) }
 		if (currentlyBoundLevel != context.level) {
-			bind(context)
 			currentlyBoundLevel = context.level
+			bind(context)
+		} else {
+			player?.let { parseInput(event, context, it) }
 		}
 	}
 
@@ -101,29 +104,23 @@ class WorldScene : Node2D() {
 		val world = context.world
 
 		// Clear all the children.
-		sceneForEntity.values.forEach {
-			removeChild(it)
+		scenesBucket.getChildren().forEach {
+			scenesBucket.removeChild(it as Node)
 			it.queueFree()
 		}
 
+		sceneForEntity.clear()
 		sceneForEntity = mutableMapOf()
 		tileMap.clear()
 		tileMap.setOuterBorder(world)
 
 		Position(world.width - 1, world.height - 1).forEach { position ->
-			val floorScene = GD.load<PackedScene>(EntityScene.PATH)?.instance() as? EntityScene
 			val memoryScene = GD.load<PackedScene>(MemoryScene.PATH)?.instance() as? MemoryScene
-
-			// Set up the floor at this position.
-			floorScene?.let {
-				addChild(it)
-				it.position = Vector2(position.x * 32, position.y * 32)
-			}
 
 			// Set up the memory at this position.
 			memoryScene?.let {
 				player?.let { player ->
-					addChild(it)
+					scenesBucket.addChild(it)
 					it.bind(player, position)
 				}
 				it.position = Vector2(position.x * 32, position.y * 32)
@@ -136,7 +133,7 @@ class WorldScene : Node2D() {
 
 				if (entityScene != null) {
 					sceneForEntity[entity] = entityScene
-					addChild(entityScene)
+					scenesBucket.addChild(entityScene)
 					entityScene.bind(context, entity)
 
 					if (entity.name == "wall") {

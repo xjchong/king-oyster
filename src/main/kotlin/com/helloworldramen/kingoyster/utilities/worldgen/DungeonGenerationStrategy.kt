@@ -1,5 +1,6 @@
 package com.helloworldramen.kingoyster.utilities.worldgen
 
+import com.helloworldramen.kingoyster.consoleviews.WorldConsoleView
 import com.helloworldramen.kingoyster.entities.FeatureFactory
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Position
@@ -169,6 +170,7 @@ object DungeonGenerationStrategy: WorldGenerationStrategy {
     private fun World.removeDeadEnd(position: Position) {
         if (!isDeadEnd(position)) return
 
+        removeAll(position)
         add(FeatureFactory.wall(), position)
         regionIds[position] = WALL_REGION_ID
 
