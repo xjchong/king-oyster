@@ -5,6 +5,7 @@ import com.helloworldramen.kingoyster.oyster.Position
 import com.helloworldramen.kingoyster.parts.MemoryPart
 import com.helloworldramen.kingoyster.parts.SensoryPart
 import com.helloworldramen.kingoyster.scenes.entity.EntitySprite
+import godot.ColorRect
 import godot.Node2D
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -13,6 +14,9 @@ import godot.extensions.getNodeAs
 @RegisterClass
 class MemoryScene : Node2D() {
 
+	private val backgroundRect: ColorRect by lazy { getNodeAs ("BackgroundRect")!! }
+	private val memoryRect: ColorRect by lazy { getNodeAs("MemoryRect")!! }
+	private val fogRect: ColorRect by lazy { getNodeAs("FogRect")!! }
 	private val entitySprite: EntitySprite by lazy { getNodeAs("EntitySprite")!! }
 
 	private var entity: Entity = Entity.UNKNOWN()
@@ -32,11 +36,24 @@ class MemoryScene : Node2D() {
 		val visiblePositions = entity.find(SensoryPart::class)?.visiblePositions ?: listOf()
 		val rememberedEntities = entity.find(MemoryPart::class)?.get(worldPosition)
 
-		if (rememberedEntities == null || visiblePositions.contains(worldPosition)) {
-			visible = false
-		} else {
-			visible = true
-			entitySprite.bind(rememberedEntities.lastOrNull())
+		when {
+			visiblePositions.contains(worldPosition) -> { // Visible tile.
+				visible = false
+			}
+			rememberedEntities == null -> { // Unvisited (fog) tile.
+				visible = true
+				fogRect.visible = true
+			}
+			else -> { // Memory tile.
+				val topEntity = rememberedEntities.lastOrNull()
+
+				visible = true
+				entitySprite.bind(topEntity)
+
+				backgroundRect.visible = topEntity?.name != "wall"
+				entitySprite.visible = topEntity?.name != "wall"
+				fogRect.visible = false
+			}
 		}
 	}
 

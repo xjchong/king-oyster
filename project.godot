@@ -15,9 +15,19 @@ _global_script_classes=[ {
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntityScene.kt"
 }, {
 "base": "Node2D",
+"class": "com_helloworldramen_kingoyster_scenes_entity_EntitySprite",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntitySprite.kt"
+}, {
+"base": "Node2D",
 "class": "com_helloworldramen_kingoyster_scenes_fog_FogScene",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/fog/FogScene.kt"
+}, {
+"base": "Node2D",
+"class": "com_helloworldramen_kingoyster_scenes_memory_MemoryScene",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/memory/MemoryScene.kt"
 }, {
 "base": "Node2D",
 "class": "com_helloworldramen_kingoyster_scenes_world_WorldScene",
@@ -26,7 +36,9 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "com_helloworldramen_kingoyster_scenes_entity_EntityScene": "",
+"com_helloworldramen_kingoyster_scenes_entity_EntitySprite": "",
 "com_helloworldramen_kingoyster_scenes_fog_FogScene": "",
+"com_helloworldramen_kingoyster_scenes_memory_MemoryScene": "",
 "com_helloworldramen_kingoyster_scenes_world_WorldScene": ""
 }
 

@@ -2,22 +2,22 @@ package com.helloworldramen.kingoyster.scenes.world
 
 import com.helloworldramen.kingoyster.actions.*
 import com.helloworldramen.kingoyster.oyster.*
+import com.helloworldramen.kingoyster.oyster.World
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
-import com.helloworldramen.kingoyster.scenes.fog.FogScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
-import godot.InputEvent
-import godot.Node
-import godot.Node2D
-import godot.PackedScene
+import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.Vector2
+import godot.extensions.getNodeAs
 import godot.global.GD
 
 @RegisterClass
 class WorldScene : Node2D() {
+
+	private val tileMap: TileMap by lazy { getNodeAs("TileMap")!! }
 
 	var context: Context = Context.UNKNOWN()
 	private var currentlyBoundLevel = 0
@@ -99,30 +99,23 @@ class WorldScene : Node2D() {
 		val world = context.world
 
 		// Clear all the children.
-		getChildren().forEach {
-			removeChild(it as Node)
+		sceneForEntity.values.forEach {
+			removeChild(it)
 			it.queueFree()
 		}
 
 		sceneForEntity = mutableMapOf()
+		tileMap.clear()
 
 		Position(world.width - 1, world.height - 1).forEach { position ->
 			val floorScene = GD.load<PackedScene>(EntityScene.PATH)?.instance() as? EntityScene
-			val fogScene = GD.load<PackedScene>(FogScene.PATH)?.instance() as? FogScene
 			val memoryScene = GD.load<PackedScene>(MemoryScene.PATH)?.instance() as? MemoryScene
+
 
 			// Set up the floor at this position.
 			floorScene?.let {
 				addChild(it)
 				it.position = Vector2(position.x * 32, position.y * 32)
-			}
-
-			// Set up the fog at this position.
-			fogScene?.let {
-				addChild((it))
-				it.bind(context, position)
-				it.position = Vector2(position.x * 32, position.y * 32)
-				it.zIndex = 500
 			}
 
 			// Set up the memory at this position.
@@ -143,9 +136,15 @@ class WorldScene : Node2D() {
 					sceneForEntity[entity] = entityScene
 					addChild(entityScene)
 					entityScene.bind(context, entity)
+
+					if (entity.name == "wall") {
+						tileMap.setCell(position.x.toLong(), position.y.toLong(), 0)
+					}
 				}
 			}
 		}
+
+		tileMap.updateBitmaskRegion(end = Vector2(1088, 544))
 	}
 
 	private fun List<Entity>?.tryActions(vararg actions: Action): Entity? {
