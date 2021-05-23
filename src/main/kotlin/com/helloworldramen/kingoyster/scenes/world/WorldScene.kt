@@ -13,13 +13,15 @@ import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.Vector2
 import godot.extensions.getNodeAs
+import godot.extensions.instanceAs
 import godot.global.GD
 
 @RegisterClass
 class WorldScene : Node2D() {
 
 	private val tileMap: TileMap by lazy { getNodeAs("TileMap")!! }
-	private val scenesBucket: Node2D by lazy { getNodeAs("ScenesBucket")!! }
+	private val entityScenesBucket: Node2D by lazy { getNodeAs("EntityScenesBucket")!! }
+	private val memoryScenesBucket: Node2D by lazy { getNodeAs("MemoryScenesBucket")!! }
 
 	var context: Context = Context.UNKNOWN()
 	private var currentlyBoundLevel = 0
@@ -34,6 +36,7 @@ class WorldScene : Node2D() {
 		player = world.update(context)
 		context.player = player
 		currentlyBoundLevel = context.level
+		setupMemoryScenes()
 		bind(context)
 	}
 
@@ -103,8 +106,8 @@ class WorldScene : Node2D() {
 		val world = context.world
 
 		// Clear all the children.
-		scenesBucket.getChildren().forEach {
-			scenesBucket.removeChild(it as Node)
+		entityScenesBucket.getChildren().forEach {
+			entityScenesBucket.removeChild(it as Node)
 			it.queueFree()
 		}
 
@@ -114,25 +117,13 @@ class WorldScene : Node2D() {
 		tileMap.setOuterBorder(world)
 
 		Position(world.width - 1, world.height - 1).forEach { position ->
-			val memoryScene = GD.load<PackedScene>(MemoryScene.PATH)?.instance() as? MemoryScene
-
-			// Set up the memory at this position.
-			memoryScene?.let {
-				player?.let { player ->
-					scenesBucket.addChild(it)
-					it.bind(player, position)
-				}
-				it.position = Vector2(position.x * 32, position.y * 32)
-				it.zIndex = 1000
-			}
-
 			// Add the entities for this position.
 			world[position]?.forEach { entity ->
 				val entityScene = GD.load<PackedScene>(EntityScene.PATH)?.instance() as? EntityScene
 
 				if (entityScene != null) {
 					sceneForEntity[entity] = entityScene
-					scenesBucket.addChild(entityScene)
+					entityScenesBucket.addChild(entityScene)
 					entityScene.bind(context, entity)
 
 					if (entity.name == "wall") {
@@ -145,6 +136,31 @@ class WorldScene : Node2D() {
 		tileMap.updateBitmaskRegion(
 			start = Vector2(-TILE_SIZE, -TILE_SIZE),
 			end = Vector2(world.width * TILE_SIZE, world.height * TILE_SIZE))
+	}
+
+	private fun setupMemoryScenes() {
+		val packedMemoryScene = GD.load<PackedScene>(MemoryScene.PATH)
+
+		memoryScenesBucket.getChildren().forEach {
+			memoryScenesBucket.removeChild(it as Node)
+			it.queueFree()
+		}
+
+		Position(context.world.width - 1, context.world.height - 1).forEach { position ->
+			val memoryScene = packedMemoryScene?.instanceAs<MemoryScene>()
+
+			// Set up the memory at this position.
+			memoryScene?.let { scene ->
+				player?.let { player ->
+					memoryScenesBucket.addChild(scene)
+					scene.bind(player, position)
+					scene.position = Vector2(position.x * 32, position.y * 32)
+					scene.zIndex = 1000
+				} ?: run {
+					scene.queueFree()
+				}
+			}
+		}
 	}
 
 	private fun List<Entity>?.tryActions(vararg actions: Action): Entity? {
