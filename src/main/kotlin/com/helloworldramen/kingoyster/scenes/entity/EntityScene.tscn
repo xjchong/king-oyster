@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntityScene.kt" type="Script" id=1]
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntitySprite.tscn" type="PackedScene" id=2]
@@ -64,6 +64,22 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 0, 0 ), Vector2( -10, 0 ), Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "on_death"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("EntitySprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 0.466516, 0.267943 ),
+"update": 0,
+"values": [ Color( 7.06667, 0.14902, 0.14902, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
 [sub_resource type="Animation" id=5]
@@ -145,6 +161,7 @@ __meta__ = {
 }
 
 [node name="EntitySprite" parent="." instance=ExtResource( 2 )]
+z_index = 500
 
 [node name="Tween" type="Tween" parent="."]
 
@@ -153,5 +170,6 @@ anims/bump_east = SubResource( 1 )
 anims/bump_north = SubResource( 2 )
 anims/bump_south = SubResource( 3 )
 anims/bump_west = SubResource( 4 )
+anims/on_death = SubResource( 7 )
 anims/on_hit = SubResource( 5 )
 anims/pulse = SubResource( 6 )

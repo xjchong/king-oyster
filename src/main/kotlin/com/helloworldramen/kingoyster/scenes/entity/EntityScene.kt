@@ -4,6 +4,7 @@ import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
+import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.oyster.Context
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Position
@@ -36,12 +37,17 @@ class EntityScene : Node2D(), EventBusSubscriber {
 					animateOnHit()
 				}
 			}
+			is DeathEvent -> {
+				if (event.entity == entity) {
+					animateOnDeath()
+				}
+			}
 		}
 	}
 
 	@RegisterFunction
 	override fun _ready() {
-		EventBus.register(this, DamageEvent::class)
+		EventBus.register(this, DamageEvent::class, DeathEvent::class)
 	}
 
 	override fun _onDestroy() {
@@ -83,6 +89,10 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	fun animateOnHit() {
 		animationPlayer.play("on_hit")
+	}
+
+	fun animateOnDeath() {
+		animationPlayer.play("on_death")
 	}
 
 	private fun setPosition(shouldAnimate: Boolean = true) {
