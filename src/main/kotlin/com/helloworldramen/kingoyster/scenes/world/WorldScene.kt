@@ -33,18 +33,17 @@ class WorldScene : Node2D() {
 		context = Context(world)
 		player = world.update(context)
 		context.player = player
-
 		currentlyBoundLevel = context.level
 		bind(context)
 	}
 
 	@RegisterFunction
 	override fun _input(event: InputEvent) {
+		player?.let { parseInput(event, context, it) }
+
 		if (currentlyBoundLevel != context.level) {
 			currentlyBoundLevel = context.level
 			bind(context)
-		} else {
-			player?.let { parseInput(event, context, it) }
 		}
 	}
 
