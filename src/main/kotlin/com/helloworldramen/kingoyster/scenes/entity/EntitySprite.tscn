@@ -89,4 +89,4 @@ visible = false
 position = Vector2( 16, 16 )
 scale = Vector2( 2, 2 )
 frames = SubResource( 12 )
-animation = "knight"
+animation = "slime"

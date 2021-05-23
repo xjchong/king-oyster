@@ -1,5 +1,9 @@
 package com.helloworldramen.kingoyster.scenes.entity
 
+import com.helloworldramen.kingoyster.eventbus.Event
+import com.helloworldramen.kingoyster.eventbus.EventBus
+import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
+import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.oyster.Context
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Position
@@ -14,7 +18,7 @@ import godot.extensions.getNodeAs
 import godot.global.GD
 
 @RegisterClass
-class EntityScene : Node2D() {
+class EntityScene : Node2D(), EventBusSubscriber {
 
 	private val entitySprite: EntitySprite by lazy { getNodeAs("EntitySprite")!! }
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
@@ -22,6 +26,22 @@ class EntityScene : Node2D() {
 
 	private var context: Context = Context.UNKNOWN()
 	private var entity: Entity = Entity.UNKNOWN()
+
+
+	override fun receiveEvent(event: Event) {
+		when (event) {
+			is DamageEvent -> {
+				if (event.target == entity) {
+					animateOnHit()
+				}
+			}
+		}
+	}
+
+	@RegisterFunction
+	override fun _ready() {
+		EventBus.register(this, DamageEvent::class)
+	}
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
@@ -36,7 +56,7 @@ class EntityScene : Node2D() {
 		setPosition(shouldAnimate = false)
 	}
 
-	fun bump(position: Position) {
+	fun animateBump(position: Position) {
 		if (animationPlayer.isPlaying()) return
 		val currentPosition = context.world[entity] ?: return
 
@@ -49,8 +69,12 @@ class EntityScene : Node2D() {
 		}
 	}
 
-	fun pulse() {
+	fun animatePulse() {
 		animationPlayer.play("pulse")
+	}
+
+	fun animateOnHit() {
+		animationPlayer.play("on_hit")
 	}
 
 	private fun setPosition(shouldAnimate: Boolean = true) {

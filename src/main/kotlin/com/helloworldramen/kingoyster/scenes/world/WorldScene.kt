@@ -22,7 +22,6 @@ class WorldScene : Node2D() {
 	var context: Context = Context.UNKNOWN()
 	private var currentlyBoundLevel = 0
 	private var player: Entity? = null
-	private var playerScene: EntityScene? = null
 	private var sceneForEntity: MutableMap<Entity, EntityScene> = mutableMapOf()
 
 	@RegisterFunction
@@ -54,7 +53,7 @@ class WorldScene : Node2D() {
 			return if (player.respondToAction(Move(context, player, position))) {
 				true
 			} else {
-				playerScene?.bump(position)
+				sceneForEntity[player]?.animateBump(position)
 				world[position].tryActions(
 					Open(context, player), Attack(context, player)
 				) != null
@@ -67,7 +66,7 @@ class WorldScene : Node2D() {
 				Ascend(context, player)
 			)
 
-			sceneForEntity[entity]?.pulse()
+			sceneForEntity[entity]?.animatePulse()
 
 			return entity != null
 		}
@@ -144,10 +143,6 @@ class WorldScene : Node2D() {
 					sceneForEntity[entity] = entityScene
 					addChild(entityScene)
 					entityScene.bind(context, entity)
-
-					if (entity.name == "player") {
-						playerScene = entityScene
-					}
 				}
 			}
 		}
