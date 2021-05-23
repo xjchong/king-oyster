@@ -23,6 +23,7 @@ class WorldScene : Node2D() {
 	private var currentlyBoundLevel = 0
 	private var player: Entity? = null
 	private var playerScene: EntityScene? = null
+	private var sceneForEntity: MutableMap<Entity, EntityScene> = mutableMapOf()
 
 	@RegisterFunction
 	override fun _ready() {
@@ -56,15 +57,19 @@ class WorldScene : Node2D() {
 				playerScene?.bump(position)
 				world[position].tryActions(
 					Open(context, player), Attack(context, player)
-				)
+				) != null
 			}
 		}
 
 		fun performStandingActions(): Boolean {
-			return world[currentPosition].tryActions(
+			val entity = world[currentPosition].tryActions(
 				Take(context, player),
 				Ascend(context, player)
 			)
+
+			sceneForEntity[entity]?.pulse()
+
+			return entity != null
 		}
 
 		val isValidInput = when {
@@ -100,6 +105,8 @@ class WorldScene : Node2D() {
 			it.queueFree()
 		}
 
+		sceneForEntity = mutableMapOf()
+
 		Position(world.width - 1, world.height - 1).forEach { position ->
 			val floorScene = GD.load<PackedScene>(EntityScene.PATH)?.instance() as? EntityScene
 			val fogScene = GD.load<PackedScene>(FogScene.PATH)?.instance() as? FogScene
@@ -134,6 +141,7 @@ class WorldScene : Node2D() {
 				val entityScene = GD.load<PackedScene>(EntityScene.PATH)?.instance() as? EntityScene
 
 				if (entityScene != null) {
+					sceneForEntity[entity] = entityScene
 					addChild(entityScene)
 					entityScene.bind(context, entity)
 
@@ -145,13 +153,13 @@ class WorldScene : Node2D() {
 		}
 	}
 
-	private fun List<Entity>?.tryActions(vararg actions: Action): Boolean {
-		if (this.isNullOrEmpty()) return false
+	private fun List<Entity>?.tryActions(vararg actions: Action): Entity? {
+		if (this.isNullOrEmpty()) return null
 
-		return actions.firstOrNull { action ->
-			lastOrNull { entity ->
-				entity.respondToAction(action)
-			} != null
-		} != null
+		for (action in actions) {
+			return lastOrNull { it.respondToAction(action) } ?: continue
+		}
+
+		return null
 	}
 }

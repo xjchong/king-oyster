@@ -5,7 +5,6 @@ import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Position
 import com.helloworldramen.kingoyster.parts.ItemPart
 import com.helloworldramen.kingoyster.parts.MovementPart
-import com.helloworldramen.kingoyster.parts.PortalPart
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -13,8 +12,6 @@ import godot.core.NodePath
 import godot.core.Vector2
 import godot.extensions.getNodeAs
 import godot.global.GD
-import java.util.Timer
-import kotlin.concurrent.timerTask
 
 @RegisterClass
 class EntityScene : Node2D() {
@@ -52,7 +49,13 @@ class EntityScene : Node2D() {
 		}
 	}
 
+	fun pulse() {
+		animationPlayer.play("pulse")
+	}
+
 	private fun setPosition(shouldAnimate: Boolean = true) {
+		if (animationPlayer.isPlaying()) return
+
 		val worldPosition = context.world[entity]
 		val baseZIndex = when {
 			entity.has(MovementPart::class) -> 100
