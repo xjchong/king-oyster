@@ -135,6 +135,16 @@ class World(val width: Int, val height: Int) {
         }
     }
 
+    fun respondToActions(position: Position, vararg actions: Action): Entity? {
+        val entities = get(position) ?: return null
+
+        for (action in actions) {
+            return entities.lastOrNull { it.respondToAction(action) } ?: continue
+        }
+
+        return null
+    }
+
     private fun normalizeTime() {
         updateableEntities.firstOrNull()?.let { firstEntity ->
             val normalizer = firstEntity.nextUpdateTime

@@ -1,5 +1,6 @@
 package com.helloworldramen.kingoyster.parts
 
+import com.helloworldramen.kingoyster.actions.Attack
 import com.helloworldramen.kingoyster.actions.Move
 import com.helloworldramen.kingoyster.oyster.Context
 import com.helloworldramen.kingoyster.oyster.Entity
@@ -14,7 +15,10 @@ class AIPart : Part {
     override fun update(context: Context, partOwner: Entity) {
         // Wander around randomly.
         val currentPosition = context.world[partOwner] ?: return
+        val actionPosition = currentPosition.neighborsShuffled().first()
 
-        partOwner.respondToAction(Move(context, partOwner, currentPosition.neighborsShuffled().first()))
+        if (!partOwner.respondToAction(Move(context, partOwner, actionPosition))) {
+            context.world.respondToActions(actionPosition, Attack(context, partOwner))
+        }
     }
 }
