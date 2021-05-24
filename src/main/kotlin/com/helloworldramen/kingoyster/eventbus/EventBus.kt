@@ -11,19 +11,19 @@ object EventBus: CoroutineScope {
 
     override val coroutineContext: CoroutineContext = Dispatchers.Default
 
-    private val subscribersForEvent: MutableMap<KClass<out Event>, MutableList<EventBusSubscriber>> = mutableMapOf()
+    private val subscribersForEvent: MutableMap<KClass<out Event>, List<EventBusSubscriber>> = mutableMapOf()
     private val eventsForSubscriber: MutableMap<EventBusSubscriber, List<KClass<out Event>>> = mutableMapOf()
 
     fun register(subscriber: EventBusSubscriber, vararg events: KClass<out Event>) {
         eventsForSubscriber[subscriber] = events.toList()
         events.forEach { event ->
-            subscribersForEvent.getOrPut(event) { mutableListOf() }.add(subscriber)
+            subscribersForEvent[event] = subscribersForEvent[event]?.plus(listOf(subscriber)) ?: listOf(subscriber)
         }
     }
 
     fun unregister(subscriber: EventBusSubscriber) {
         eventsForSubscriber[subscriber]?.forEach {
-            subscribersForEvent[it]?.remove(subscriber)
+            subscribersForEvent[it] = subscribersForEvent[it]?.filter { s -> s != subscriber } ?: listOf()
         }
         eventsForSubscriber.remove(subscriber)
     }
