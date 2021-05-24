@@ -13,8 +13,8 @@ import godot.extensions.getNodeAs
 @RegisterClass
 class EntitySprite : Node2D() {
 
-	private val label: Label by lazy { getNodeAs("MarginContainer/Label")!! }
-	private val animatedSprite: AnimatedSprite by lazy { getNodeAs("MarginContainer/AnimatedSprite")!! }
+	private val label: Label by lazy { getNodeAs("Label")!! }
+	private val animatedSprite: AnimatedSprite by lazy { getNodeAs("AnimatedSprite")!! }
 
 	private var entity: Entity? = null
 

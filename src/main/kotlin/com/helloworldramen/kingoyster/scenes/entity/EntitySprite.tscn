@@ -65,14 +65,7 @@ animations = [ {
 [node name="EntitySprite" type="Node2D"]
 script = ExtResource( 4 )
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-margin_right = 32.0
-margin_bottom = 32.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="MarginContainer"]
+[node name="Label" type="Label" parent="."]
 margin_right = 32.0
 margin_bottom = 32.0
 custom_fonts/font = SubResource( 1 )
@@ -84,7 +77,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="MarginContainer"]
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 visible = false
 position = Vector2( 16, 16 )
 scale = Vector2( 2, 2 )
