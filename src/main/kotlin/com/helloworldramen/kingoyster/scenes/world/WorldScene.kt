@@ -186,6 +186,7 @@ class WorldScene : Node2D() {
 	}
 
 	companion object {
+		const val PATH = "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/world/WorldScene.tscn"
 		const val TILE_SIZE = 32
 	}
 }

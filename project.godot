@@ -45,7 +45,7 @@ _global_script_class_icons={
 [application]
 
 config/name="king-oyster"
-run/main_scene="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/world/WorldScene.tscn"
+run/main_scene="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/mainmenu/MainMenuScene.tscn"
 config/icon="res://icon.png"
 
 [display]
