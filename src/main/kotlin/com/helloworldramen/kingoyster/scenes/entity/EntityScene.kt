@@ -29,6 +29,8 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
 	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
 
+	private val toastTextScene = GD.load<PackedScene>(ToastTextScene.PATH)
+
 	private var context: Context = Context.UNKNOWN()
 	private var entity: Entity = Entity.UNKNOWN()
 
@@ -91,9 +93,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	fun animateOnHit(amount: Int) {
-		val toastTextScene = GD.load<PackedScene>(ToastTextScene.PATH)?.instanceAs<ToastTextScene>()
-
-		toastTextScene?.let {
+		toastTextScene?.instanceAs<ToastTextScene>()?.let {
 			it.bind(amount.toString())
 			addChild(it)
 		}

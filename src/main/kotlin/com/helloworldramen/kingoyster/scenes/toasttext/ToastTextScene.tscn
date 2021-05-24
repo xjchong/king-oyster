@@ -7,7 +7,7 @@
 size = 32
 font_data = ExtResource( 2 )
 
-[node name="ToastTextScene" type="Position2D"]
+[node name="ToastTextScene" type="Node2D"]
 z_index = 500
 script = ExtResource( 1 )
 

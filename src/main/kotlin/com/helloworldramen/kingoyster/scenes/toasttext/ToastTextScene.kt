@@ -1,6 +1,7 @@
 package com.helloworldramen.kingoyster.scenes.toasttext
 
 import godot.Label
+import godot.Node2D
 import godot.Position2D
 import godot.Tween
 import godot.annotation.RegisterClass
@@ -12,7 +13,7 @@ import kotlin.math.min
 import kotlin.random.Random
 
 @RegisterClass
-class ToastTextScene : Position2D() {
+class ToastTextScene : Node2D() {
 
 	private val label: Label by lazy { getNodeAs("Label")!! }
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
