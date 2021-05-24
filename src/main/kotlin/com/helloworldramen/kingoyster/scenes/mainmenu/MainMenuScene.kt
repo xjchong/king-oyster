@@ -59,6 +59,7 @@ class MainMenuScene : MarginContainer() {
 	}
 
 	companion object {
+		const val PATH = "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/mainmenu/MainMenuScene.tscn"
 		const val ITEMS_VBOX_PATH = "CenterContainer/VBox/ItemsMarginContainer/ItemsVBox"
 	}
 }

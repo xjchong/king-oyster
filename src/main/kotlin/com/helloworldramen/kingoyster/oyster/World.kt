@@ -1,5 +1,6 @@
 package com.helloworldramen.kingoyster.oyster
 
+import godot.global.GD
 import java.util.*
 
 class World(val width: Int, val height: Int) {
@@ -107,6 +108,10 @@ class World(val width: Int, val height: Int) {
 
     fun update(context: Context): Entity? {
         do {
+            if (updateableEntities.none { it.requiresInput }) {
+                return null
+            }
+
             val entity = updateableEntities.poll() ?: return null
 
             if (entity.nextUpdateTime != nextUpdateTimeForEntity[entity]) {

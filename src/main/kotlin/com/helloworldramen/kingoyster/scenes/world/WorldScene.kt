@@ -2,9 +2,14 @@ package com.helloworldramen.kingoyster.scenes.world
 
 import com.helloworldramen.kingoyster.actions.*
 import com.helloworldramen.kingoyster.consoleviews.WorldConsoleView
+import com.helloworldramen.kingoyster.eventbus.Event
+import com.helloworldramen.kingoyster.eventbus.EventBus
+import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
+import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.oyster.*
 import com.helloworldramen.kingoyster.oyster.World
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
+import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
@@ -31,6 +36,7 @@ class WorldScene : Node2D() {
 	@RegisterFunction
 	override fun _ready() {
 		val world = World(17, 17)
+
 		WorldGenerator.repopulate(world, DungeonGenerationStrategy)
 		context = Context(world)
 		player = world.update(context)
@@ -38,6 +44,13 @@ class WorldScene : Node2D() {
 		currentlyBoundLevel = context.level
 		setupMemoryScenes()
 		bind(context)
+	}
+
+	@RegisterFunction
+	override fun _process(delta: Double) {
+		if (player == null) {
+			getTree()?.changeScene(MainMenuScene.PATH)
+		}
 	}
 
 	@RegisterFunction
