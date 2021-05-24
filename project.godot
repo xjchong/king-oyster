@@ -29,7 +29,7 @@ _global_script_classes=[ {
 "language": "Kotlin",
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/memory/MemoryScene.kt"
 }, {
-"base": "Position2D",
+"base": "Node2D",
 "class": "com_helloworldramen_kingoyster_scenes_toasttext_ToastTextScene",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/toasttext/ToastTextScene.kt"

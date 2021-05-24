@@ -30,9 +30,9 @@ object EventBus: CoroutineScope {
 
     fun post(event: Event) {
         subscribersForEvent[event::class]?.forEach {
-            launch {
+//            launch { // Disabling this for now until I can figure out how to have UI respond to events in a thread safe way.
                 it.receiveEvent(event)
-            }
+//            }
         }
     }
 }
