@@ -59,6 +59,6 @@ class MainMenuScene : MarginContainer() {
 	}
 
 	companion object {
-		const val ITEMS_VBOX_PATH = "CenterContainer/VBox/ItemsCenterContainer/ItemsVBox"
+		const val ITEMS_VBOX_PATH = "CenterContainer/VBox/ItemsMarginContainer/ItemsVBox"
 	}
 }

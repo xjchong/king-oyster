@@ -1,7 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/fonts/small_pixel-7.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/mainmenu/MainMenuScene.kt" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.247059, 0.176471, 0.145098, 1 )
 
 [sub_resource type="DynamicFont" id=1]
 size = 64
@@ -18,6 +21,11 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="BackgroundPanel" type="Panel" parent="."]
+margin_right = 544.0
+margin_bottom = 544.0
+custom_styles/panel = SubResource( 3 )
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 margin_right = 544.0
@@ -40,69 +48,68 @@ margin_bottom = 64.0
 custom_fonts/font = SubResource( 1 )
 text = "King Oyster"
 
-[node name="ItemsCenterContainer" type="CenterContainer" parent="CenterContainer/VBox"]
+[node name="ItemsMarginContainer" type="MarginContainer" parent="CenterContainer/VBox"]
 margin_top = 88.0
 margin_right = 278.0
 margin_bottom = 192.0
 
-[node name="ItemsVBox" type="VBoxContainer" parent="CenterContainer/VBox/ItemsCenterContainer"]
-margin_left = 89.0
-margin_right = 189.0
+[node name="ItemsVBox" type="VBoxContainer" parent="CenterContainer/VBox/ItemsMarginContainer"]
+margin_right = 278.0
 margin_bottom = 104.0
 
-[node name="StartItem" type="HBoxContainer" parent="CenterContainer/VBox/ItemsCenterContainer/ItemsVBox"]
-margin_right = 100.0
+[node name="StartItem" type="HBoxContainer" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox"]
+margin_right = 278.0
 margin_bottom = 32.0
 custom_constants/separation = 8
 
-[node name="StartSelector" type="Label" parent="CenterContainer/VBox/ItemsCenterContainer/ItemsVBox/StartItem"]
+[node name="StartSelector" type="Label" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox/StartItem"]
 margin_right = 10.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 10, 0 )
 custom_fonts/font = SubResource( 2 )
 text = ">"
 
-[node name="StartLabel" type="Label" parent="CenterContainer/VBox/ItemsCenterContainer/ItemsVBox/StartItem"]
+[node name="StartLabel" type="Label" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox/StartItem"]
 margin_left = 18.0
 margin_right = 80.0
 margin_bottom = 32.0
 custom_fonts/font = SubResource( 2 )
 text = "Start"
 
-[node name="OptionsItem" type="HBoxContainer" parent="CenterContainer/VBox/ItemsCenterContainer/ItemsVBox"]
+[node name="OptionsItem" type="HBoxContainer" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox"]
 margin_top = 36.0
-margin_right = 100.0
+margin_right = 278.0
 margin_bottom = 68.0
 custom_constants/separation = 8
 
-[node name="OptionsSelector" type="Label" parent="CenterContainer/VBox/ItemsCenterContainer/ItemsVBox/OptionsItem"]
+[node name="OptionsSelector" type="Label" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox/OptionsItem"]
 margin_right = 10.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 10, 0 )
 custom_fonts/font = SubResource( 2 )
 text = ">"
 
-[node name="OptionsLabel" type="Label" parent="CenterContainer/VBox/ItemsCenterContainer/ItemsVBox/OptionsItem"]
+[node name="OptionsLabel" type="Label" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox/OptionsItem"]
 margin_left = 18.0
 margin_right = 100.0
 margin_bottom = 32.0
 custom_fonts/font = SubResource( 2 )
 text = "Options"
 
-[node name="ExitItem" type="HBoxContainer" parent="CenterContainer/VBox/ItemsCenterContainer/ItemsVBox"]
+[node name="ExitItem" type="HBoxContainer" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox"]
 margin_top = 72.0
-margin_right = 100.0
+margin_right = 278.0
 margin_bottom = 104.0
 custom_constants/separation = 8
 
-[node name="ExitSelector" type="Label" parent="CenterContainer/VBox/ItemsCenterContainer/ItemsVBox/ExitItem"]
+[node name="ExitSelector" type="Label" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox/ExitItem"]
 margin_right = 10.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 10, 0 )
 custom_fonts/font = SubResource( 2 )
 text = ">"
 
-[node name="ExitLabel" type="Label" parent="CenterContainer/VBox/ItemsCenterContainer/ItemsVBox/ExitItem"]
+[node name="ExitLabel" type="Label" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox/ExitItem"]
 margin_left = 18.0
 margin_right = 61.0
 margin_bottom = 32.0
