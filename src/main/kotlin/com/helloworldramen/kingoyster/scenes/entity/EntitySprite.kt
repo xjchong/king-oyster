@@ -31,13 +31,11 @@ class EntitySprite : Node2D() {
 
 	private fun updateAppearance() {
 		animatedSprite.visible = false
-		label.visible = true
 
 		val (text, color)= when(entity?.name) {
 			"player" -> {
 				animatedSprite.visible = true
 				animatedSprite.play("knight")
-				label.visible = false
 				Pair("@", Color.yellow)
 			}
 			"wall" -> Pair("#", Color.white)
@@ -50,7 +48,6 @@ class EntitySprite : Node2D() {
 			"slime" -> {
 				animatedSprite.visible = true
 				animatedSprite.play("slime")
-				label.visible = false
 				Pair("s", Color.lightgreen)
 			}
 			"stairs" -> Pair("<", Color.white)
@@ -61,6 +58,7 @@ class EntitySprite : Node2D() {
 
 		label.text = text
 		label.set("custom_colors/font_color", color)
+		label.visible = !animatedSprite.visible
 	}
 
 	private val Entity.canChangeAppearance: Boolean

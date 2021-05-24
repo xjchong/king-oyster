@@ -106,7 +106,6 @@ class World(val width: Int, val height: Int) {
     }
 
     fun update(context: Context): Entity? {
-        println(updateableEntities.map { Pair(it.name, it.nextUpdateTime)})
         do {
             val entity = updateableEntities.poll() ?: return null
 
