@@ -155,7 +155,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 					it.bind(context, entity)
 
 					if (entity.name == "wall") {
-						tileMap.setCell(position.x.toLong(), position.y.toLong(), 0)
+						tileMap.setCell(position.x.toLong(), position.y.toLong(), 1)
 					}
 				}
 			}
@@ -180,13 +180,13 @@ class WorldScene : Node2D(), EventBusSubscriber {
 
 	private fun TileMap.setOuterBorder(world: World) {
 		for (x in (-1..world.width)) {
-			setCell(x.toLong(), (-1).toLong(), 0)
-			setCell(x.toLong(), world.height.toLong(), 0)
+			setCell(x.toLong(), (-1).toLong(), 1)
+			setCell(x.toLong(), world.height.toLong(), 1)
 		}
 
 		for (y in (0 until world.height)) {
-			setCell((-1).toLong(), y.toLong(), 0)
-			setCell(world.width.toLong(), y.toLong(), 0)
+			setCell((-1).toLong(), y.toLong(), 1)
+			setCell(world.width.toLong(), y.toLong(), 1)
 		}
 	}
 
