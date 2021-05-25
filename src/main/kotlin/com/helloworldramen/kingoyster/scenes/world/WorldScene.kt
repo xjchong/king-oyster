@@ -1,6 +1,7 @@
 package com.helloworldramen.kingoyster.scenes.world
 
 import com.helloworldramen.kingoyster.actions.*
+import com.helloworldramen.kingoyster.ai.Ai
 import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
@@ -82,7 +83,14 @@ class WorldScene : Node2D(), EventBusSubscriber {
 		if (nextEntity != lastEntity || lastEntity?.time != lastEntityTime) {
 			lastEntity = nextEntity
 			lastEntityTime = nextEntity?.time
-			nextEntity?.update(context)
+
+			nextEntity?.let {
+				it.update(context)
+
+				if (it.name != "player") {
+					Ai.actForEntity(context, it)
+				}
+			}
 		}
 	}
 

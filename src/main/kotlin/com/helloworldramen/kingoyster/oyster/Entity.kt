@@ -21,7 +21,7 @@ class Entity (
 
         if (didRespond) {
             with (action.actor) {
-                time += (BASE_TIME_STEP * timeFactor * action.timeFactor).toInt()
+                time += (BASE_TIME_STEP * timeFactor * action.timeFactor)
             }
         }
 
@@ -34,6 +34,10 @@ class Entity (
         parts.forEach { it.update(context, this) }
     }
 
+    fun idle() {
+        time += BASE_TIME_STEP * timeFactor
+    }
+
     inline fun <reified P : Part> find(klass: KClass<P>): P? {
         return parts.find { klass.isInstance(it) } as? P
     }
@@ -43,7 +47,7 @@ class Entity (
     }
 
     companion object {
-        const val BASE_TIME_STEP = 100
+        private const val BASE_TIME_STEP = 100
 
         val UNKNOWN: Entity = Entity("unknown")
     }
