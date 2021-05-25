@@ -6,7 +6,7 @@ import com.helloworldramen.kingoyster.ai.curves.LinearCurve
 
 class ConstantConsideration(value: Double) : GameAiConsideration(LinearCurve(value, value)){
 
-    override val minValue: Double = 1.0
+    override val minValue: Double = 0.0
     override val maxValue: Double = 1.0
 
     override fun evaluate(aiContext: GameAiContext): Double {
