@@ -2,6 +2,7 @@ package com.helloworldramen.kingoyster.parts
 
 import com.helloworldramen.kingoyster.actions.Ascend
 import com.helloworldramen.kingoyster.eventbus.EventBus
+import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.oyster.Action
 import com.helloworldramen.kingoyster.oyster.Context
@@ -35,6 +36,8 @@ class AscendablePart : Part {
 
             entity.find(MemoryPart::class)?.clear()
             WorldGenerator.repopulate(context.world, generationStrategy, entity, context.world[entity])
+
+            EventBus.post(AscendEvent)
         }
 
         return true

@@ -1,6 +1,11 @@
 package com.helloworldramen.kingoyster.scenes.world
 
 import com.helloworldramen.kingoyster.actions.*
+import com.helloworldramen.kingoyster.eventbus.Event
+import com.helloworldramen.kingoyster.eventbus.EventBus
+import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
+import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
+import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.oyster.*
 import com.helloworldramen.kingoyster.oyster.World
 import com.helloworldramen.kingoyster.parts.HealthPart
@@ -16,9 +21,11 @@ import godot.core.Vector2
 import godot.extensions.getNodeAs
 import godot.extensions.instanceAs
 import godot.global.GD
+import java.util.Timer
+import kotlin.concurrent.timerTask
 
 @RegisterClass
-class WorldScene : Node2D() {
+class WorldScene : Node2D(), EventBusSubscriber {
 
 	private val tileMap: TileMap by lazy { getNodeAs("TileMap")!! }
 	private val entityScenesBucket: Node2D by lazy { getNodeAs("EntityScenesBucket")!! }
@@ -28,31 +35,39 @@ class WorldScene : Node2D() {
 	private val packedEntityScene = GD.load<PackedScene>(EntityScene.PATH)
 
 	var context: Context = Context.UNKNOWN
-	private var currentlyBoundLevel = 0
 	private var player: Entity? = null
 	private var lastEntity: Entity? = null
 	private var lastEntityTime: Double? = null
 	private val sceneForEntity: MutableMap<Entity, EntityScene> = mutableMapOf()
 
+	override fun receiveEvent(event: Event) {
+		when (event) {
+			is AscendEvent -> {
+				player?.update(context)
+				bind(context)
+			}
+			is GameOverEvent -> getTree()?.changeScene(MainMenuScene.PATH)
+		}
+	}
+
 	@RegisterFunction
 	override fun _ready() {
 		val world = World(17, 17)
 
+		EventBus.register(this, AscendEvent::class, GameOverEvent::class)
+
 		player = WorldGenerator.repopulate(world, DungeonGenerationStrategy)
 		context = Context(world)
-		currentlyBoundLevel = context.level
 
 		bind(context)
 	}
 
+	override fun _onDestroy() {
+		EventBus.unregister(this)
+	}
+
 	@RegisterFunction
 	override fun _process(delta: Double) {
-		// End the game if the player dies.
-		if (player?.find(HealthPart::class)?.health ?: 0 <= 0) {
-			getTree()?.changeScene(MainMenuScene.PATH)
-			return
-		}
-
 		updateNextEntity()
 	}
 
@@ -68,11 +83,6 @@ class WorldScene : Node2D() {
 			lastEntity = nextEntity
 			lastEntityTime = nextEntity?.time
 			nextEntity?.update(context)
-		}
-
-		if (currentlyBoundLevel != context.level) {
-			currentlyBoundLevel = context.level
-			bind(context)
 		}
 	}
 
