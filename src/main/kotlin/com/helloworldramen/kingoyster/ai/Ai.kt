@@ -3,8 +3,10 @@ package com.helloworldramen.kingoyster.ai
 import com.helloworldramen.kingoyster.ai.considerations.ConstantConsideration
 import com.helloworldramen.kingoyster.ai.considerations.IsEnemyInRangeConsideration
 import com.helloworldramen.kingoyster.ai.options.AttackRandomEnemyOption
+import com.helloworldramen.kingoyster.ai.options.IdleOption
 import com.helloworldramen.kingoyster.ai.options.WanderRandomlyOption
 import com.helloworldramen.kingoyster.ai.reasoners.HighestValueReasoner
+import com.helloworldramen.kingoyster.ai.reasoners.PurelyRandomReasoner
 import com.helloworldramen.kingoyster.oyster.Context
 import com.helloworldramen.kingoyster.oyster.Entity
 import godot.global.GD
@@ -16,11 +18,14 @@ object Ai {
         val aiContext = GameAiContext(context, entity)
 
         val entityOptions = when (entity.name) {
-            "slime" -> HighestValueReasoner.prioritize(aiContext, listOf(
+            "slime" -> PurelyRandomReasoner.prioritize(aiContext, listOf(
                 AttackRandomEnemyOption(
                     IsEnemyInRangeConsideration
                 ),
                 WanderRandomlyOption(
+                    ConstantConsideration(0.5)
+                ),
+                IdleOption(
                     ConstantConsideration(0.5)
                 )
             ))

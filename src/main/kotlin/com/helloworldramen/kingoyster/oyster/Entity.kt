@@ -34,10 +34,11 @@ class Entity (
         parts.forEach { it.update(context, this) }
     }
 
-    fun idle(world: World) {
-        if (time > world.currentTime) return
+    fun idle(world: World): Boolean {
+        if (time > world.currentTime) return false
 
         time += BASE_TIME_STEP * timeFactor
+        return true
     }
 
     inline fun <reified P : Part> find(klass: KClass<P>): P? {
