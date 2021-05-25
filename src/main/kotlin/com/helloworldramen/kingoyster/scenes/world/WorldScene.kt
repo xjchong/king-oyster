@@ -50,7 +50,7 @@ class WorldScene : Node2D() {
 		// End the game if the player dies.
 		if (player?.find(HealthPart::class)?.health ?: 0 <= 0) {
 			getTree()?.changeScene(MainMenuScene.PATH)
-            return
+			return
 		}
 
 		updateNextEntity()
