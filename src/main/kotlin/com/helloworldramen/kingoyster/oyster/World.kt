@@ -1,12 +1,9 @@
 package com.helloworldramen.kingoyster.oyster
 
-import godot.global.GD
-import java.util.*
-
 class World(val width: Int, val height: Int) {
 
     val currentTime: Double
-        get() = updateableEntities.peek()?.nextUpdateTime ?: 0.0
+        get() = next()?.time ?: 0.0
 
     private val entitiesForPosition: MutableMap<Position, MutableList<Entity>> =
         mutableMapOf<Position, MutableList<Entity>>().apply {
@@ -15,23 +12,11 @@ class World(val width: Int, val height: Int) {
             }
         }
     private val positionForEntity: MutableMap<Entity, Position> = mutableMapOf()
-    private val nextUpdateTimeForEntity: MutableMap<Entity, Double> = mutableMapOf()
-    private val updateNumberForEntity: MutableMap<Entity, Long> = mutableMapOf()
     private val allEntities: MutableList<Entity> = mutableListOf()
-
-    private val updateComparator = compareBy<Entity> {
-        it.nextUpdateTime
-    }.thenBy {
-        updateNumberForEntity[it] ?: 0L
-    }
-    private val updateableEntities: PriorityQueue<Entity> = PriorityQueue(updateComparator)
-
-    private var nextUpdateNumber: Long = 0 // Use this to keep track of the number of updates. It should be normalized periodically.
+    private val updateableEntities: MutableList<Entity> = mutableListOf()
 
     operator fun get(position: Position): List<Entity>? = entitiesForPosition[position]
-
     operator fun get(x: Int, y: Int): List<Entity>? = entitiesForPosition[Position(x, y)]
-
     operator fun get(entity: Entity): Position? = positionForEntity[entity]
 
     fun add(entity: Entity, position: Position? = null): Boolean {
@@ -40,10 +25,8 @@ class World(val width: Int, val height: Int) {
         allEntities.add(entity)
 
         if (entity.timeFactor > 0.0) {
-            entity.nextUpdateTime = currentTime
+            entity.time = currentTime
             updateableEntities.add(entity)
-            nextUpdateTimeForEntity[entity] = entity.nextUpdateTime
-            updateNumberForEntity[entity] = nextUpdateNumber++
         }
 
         if (position != null) {
@@ -78,8 +61,6 @@ class World(val width: Int, val height: Int) {
             entitiesForPosition[it]?.remove(entity)
         }
         updateableEntities.remove(entity)
-        nextUpdateTimeForEntity.remove(entity)
-        updateNumberForEntity.remove(entity)
         allEntities.remove(entity)
 
         return true
@@ -100,44 +81,19 @@ class World(val width: Int, val height: Int) {
         entitiesForPosition.values.forEach { it.clear() }
         positionForEntity.clear()
         updateableEntities.clear()
-        nextUpdateTimeForEntity.clear()
-        updateNumberForEntity.clear()
         allEntities.clear()
-        nextUpdateNumber = 0
     }
 
-    fun update(context: Context): Entity? {
-        do {
-            if (updateableEntities.none { it.requiresInput }) {
-                return null
-            }
+    fun next(): Entity? {
+        val nextEntity = updateableEntities.minByOrNull {
+            it.time
+        } ?: return null
 
-            val entity = updateableEntities.poll() ?: return null
-
-            if (entity.nextUpdateTime != nextUpdateTimeForEntity[entity]) {
-                nextUpdateTimeForEntity[entity] = entity.nextUpdateTime
-                updateableEntities.add(entity)
-                continue
-            }
-
-            if (entity.nextUpdateTime > NORMALIZE_TIME_THRESHOLD) {
-                normalizeTime()
-            }
-
-            entity.update(context)
-
-            // If after updating the entity, its time didn't change, then assume it is waiting.
-            if (entity.nextUpdateTime == nextUpdateTimeForEntity[entity]) {
-                entity.nextUpdateTime += Entity.BASE_TIME_STEP * entity.timeFactor
-            }
-
-            updateableEntities.add(entity)
-            nextUpdateTimeForEntity[entity] = entity.nextUpdateTime
-        } while (updateableEntities.firstOrNull()?.requiresInput == false)
-
-        return updateableEntities.firstOrNull()?.apply {
-            update(context)
+        if (nextEntity.time > NORMALIZE_TIME_THRESHOLD) {
+            normalizeTime()
         }
+
+        return nextEntity
     }
 
     fun respondToActions(position: Position, vararg actions: Action): Entity? {
@@ -151,13 +107,10 @@ class World(val width: Int, val height: Int) {
     }
 
     private fun normalizeTime() {
-        updateableEntities.firstOrNull()?.let { firstEntity ->
-            val normalizer = firstEntity.nextUpdateTime
+        val normalizer = next()?.time ?: return
 
-            updateableEntities.forEach {
-                it.nextUpdateTime -= normalizer
-                nextUpdateTimeForEntity[it] = it.nextUpdateTime
-            }
+        updateableEntities.forEach {
+            it.time -= normalizer
         }
     }
 

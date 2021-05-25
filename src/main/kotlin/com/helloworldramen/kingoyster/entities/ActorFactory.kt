@@ -26,8 +26,7 @@ object ActorFactory {
                 visionRange = 10
             )
         ),
-        timeFactor = 1.0,
-        requiresInput = true
+        timeFactor = 1.0
     )
 
     fun slime() = Entity(

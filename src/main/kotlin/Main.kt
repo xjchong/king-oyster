@@ -36,7 +36,7 @@ class ConsoleGameEngine : EventBusSubscriber {
 
         while (true) {
             val startTime = System.nanoTime()
-            val player = world.update(context) ?: break
+            val player = world.next() ?: break
             println((System.nanoTime() - startTime) / 1000000.0)
             WorldConsoleView.display(context.world, player)
 

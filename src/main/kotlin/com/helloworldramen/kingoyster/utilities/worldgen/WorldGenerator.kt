@@ -10,7 +10,8 @@ import kotlin.math.roundToInt
 
 object WorldGenerator {
 
-    fun repopulate(world: World, strategy: WorldGenerationStrategy, existingPlayer: Entity? = null, playerPosition: Position? = null) {
+    fun repopulate(world: World, strategy: WorldGenerationStrategy, existingPlayer: Entity? = null,
+                   playerPosition: Position? = null): Entity {
         val player = existingPlayer ?: ActorFactory.player()
 
         world.clear()
@@ -25,6 +26,8 @@ object WorldGenerator {
         placePlayer(world, player, playerPosition)
         placeEnemies(world)
         placeItems(world)
+
+        return player
     }
 
     private fun placePlayer(world: World, player: Entity, position: Position? = null) {

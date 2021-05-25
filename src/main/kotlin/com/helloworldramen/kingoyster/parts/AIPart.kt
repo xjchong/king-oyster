@@ -18,7 +18,9 @@ class AIPart : Part {
         val actionPosition = currentPosition.neighborsShuffled().first()
 
         if (!partOwner.respondToAction(Move(context, partOwner, actionPosition))) {
-            context.world.respondToActions(actionPosition, Attack(context, partOwner))
+            if (context.world.respondToActions(actionPosition, Attack(context, partOwner)) == null) {
+                partOwner.time += Entity.BASE_TIME_STEP * partOwner.timeFactor
+            }
         }
     }
 }

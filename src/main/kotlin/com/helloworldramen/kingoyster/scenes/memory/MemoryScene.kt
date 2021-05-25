@@ -19,7 +19,7 @@ class MemoryScene : Node2D() {
 	private val fogRect: ColorRect by lazy { getNodeAs("FogRect")!! }
 	private val entitySprite: EntitySprite by lazy { getNodeAs("EntitySprite")!! }
 
-	private var entity: Entity = Entity.UNKNOWN()
+	private var entity: Entity = Entity.UNKNOWN
 	private var worldPosition: Position = Position(0, 0)
 
 	@RegisterFunction

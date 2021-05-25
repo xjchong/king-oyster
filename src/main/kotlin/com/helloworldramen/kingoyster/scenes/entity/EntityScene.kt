@@ -31,8 +31,8 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	private val toastTextScene = GD.load<PackedScene>(ToastTextScene.PATH)
 
-	private var context: Context = Context.UNKNOWN()
-	private var entity: Entity = Entity.UNKNOWN()
+	private var context: Context = Context.UNKNOWN
+	private var entity: Entity = Entity.UNKNOWN
 
 
 	override fun receiveEvent(event: Event) {

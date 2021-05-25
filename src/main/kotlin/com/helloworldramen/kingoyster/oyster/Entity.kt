@@ -6,23 +6,22 @@ class Entity (
     val name: String,
     val parts: List<Part> = listOf(),
     var timeFactor: Double = 0.0, // 0 means this entity needs no updates.
-    var requiresInput: Boolean = false,
-    var nextUpdateTime: Double = 0.0
+    var time: Double = 0.0
 ) {
 
     fun copy(): Entity {
-        return Entity(name, parts.map { it.copy() }, timeFactor, requiresInput, nextUpdateTime)
+        return Entity(name, parts.map { it.copy() }, timeFactor, time)
     }
 
     fun respondToAction(action: Action): Boolean {
         // Actors shouldn't be able to perform actions if its not their turn yet.
-        if (action.context.world.currentTime < action.actor.nextUpdateTime) return false
+        if (action.context.world.currentTime < action.actor.time) return false
 
         val didRespond = parts.sumBy { if (it.respondToAction(this, action)) 1 else 0 } > 0
 
         if (didRespond) {
             with (action.actor) {
-                nextUpdateTime += (BASE_TIME_STEP * timeFactor * action.timeFactor).toInt()
+                time += (BASE_TIME_STEP * timeFactor * action.timeFactor).toInt()
             }
         }
 
@@ -30,6 +29,8 @@ class Entity (
     }
 
     fun update(context: Context) {
+        if (time > context.world.currentTime) return
+
         parts.forEach { it.update(context, this) }
     }
 
@@ -44,8 +45,6 @@ class Entity (
     companion object {
         const val BASE_TIME_STEP = 100
 
-        fun UNKNOWN(): Entity {
-            return Entity("unknown")
-        }
+        val UNKNOWN: Entity = Entity("unknown")
     }
 }
