@@ -28,7 +28,7 @@ object Ai {
         }
 
         if (!entityOptions.any { it.execute(aiContext) }) {
-            entity.idle()
+            entity.idle(context.world)
         }
         GD.print("ai time for ${entity.name}: ${(System.nanoTime() - startTime) / 1000000.0}")
     }

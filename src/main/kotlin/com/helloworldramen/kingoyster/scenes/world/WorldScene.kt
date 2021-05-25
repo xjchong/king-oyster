@@ -44,7 +44,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 	override fun receiveEvent(event: Event) {
 		when (event) {
 			is AscendEvent -> {
-				player?.update(context)
+				player?.update(context, context.world)
 				bind(context)
 			}
 			is GameOverEvent -> getTree()?.changeScene(MainMenuScene.PATH)
@@ -85,7 +85,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 			lastEntityTime = nextEntity?.time
 
 			nextEntity?.let {
-				it.update(context)
+				it.update(context, context.world)
 
 				if (it.name != "player") {
 					Ai.actForEntity(context, it)
@@ -100,6 +100,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 
 		fun performActions(position: Position?) {
 			when {
+				world.currentTime < player.time -> return
 				position == null -> {
 					world.respondToActions(currentPosition,
 						Take(context, player),
@@ -123,6 +124,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 			inputEvent.isActionPressed("ui_down", true) -> performActions(currentPosition.south())
 			inputEvent.isActionPressed("ui_left", true) -> performActions(currentPosition.west())
 			inputEvent.isActionPressed("ui_accept") -> performActions(null)
+			inputEvent.isActionPressed("game_b", true) -> player.idle(world)
 		}
 	}
 

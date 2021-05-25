@@ -28,13 +28,15 @@ class Entity (
         return didRespond
     }
 
-    fun update(context: Context) {
-        if (time > context.world.currentTime) return
+    fun update(context: Context, world: World) {
+        if (time > world.currentTime) return
 
         parts.forEach { it.update(context, this) }
     }
 
-    fun idle() {
+    fun idle(world: World) {
+        if (time > world.currentTime) return
+
         time += BASE_TIME_STEP * timeFactor
     }
 
