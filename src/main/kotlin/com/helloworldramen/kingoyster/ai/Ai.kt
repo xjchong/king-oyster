@@ -48,6 +48,12 @@ object Ai {
         if (!entityOptions.any { it.execute(aiContext) }) {
             entity.idle(context.world)
         }
-        GD.print("ai time for ${entity.name}: ${(System.nanoTime() - startTime) / 1000000.0}")
+
+        log(aiContext, entity, entityOptions, startTime)
+    }
+
+    private fun log(aiContext: GameAiContext, entity: Entity, options: List<GameAiOption>, startTime: Long) {
+        val totalTimeString = String.format("%.2f", (System.nanoTime() - startTime) / 1000000.0)
+        GD.print("AI(${totalTimeString}ms) ${entity.name}: ${options.map { Pair(it::class.simpleName?.take(5), it.evaluate(aiContext)) }}")
     }
 }

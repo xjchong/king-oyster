@@ -6,10 +6,10 @@ import com.helloworldramen.kingoyster.ai.curves.LinearCurve
 
 abstract class BooleanConsideration : GameAiConsideration(LinearCurve()) {
 
-    override val minValue: Double = 0.0
-    override val maxValue: Double = 1.0
+    final override val minValue: Double = 0.0
+    final override val maxValue: Double = 1.0
 
-    override fun evaluate(aiContext: GameAiContext): Double {
+    final override fun evaluate(aiContext: GameAiContext): Double {
         return if (isConditionTrue(aiContext)) 1.0 else 0.0
     }
 

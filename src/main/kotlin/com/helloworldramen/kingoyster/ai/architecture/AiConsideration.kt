@@ -1,7 +1,7 @@
 package com.helloworldramen.kingoyster.ai.architecture
 
 
-abstract class AiConsideration<C : AiContext>(val curve: AiCurve) {
+abstract class AiConsideration<C : AiContext>(private val curve: AiCurve) {
 
     protected abstract val minValue: Double
     protected abstract val maxValue: Double
