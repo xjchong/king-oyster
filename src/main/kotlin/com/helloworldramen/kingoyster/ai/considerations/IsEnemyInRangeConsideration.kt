@@ -9,12 +9,12 @@ object IsEnemyInRangeConsideration : BooleanConsideration() {
     override fun isConditionTrue(aiContext: GameAiContext): Boolean {
         val (context, entity) = aiContext
         val entityPosition = context.world[entity] ?: return false
-        val entityFaction = entity.find(FactionPart::class)?.faction
+        val entityFaction = entity.find<FactionPart>()?.faction
 
         return entityPosition.neighbors().any { neighbor ->
             context.world[neighbor]?.any {
-                it.has(AttackablePart::class) &&
-                        it.find(FactionPart::class)?.faction != entityFaction
+                it.has<AttackablePart>() &&
+                        it.find<FactionPart>()?.faction != entityFaction
             } == true
         }
     }
