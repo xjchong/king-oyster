@@ -111,10 +111,8 @@ class WorldScene : Node2D(), EventBusSubscriber {
 				}
 				player.respondToAction(Move(context, player, position)) -> return
 				world.respondToActions(position, Open(context, player)) != null -> return
-				else -> {
-					sceneForEntity[player]?.animateBump(position)
-					world.respondToActions(position, Attack(context, player)) != null
-				}
+				world.respondToActions(position, Attack(context, player)) != null -> return
+				else -> sceneForEntity[player]?.animateBump(position)
 			}
 		}
 

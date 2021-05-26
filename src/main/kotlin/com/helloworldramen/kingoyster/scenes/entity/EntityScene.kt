@@ -3,6 +3,7 @@ package com.helloworldramen.kingoyster.scenes.entity
 import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
+import com.helloworldramen.kingoyster.eventbus.events.AttackEvent
 import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.oyster.Context
@@ -41,6 +42,13 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	override fun receiveEvent(event: Event) {
 		when (event) {
+			is AttackEvent -> {
+				if (event.attacker == entity) {
+					context.world[event.target]?.let {
+						animateBump(it)
+					}
+				}
+			}
 			is DamageEvent -> {
 				if (event.target == entity) {
 					animateOnHit(event.value)
@@ -56,7 +64,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _ready() {
-		EventBus.register(this, DamageEvent::class, DeathEvent::class)
+		EventBus.register(this, AttackEvent::class, DamageEvent::class, DeathEvent::class)
 		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
 	}
 

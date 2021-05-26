@@ -2,6 +2,8 @@ package com.helloworldramen.kingoyster.parts
 
 import com.helloworldramen.kingoyster.actions.Attack
 import com.helloworldramen.kingoyster.actions.Damage
+import com.helloworldramen.kingoyster.eventbus.EventBus
+import com.helloworldramen.kingoyster.eventbus.events.AttackEvent
 import com.helloworldramen.kingoyster.oyster.Action
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Part
@@ -27,6 +29,8 @@ class AttackablePart : Part {
         if (find(FactionPart::class)?.faction == attacker.find(FactionPart::class)?.faction) {
             return false
         }
+
+        EventBus.post(AttackEvent(attacker, this))
 
         respondToAction(Damage(
             context, attacker, amount
