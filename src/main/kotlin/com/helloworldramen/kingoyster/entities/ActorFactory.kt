@@ -29,6 +29,28 @@ object ActorFactory {
         timeFactor = 1.0
     )
 
+    fun goblin() = Entity(
+        name = "goblin",
+        parts = listOf(
+            AttackablePart(),
+            CombatPart(
+                attackPotency = 1
+            ),
+            FactionPart(Faction.Monster),
+            HealthPart(
+                maxHealth = 2
+            ),
+            PhysicalPart(
+                isPassable = false
+            ),
+            MovementPart(),
+            SensoryPart(
+                visionRange = 7
+            )
+        ),
+        timeFactor = 1.0
+    )
+
     fun slime() = Entity(
         name = "slime",
         parts = listOf(

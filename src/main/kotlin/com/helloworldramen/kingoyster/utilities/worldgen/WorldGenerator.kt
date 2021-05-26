@@ -41,8 +41,11 @@ object WorldGenerator {
     }
 
     private fun placeEnemies(world: World) {
-        world.placeWithDensity(0.02) {
+        world.placeWithDensity(0.014) {
             ActorFactory.slime()
+        }
+        world.placeWithDensity(0.006) {
+            ActorFactory.goblin()
         }
     }
 

@@ -8,6 +8,6 @@ class LinearCurve(startValue: Double = 0.0, endValue: Double = 1.0) : AiCurve {
     private val y2: Double = endValue.coerceIn(0.0, 1.0)
 
     override fun transform(rawNormalizedValue: Double): Double {
-        return ((y1 - y2) * rawNormalizedValue) + y1
+        return ((y2 - y1) * rawNormalizedValue) + y1
     }
 }
