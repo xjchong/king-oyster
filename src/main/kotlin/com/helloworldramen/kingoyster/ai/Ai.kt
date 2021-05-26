@@ -20,6 +20,11 @@ object Ai {
         val aiContext = GameAiContext(context, entity)
 
         val entityOptions = when (entity.name) {
+            "ghost" -> HighestValueReasoner.prioritize(aiContext, listOf(
+                WanderRandomlyOption(
+                    ConstantConsideration(0.5)
+                )
+            ))
             "goblin" -> HighestValueReasoner.prioritize(aiContext, listOf(
                 AttackRandomEnemyOption(
                     IsEnemyInRangeConsideration

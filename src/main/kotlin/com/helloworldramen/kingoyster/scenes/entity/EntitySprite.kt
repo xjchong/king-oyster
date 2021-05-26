@@ -45,6 +45,9 @@ class EntitySprite : Node2D() {
 					Color.orange
 				)
 			}
+			"ghost" -> {
+				Pair("G", Color.darkblue)
+			}
 			"goblin" -> {
 				Pair("g", Color.darkred)
 			}
