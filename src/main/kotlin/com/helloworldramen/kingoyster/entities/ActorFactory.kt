@@ -14,7 +14,7 @@ object ActorFactory {
             ),
             FactionPart(Faction.Player),
             HealthPart(
-                maxHealth = 10
+                maxHealth = 100
             ),
             InventoryPart(6),
             PhysicalPart(
