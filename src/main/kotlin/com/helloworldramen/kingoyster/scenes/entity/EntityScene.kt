@@ -34,6 +34,10 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private var context: Context = Context.UNKNOWN
 	private var entity: Entity = Entity.UNKNOWN
 
+	private var isTweening: Boolean = false
+
+	val isAnimating: Boolean
+		get() = isTweening || animationPlayer.isPlaying()
 
 	override fun receiveEvent(event: Event) {
 		when (event) {
@@ -53,6 +57,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	@RegisterFunction
 	override fun _ready() {
 		EventBus.register(this, DamageEvent::class, DeathEvent::class)
+		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
 	}
 
 	override fun _onDestroy() {
@@ -61,7 +66,13 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
-		if (entity.canChangePosition) setPosition()
+		if (entity.canChangePosition) {
+			context.world[entity]?.let {
+				if (position != calculateNodePosition(it)) {
+					setPosition()
+				}
+			}
+		}
 	}
 
 	fun bind(context: Context, entity: Entity) {
@@ -107,12 +118,17 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		animationPlayer.play("on_death")
 	}
 
+	@RegisterFunction
+	fun onAllTweenCompleted() {
+		isTweening = false
+	}
+
 	private fun setPosition(shouldAnimate: Boolean = true) {
-		if (animationPlayer.isPlaying()) return
+		if (isAnimating) return
 
 		val worldPosition = context.world[entity]
 		val baseZIndex = when {
-			entity.has(MovementPart::class) -> 100
+			entity.has<MovementPart>() -> 100
 			else -> 50
 		}
 
@@ -125,13 +141,11 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		zIndex = (baseZIndex + context.world[worldPosition]!!.indexOf(entity)).toLong()
 
 		if (shouldAnimate) {
-			tween.run {
-				interpolateProperty(this@EntityScene, NodePath("position"),
-					initialVal = position, finalVal = calculateNodePosition(worldPosition),
-					0.1, easeType = Tween.EASE_IN
-				)
-				start()
-			}
+			isTweening = true
+			tween.interpolateProperty(this, NodePath("position"),
+				initialVal = position, finalVal = calculateNodePosition(worldPosition),
+				0.06, transType = Tween.TRANS_QUAD, easeType = Tween.EASE_IN)
+			tween.start()
 		} else {
 			position = calculateNodePosition(worldPosition)
 		}
@@ -142,7 +156,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	private val Entity.canChangePosition: Boolean
-		get() = has(MovementPart::class) || has(ItemPart::class)
+		get() = has<MovementPart>() || has<ItemPart>()
 
 	companion object {
 		const val PATH = "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntityScene.tscn"
