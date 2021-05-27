@@ -50,7 +50,6 @@ class MemoryScene : Node2D() {
 				visible = true
 				entitySprite.bind(topEntity)
 
-				backgroundRect.visible = topEntity?.name != "wall"
 				entitySprite.visible = topEntity?.name != "wall"
 				fogRect.visible = false
 			}

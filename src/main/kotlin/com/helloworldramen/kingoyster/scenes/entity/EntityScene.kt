@@ -147,7 +147,6 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			return
 		}
 
-		visible = true
 		zIndex = (baseZIndex + context.world[worldPosition]!!.indexOf(entity)).toLong()
 
 		if (shouldAnimate) {
