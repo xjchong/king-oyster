@@ -3,10 +3,10 @@ package com.helloworldramen.kingoyster.ai
 import com.helloworldramen.kingoyster.ai.considerations.ConstantConsideration
 import com.helloworldramen.kingoyster.ai.considerations.IsEnemyInRangeConsideration
 import com.helloworldramen.kingoyster.ai.considerations.IsEnemyInSightConsideration
-import com.helloworldramen.kingoyster.ai.options.AttackRandomEnemyOption
-import com.helloworldramen.kingoyster.ai.options.ChaseRandomEnemyOption
-import com.helloworldramen.kingoyster.ai.options.IdleOption
-import com.helloworldramen.kingoyster.ai.options.WanderRandomlyOption
+import com.helloworldramen.kingoyster.ai.strategies.AttackInRangeEnemiesStrategy
+import com.helloworldramen.kingoyster.ai.strategies.ChaseVisibleEnemiesStrategy
+import com.helloworldramen.kingoyster.ai.strategies.IdleStrategy
+import com.helloworldramen.kingoyster.ai.strategies.WanderStrategy
 import com.helloworldramen.kingoyster.ai.reasoners.HighestValueReasoner
 import com.helloworldramen.kingoyster.ai.reasoners.PurelyRandomReasoner
 import com.helloworldramen.kingoyster.oyster.Context
@@ -17,48 +17,48 @@ object Ai {
 
     fun actForEntity(context: Context, entity: Entity) {
         val startTime = System.nanoTime()
-        val aiContext = GameAiContext(context, entity)
+        val aiContext = GameAiStrategyContext(context, entity)
 
-        val entityOptions = when (entity.name) {
+        val entityOptionsWithScore = when (entity.name) {
             "ghost" -> HighestValueReasoner.prioritize(aiContext, listOf(
-                WanderRandomlyOption(
+                WanderStrategy(
                     ConstantConsideration(0.5)
                 )
             ))
             "goblin" -> HighestValueReasoner.prioritize(aiContext, listOf(
-                AttackRandomEnemyOption(
+                AttackInRangeEnemiesStrategy(
                     IsEnemyInRangeConsideration
                 ),
-                WanderRandomlyOption(
+                WanderStrategy(
                     ConstantConsideration(0.5)
                 ),
-                ChaseRandomEnemyOption(
+                ChaseVisibleEnemiesStrategy(
                     IsEnemyInSightConsideration
                 )
             ))
             "slime" -> PurelyRandomReasoner.prioritize(aiContext, listOf(
-                AttackRandomEnemyOption(
+                AttackInRangeEnemiesStrategy(
                     IsEnemyInRangeConsideration
                 ),
-                WanderRandomlyOption(
+                WanderStrategy(
                     ConstantConsideration(0.5)
                 ),
-                IdleOption(
+                IdleStrategy(
                     ConstantConsideration(0.5)
                 )
             ))
             else -> listOf()
         }
 
-        if (!entityOptions.any { it.execute(aiContext) }) {
+        if (!entityOptionsWithScore.any { it.first.execute() }) {
             entity.idle(context.world)
         }
 
-        log(aiContext, entity, entityOptions, startTime)
+        log(entity, entityOptionsWithScore, startTime)
     }
 
-    private fun log(aiContext: GameAiContext, entity: Entity, options: List<GameAiOption>, startTime: Long) {
+    private fun log(entity: Entity, optionsWithScore: List<Pair<GameAiOption, Double>>, startTime: Long) {
         val totalTimeString = String.format("%.2f", (System.nanoTime() - startTime) / 1000000.0)
-        GD.print("AI(${totalTimeString}ms) ${entity.name}: ${options.map { Pair(it::class.simpleName?.take(5), it.evaluate(aiContext)) }}")
+        GD.print("AI(${totalTimeString}ms) ${entity.name}: ${optionsWithScore.map { Pair(it.first::class.simpleName?.take(5), it.second) }}")
     }
 }

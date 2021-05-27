@@ -18,3 +18,7 @@ sealed class Faction {
 }
 
 fun Entity.faction(): Faction? = find<FactionPart>()?.faction
+
+fun Entity.isEnemyOf(otherEntity: Entity): Boolean {
+    return otherEntity.faction() ?: faction() != faction()
+}

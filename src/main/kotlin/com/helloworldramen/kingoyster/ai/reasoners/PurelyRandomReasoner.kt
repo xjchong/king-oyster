@@ -1,15 +1,21 @@
 package com.helloworldramen.kingoyster.ai.reasoners
 
-import com.helloworldramen.kingoyster.ai.GameAiContext
+import com.helloworldramen.kingoyster.ai.GameAiOptionContext
+import com.helloworldramen.kingoyster.ai.GameAiStrategyContext
 import com.helloworldramen.kingoyster.ai.GameAiReasoner
 import com.helloworldramen.kingoyster.ai.architecture.AiOption
+import com.helloworldramen.kingoyster.ai.architecture.AiStrategy
 
-object PurelyRandomReasoner : GameAiReasoner {
+object PurelyRandomReasoner : ParallelizedReasoner(), GameAiReasoner {
 
     override fun prioritize(
-        aiContext: GameAiContext,
-        options: List<AiOption<GameAiContext>>
-    ): List<AiOption<GameAiContext>> {
-        return options.shuffled()
+        strategyContext: GameAiStrategyContext,
+        strategies: List<AiStrategy<GameAiStrategyContext, GameAiOptionContext>>
+    ): List<Pair<AiOption<GameAiOptionContext>, Double>> {
+        val scoreForOption = generateScoreForOptionParallelized(strategyContext, strategies)
+
+        return scoreForOption.keys.shuffled().map {
+            Pair(it, scoreForOption[it] ?: 0.0)
+        }
     }
 }

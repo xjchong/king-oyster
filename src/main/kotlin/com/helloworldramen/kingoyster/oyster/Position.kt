@@ -2,6 +2,8 @@ package com.helloworldramen.kingoyster.oyster
 
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 data class Position(val x: Int = 0, val y: Int = 0) {
 
@@ -38,6 +40,10 @@ data class Position(val x: Int = 0, val y: Int = 0) {
     fun neighbors(): List<Position> = listOf(north(), east(), south(), west())
 
     fun neighborsShuffled(): List<Position> = neighbors().shuffled()
+
+    fun distanceFrom(position: Position): Double {
+        return sqrt((x - position.x).toDouble().pow(2) + (y - position.y).toDouble().pow(2))
+    }
 
     fun range(otherPosition: Position): List<Position> {
         val positions: MutableList<Position> = mutableListOf()

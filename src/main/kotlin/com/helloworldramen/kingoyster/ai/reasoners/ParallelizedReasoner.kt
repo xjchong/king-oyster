@@ -1,25 +1,35 @@
 package com.helloworldramen.kingoyster.ai.reasoners
 
-import com.helloworldramen.kingoyster.ai.GameAiContext
 import com.helloworldramen.kingoyster.ai.GameAiOption
+import com.helloworldramen.kingoyster.ai.GameAiStrategyContext
+import com.helloworldramen.kingoyster.ai.GameAiStrategy
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 abstract class ParallelizedReasoner : CoroutineScope {
 
-    override val coroutineContext: CoroutineContext = Dispatchers.Default
+    final override val coroutineContext: CoroutineContext = Dispatchers.Default
 
-    protected fun mapValuesForOptions(aiContext: GameAiContext, options: List<GameAiOption>): Map<GameAiOption, Double> {
-        val valueForOption = mutableMapOf<GameAiOption, Double>()
+    protected fun generateScoreForOptionParallelized(
+        strategyContext: GameAiStrategyContext,
+        strategies: List<GameAiStrategy>
+    ): Map<GameAiOption, Double> {
+        val scoreForOptionForStrategy = mutableMapOf<GameAiStrategy, Map<GameAiOption, Double>>()
 
         runBlocking {
-            options.map {
+            strategies.map { strategy ->
                 launch {
-                    valueForOption[it] = it.evaluate(aiContext)
+                    scoreForOptionForStrategy[strategy] = strategy.evaluateOptions(strategyContext)
                 }
             }
         }
 
-        return valueForOption
+        val scoreForOption = mutableMapOf<GameAiOption, Double>()
+
+        scoreForOptionForStrategy.values.forEach { strategyScoreForOption ->
+            strategyScoreForOption.forEach { (option, score) -> scoreForOption[option] = score }
+        }
+
+        return scoreForOption
     }
 }

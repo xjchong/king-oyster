@@ -1,17 +1,24 @@
 package com.helloworldramen.kingoyster.ai.reasoners
 
-import com.helloworldramen.kingoyster.ai.GameAiContext
+import com.helloworldramen.kingoyster.ai.GameAiOptionContext
+import com.helloworldramen.kingoyster.ai.GameAiStrategyContext
 import com.helloworldramen.kingoyster.ai.GameAiReasoner
 import com.helloworldramen.kingoyster.ai.architecture.AiOption
+import com.helloworldramen.kingoyster.ai.architecture.AiStrategy
 
 object HighestValueReasoner : ParallelizedReasoner(), GameAiReasoner {
 
     override fun prioritize(
-        aiContext: GameAiContext,
-        options: List<AiOption<GameAiContext>>
-    ): List<AiOption<GameAiContext>> {
-        val valueForOption = mapValuesForOptions(aiContext, options)
+        strategyContext: GameAiStrategyContext,
+        strategies: List<AiStrategy<GameAiStrategyContext, GameAiOptionContext>>
+    ): List<Pair<AiOption<GameAiOptionContext>, Double>> {
+        val scoreForOption = generateScoreForOptionParallelized(strategyContext, strategies)
 
-        return options.sortedByDescending { valueForOption[it] ?: 0.0 }
+        return scoreForOption.keys.sortedByDescending {
+            scoreForOption[it]
+        }.map {
+            Pair(it, scoreForOption[it] ?: 0.0)
+        }
     }
+
 }

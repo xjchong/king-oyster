@@ -1,5 +1,6 @@
 package com.helloworldramen.kingoyster.parts
 
+import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Part
 
 class PhysicalPart(
@@ -11,3 +12,5 @@ class PhysicalPart(
         return PhysicalPart(isPassable, doesBlockVision)
     }
 }
+
+fun Entity.isPassable() = (find<PhysicalPart>()?.isPassable == false).not()
