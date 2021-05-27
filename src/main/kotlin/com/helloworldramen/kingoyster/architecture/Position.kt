@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.oyster
+package com.helloworldramen.kingoyster.architecture
 
 import kotlin.math.max
 import kotlin.math.min

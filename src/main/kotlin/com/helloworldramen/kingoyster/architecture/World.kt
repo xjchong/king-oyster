@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.oyster
+package com.helloworldramen.kingoyster.architecture
 
 class World(val width: Int, val height: Int) {
 

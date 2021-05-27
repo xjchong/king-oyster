@@ -1,6 +1,6 @@
 package com.helloworldramen.kingoyster.entities
 
-import com.helloworldramen.kingoyster.oyster.Entity
+import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.parts.ItemPart
 import com.helloworldramen.kingoyster.parts.MoneyPart
 import kotlin.random.Random

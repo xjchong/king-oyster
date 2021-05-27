@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.oyster
+package com.helloworldramen.kingoyster.architecture
 
 
 class Context(val world: World) {

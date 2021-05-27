@@ -6,9 +6,9 @@ import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
-import com.helloworldramen.kingoyster.oyster.Position
-import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.oyster.World
+import com.helloworldramen.kingoyster.architecture.Position
+import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.architecture.World
 import com.helloworldramen.kingoyster.parts.*
 
 object WorldConsoleView : EventBusSubscriber {

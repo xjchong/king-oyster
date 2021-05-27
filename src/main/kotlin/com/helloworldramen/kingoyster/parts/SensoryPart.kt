@@ -1,9 +1,9 @@
 package com.helloworldramen.kingoyster.parts
 
-import com.helloworldramen.kingoyster.oyster.Context
-import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.oyster.Part
-import com.helloworldramen.kingoyster.oyster.Position
+import com.helloworldramen.kingoyster.architecture.Context
+import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.architecture.Part
+import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.utilities.ShadowCasting
 
 class SensoryPart(

@@ -1,9 +1,9 @@
 package com.helloworldramen.kingoyster.ai
 
 import com.helloworldramen.kingoyster.ai.architecture.*
-import com.helloworldramen.kingoyster.oyster.Context
-import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.oyster.Position
+import com.helloworldramen.kingoyster.architecture.Context
+import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.architecture.Position
 
 data class GameAiStrategyContext(
     val context: Context,

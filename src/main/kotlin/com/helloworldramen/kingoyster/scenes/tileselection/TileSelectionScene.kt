@@ -1,6 +1,6 @@
 package com.helloworldramen.kingoyster.scenes.tileselection
 
-import com.helloworldramen.kingoyster.oyster.Position
+import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
 import godot.*

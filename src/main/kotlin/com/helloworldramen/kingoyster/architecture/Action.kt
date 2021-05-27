@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.oyster
+package com.helloworldramen.kingoyster.architecture
 
 interface Action {
     val context: Context

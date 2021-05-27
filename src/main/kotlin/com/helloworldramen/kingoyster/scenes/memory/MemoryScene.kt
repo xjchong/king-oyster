@@ -1,7 +1,7 @@
 package com.helloworldramen.kingoyster.scenes.memory
 
-import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.oyster.Position
+import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.parts.MemoryPart
 import com.helloworldramen.kingoyster.parts.visiblePositions
 import com.helloworldramen.kingoyster.scenes.entity.EntitySprite

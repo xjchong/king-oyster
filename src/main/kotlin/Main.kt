@@ -4,7 +4,7 @@ import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
-import com.helloworldramen.kingoyster.oyster.*
+import com.helloworldramen.kingoyster.architecture.*
 import com.helloworldramen.kingoyster.parts.AscendablePart
 import com.helloworldramen.kingoyster.parts.ItemPart
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy

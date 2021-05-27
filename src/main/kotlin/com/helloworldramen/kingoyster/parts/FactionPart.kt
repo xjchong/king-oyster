@@ -1,7 +1,7 @@
 package com.helloworldramen.kingoyster.parts
 
-import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.oyster.Part
+import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.architecture.Part
 
 class FactionPart(
     val faction: Faction

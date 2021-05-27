@@ -1,6 +1,6 @@
 package com.helloworldramen.kingoyster.parts
 
-import com.helloworldramen.kingoyster.oyster.*
+import com.helloworldramen.kingoyster.architecture.*
 
 class MemoryPart() : Part {
 

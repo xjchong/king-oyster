@@ -4,10 +4,10 @@ import com.helloworldramen.kingoyster.actions.Ascend
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
-import com.helloworldramen.kingoyster.oyster.Action
-import com.helloworldramen.kingoyster.oyster.Context
-import com.helloworldramen.kingoyster.oyster.Part
-import com.helloworldramen.kingoyster.oyster.Entity
+import com.helloworldramen.kingoyster.architecture.Action
+import com.helloworldramen.kingoyster.architecture.Context
+import com.helloworldramen.kingoyster.architecture.Part
+import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.utilities.worldgen.DrunkGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator

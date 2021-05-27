@@ -4,9 +4,9 @@ import com.helloworldramen.kingoyster.actions.Attack
 import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.AttackEvent
-import com.helloworldramen.kingoyster.oyster.Action
-import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.oyster.Part
+import com.helloworldramen.kingoyster.architecture.Action
+import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.architecture.Part
 
 class AttackablePart : Part {
 

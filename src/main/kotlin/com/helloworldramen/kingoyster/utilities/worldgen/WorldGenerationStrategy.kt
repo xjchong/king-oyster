@@ -1,6 +1,6 @@
 package com.helloworldramen.kingoyster.utilities.worldgen
 
-import com.helloworldramen.kingoyster.oyster.World
+import com.helloworldramen.kingoyster.architecture.World
 
 interface WorldGenerationStrategy {
 

@@ -7,8 +7,8 @@ import com.helloworldramen.kingoyster.ai.strategies.IdleStrategy
 import com.helloworldramen.kingoyster.ai.strategies.WanderStrategy
 import com.helloworldramen.kingoyster.ai.reasoners.HighestValueReasoner
 import com.helloworldramen.kingoyster.ai.reasoners.PurelyRandomReasoner
-import com.helloworldramen.kingoyster.oyster.Context
-import com.helloworldramen.kingoyster.oyster.Entity
+import com.helloworldramen.kingoyster.architecture.Context
+import com.helloworldramen.kingoyster.architecture.Entity
 
 object Ai {
 

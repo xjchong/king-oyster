@@ -3,9 +3,9 @@ package com.helloworldramen.kingoyster.utilities.worldgen
 import com.helloworldramen.kingoyster.entities.ActorFactory
 import com.helloworldramen.kingoyster.entities.FeatureFactory
 import com.helloworldramen.kingoyster.entities.ItemFactory
-import com.helloworldramen.kingoyster.oyster.Position
-import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.oyster.World
+import com.helloworldramen.kingoyster.architecture.Position
+import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.architecture.World
 import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlin.random.nextInt

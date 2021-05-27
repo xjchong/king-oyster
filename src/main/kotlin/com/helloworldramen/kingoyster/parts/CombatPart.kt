@@ -1,6 +1,6 @@
 package com.helloworldramen.kingoyster.parts
 
-import com.helloworldramen.kingoyster.oyster.Part
+import com.helloworldramen.kingoyster.architecture.Part
 
 class CombatPart(
     val attackPotency: Int

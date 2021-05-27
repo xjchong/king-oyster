@@ -7,12 +7,11 @@ import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
-import com.helloworldramen.kingoyster.oyster.*
-import com.helloworldramen.kingoyster.oyster.World
+import com.helloworldramen.kingoyster.architecture.*
+import com.helloworldramen.kingoyster.architecture.World
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
-import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
 import com.helloworldramen.kingoyster.scenes.tileselection.TileSelectionScene
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator

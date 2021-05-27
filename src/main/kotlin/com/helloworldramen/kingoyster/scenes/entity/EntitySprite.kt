@@ -1,6 +1,6 @@
 package com.helloworldramen.kingoyster.scenes.entity
 
-import com.helloworldramen.kingoyster.oyster.Entity
+import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.parts.DoorPart
 import godot.AnimatedSprite
 import godot.Label

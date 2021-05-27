@@ -1,10 +1,9 @@
 package com.helloworldramen.kingoyster.utilities.worldgen
 
-import com.helloworldramen.kingoyster.consoleviews.WorldConsoleView
 import com.helloworldramen.kingoyster.entities.FeatureFactory
-import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.oyster.Position
-import com.helloworldramen.kingoyster.oyster.World
+import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.architecture.Position
+import com.helloworldramen.kingoyster.architecture.World
 import java.util.*
 import kotlin.math.roundToInt
 
