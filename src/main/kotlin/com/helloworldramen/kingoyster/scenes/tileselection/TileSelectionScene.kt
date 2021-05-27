@@ -12,6 +12,9 @@ import godot.extensions.getNodeAs
 import godot.extensions.instanceAs
 import godot.global.GD
 import godot.signals.signal
+import java.util.Timer
+import kotlin.concurrent.timerTask
+import kotlin.math.roundToInt
 
 @RegisterClass
 class TileSelectionScene : Node2D() {
@@ -30,6 +33,8 @@ class TileSelectionScene : Node2D() {
 	var positionGroups: List<List<Position>> = listOf()
 		private set
 
+	private var selectionGroups: List<TileSelectionGroup> = listOf()
+
 	private var selectablePositions: Set<Position> = setOf()
 	private var isSelecting = false
 
@@ -40,11 +45,21 @@ class TileSelectionScene : Node2D() {
 	override fun _input(event: InputEvent) {
 		if (!isSelecting) return
 
+		val currentSelectionGroup = selectionGroups[currentGroupIndex]
+
 		when {
-			event.isActionPressed("ui_up", true) -> selectGroup(currentGroupIndex - 1)
-			event.isActionPressed("ui_right", true) -> selectGroup(currentGroupIndex + 1)
-			event.isActionPressed("ui_down", true) -> selectGroup(currentGroupIndex + 1)
-			event.isActionPressed("ui_left", true) -> selectGroup(currentGroupIndex - 1)
+			event.isActionPressed("ui_up", true) -> {
+				selectGroup(currentSelectionGroup.northNeighborIndex)
+			}
+			event.isActionPressed("ui_right", true) -> {
+				selectGroup(currentSelectionGroup.eastNeighborIndex)
+			}
+			event.isActionPressed("ui_down", true) -> {
+				selectGroup(currentSelectionGroup.southNeighborIndex)
+			}
+			event.isActionPressed("ui_left", true) -> {
+				selectGroup(currentSelectionGroup.westNeighborIndex)
+			}
 			event.isActionPressed("ui_accept") -> confirmCurrentSelection()
 			event.isActionPressed("ui_cancel") -> cancelSelection()
 		}
@@ -80,6 +95,8 @@ class TileSelectionScene : Node2D() {
 
 		this.positionGroups = positionGroups
 		selectablePositions = positionGroups.flatten().toSet()
+		selectionGroups = calculateSelectionGroups(positionGroups)
+		currentGroupIndex = 0
 		isSelecting = true
 
 		selectGroup(0)
@@ -91,7 +108,10 @@ class TileSelectionScene : Node2D() {
 			it.hide()
 		}
 
-		signalTilesSelected.emit(currentGroupIndex)
+		// An artifical delay to mitigate input from this scene being used in the parent.
+		Timer().schedule(timerTask {
+			signalTilesSelected.emit(currentGroupIndex)
+		}, 100)
 	}
 
 	private fun cancelSelection() {
@@ -100,7 +120,10 @@ class TileSelectionScene : Node2D() {
 			it.hide()
 		}
 
-		signalTilesSelected.emit(-1)
+		// An artifical delay to mitigate input from this scene being used in the parent.
+		Timer().schedule(timerTask {
+			signalTilesSelected.emit(-1)
+		}, 100)
 	}
 
 	private fun selectGroup(nextIndex: Int) {
@@ -115,5 +138,61 @@ class TileSelectionScene : Node2D() {
 				else -> tileOverlaySceneForPosition[position]?.showNonInteractive()
 			}
 		}
+	}
+
+	private fun calculateSelectionGroups(positionGroups: List<List<Position>>): List<TileSelectionGroup> {
+		val selectionGroups = mutableListOf<TileSelectionGroup>()
+		val averagePositions = positionGroups.map { it.averagePosition() }
+
+		for ((index, averagePosition) in averagePositions.withIndex()) {
+			selectionGroups.add(
+				TileSelectionGroup(index,
+					northNeighborIndex = averagePositions.closestNeighborIndex(averagePosition, index) {
+						it.y < averagePosition.y
+					} ?: index,
+					eastNeighborIndex = averagePositions.closestNeighborIndex(averagePosition, index) {
+						it.x > averagePosition.x
+					} ?: index,
+					southNeighborIndex = averagePositions.closestNeighborIndex(averagePosition, index) {
+						it.y > averagePosition.y
+					} ?: index,
+					westNeighborIndex = averagePositions.closestNeighborIndex(averagePosition, index) {
+						it.x < averagePosition.x
+					} ?: index,
+				)
+			)
+		}
+
+		return selectionGroups
+	}
+
+	private fun List<Position>.closestNeighborIndex(position: Position, index: Int, predicate: (Position) -> Boolean): Int? {
+		// For example, only positions west of a certain position.
+		val filtered = filterIndexed { i, p ->
+			i != index && predicate(p)
+		}
+
+		// Get the closest neighbor to the parameter position.
+		val closestNeighbor = filtered.minByOrNull { position.distanceFrom(it) } ?: return null
+
+		// Get the index of that neighbor from the original list.
+		val closestNeighborIndex = indexOf(closestNeighbor)
+
+		return if (closestNeighborIndex < 0) null else closestNeighborIndex
+	}
+
+	private fun List<Position>.averagePosition(): Position {
+		var totalX = 0
+		var totalY = 0
+
+		forEach {
+			totalX += it.x
+			totalY += it.y
+		}
+
+		return Position(
+			(totalX / size.toDouble().roundToInt()),
+			(totalY / size.toDouble().roundToInt())
+		)
 	}
 }
