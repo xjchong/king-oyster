@@ -55,7 +55,7 @@ class EntitySprite : Node2D() {
 			}
 			"slime" -> {
 				animatedSprite.visible = true
-				animatedSprite.position += Vector2(0, -1)
+				animatedSprite.position -= Vector2(0, 2)
 				animatedSprite.play("blue_slime")
 				Pair("s", Color.lightgreen)
 			}
