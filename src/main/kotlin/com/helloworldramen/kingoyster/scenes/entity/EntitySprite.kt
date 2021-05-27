@@ -1,7 +1,7 @@
 package com.helloworldramen.kingoyster.scenes.entity
 
 import com.helloworldramen.kingoyster.oyster.Entity
-import com.helloworldramen.kingoyster.parts.PortalPart
+import com.helloworldramen.kingoyster.parts.DoorPart
 import godot.AnimatedSprite
 import godot.Label
 import godot.Node2D
@@ -43,7 +43,7 @@ class EntitySprite : Node2D() {
 			"wall" -> Pair("#", Color.white)
 			"door" -> {
 				Pair(
-					if (entity?.find(PortalPart::class)?.isOpen == true) "'" else "+",
+					if (entity?.find(DoorPart::class)?.isOpen == true) "'" else "+",
 					Color.orange
 				)
 			}
@@ -71,5 +71,5 @@ class EntitySprite : Node2D() {
 	}
 
 	private val Entity.canChangeAppearance: Boolean
-		get() = has(PortalPart::class)
+		get() = has(DoorPart::class)
 }

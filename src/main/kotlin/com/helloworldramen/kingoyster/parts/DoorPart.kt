@@ -6,10 +6,10 @@ import com.helloworldramen.kingoyster.oyster.Action
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Part
 
-class PortalPart(var isOpen: Boolean) : Part {
+class DoorPart(var isOpen: Boolean) : Part {
 
     override fun copy(): Part {
-        return PortalPart(isOpen)
+        return DoorPart(isOpen)
     }
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {

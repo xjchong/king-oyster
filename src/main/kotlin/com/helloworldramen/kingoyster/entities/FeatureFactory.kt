@@ -3,7 +3,7 @@ package com.helloworldramen.kingoyster.entities
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.parts.AscendablePart
 import com.helloworldramen.kingoyster.parts.PhysicalPart
-import com.helloworldramen.kingoyster.parts.PortalPart
+import com.helloworldramen.kingoyster.parts.DoorPart
 
 object FeatureFactory {
 
@@ -14,7 +14,7 @@ object FeatureFactory {
                 isPassable = isOpen,
                 doesBlockVision = !isOpen
             ),
-            PortalPart(isOpen)
+            DoorPart(isOpen)
         )
     )
 
