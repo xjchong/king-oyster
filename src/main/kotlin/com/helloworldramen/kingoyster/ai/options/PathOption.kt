@@ -3,9 +3,16 @@ package com.helloworldramen.kingoyster.ai.options
 import com.helloworldramen.kingoyster.actions.Move
 import com.helloworldramen.kingoyster.ai.GameAiOption
 import com.helloworldramen.kingoyster.ai.GameAiOptionContext
+import com.helloworldramen.kingoyster.ai.architecture.AiStrategy
+import com.helloworldramen.kingoyster.ai.architecture.AiStrategyContext
 import com.helloworldramen.kingoyster.parts.isPassable
 
-class PathOption(optionContext: GameAiOptionContext) : GameAiOption(optionContext) {
+class PathOption(
+    override val parentStrategy: AiStrategy<out AiStrategyContext, GameAiOptionContext>,
+    override val optionContext: GameAiOptionContext
+) : GameAiOption() {
+
+    override val tag: String = "pth"
 
     override fun execute(): Boolean {
         val (context, entity, _, position) = optionContext

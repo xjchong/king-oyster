@@ -3,8 +3,15 @@ package com.helloworldramen.kingoyster.ai.options
 import com.helloworldramen.kingoyster.actions.Move
 import com.helloworldramen.kingoyster.ai.GameAiOption
 import com.helloworldramen.kingoyster.ai.GameAiOptionContext
+import com.helloworldramen.kingoyster.ai.architecture.AiStrategy
+import com.helloworldramen.kingoyster.ai.architecture.AiStrategyContext
 
-class MoveOption(optionContext: GameAiOptionContext) : GameAiOption(optionContext) {
+class MoveOption(
+    override val parentStrategy: AiStrategy<out AiStrategyContext, GameAiOptionContext>,
+    override val optionContext: GameAiOptionContext
+) : GameAiOption() {
+
+    override val tag: String = "mov"
 
     override fun execute(): Boolean {
         val (context, entity, _, position) = optionContext

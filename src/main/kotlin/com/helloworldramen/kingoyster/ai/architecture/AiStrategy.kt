@@ -8,6 +8,8 @@ abstract class AiStrategy<C : AiStrategyContext, O : AiOptionContext>(private va
 
     final override val coroutineContext: CoroutineContext = Dispatchers.Default
 
+    open val tag: String? = this::class.simpleName?.take(4)
+
     protected abstract fun listOptions(strategyContext: C): List<AiOption<O>>
 
     suspend fun evaluateOptions(strategyContext: C): Map<AiOption<O>, Double> {

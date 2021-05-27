@@ -11,6 +11,8 @@ import com.helloworldramen.kingoyster.parts.visiblePositions
 
 class ChaseVisibleEnemiesStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy(considerations.toList()) {
 
+    override val tag: String = "CHS"
+
     override fun listOptions(strategyContext: GameAiStrategyContext): List<AiOption<GameAiOptionContext>> {
         val (context, chaser) = strategyContext
         val visiblePositions = chaser.visiblePositions()
@@ -19,7 +21,7 @@ class ChaseVisibleEnemiesStrategy(vararg considerations: GameAiConsideration) : 
         }
 
         return enemyPositions.map {
-            PathOption(strategyContext.withPosition(it))
+            PathOption(this, strategyContext.withPosition(it))
         }
     }
 }

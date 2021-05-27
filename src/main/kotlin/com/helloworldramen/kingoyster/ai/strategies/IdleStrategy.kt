@@ -9,7 +9,9 @@ import com.helloworldramen.kingoyster.ai.options.IdleOption
 
 class IdleStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy(considerations.toList()) {
 
+    override val tag: String = "IDL"
+
     override fun listOptions(strategyContext: GameAiStrategyContext): List<AiOption<GameAiOptionContext>> {
-        return listOf(IdleOption(strategyContext.asOptionContext()))
+        return listOf(IdleOption(this, strategyContext.asOptionContext()))
     }
 }

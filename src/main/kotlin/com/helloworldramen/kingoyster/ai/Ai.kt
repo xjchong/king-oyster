@@ -59,6 +59,8 @@ object Ai {
 
     private fun log(entity: Entity, optionsWithScore: List<Pair<GameAiOption, Double>>, startTime: Long) {
         val totalTimeString = String.format("%.2f", (System.nanoTime() - startTime) / 1000000.0)
-        GD.print("AI(${totalTimeString}ms) ${entity.name}: ${optionsWithScore.map { Pair(it.first::class.simpleName?.take(5), it.second) }}")
+        GD.print("AI(${totalTimeString}ms) ${entity.name}: ${optionsWithScore.map { (option, score) ->
+            Pair("${option.parentStrategy.tag}-${option.tag}", String.format("%.2f", score))
+        }}")
     }
 }

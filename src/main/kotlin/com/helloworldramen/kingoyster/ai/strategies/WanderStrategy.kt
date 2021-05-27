@@ -7,6 +7,8 @@ import com.helloworldramen.kingoyster.parts.isPassable
 
 class WanderStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy(considerations.toList()) {
 
+    override val tag: String = "WDR"
+
     override fun listOptions(strategyContext: GameAiStrategyContext): List<AiOption<GameAiOptionContext>> {
         val (context, entity) = strategyContext
         val currentPosition = context.positionOf(entity) ?: return listOf()
@@ -15,7 +17,7 @@ class WanderStrategy(vararg considerations: GameAiConsideration) : GameAiStrateg
         }
 
         return passableNeighbors.map {
-            MoveOption(strategyContext.withPosition(it))
+            MoveOption(this, strategyContext.withPosition(it))
         }
     }
 }

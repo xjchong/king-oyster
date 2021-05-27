@@ -1,6 +1,5 @@
 package com.helloworldramen.kingoyster.ai.strategies
 
-import com.helloworldramen.kingoyster.actions.Attack
 import com.helloworldramen.kingoyster.ai.GameAiConsideration
 import com.helloworldramen.kingoyster.ai.GameAiOptionContext
 import com.helloworldramen.kingoyster.ai.GameAiStrategyContext
@@ -11,6 +10,8 @@ import com.helloworldramen.kingoyster.parts.isEnemyOf
 
 class AttackInRangeEnemiesStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy(considerations.toList()) {
 
+    override val tag: String = "ATK"
+
     override fun listOptions(strategyContext: GameAiStrategyContext): List<AiOption<GameAiOptionContext>> {
         val (context, attacker) = strategyContext
         val attackerPosition = context.positionOf(attacker) ?: return listOf()
@@ -19,7 +20,7 @@ class AttackInRangeEnemiesStrategy(vararg considerations: GameAiConsideration) :
         }
 
         return enemies.map {
-            AttackOption(strategyContext.withTarget(it))
+            AttackOption(this, strategyContext.withTarget(it))
         }
     }
 }
