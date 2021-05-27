@@ -9,10 +9,7 @@ import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.oyster.Context
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Position
-import com.helloworldramen.kingoyster.parts.HealthPart
-import com.helloworldramen.kingoyster.parts.ItemPart
-import com.helloworldramen.kingoyster.parts.MovementPart
-import com.helloworldramen.kingoyster.parts.SensoryPart
+import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import godot.*
 import godot.annotation.RegisterClass
@@ -83,9 +80,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			}
 		}
 
-		visible = context.player.find<SensoryPart>()
-			?.visiblePositions
-			?.contains(worldPosition) == true
+		visible = context.player.visiblePositions().contains(worldPosition)
 	}
 
 	fun bind(context: Context, entity: Entity) {

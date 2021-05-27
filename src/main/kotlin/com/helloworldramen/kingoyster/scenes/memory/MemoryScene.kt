@@ -3,7 +3,7 @@ package com.helloworldramen.kingoyster.scenes.memory
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Position
 import com.helloworldramen.kingoyster.parts.MemoryPart
-import com.helloworldramen.kingoyster.parts.SensoryPart
+import com.helloworldramen.kingoyster.parts.visiblePositions
 import com.helloworldramen.kingoyster.scenes.entity.EntitySprite
 import godot.ColorRect
 import godot.Node2D
@@ -33,7 +33,7 @@ class MemoryScene : Node2D() {
 	}
 
 	private fun updateAppearance() {
-		val visiblePositions = entity.find(SensoryPart::class)?.visiblePositions ?: listOf()
+		val visiblePositions = entity.visiblePositions()
 		val rememberedEntities = entity.find(MemoryPart::class)?.get(worldPosition)
 
 		when {

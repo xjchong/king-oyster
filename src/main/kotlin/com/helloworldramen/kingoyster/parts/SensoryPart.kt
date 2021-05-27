@@ -38,3 +38,5 @@ class SensoryPart(
         visiblePositions = nextVisiblePositions
     }
 }
+
+fun Entity.visiblePositions(): List<Position> = find<SensoryPart>()?.visiblePositions ?: listOf()

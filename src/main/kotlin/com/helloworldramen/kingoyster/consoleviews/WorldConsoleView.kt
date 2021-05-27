@@ -37,7 +37,7 @@ object WorldConsoleView : EventBusSubscriber {
     }
 
     fun display(world: World, player: Entity? = null) {
-        val visiblePositions = player?.find(SensoryPart::class)?.visiblePositions ?: listOf()
+        val visiblePositions = player?.visiblePositions() ?: listOf()
         val worldMemory = player?.find(MemoryPart::class)
 
         Position(world.width - 1, world.height - 1).forEach {

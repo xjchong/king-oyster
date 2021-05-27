@@ -5,9 +5,9 @@ import com.helloworldramen.kingoyster.ai.GameAiConsideration
 import com.helloworldramen.kingoyster.ai.GameAiContext
 import com.helloworldramen.kingoyster.ai.GameAiOption
 import com.helloworldramen.kingoyster.oyster.Position
-import com.helloworldramen.kingoyster.parts.FactionPart
 import com.helloworldramen.kingoyster.parts.PhysicalPart
-import com.helloworldramen.kingoyster.parts.SensoryPart
+import com.helloworldramen.kingoyster.parts.faction
+import com.helloworldramen.kingoyster.parts.visiblePositions
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -17,11 +17,11 @@ class ChaseRandomEnemyOption(vararg considerations: GameAiConsideration) : GameA
         val (context, chaser) = aiContext
         val world = context.world
         val currentPosition = context.world[chaser] ?: return false
-        val chaserFaction = chaser.find(FactionPart::class)?.faction ?: return false
-        val visiblePositions = chaser.find(SensoryPart::class)?.visiblePositions ?: return false
+        val chaserFaction = chaser.faction() ?: return false
+        val visiblePositions = chaser.visiblePositions()
         val enemyPosition = visiblePositions.shuffled().firstOrNull { visiblePosition ->
             world[visiblePosition]?.any { visibleEntity ->
-                visibleEntity.find(FactionPart::class)?.faction ?: chaserFaction != chaserFaction
+                visibleEntity.faction() ?: chaserFaction != chaserFaction
             } == true
         } ?: return false
 

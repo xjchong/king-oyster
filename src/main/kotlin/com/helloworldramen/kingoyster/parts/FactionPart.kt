@@ -1,5 +1,6 @@
 package com.helloworldramen.kingoyster.parts
 
+import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.Part
 
 class FactionPart(
@@ -15,3 +16,5 @@ sealed class Faction {
     object Player : Faction()
     object Monster : Faction()
 }
+
+fun Entity.faction(): Faction? = find<FactionPart>()?.faction

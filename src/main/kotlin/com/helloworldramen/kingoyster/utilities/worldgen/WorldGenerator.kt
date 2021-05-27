@@ -47,6 +47,9 @@ object WorldGenerator {
         world.placeWithDensity(0.006) {
             ActorFactory.goblin()
         }
+        world.placeWithDensity(0.006) {
+            ActorFactory.ghost()
+        }
     }
 
     private fun placeItems(world: World) {
