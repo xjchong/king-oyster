@@ -40,14 +40,15 @@ object ActorFactory {
                 maxHealth = 1
             ),
             PhysicalPart(
-                isPassable = true
+                isPassable = true,
+                isCorporeal = false
             ),
             MovementPart(),
             SensoryPart(
                 visionRange = 3
             )
         ),
-        timeFactor = 0.5
+        timeFactor = 1.0
     )
 
     fun goblin() = Entity(

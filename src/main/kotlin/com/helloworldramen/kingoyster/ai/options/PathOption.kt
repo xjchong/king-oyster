@@ -6,7 +6,7 @@ import com.helloworldramen.kingoyster.ai.GameAiOptionContext
 import com.helloworldramen.kingoyster.ai.architecture.AiStrategy
 import com.helloworldramen.kingoyster.ai.architecture.AiStrategyContext
 import com.helloworldramen.kingoyster.ai.tag
-import com.helloworldramen.kingoyster.parts.isPassable
+import com.helloworldramen.kingoyster.parts.canPass
 
 class PathOption(
     override val parentStrategy: AiStrategy<out AiStrategyContext, GameAiOptionContext>,
@@ -22,7 +22,7 @@ class PathOption(
 
         val currentPosition = context.positionOf(entity) ?: return false
         val passableNeighbors = currentPosition.neighborsShuffled().filter { neighbor ->
-            context.entitiesAt(neighbor)?.all { it.isPassable() } == true
+            context.entitiesAt(neighbor)?.all { entity.canPass(it) } == true
         }
 
         return passableNeighbors.sortedBy { it.distanceFrom(position) }.any { greedyPosition ->

@@ -21,7 +21,7 @@ class MovementPart : Part {
     private fun respondToMove(partOwner: Entity, action: Move): Boolean {
         val (context, _, position) = action
 
-        if (context.world[position]?.any { it.find(PhysicalPart::class)?.isPassable == false} == true) {
+        if (context.entitiesAt(position)?.any { !partOwner.canPass(it)} == true) {
             return false
         }
 
