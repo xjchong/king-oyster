@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/world/WorldScene.kt" type="Script" id=1]
 [ext_resource path="res://src/main/resources/sprites/minimal-3x3-test.png" type="Texture" id=2]
 [ext_resource path="res://src/main/resources/tiles/walls-autotile-3x3-minimal.png" type="Texture" id=3]
+[ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/tileselection/TileSelectionScene.tscn" type="PackedScene" id=4]
 
 [sub_resource type="TileSet" id=1]
 0/name = "wall"
@@ -74,3 +75,6 @@ tile_data = PoolIntArray( -1, 1, 1, -65536, 1, 196610, -65535, 1, 196610, -65534
 [node name="EntityScenesBucket" type="Node2D" parent="."]
 
 [node name="MemoryScenesBucket" type="Node2D" parent="."]
+
+[node name="TileSelectionScene" parent="." instance=ExtResource( 4 )]
+z_index = 2000

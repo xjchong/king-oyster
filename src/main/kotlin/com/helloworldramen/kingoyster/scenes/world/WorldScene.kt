@@ -9,10 +9,11 @@ import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.oyster.*
 import com.helloworldramen.kingoyster.oyster.World
-import com.helloworldramen.kingoyster.parts.HealthPart
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
+import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
+import com.helloworldramen.kingoyster.scenes.tileselection.TileSelectionScene
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
 import godot.*
@@ -22,8 +23,6 @@ import godot.core.Vector2
 import godot.extensions.getNodeAs
 import godot.extensions.instanceAs
 import godot.global.GD
-import java.util.Timer
-import kotlin.concurrent.timerTask
 
 @RegisterClass
 class WorldScene : Node2D(), EventBusSubscriber {
@@ -31,6 +30,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 	private val tileMap: TileMap by lazy { getNodeAs("TileMap")!! }
 	private val entityScenesBucket: Node2D by lazy { getNodeAs("EntityScenesBucket")!! }
 	private val memoryScenesBucket: Node2D by lazy { getNodeAs("MemoryScenesBucket")!! }
+	private val tileSelectionScene: TileSelectionScene by lazy { getNodeAs("TileSelectionScene")!! }
 
 	private val packedMemoryScene = GD.load<PackedScene>(MemoryScene.PATH)
 	private val packedEntityScene = GD.load<PackedScene>(EntityScene.PATH)
@@ -57,6 +57,10 @@ class WorldScene : Node2D(), EventBusSubscriber {
 
 		EventBus.register(this, AscendEvent::class, GameOverEvent::class)
 
+		tileSelectionScene.bind(world.width, world.height)
+		tileSelectionScene.pauseMode = PauseMode.PAUSE_MODE_PROCESS.id
+		tileSelectionScene.signalTilesSelected.connect(this, ::onTilesSelected)
+
 		player = WorldGenerator.repopulate(world, DungeonGenerationStrategy)
 		context = Context(world)
 		context.player = player!!
@@ -76,6 +80,17 @@ class WorldScene : Node2D(), EventBusSubscriber {
 	@RegisterFunction
 	override fun _input(event: InputEvent) {
 		player?.let { parseInput(event, context, it) }
+	}
+
+	@RegisterFunction
+	fun onTilesSelected(groupIndex: Int) {
+		if (groupIndex < 0) {
+			println("No tiles selected.")
+		} else {
+			println("Tiles selected: ${tileSelectionScene.positionGroups.getOrNull(groupIndex)}")
+		}
+
+		getTree()?.paused = false
 	}
 
 	private fun updateNextEntity() {
@@ -124,6 +139,10 @@ class WorldScene : Node2D(), EventBusSubscriber {
 			inputEvent.isActionPressed("ui_left", true) -> performActions(currentPosition.west())
 			inputEvent.isActionPressed("ui_accept") -> performActions(null)
 			inputEvent.isActionPressed("ui_cancel", true) -> player.idle(world)
+			inputEvent.isActionPressed("ui_select") -> {
+				getTree()?.paused = true
+				tileSelectionScene.startTileSelection(currentPosition.neighbors().map { listOf(it) })
+			}
 		}
 	}
 
