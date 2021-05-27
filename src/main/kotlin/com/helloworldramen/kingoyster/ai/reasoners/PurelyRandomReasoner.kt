@@ -5,8 +5,12 @@ import com.helloworldramen.kingoyster.ai.GameAiStrategyContext
 import com.helloworldramen.kingoyster.ai.GameAiReasoner
 import com.helloworldramen.kingoyster.ai.architecture.AiOption
 import com.helloworldramen.kingoyster.ai.architecture.AiStrategy
+import kotlinx.coroutines.Dispatchers
+import kotlin.coroutines.CoroutineContext
 
-object PurelyRandomReasoner : ParallelizedReasoner(), GameAiReasoner {
+object PurelyRandomReasoner : ParallelizedOptionScorer, GameAiReasoner {
+
+    override val coroutineContext: CoroutineContext = Dispatchers.Default
 
     override fun prioritize(
         strategyContext: GameAiStrategyContext,

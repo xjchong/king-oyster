@@ -4,13 +4,10 @@ import com.helloworldramen.kingoyster.ai.GameAiOption
 import com.helloworldramen.kingoyster.ai.GameAiStrategyContext
 import com.helloworldramen.kingoyster.ai.GameAiStrategy
 import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
 
-abstract class ParallelizedReasoner : CoroutineScope {
+interface ParallelizedOptionScorer : CoroutineScope {
 
-    final override val coroutineContext: CoroutineContext = Dispatchers.Default
-
-    protected fun generateScoreForOptionParallelized(
+    fun generateScoreForOptionParallelized(
         strategyContext: GameAiStrategyContext,
         strategies: List<GameAiStrategy>
     ): Map<GameAiOption, Double> {
