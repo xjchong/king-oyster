@@ -123,7 +123,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 			inputEvent.isActionPressed("ui_down", true) -> performActions(currentPosition.south())
 			inputEvent.isActionPressed("ui_left", true) -> performActions(currentPosition.west())
 			inputEvent.isActionPressed("ui_accept") -> performActions(null)
-			inputEvent.isActionPressed("game_b", true) -> player.idle(world)
+			inputEvent.isActionPressed("ui_cancel", true) -> player.idle(world)
 		}
 	}
 
