@@ -47,7 +47,7 @@ object ActorFactory {
                 visionRange = 3
             )
         ),
-        timeFactor = 1.2
+        timeFactor = 0.5
     )
 
     fun goblin() = Entity(

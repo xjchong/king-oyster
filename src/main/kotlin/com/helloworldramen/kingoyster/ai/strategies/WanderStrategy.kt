@@ -16,7 +16,7 @@ class WanderStrategy(vararg considerations: GameAiConsideration) : GameAiStrateg
             context.entitiesAt(neighbor)?.all { it.isPassable() } == true
         }
 
-        return passableNeighbors.map {
+        return passableNeighbors.shuffled().map {
             MoveOption(this, strategyContext.withPosition(it))
         }
     }

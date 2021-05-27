@@ -7,6 +7,8 @@ import com.helloworldramen.kingoyster.oyster.Position
 import com.helloworldramen.kingoyster.oyster.Entity
 import com.helloworldramen.kingoyster.oyster.World
 import kotlin.math.roundToInt
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 object WorldGenerator {
 
@@ -47,7 +49,7 @@ object WorldGenerator {
         world.placeWithDensity(0.006) {
             ActorFactory.goblin()
         }
-        world.placeWithDensity(0.006) {
+        world.placeWithRange(1, 1) {
             ActorFactory.ghost()
         }
     }
@@ -64,6 +66,16 @@ object WorldGenerator {
 
     private fun World.placeWithDensity(percentage: Double, entityFn: () -> Entity) {
         repeat((width * height * percentage).roundToInt()) {
+            randomEmptyPosition()?.let {
+                add(entityFn(), it)
+            }
+        }
+    }
+
+    private fun World.placeWithRange(minCount: Int, maxCount: Int, entityFn: () -> Entity) {
+        val count = Random.nextInt(minCount..maxCount)
+
+        repeat(count) {
             randomEmptyPosition()?.let {
                 add(entityFn(), it)
             }
