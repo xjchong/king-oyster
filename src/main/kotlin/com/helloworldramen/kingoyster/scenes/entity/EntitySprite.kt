@@ -8,6 +8,7 @@ import godot.Node2D
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.Color
+import godot.core.Vector2
 import godot.extensions.getNodeAs
 
 @RegisterClass
@@ -31,6 +32,7 @@ class EntitySprite : Node2D() {
 
 	private fun updateAppearance() {
 		animatedSprite.visible = false
+		animatedSprite.position = Vector2(16, 16)
 
 		val (text, color)= when(entity?.name) {
 			"player" -> {
@@ -53,7 +55,8 @@ class EntitySprite : Node2D() {
 			}
 			"slime" -> {
 				animatedSprite.visible = true
-				animatedSprite.play("slime")
+				animatedSprite.position += Vector2(0, -1)
+				animatedSprite.play("blue_slime")
 				Pair("s", Color.lightgreen)
 			}
 			"stairs" -> Pair("<", Color.white)

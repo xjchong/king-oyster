@@ -59,6 +59,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 
 		player = WorldGenerator.repopulate(world, DungeonGenerationStrategy)
 		context = Context(world)
+		context.player = player!!
 
 		bind(context)
 	}

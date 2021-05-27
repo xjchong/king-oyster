@@ -2,6 +2,7 @@ package com.helloworldramen.kingoyster.oyster
 
 
 class Context(val world: World) {
+    var player = Entity.UNKNOWN
     var level = 1
 
     companion object {

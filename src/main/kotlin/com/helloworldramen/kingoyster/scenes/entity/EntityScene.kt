@@ -12,6 +12,7 @@ import com.helloworldramen.kingoyster.oyster.Position
 import com.helloworldramen.kingoyster.parts.HealthPart
 import com.helloworldramen.kingoyster.parts.ItemPart
 import com.helloworldramen.kingoyster.parts.MovementPart
+import com.helloworldramen.kingoyster.parts.SensoryPart
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import godot.*
 import godot.annotation.RegisterClass
@@ -74,13 +75,17 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
-		if (entity.canChangePosition) {
-			context.world[entity]?.let {
-				if (position != calculateNodePosition(it)) {
-					setPosition()
-				}
+		val worldPosition = context.world[entity]
+
+		if (entity.canChangePosition && worldPosition != null) {
+			if (position != calculateNodePosition(worldPosition)) {
+				setPosition()
 			}
 		}
+
+		visible = context.player.find<SensoryPart>()
+			?.visiblePositions
+			?.contains(worldPosition) == true
 	}
 
 	fun bind(context: Context, entity: Entity) {
