@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntityScene.kt" type="Script" id=1]
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntitySprite.tscn" type="PackedScene" id=2]
@@ -65,6 +65,9 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Vector2( 0, 0 ), Vector2( -10, 0 ), Vector2( 0, 0 ) ]
 }
+
+[sub_resource type="Animation" id=8]
+resource_name = "none"
 
 [sub_resource type="Animation" id=5]
 resource_name = "on_death"
@@ -168,6 +171,7 @@ anims/bump_east = SubResource( 1 )
 anims/bump_north = SubResource( 2 )
 anims/bump_south = SubResource( 3 )
 anims/bump_west = SubResource( 4 )
+anims/none = SubResource( 8 )
 anims/on_death = SubResource( 5 )
 anims/on_hit = SubResource( 6 )
 anims/pulse = SubResource( 7 )

@@ -80,7 +80,9 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			}
 		}
 
-		visible = context.player.visiblePositions().contains(worldPosition)
+		if (!isAnimating) {
+			visible = context.player.visiblePositions().contains(worldPosition)
+		}
 	}
 
 	fun bind(context: Context, entity: Entity) {
