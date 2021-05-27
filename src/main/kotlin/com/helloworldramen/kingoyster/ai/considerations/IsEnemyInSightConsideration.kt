@@ -1,8 +1,6 @@
 package com.helloworldramen.kingoyster.ai.considerations
 
 import com.helloworldramen.kingoyster.ai.GameAiOptionContext
-import com.helloworldramen.kingoyster.ai.GameAiStrategyContext
-import com.helloworldramen.kingoyster.parts.faction
 import com.helloworldramen.kingoyster.parts.visiblePositions
 
 

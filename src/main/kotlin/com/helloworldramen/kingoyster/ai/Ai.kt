@@ -27,18 +27,18 @@ object Ai {
             ))
             "goblin" -> HighestValueReasoner.prioritize(aiContext, listOf(
                 AttackInRangeEnemiesStrategy(
-                    IsEnemyInRangeConsideration
+                    ConstantConsideration(0.9)
                 ),
                 WanderStrategy(
                     ConstantConsideration(0.5)
                 ),
                 ChaseVisibleEnemiesStrategy(
-                    IsEnemyInSightConsideration
+                    ConstantConsideration(0.8)
                 )
             ))
             "slime" -> PurelyRandomReasoner.prioritize(aiContext, listOf(
                 AttackInRangeEnemiesStrategy(
-                    IsEnemyInRangeConsideration
+                    ConstantConsideration(0.5)
                 ),
                 WanderStrategy(
                     ConstantConsideration(0.5)
