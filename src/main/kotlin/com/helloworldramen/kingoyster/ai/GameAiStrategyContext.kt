@@ -43,3 +43,8 @@ typealias GameAiStrategy = AiStrategy<GameAiStrategyContext, GameAiOptionContext
 typealias GameAiConsideration = AiConsideration<GameAiOptionContext>
 typealias GameAiOption = AiOption<GameAiOptionContext>
 typealias GameAiReasoner = AiReasoner<GameAiStrategyContext, GameAiOptionContext>
+
+fun Position?.tag(): String {
+    return if (this == null) "?,?"
+    else "$x,$y"
+}

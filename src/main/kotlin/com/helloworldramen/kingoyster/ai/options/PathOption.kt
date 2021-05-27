@@ -5,6 +5,7 @@ import com.helloworldramen.kingoyster.ai.GameAiOption
 import com.helloworldramen.kingoyster.ai.GameAiOptionContext
 import com.helloworldramen.kingoyster.ai.architecture.AiStrategy
 import com.helloworldramen.kingoyster.ai.architecture.AiStrategyContext
+import com.helloworldramen.kingoyster.ai.tag
 import com.helloworldramen.kingoyster.parts.isPassable
 
 class PathOption(
@@ -12,7 +13,7 @@ class PathOption(
     override val optionContext: GameAiOptionContext
 ) : GameAiOption() {
 
-    override val tag: String = "pth"
+    override val tag: String = "pth.${optionContext.position.tag()}"
 
     override fun execute(): Boolean {
         val (context, entity, _, position) = optionContext
