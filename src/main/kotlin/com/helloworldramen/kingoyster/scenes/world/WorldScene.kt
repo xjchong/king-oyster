@@ -9,6 +9,8 @@ import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.architecture.*
 import com.helloworldramen.kingoyster.architecture.World
+import com.helloworldramen.kingoyster.parts.DoorPart
+import com.helloworldramen.kingoyster.parts.ItemPart
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
@@ -82,14 +84,20 @@ class WorldScene : Node2D(), EventBusSubscriber {
 	}
 
 	@RegisterFunction
-	fun onTilesSelected(groupIndex: Int) {
-		if (groupIndex < 0) {
-			println("No tiles selected.")
-		} else {
-			println("Tiles selected: ${tileSelectionScene.positionGroups.getOrNull(groupIndex)}")
+	fun onTilesSelected(selectionReason: String) {
+		getTree()?.paused = false
+
+		when (selectionReason) {
+			SELECTION_REASON_INTERACT -> {
+				tileSelectionScene.selection.firstOrNull()?.let {
+					performInteractiveActions(it)
+				}
+			}
+			SELECTION_REASON_TEST -> {
+				println("Tiles selected: ${tileSelectionScene.selection}")
+			}
 		}
 
-		getTree()?.paused = false
 	}
 
 	private fun updateNextEntity() {
@@ -113,21 +121,26 @@ class WorldScene : Node2D(), EventBusSubscriber {
 		val world = context.world
 		val currentPosition = world[player] ?: return
 
-		fun performActions(position: Position?) {
+		fun performActions(position: Position) {
 			when {
-				world.currentTime < player.time -> return
-				position == null -> {
-					world.respondToActions(currentPosition,
-						Take(context, player),
-						Ascend(context, player)
-					)?.let {
-						sceneForEntity[it]?.animatePulse()
-					}
-				}
+				position == currentPosition -> performInteractiveActions(position)
 				player.respondToAction(Move(context, player, position)) -> return
 				world.respondToActions(position, Open(context, player)) != null -> return
 				world.respondToActions(position, Attack(context, player)) != null -> return
 				else -> sceneForEntity[player]?.animateBump(position)
+			}
+		}
+
+		fun getNearbyInteractivePositions(position: Position): List<Position> {
+			val nearbyPositions = listOf(position) + position.neighbors()
+
+			return nearbyPositions.filter { nearbyPosition ->
+				context.entitiesAt(nearbyPosition)?.any {
+					when (nearbyPosition) {
+						position -> it.has<ItemPart>()
+						else -> it.has<DoorPart>()
+					}
+				} == true
 			}
 		}
 
@@ -136,12 +149,38 @@ class WorldScene : Node2D(), EventBusSubscriber {
 			inputEvent.isActionPressed("ui_right", true) -> performActions(currentPosition.east())
 			inputEvent.isActionPressed("ui_down", true) -> performActions(currentPosition.south())
 			inputEvent.isActionPressed("ui_left", true) -> performActions(currentPosition.west())
-			inputEvent.isActionPressed("ui_accept") -> performActions(null)
+			inputEvent.isActionPressed("ui_accept") -> {
+				val interactivePositions = getNearbyInteractivePositions(currentPosition)
+
+				when (interactivePositions.size) {
+					0 -> return
+					1 -> performInteractiveActions(interactivePositions.first())
+					else -> {
+						getTree()?.paused = true
+						tileSelectionScene.startTileSelection(
+							SELECTION_REASON_INTERACT,
+							interactivePositions.map { listOf(it) })
+					}
+				}
+			}
 			inputEvent.isActionPressed("ui_cancel", true) -> player.idle(world)
 			inputEvent.isActionPressed("ui_select") -> {
 				getTree()?.paused = true
-				tileSelectionScene.startTileSelection(currentPosition.neighbors().map { listOf(it) })
+				tileSelectionScene.startTileSelection(
+					SELECTION_REASON_TEST,
+					currentPosition.neighbors().map { listOf(it) })
 			}
+		}
+	}
+
+	private fun performInteractiveActions(position: Position) {
+		with(context) {
+			world.respondToActions(position,
+				Take(this, player),
+				Open(this, player),
+				Close(this, player),
+				Ascend(this, player)
+			)
 		}
 	}
 
@@ -210,5 +249,8 @@ class WorldScene : Node2D(), EventBusSubscriber {
 	companion object {
 		const val PATH = "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/world/WorldScene.tscn"
 		const val TILE_SIZE = 32
+
+		const val SELECTION_REASON_INTERACT = "interact"
+		const val SELECTION_REASON_TEST = "test"
 	}
 }

@@ -9,6 +9,7 @@ import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
+import com.helloworldramen.kingoyster.eventbus.events.TakeEvent
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import godot.*
@@ -57,12 +58,22 @@ class EntityScene : Node2D(), EventBusSubscriber {
 					animateOnDeath()
 				}
 			}
+			is TakeEvent -> {
+				if (event.taken == entity) {
+					animatePulse()
+				}
+			}
 		}
 	}
 
 	@RegisterFunction
 	override fun _ready() {
-		EventBus.register(this, AttackEvent::class, DamageEvent::class, DeathEvent::class)
+		EventBus.register(this,
+			AttackEvent::class,
+			DamageEvent::class,
+			DeathEvent::class,
+			TakeEvent::class
+		)
 		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
 	}
 

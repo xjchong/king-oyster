@@ -4,6 +4,8 @@ import com.helloworldramen.kingoyster.actions.Take
 import com.helloworldramen.kingoyster.architecture.Action
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
+import com.helloworldramen.kingoyster.eventbus.EventBus
+import com.helloworldramen.kingoyster.eventbus.events.TakeEvent
 
 class ItemPart : Part {
 
@@ -23,6 +25,7 @@ class ItemPart : Part {
         val takerInventory = taker.find(InventoryPart::class) ?: return false
 
         if (takerInventory.put(this)) {
+            EventBus.post(TakeEvent(taker, this))
             context.world.remove(this)
 
             return true

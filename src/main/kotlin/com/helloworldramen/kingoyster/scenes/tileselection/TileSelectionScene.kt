@@ -20,7 +20,10 @@ import kotlin.math.roundToInt
 class TileSelectionScene : Node2D() {
 
 	@RegisterSignal
-	val signalTilesSelected by signal<Int>("selectedGroupIndex")
+	val signalTilesSelected by signal<String>("selectionReason")
+
+	var selection: List<Position> = listOf()
+		private set
 
 	private val tileOverlayScenesBucket: Node2D by lazy { getNodeAs("TileOverlayScenesBucket")!! }
 
@@ -30,13 +33,12 @@ class TileSelectionScene : Node2D() {
 
 	private var currentGroupIndex: Int = 0
 
-	var positionGroups: List<List<Position>> = listOf()
-		private set
-
+	private var positionGroups: List<List<Position>> = listOf()
 	private var selectionGroups: List<TileSelectionGroup> = listOf()
 
 	private var selectablePositions: Set<Position> = setOf()
 	private var isSelecting = false
+	private var selectionReason: String? = null
 
 	private var width: Int = 0
 	private var height: Int = 0
@@ -90,10 +92,12 @@ class TileSelectionScene : Node2D() {
 		tileOverlaySceneForPosition = nextTileOverlaySceneForPosition
 	}
 
-	fun startTileSelection(positionGroups: List<List<Position>>) {
+	fun startTileSelection(reason: String, positionGroups: List<List<Position>>) {
 		if (positionGroups.isEmpty()) return
 
+		this.selectionReason = reason
 		this.positionGroups = positionGroups
+		this.selection = listOf()
 		selectablePositions = positionGroups.flatten().toSet()
 		selectionGroups = calculateSelectionGroups(positionGroups)
 		currentGroupIndex = 0
@@ -103,6 +107,7 @@ class TileSelectionScene : Node2D() {
 	}
 
 	private fun confirmCurrentSelection() {
+		selection = positionGroups[currentGroupIndex]
 		isSelecting = false
 		tileOverlaySceneForPosition.values.forEach {
 			it.hide()
@@ -110,11 +115,12 @@ class TileSelectionScene : Node2D() {
 
 		// An artifical delay to mitigate input from this scene being used in the parent.
 		Timer().schedule(timerTask {
-			signalTilesSelected.emit(currentGroupIndex)
+			signalTilesSelected.emit(selectionReason ?: "")
 		}, 100)
 	}
 
 	private fun cancelSelection() {
+		selection = listOf()
 		isSelecting = false
 		tileOverlaySceneForPosition.values.forEach {
 			it.hide()
@@ -122,7 +128,7 @@ class TileSelectionScene : Node2D() {
 
 		// An artifical delay to mitigate input from this scene being used in the parent.
 		Timer().schedule(timerTask {
-			signalTilesSelected.emit(-1)
+			signalTilesSelected.emit(selectionReason ?: "")
 		}, 100)
 	}
 
