@@ -148,7 +148,8 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private fun performDirectionActions(position: Position) {
 		val player = context.player
 
-		if (player.respondToAction(Move(context, player, position))
+		if (player.time > context.world.currentTime // Don't read any direction input when not player's turn.
+			|| player.respondToAction(Move(context, player, position))
 			|| context.world.respondToActions(position,
 				Open(context, player),
 				Attack(context, player)
