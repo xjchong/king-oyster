@@ -5,7 +5,7 @@ import com.helloworldramen.kingoyster.ai.options.PathFartherOption
 import com.helloworldramen.kingoyster.parts.isEnemyOf
 import com.helloworldramen.kingoyster.parts.visiblePositions
 
-class FleeFromVisibleEnemiesStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy() {
+class FleeFromVisibleEnemyStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy() {
 
     override val tag: String = "FLE"
     override val considerations: List<GameAiConsideration> = considerations.toList()

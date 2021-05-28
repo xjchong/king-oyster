@@ -17,7 +17,7 @@ object Ai {
 
         val entityOptionsWithScore = when (entity.name) {
             "ghost" -> HighestValueReasoner.prioritize(aiContext, listOf(
-                FleeFromVisibleEnemiesStrategy(
+                FleeFromVisibleEnemyStrategy(
                     ConstantConsideration(0.6)
                 ),
                 WanderStrategy(
@@ -25,15 +25,15 @@ object Ai {
                 )
             ))
             "goblin" -> HighestValueReasoner.prioritize(aiContext, listOf(
-                AttackInRangeEnemiesStrategy(
+                AttackInRangeEnemyStrategy(
                     ConstantConsideration(0.9),
                     OwnHealthConsideration(LinearCurve())
                 ),
-                ChaseVisibleEnemiesStrategy(
+                ChaseVisibleEnemyStrategy(
                     ConstantConsideration(0.8),
                     OwnHealthConsideration(LinearCurve())
                 ),
-                FleeFromVisibleEnemiesStrategy(
+                FleeFromVisibleEnemyStrategy(
                     OwnHealthConsideration(LinearCurve(3.0, 0.0))
                 ),
                 WanderStrategy(
@@ -41,7 +41,7 @@ object Ai {
                 ),
             ))
             "slime" -> PurelyRandomReasoner.prioritize(aiContext, listOf(
-                AttackInRangeEnemiesStrategy(
+                AttackInRangeEnemyStrategy(
                     ConstantConsideration(0.5)
                 ),
                 WanderStrategy(

@@ -10,7 +10,7 @@ import com.helloworldramen.kingoyster.ai.options.PathCloserOption
 import com.helloworldramen.kingoyster.parts.isEnemyOf
 import com.helloworldramen.kingoyster.parts.visiblePositions
 
-class ChaseVisibleEnemiesStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy() {
+class ChaseVisibleEnemyStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy() {
 
     override val tag: String = "CHS"
     override val considerations: List<AiConsideration<GameAiOptionContext>> = considerations.toList()

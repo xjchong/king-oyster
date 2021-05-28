@@ -9,7 +9,7 @@ import com.helloworldramen.kingoyster.ai.architecture.AiOption
 import com.helloworldramen.kingoyster.ai.options.AttackOption
 import com.helloworldramen.kingoyster.parts.isEnemyOf
 
-class AttackInRangeEnemiesStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy() {
+class AttackInRangeEnemyStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy() {
 
     override val tag: String = "ATK"
     override val considerations: List<AiConsideration<GameAiOptionContext>> = considerations.toList()
