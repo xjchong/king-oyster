@@ -15,6 +15,7 @@ class FactionPart(
 sealed class Faction {
     object Player : Faction()
     object Monster : Faction()
+    object Spirit : Faction()
 }
 
 fun Entity.faction(): Faction? = find<FactionPart>()?.faction

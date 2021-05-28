@@ -35,7 +35,7 @@ object ActorFactory {
             CombatPart(
                 attackPotency = 1
             ),
-            FactionPart(Faction.Monster),
+            FactionPart(Faction.Spirit),
             HealthPart(
                 maxHealth = 1
             ),
@@ -45,7 +45,7 @@ object ActorFactory {
             ),
             MovementPart(),
             SensoryPart(
-                visionRange = 3
+                visionRange = 4
             )
         ),
         timeFactor = 1.0

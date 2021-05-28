@@ -16,7 +16,10 @@ object Ai {
         val aiContext = GameAiStrategyContext(context, entity)
 
         val entityOptionsWithScore = when (entity.name) {
-            "ghost" -> PurelyRandomReasoner.prioritize(aiContext, listOf(
+            "ghost" -> HighestValueReasoner.prioritize(aiContext, listOf(
+                FleeFromVisibleEnemiesStrategy(
+                    ConstantConsideration(0.6)
+                ),
                 WanderStrategy(
                     ConstantConsideration(0.5)
                 )
