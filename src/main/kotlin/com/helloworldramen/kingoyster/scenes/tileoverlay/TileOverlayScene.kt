@@ -1,5 +1,6 @@
 package com.helloworldramen.kingoyster.scenes.tileoverlay
 
+import godot.AnimationPlayer
 import godot.ColorRect
 import godot.Node2D
 import godot.annotation.RegisterClass
@@ -10,19 +11,20 @@ import godot.extensions.getNodeAs
 class TileOverlayScene: Node2D() {
 
 	private val colorRect: ColorRect by lazy { getNodeAs("ColorRect")!! }
+	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
 
 	fun showCanSelect() {
-		colorRect.color = Color.yellow
+		animationPlayer.play("can_select")
 		show()
 	}
 
 	fun showSelected() {
-		colorRect.color = Color.white
+		animationPlayer.play("selected")
 		show()
 	}
 
 	fun showNonInteractive() {
-		colorRect.color = Color.black
+		animationPlayer.play("non_interactive")
 		show()
 	}
 
