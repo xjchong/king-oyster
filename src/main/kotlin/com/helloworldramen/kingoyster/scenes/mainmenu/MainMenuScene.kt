@@ -1,6 +1,6 @@
 package com.helloworldramen.kingoyster.scenes.mainmenu
 
-import com.helloworldramen.kingoyster.scenes.world.WorldScene
+import com.helloworldramen.kingoyster.scenes.game.GameScene
 import godot.InputEvent
 import godot.Label
 import godot.MarginContainer
@@ -17,7 +17,7 @@ class MainMenuScene : MarginContainer() {
 	private val exitSelector: Label by lazy { getNodeAs("$ITEMS_VBOX_PATH/ExitItem/ExitSelector")!! }
 
 	private val selectors: List<Label> by lazy { listOf(startSelector, optionsSelector, exitSelector) }
-	var selectedIndex = 0
+	private var selectedIndex = 0
 		set(value) {
 			setSelection(value)
 			field = value
@@ -52,7 +52,7 @@ class MainMenuScene : MarginContainer() {
 
 	private fun handleItemEntered() {
 		when (selectedIndex) {
-			0 -> getTree()?.changeScene(WorldScene.PATH)
+			0 -> getTree()?.changeScene(GameScene.PATH)
 			1 -> GD.print("TODO: Implement options scene.")
 			2 -> getTree()?.quit()
 		}
