@@ -11,9 +11,7 @@ import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
-import com.helloworldramen.kingoyster.parts.AscendablePart
-import com.helloworldramen.kingoyster.parts.DoorPart
-import com.helloworldramen.kingoyster.parts.ItemPart
+import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.tileselection.TileSelectionScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
@@ -139,7 +137,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 			context.entitiesAt(nearbyPosition)?.any {
 				when (nearbyPosition) {
 					position -> it.has<ItemPart>() || it.has<AscendablePart>()
-					else -> it.has<DoorPart>()
+					else -> it.has<DoorPart>() || (it.has<AttackablePart>() && it.isEnemyOf(context.player))
 				}
 			} == true
 		}
@@ -163,6 +161,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private fun performInteractiveActions(position: Position) {
 		with(context) {
 			world.respondToActions(position,
+				Attack(this, player),
 				Take(this, player),
 				Open(this, player),
 				Close(this, player),
