@@ -21,6 +21,8 @@ class WorldScene : Node2D() {
 	private val packedMemoryScene = GD.load<PackedScene>(MemoryScene.PATH)
 	private val packedEntityScene = GD.load<PackedScene>(EntityScene.PATH)
 
+	private val sceneForEntity: MutableMap<Entity, EntityScene> = mutableMapOf()
+
 	fun bind(context: Context) {
 		val world = context.world
 
@@ -35,6 +37,7 @@ class WorldScene : Node2D() {
 			it.queueFree()
 		}
 
+		sceneForEntity.clear()
 		tileMap.clear()
 		tileMap.setOuterBorder(world)
 
@@ -44,6 +47,7 @@ class WorldScene : Node2D() {
 				packedEntityScene?.instanceAs<EntityScene>()?.let {
 					entityScenesBucket.addChild(it)
 					it.bind(context, entity)
+					sceneForEntity[entity] = it
 
 					if (entity.name == "wall") {
 						tileMap.setCell(position.x.toLong(), position.y.toLong(), 1)
@@ -63,6 +67,10 @@ class WorldScene : Node2D() {
 		tileMap.updateBitmaskRegion(
 			start = Vector2(-TILE_SIZE, -TILE_SIZE),
 			end = Vector2(world.width * TILE_SIZE, world.height * TILE_SIZE))
+	}
+
+	fun animateBump(entity: Entity, position: Position) {
+		sceneForEntity[entity]?.animateBump(position)
 	}
 
 	private fun TileMap.setOuterBorder(world: World) {

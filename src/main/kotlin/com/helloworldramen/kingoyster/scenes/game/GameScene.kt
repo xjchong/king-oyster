@@ -14,7 +14,6 @@ import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.parts.AscendablePart
 import com.helloworldramen.kingoyster.parts.DoorPart
 import com.helloworldramen.kingoyster.parts.ItemPart
-import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.tileselection.TileSelectionScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
@@ -33,16 +32,16 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private val tileSelectionScene: TileSelectionScene by lazy { getNodeAs("TileSelectionScene")!! }
 
 	private var context: Context = Context.UNKNOWN
-	private var player: Entity? = null
 	private var lastEntity: Entity? = null
 	private var lastEntityTime: Double? = null
-	private val sceneForEntity: MutableMap<Entity, EntityScene> = mutableMapOf()
 
 	override fun receiveEvent(event: Event) {
 		when (event) {
 			is AscendEvent -> {
-				player?.update(context, context.world)
-				worldScene.bind(context)
+				with(context) {
+					player.update(this, world)
+					worldScene.bind(this)
+				}
 			}
 			is GameOverEvent -> getTree()?.changeScene(MainMenuScene.PATH)
 		}
@@ -51,12 +50,12 @@ class GameScene : Node2D(), EventBusSubscriber {
 	@RegisterFunction
 	override fun _ready() {
 		val world = World(17, 17)
+		val player = WorldGenerator.repopulate(world, DungeonGenerationStrategy)
 
 		EventBus.register(this, AscendEvent::class, GameOverEvent::class)
 
-		player = WorldGenerator.repopulate(world, DungeonGenerationStrategy)
 		context = Context(world)
-		context.player = player!!
+		context.player = player
 
 		worldScene.bind(context)
 
@@ -72,9 +71,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _input(event: InputEvent) {
-		player?.let {
-			parseInput(event, context, it)
-		}
+		parseInput(event)
 	}
 
 	@RegisterFunction
@@ -86,9 +83,6 @@ class GameScene : Node2D(), EventBusSubscriber {
 				tileSelectionScene.selection.firstOrNull()?.let {
 					performInteractiveActions(it)
 				}
-			}
-			SELECTION_REASON_TEST -> {
-				println("Tiles selected: ${tileSelectionScene.selection}")
 			}
 		}
 	}
@@ -110,39 +104,17 @@ class GameScene : Node2D(), EventBusSubscriber {
 		}
 	}
 
-	private fun parseInput(inputEvent: InputEvent, context: Context, player: Entity) {
+	private fun parseInput(event: InputEvent) {
 		val world = context.world
+		val player = context.player
 		val currentPosition = world[player] ?: return
 
-		fun performActions(position: Position) {
-			when {
-				position == currentPosition -> performInteractiveActions(position)
-				player.respondToAction(Move(context, player, position)) -> return
-				world.respondToActions(position, Open(context, player)) != null -> return
-				world.respondToActions(position, Attack(context, player)) != null -> return
-				else -> sceneForEntity[player]?.animateBump(position)
-			}
-		}
-
-		fun getNearbyInteractivePositions(position: Position): List<Position> {
-			val nearbyPositions = listOf(position) + position.neighbors()
-
-			return nearbyPositions.filter { nearbyPosition ->
-				context.entitiesAt(nearbyPosition)?.any {
-					when (nearbyPosition) {
-						position -> it.has<ItemPart>() || it.has<AscendablePart>()
-						else -> it.has<DoorPart>()
-					}
-				} == true
-			}
-		}
-
 		when {
-			inputEvent.isActionPressed("ui_up", true) -> performActions(currentPosition.north())
-			inputEvent.isActionPressed("ui_right", true) -> performActions(currentPosition.east())
-			inputEvent.isActionPressed("ui_down", true) -> performActions(currentPosition.south())
-			inputEvent.isActionPressed("ui_left", true) -> performActions(currentPosition.west())
-			inputEvent.isActionPressed("ui_accept") -> {
+			event.isActionPressed("ui_up", true) -> performDirectionActions(currentPosition.north())
+			event.isActionPressed("ui_right", true) -> performDirectionActions(currentPosition.east())
+			event.isActionPressed("ui_down", true) -> performDirectionActions(currentPosition.south())
+			event.isActionPressed("ui_left", true) -> performDirectionActions(currentPosition.west())
+			event.isActionPressed("ui_accept") -> {
 				val interactivePositions = getNearbyInteractivePositions(currentPosition)
 
 				when (interactivePositions.size) {
@@ -156,14 +128,35 @@ class GameScene : Node2D(), EventBusSubscriber {
 					}
 				}
 			}
-			inputEvent.isActionPressed("ui_cancel", true) -> player.idle(world)
-			inputEvent.isActionPressed("ui_select") -> {
-				getTree()?.paused = true
-				tileSelectionScene.startTileSelection(
-					WorldScene.SELECTION_REASON_TEST,
-					currentPosition.neighbors().map { listOf(it) })
-			}
+			event.isActionPressed("ui_cancel", true) -> player.idle(world)
 		}
+	}
+
+	private fun getNearbyInteractivePositions(position: Position): List<Position> {
+		val nearbyPositions = listOf(position) + position.neighbors()
+
+		return nearbyPositions.filter { nearbyPosition ->
+			context.entitiesAt(nearbyPosition)?.any {
+				when (nearbyPosition) {
+					position -> it.has<ItemPart>() || it.has<AscendablePart>()
+					else -> it.has<DoorPart>()
+				}
+			} == true
+		}
+	}
+
+	private fun performDirectionActions(position: Position) {
+		val player = context.player
+
+		if (player.respondToAction(Move(context, player, position))
+			|| context.world.respondToActions(position,
+				Open(context, player),
+				Attack(context, player)
+			) != null
+		) return
+
+		// If we didn't successfully perform a direction action, indicate the failure with a bump animation.
+		worldScene.animateBump(player, position)
 	}
 
 	private fun performInteractiveActions(position: Position) {
@@ -181,6 +174,5 @@ class GameScene : Node2D(), EventBusSubscriber {
 		const val PATH = "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/game/GameScene.tscn"
 
 		const val SELECTION_REASON_INTERACT = "interact"
-		const val SELECTION_REASON_TEST = "test"
 	}
 }
