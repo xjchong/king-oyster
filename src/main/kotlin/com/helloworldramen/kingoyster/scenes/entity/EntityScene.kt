@@ -11,6 +11,7 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.eventbus.events.TakeEvent
 import com.helloworldramen.kingoyster.parts.*
+import com.helloworldramen.kingoyster.scenes.health.HealthScene
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import godot.*
 import godot.annotation.RegisterClass
@@ -26,6 +27,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	private val backgroundRect: ColorRect by lazy { getNodeAs("BackgroundRect")!! }
 	private val entitySprite: EntitySprite by lazy { getNodeAs("EntitySprite")!! }
+	private val healthScene: HealthScene by lazy { getNodeAs("EntitySprite/HealthScene")!! }
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
 	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
 
@@ -101,6 +103,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		this.entity = entity
 
 		entitySprite.bind(entity)
+		healthScene.bind(entity)
 		setPosition(shouldAnimate = false)
 
 		backgroundRect.visible = entity.name != "wall"
