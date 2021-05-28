@@ -47,7 +47,7 @@ class TileSelectionScene : Control() {
 	override fun _input(event: InputEvent) {
 		if (!isSelecting) return
 
-        // It is important to call this to consume the event.
+		// It is important to call this to consume the event.
 		// Without this, upon unpausing the game, the game scene
 		// may still pick up the last key pressed and immediately parse it.
 		acceptEvent()

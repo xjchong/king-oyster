@@ -23,7 +23,7 @@ class WorldScene : Node2D() {
 
 	private val sceneForEntity: MutableMap<Entity, EntityScene> = mutableMapOf()
 
-	fun bind(context: Context) {
+	fun bind(context: Context): EntityScene? {
 		val world = context.world
 
 		// Wipe all the scenes.
@@ -67,6 +67,8 @@ class WorldScene : Node2D() {
 		tileMap.updateBitmaskRegion(
 			start = Vector2(-TILE_SIZE, -TILE_SIZE),
 			end = Vector2(world.width * TILE_SIZE, world.height * TILE_SIZE))
+
+		return sceneForEntity[context.player]
 	}
 
 	fun animateBump(entity: Entity, position: Position) {

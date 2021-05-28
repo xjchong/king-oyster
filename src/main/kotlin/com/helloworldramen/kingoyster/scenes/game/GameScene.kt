@@ -12,15 +12,18 @@ import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.parts.*
+import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.tileselection.TileSelectionScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
+import godot.Input
 import godot.InputEvent
 import godot.Node2D
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
+import godot.core.Vector2
 import godot.extensions.getNodeAs
 
 @RegisterClass
@@ -28,6 +31,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	private val worldScene: WorldScene by lazy { getNodeAs("WorldScene")!! }
 	private val tileSelectionScene: TileSelectionScene by lazy { getNodeAs("TileSelectionScene")!! }
+	private var playerScene: EntityScene? = null
 
 	private var context: Context = Context.UNKNOWN
 	private var lastEntity: Entity? = null
@@ -55,7 +59,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 		context = Context(world)
 		context.player = player
 
-		worldScene.bind(context)
+		playerScene = worldScene.bind(context)
 
 		tileSelectionScene.bind(world.width, world.height)
 		tileSelectionScene.pauseMode = PauseMode.PAUSE_MODE_PROCESS.id
@@ -64,7 +68,9 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
-		updateNextEntity()
+		if (playerScene?.isAnimating == false) {
+			updateNextEntity()
+		}
 	}
 
 	@RegisterFunction
@@ -107,6 +113,16 @@ class GameScene : Node2D(), EventBusSubscriber {
 		val player = context.player
 		val currentPosition = world[player] ?: return
 
+		if (Input.isActionPressed("left_modifier")) {
+			when {
+				event.isActionPressed("ui_up") -> performModifiedDirectionActions(Position(0, -1))
+				event.isActionPressed("ui_right") -> performModifiedDirectionActions(Position(1, 0))
+				event.isActionPressed("ui_down") -> performModifiedDirectionActions(Position(0, 1))
+				event.isActionPressed("ui_left") -> performModifiedDirectionActions(Position(-1, 0))
+			}
+			return
+		}
+
 		when {
 			event.isActionPressed("ui_up", true) -> performDirectionActions(currentPosition.north())
 			event.isActionPressed("ui_right", true) -> performDirectionActions(currentPosition.east())
@@ -141,6 +157,28 @@ class GameScene : Node2D(), EventBusSubscriber {
 				}
 			} == true
 		}
+	}
+
+	private fun performModifiedDirectionActions(vector: Position) {
+		val player = context.player
+		val world = context.world
+		val currentPosition = context.positionOf(player) ?: return
+		val maxVectorMagnitude = if (vector.x != 0) world.width else world.height
+		var furthestPosition = currentPosition
+
+		for (i in 1..maxVectorMagnitude) {
+			val nextVector = Position(vector.x * i, vector.y * i)
+			val nextPosition = currentPosition.withRelative(nextVector)
+
+			if (context.entitiesAt(nextPosition)?.any { !it.isPassable() } == true) break
+
+			furthestPosition = nextPosition
+		}
+
+		furthestPosition.neighbors().forEach { neighbor ->
+			world.respondToActions(neighbor, Damage(context, player, 1))
+		}
+		player.respondToAction(Move(context, player, furthestPosition))
 	}
 
 	private fun performDirectionActions(position: Position) {

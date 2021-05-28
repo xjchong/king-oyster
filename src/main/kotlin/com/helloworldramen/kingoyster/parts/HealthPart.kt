@@ -23,7 +23,7 @@ class HealthPart(var maxHealth: Int, var health: Int = maxHealth) : Part {
     }
 
     private fun Entity.respondToDamage(action: Damage): Boolean {
-        val (context, _, amount) = action
+        val (context, source, amount) = action
         val currentPosition = context.world[this] ?: return false
 
         EventBus.post(DamageEvent(currentPosition, this, amount))
