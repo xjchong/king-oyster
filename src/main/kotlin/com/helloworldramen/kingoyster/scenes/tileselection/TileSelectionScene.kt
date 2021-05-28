@@ -17,7 +17,7 @@ import kotlin.concurrent.timerTask
 import kotlin.math.roundToInt
 
 @RegisterClass
-class TileSelectionScene : Node2D() {
+class TileSelectionScene : Control() {
 
 	@RegisterSignal
 	val signalTilesSelected by signal<String>("selectionReason")
@@ -46,6 +46,11 @@ class TileSelectionScene : Node2D() {
 	@RegisterFunction
 	override fun _input(event: InputEvent) {
 		if (!isSelecting) return
+
+        // It is important to call this to consume the event.
+		// Without this, upon unpausing the game, the game scene
+		// may still pick up the last key pressed and immediately parse it.
+		acceptEvent()
 
 		val currentSelectionGroup = selectionGroups[currentGroupIndex]
 
@@ -113,10 +118,7 @@ class TileSelectionScene : Node2D() {
 			it.hide()
 		}
 
-		// An artifical delay to mitigate input from this scene being used in the parent.
-		Timer().schedule(timerTask {
-			signalTilesSelected.emit(selectionReason ?: "")
-		}, 100)
+		signalTilesSelected.emit(selectionReason ?: "")
 	}
 
 	private fun cancelSelection() {
@@ -126,10 +128,7 @@ class TileSelectionScene : Node2D() {
 			it.hide()
 		}
 
-		// An artifical delay to mitigate input from this scene being used in the parent.
-		Timer().schedule(timerTask {
-			signalTilesSelected.emit(selectionReason ?: "")
-		}, 100)
+		signalTilesSelected.emit(selectionReason ?: "")
 	}
 
 	private fun selectGroup(nextIndex: Int) {
