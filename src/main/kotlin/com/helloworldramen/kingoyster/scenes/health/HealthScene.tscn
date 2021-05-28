@@ -1,21 +1,37 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/health/HealthScene.kt" type="Script" id=1]
-[ext_resource path="res://src/main/resources/fonts/small_pixel-7.ttf" type="DynamicFontData" id=2]
-
-[sub_resource type="DynamicFont" id=1]
-font_data = ExtResource( 2 )
+[ext_resource path="res://src/main/resources/sprites/health-bar-border.png" type="Texture" id=3]
+[ext_resource path="res://src/main/resources/sprites/health-bar-background.png" type="Texture" id=4]
+[ext_resource path="res://src/main/resources/sprites/health-bar-fade.png" type="Texture" id=5]
+[ext_resource path="res://src/main/resources/sprites/health-bar-fill.png" type="Texture" id=6]
 
 [node name="HealthScene" type="Node2D"]
 script = ExtResource( 1 )
 
-[node name="Label" type="Label" parent="."]
-margin_right = 40.0
-margin_bottom = 14.0
-custom_fonts/font = SubResource( 1 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-text = "100"
-valign = 2
+[node name="HealthBarFade" type="TextureProgress" parent="."]
+margin_right = 32.0
+margin_bottom = 8.0
+value = 75.0
+texture_under = ExtResource( 4 )
+texture_over = ExtResource( 3 )
+texture_progress = ExtResource( 5 )
+tint_under = Color( 0.168627, 0.168627, 0.168627, 1 )
+nine_patch_stretch = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="HealthBarFill" type="TextureProgress" parent="."]
+margin_right = 32.0
+margin_bottom = 8.0
+value = 50.0
+texture_over = ExtResource( 3 )
+texture_progress = ExtResource( 6 )
+tint_progress = Color( 0.266667, 0.901961, 0.247059, 1 )
+nine_patch_stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="."]

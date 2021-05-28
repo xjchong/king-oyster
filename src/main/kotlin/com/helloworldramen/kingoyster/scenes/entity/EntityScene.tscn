@@ -165,7 +165,7 @@ __meta__ = {
 [node name="EntitySprite" parent="." instance=ExtResource( 2 )]
 
 [node name="HealthScene" parent="EntitySprite" instance=ExtResource( 3 )]
-position = Vector2( 0, 24 )
+position = Vector2( 0, 30 )
 
 [node name="Tween" type="Tween" parent="."]
 
