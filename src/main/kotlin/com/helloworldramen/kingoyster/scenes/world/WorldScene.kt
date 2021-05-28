@@ -9,6 +9,7 @@ import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.architecture.*
 import com.helloworldramen.kingoyster.architecture.World
+import com.helloworldramen.kingoyster.parts.AscendablePart
 import com.helloworldramen.kingoyster.parts.DoorPart
 import com.helloworldramen.kingoyster.parts.ItemPart
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
@@ -137,7 +138,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 			return nearbyPositions.filter { nearbyPosition ->
 				context.entitiesAt(nearbyPosition)?.any {
 					when (nearbyPosition) {
-						position -> it.has<ItemPart>()
+						position -> it.has<ItemPart>() || it.has<AscendablePart>()
 						else -> it.has<DoorPart>()
 					}
 				} == true
