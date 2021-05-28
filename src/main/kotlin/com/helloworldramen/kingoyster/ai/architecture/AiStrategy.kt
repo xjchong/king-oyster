@@ -3,12 +3,14 @@ package com.helloworldramen.kingoyster.ai.architecture
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-abstract class AiStrategy<C : AiStrategyContext, O : AiOptionContext>(private val considerations: List<AiConsideration<O>>) :
+abstract class AiStrategy<C : AiStrategyContext, O : AiOptionContext> :
     CoroutineScope {
 
     final override val coroutineContext: CoroutineContext = Dispatchers.Default
 
     open val tag: String? = this::class.simpleName?.take(4)
+
+    protected abstract val considerations: List<AiConsideration<O>>
 
     protected abstract fun listOptions(strategyContext: C): List<AiOption<O>>
 

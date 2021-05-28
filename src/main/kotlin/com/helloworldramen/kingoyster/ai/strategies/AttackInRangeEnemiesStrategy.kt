@@ -4,13 +4,15 @@ import com.helloworldramen.kingoyster.ai.GameAiConsideration
 import com.helloworldramen.kingoyster.ai.GameAiOptionContext
 import com.helloworldramen.kingoyster.ai.GameAiStrategyContext
 import com.helloworldramen.kingoyster.ai.GameAiStrategy
+import com.helloworldramen.kingoyster.ai.architecture.AiConsideration
 import com.helloworldramen.kingoyster.ai.architecture.AiOption
 import com.helloworldramen.kingoyster.ai.options.AttackOption
 import com.helloworldramen.kingoyster.parts.isEnemyOf
 
-class AttackInRangeEnemiesStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy(considerations.toList()) {
+class AttackInRangeEnemiesStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy() {
 
     override val tag: String = "ATK"
+    override val considerations: List<AiConsideration<GameAiOptionContext>> = considerations.toList()
 
     override fun listOptions(strategyContext: GameAiStrategyContext): List<AiOption<GameAiOptionContext>> {
         val (context, attacker) = strategyContext

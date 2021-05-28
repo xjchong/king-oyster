@@ -41,3 +41,6 @@ class HealthPart(var maxHealth: Int, var health: Int = maxHealth) : Part {
         return true
     }
 }
+
+fun Entity.maxHealth(): Int = find<HealthPart>()?.maxHealth ?: 0
+fun Entity.health(): Int = find<HealthPart>()?.health ?: 0

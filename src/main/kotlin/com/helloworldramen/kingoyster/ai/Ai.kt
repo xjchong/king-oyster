@@ -1,12 +1,11 @@
 package com.helloworldramen.kingoyster.ai
 
 import com.helloworldramen.kingoyster.ai.considerations.ConstantConsideration
-import com.helloworldramen.kingoyster.ai.strategies.AttackInRangeEnemiesStrategy
-import com.helloworldramen.kingoyster.ai.strategies.ChaseVisibleEnemiesStrategy
-import com.helloworldramen.kingoyster.ai.strategies.IdleStrategy
-import com.helloworldramen.kingoyster.ai.strategies.WanderStrategy
+import com.helloworldramen.kingoyster.ai.considerations.OwnHealthConsideration
+import com.helloworldramen.kingoyster.ai.curves.LinearCurve
 import com.helloworldramen.kingoyster.ai.reasoners.HighestValueReasoner
 import com.helloworldramen.kingoyster.ai.reasoners.PurelyRandomReasoner
+import com.helloworldramen.kingoyster.ai.strategies.*
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
 
@@ -24,14 +23,19 @@ object Ai {
             ))
             "goblin" -> HighestValueReasoner.prioritize(aiContext, listOf(
                 AttackInRangeEnemiesStrategy(
-                    ConstantConsideration(0.9)
+                    ConstantConsideration(0.9),
+                    OwnHealthConsideration(LinearCurve())
+                ),
+                ChaseVisibleEnemiesStrategy(
+                    ConstantConsideration(0.8),
+                    OwnHealthConsideration(LinearCurve())
+                ),
+                FleeFromVisibleEnemiesStrategy(
+                    OwnHealthConsideration(LinearCurve(3.0, 0.0))
                 ),
                 WanderStrategy(
                     ConstantConsideration(0.5)
                 ),
-                ChaseVisibleEnemiesStrategy(
-                    ConstantConsideration(0.8)
-                )
             ))
             "slime" -> PurelyRandomReasoner.prioritize(aiContext, listOf(
                 AttackInRangeEnemiesStrategy(

@@ -8,12 +8,12 @@ import com.helloworldramen.kingoyster.ai.architecture.AiStrategyContext
 import com.helloworldramen.kingoyster.ai.tag
 import com.helloworldramen.kingoyster.parts.canPass
 
-class PathOption(
+class PathCloserOption(
     override val parentStrategy: AiStrategy<out AiStrategyContext, GameAiOptionContext>,
     override val optionContext: GameAiOptionContext
 ) : GameAiOption() {
 
-    override val tag: String = "pth.${optionContext.position.tag()}"
+    override val tag: String = "ptc.${optionContext.position.tag()}"
 
     override fun execute(): Boolean {
         val (context, entity, _, position) = optionContext

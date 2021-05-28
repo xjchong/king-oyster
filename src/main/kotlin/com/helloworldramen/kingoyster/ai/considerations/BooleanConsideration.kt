@@ -2,10 +2,12 @@ package com.helloworldramen.kingoyster.ai.considerations
 
 import com.helloworldramen.kingoyster.ai.GameAiConsideration
 import com.helloworldramen.kingoyster.ai.GameAiOptionContext
+import com.helloworldramen.kingoyster.ai.architecture.AiCurve
 import com.helloworldramen.kingoyster.ai.curves.LinearCurve
 
-abstract class BooleanConsideration : GameAiConsideration(LinearCurve()) {
+abstract class BooleanConsideration : GameAiConsideration() {
 
+    final override val curve: AiCurve = LinearCurve()
     final override val minValue: Double = 0.0
     final override val maxValue: Double = 1.0
 
