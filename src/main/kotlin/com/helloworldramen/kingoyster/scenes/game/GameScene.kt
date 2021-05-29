@@ -3,7 +3,6 @@ package com.helloworldramen.kingoyster.scenes.game
 import com.helloworldramen.kingoyster.actions.*
 import com.helloworldramen.kingoyster.ai.Ai
 import com.helloworldramen.kingoyster.architecture.Context
-import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
 import com.helloworldramen.kingoyster.eventbus.Event
@@ -13,6 +12,7 @@ import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
+import com.helloworldramen.kingoyster.scenes.listmenu.ListMenuScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.tileselection.TileSelectionScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
@@ -25,12 +25,14 @@ import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.extensions.getNodeAs
 import java.util.*
+import kotlin.random.Random
 
 @RegisterClass
 class GameScene : Node2D(), EventBusSubscriber {
 
 	private val worldScene: WorldScene by lazy { getNodeAs("WorldScene")!! }
 	private val tileSelectionScene: TileSelectionScene by lazy { getNodeAs("TileSelectionScene")!! }
+	private val listMenuScene: ListMenuScene by lazy { getNodeAs("UIScenesBucket/ListMenuScene")!! }
 	private var playerScene: EntityScene? = null
 
 	private var context: Context = Context.UNKNOWN
@@ -64,6 +66,10 @@ class GameScene : Node2D(), EventBusSubscriber {
 		tileSelectionScene.bind(world.width, world.height)
 		tileSelectionScene.pauseMode = PauseMode.PAUSE_MODE_PROCESS.id
 		tileSelectionScene.signalTilesSelected.connect(this, ::onTilesSelected)
+
+		listMenuScene.pauseMode = PauseMode.PAUSE_MODE_PROCESS.id
+		listMenuScene.signalListItemSelected.connect(this, ::onListItemSelected)
+		listMenuScene.hide()
 	}
 
 	@RegisterFunction
@@ -90,6 +96,13 @@ class GameScene : Node2D(), EventBusSubscriber {
 				}
 			}
 		}
+	}
+
+	@RegisterFunction
+	fun onListItemSelected(index: Int) {
+		println("index $index")
+		listMenuScene.hide()
+		getTree()?.paused = false
 	}
 
 	private fun updateNextEntity() {
@@ -122,6 +135,19 @@ class GameScene : Node2D(), EventBusSubscriber {
 			event.isActionPressed("ui_left", true) -> performDirectionActions(currentPosition.west())
 			event.isActionPressed("ui_cancel", true) -> player.idle(world)
 			event.isActionPressed("ui_accept") -> performNearbyInteractiveActions()
+			event.isActionPressed("ui_select") -> {
+				getTree()?.paused = true
+				val testTitles = mutableListOf<String>()
+
+				repeat(Random.nextInt(1, 10)) {
+					testTitles.add("test $it")
+				}
+
+				println("test size: ${testTitles.size}")
+
+				listMenuScene.bindTitles(testTitles)
+				listMenuScene.show()
+			}
 		}
 	}
 

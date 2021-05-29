@@ -12,8 +12,6 @@ import godot.extensions.getNodeAs
 import godot.extensions.instanceAs
 import godot.global.GD
 import godot.signals.signal
-import java.util.Timer
-import kotlin.concurrent.timerTask
 import kotlin.math.roundToInt
 
 @RegisterClass

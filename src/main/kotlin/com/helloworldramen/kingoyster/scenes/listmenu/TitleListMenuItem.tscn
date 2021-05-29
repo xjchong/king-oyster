@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/main/resources/themes/default_theme.tres" type="Theme" id=1]
+[ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/listmenu/TitleListMenuItem.kt" type="Script" id=2]
+
+[node name="MarginContainer" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_vertical = 4
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBox" type="HBoxContainer" parent="."]
+margin_right = 544.0
+margin_bottom = 544.0
+
+[node name="Selector" type="Label" parent="HBox"]
+margin_top = 264.0
+margin_right = 5.0
+margin_bottom = 280.0
+rect_min_size = Vector2( 5, 0 )
+theme = ExtResource( 1 )
+text = ">"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HBox"]
+margin_left = 9.0
+margin_top = 264.0
+margin_right = 66.0
+margin_bottom = 280.0
+theme = ExtResource( 1 )
+text = "hello world"
+__meta__ = {
+"_edit_use_anchors_": false
+}
