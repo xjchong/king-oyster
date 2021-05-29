@@ -24,6 +24,7 @@ import godot.Node2D
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.extensions.getNodeAs
+import java.util.*
 
 @RegisterClass
 class GameScene : Node2D(), EventBusSubscriber {
@@ -33,8 +34,8 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private var playerScene: EntityScene? = null
 
 	private var context: Context = Context.UNKNOWN
-	private var lastEntity: Entity? = null
-	private var lastEntityTime: Double? = null
+
+	private val inputQueue: Queue<InputEvent> = ArrayDeque()
 
 	override fun receiveEvent(event: Event) {
 		when (event) {
@@ -68,11 +69,14 @@ class GameScene : Node2D(), EventBusSubscriber {
 	@RegisterFunction
 	override fun _process(delta: Double) {
 		updateNextEntity()
+		inputQueue.poll()?.let { parseInput(it) }
 	}
 
 	@RegisterFunction
 	override fun _input(event: InputEvent) {
-		parseInput(event)
+		if (inputQueue.size <= MAX_INPUT_QUEUE_SIZE) {
+			inputQueue.offer(event)
+		}
 	}
 
 	@RegisterFunction
@@ -89,18 +93,11 @@ class GameScene : Node2D(), EventBusSubscriber {
 	}
 
 	private fun updateNextEntity() {
-		val nextEntity = context.world.next()
+		context.world.next()?.let { entity ->
+			entity.update(context, context.world)
 
-		if (nextEntity != lastEntity || lastEntity?.time != lastEntityTime) {
-			lastEntity = nextEntity
-			lastEntityTime = nextEntity?.time
-
-			nextEntity?.let {
-				it.update(context, context.world)
-
-				if (it.name != "player") {
-					Ai.actForEntity(context, it)
-				}
+			if (entity.name != "player") {
+				Ai.actForEntity(context, entity)
 			}
 		}
 	}
@@ -110,36 +107,37 @@ class GameScene : Node2D(), EventBusSubscriber {
 		val player = context.player
 		val currentPosition = world[player] ?: return
 
-		if (Input.isActionPressed("left_modifier")) {
-			when {
-				event.isActionPressed("ui_up") -> performModifiedDirectionActions(Position(0, -1))
-				event.isActionPressed("ui_right") -> performModifiedDirectionActions(Position(1, 0))
-				event.isActionPressed("ui_down") -> performModifiedDirectionActions(Position(0, 1))
-				event.isActionPressed("ui_left") -> performModifiedDirectionActions(Position(-1, 0))
-			}
-			return
-		}
-
 		when {
+			Input.isActionPressed("left_modifier") -> {
+				when {
+					event.isActionPressed("ui_up") -> performModifiedDirectionActions(Position.UP)
+					event.isActionPressed("ui_right") -> performModifiedDirectionActions(Position.RIGHT)
+					event.isActionPressed("ui_down") -> performModifiedDirectionActions(Position.DOWN)
+					event.isActionPressed("ui_left") -> performModifiedDirectionActions(Position.LEFT)
+				}
+			}
 			event.isActionPressed("ui_up", true) -> performDirectionActions(currentPosition.north())
 			event.isActionPressed("ui_right", true) -> performDirectionActions(currentPosition.east())
 			event.isActionPressed("ui_down", true) -> performDirectionActions(currentPosition.south())
 			event.isActionPressed("ui_left", true) -> performDirectionActions(currentPosition.west())
-			event.isActionPressed("ui_accept") -> {
-				val interactivePositions = getNearbyInteractivePositions(currentPosition)
-
-				when (interactivePositions.size) {
-					0 -> return
-					1 -> performInteractiveActions(interactivePositions.first())
-					else -> {
-						getTree()?.paused = true
-						tileSelectionScene.startTileSelection(
-							WorldScene.SELECTION_REASON_INTERACT,
-							interactivePositions.map { listOf(it) })
-					}
-				}
-			}
 			event.isActionPressed("ui_cancel", true) -> player.idle(world)
+			event.isActionPressed("ui_accept") -> performNearbyInteractiveActions()
+		}
+	}
+
+	private fun performNearbyInteractiveActions() {
+		val currentPosition = context.positionOf(context.player) ?: return
+		val interactivePositions = getNearbyInteractivePositions(currentPosition)
+
+		when (interactivePositions.size) {
+			0 -> return
+			1 -> performInteractiveActions(interactivePositions.first())
+			else -> {
+				getTree()?.paused = true
+				tileSelectionScene.startTileSelection(
+					WorldScene.SELECTION_REASON_INTERACT,
+					interactivePositions.map { listOf(it) })
+			}
 		}
 	}
 
@@ -205,6 +203,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	companion object {
 		const val PATH = "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/game/GameScene.tscn"
 
-		const val SELECTION_REASON_INTERACT = "interact"
+		private const val SELECTION_REASON_INTERACT = "interact"
+		private const val MAX_INPUT_QUEUE_SIZE = 2
 	}
 }

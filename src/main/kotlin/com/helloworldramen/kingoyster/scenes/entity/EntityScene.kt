@@ -36,7 +36,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private val worldPosition: Position?
 		get() = context.positionOf(entity)
 
-	private val eventQueue: Queue<Event> = ArrayDeque<Event>()
+	private val eventQueue: Queue<Event> = ArrayDeque()
 	private var isProcessingEvent: Boolean = false
 
 	private var isTweening: Boolean = false

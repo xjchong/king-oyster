@@ -83,4 +83,11 @@ data class Position(val x: Int = 0, val y: Int = 0) {
     fun toList(): List<Position> {
         return map { it }
     }
+
+    companion object {
+        val UP = Position(0, -1)
+        val RIGHT = Position(1, 0)
+        val DOWN = Position(0, 1)
+        val LEFT = Position(-1, 0)
+    }
 }
