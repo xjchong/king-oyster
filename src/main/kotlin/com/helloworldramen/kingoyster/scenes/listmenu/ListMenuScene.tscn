@@ -1,6 +1,24 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
+[ext_resource path="res://src/main/resources/themes/default_theme.tres" type="Theme" id=1]
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/listmenu/ListMenuScene.kt" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 0.862745 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 4.0
+expand_margin_right = 4.0
+expand_margin_top = 4.0
+expand_margin_bottom = 4.0
+anti_aliasing = false
 
 [node name="ListMenuScene" type="Control"]
 anchor_right = 1.0
@@ -11,21 +29,41 @@ __meta__ = {
 }
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
-margin_right = 544.0
-margin_bottom = 544.0
+margin_left = 0.0843849
+margin_top = 0.612915
+margin_right = 544.084
+margin_bottom = 544.613
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
-margin_left = 165.0
-margin_top = 215.0
-margin_right = 379.0
-margin_bottom = 329.0
+margin_left = 170.0
+margin_top = 257.0
+margin_right = 374.0
+margin_bottom = 287.0
+custom_styles/panel = SubResource( 1 )
 
-[node name="VBox" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 207.0
-margin_bottom = 107.0
-rect_min_size = Vector2( 200, 100 )
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 202.0
+margin_bottom = 28.0
+
+[node name="MenuTitleLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer"]
+margin_right = 200.0
+margin_bottom = 16.0
+theme = ExtResource( 1 )
+text = "Menu Title"
+
+[node name="ColorRect" type="ColorRect" parent="CenterContainer/PanelContainer/VBoxContainer"]
+margin_top = 20.0
+margin_right = 200.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 0, 2 )
+
+[node name="ItemsVBox" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+margin_top = 26.0
+margin_right = 200.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 200, 0 )

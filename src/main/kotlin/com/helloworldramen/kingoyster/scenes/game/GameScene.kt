@@ -68,8 +68,6 @@ class GameScene : Node2D(), EventBusSubscriber {
 		tileSelectionScene.signalTilesSelected.connect(this, ::onTilesSelected)
 
 		listMenuScene.pauseMode = PauseMode.PAUSE_MODE_PROCESS.id
-		listMenuScene.signalListItemSelected.connect(this, ::onListItemSelected)
-		listMenuScene.hide()
 	}
 
 	@RegisterFunction
@@ -96,13 +94,6 @@ class GameScene : Node2D(), EventBusSubscriber {
 				}
 			}
 		}
-	}
-
-	@RegisterFunction
-	fun onListItemSelected(index: Int) {
-		println("index $index")
-		listMenuScene.hide()
-		getTree()?.paused = false
 	}
 
 	private fun updateNextEntity() {
@@ -140,12 +131,19 @@ class GameScene : Node2D(), EventBusSubscriber {
 				val testTitles = mutableListOf<String>()
 
 				repeat(Random.nextInt(1, 10)) {
-					testTitles.add("test $it")
+					testTitles.add("Test $it")
 				}
 
-				println("test size: ${testTitles.size}")
+				listMenuScene.bind("Test Titles", testTitles) {
+					when {
+						it < 0 -> println("cancelled")
+						else -> println("picked test title: ${testTitles[it]}")
+					}
 
-				listMenuScene.bindTitles(testTitles)
+					listMenuScene.hide()
+					getTree()?.paused = false
+				}
+
 				listMenuScene.show()
 			}
 		}

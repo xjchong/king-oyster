@@ -1,32 +1,27 @@
 package com.helloworldramen.kingoyster.scenes.listmenu
 
-import com.helloworldramen.kingoyster.architecture.Entity
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
-import godot.annotation.RegisterSignal
 import godot.extensions.getNodeAs
 import godot.extensions.instanceAs
 import godot.global.GD
-import godot.signals.signal
 
 @RegisterClass
 class ListMenuScene : Control() {
 
-	private val vBox: VBoxContainer by lazy { getNodeAs("CenterContainer/PanelContainer/VBox")!! }
-
+	private val menuTitleLabel: Label by lazy { getNodeAs("$VBOX_PREFIX/MenuTitleLabel")!! }
+	private val itemsVBox: VBoxContainer by lazy { getNodeAs("$VBOX_PREFIX/ItemsVBox")!! }
 	private val packedTitleListMenuItem = GD.load<PackedScene>(TitleListMenuItem.PATH)
 
 	private var index: Int = 0
-
-	@RegisterSignal
-	val signalListItemSelected by signal<Int>("selectedIndex")
+	private var callback: ((Int) -> Unit)? = null
 
 	@RegisterFunction
 	override fun _input(event: InputEvent) {
 		if (!visible) return
 
-		val itemCount = vBox.getChildCount().toInt()
+		val itemCount = itemsVBox.getChildCount().toInt()
 
 		acceptEvent()
 
@@ -38,36 +33,43 @@ class ListMenuScene : Control() {
 			event.isActionPressed("ui_down", true) || event.isActionPressed("ui_right", true) -> {
 				index = (index + itemCount + 1) % itemCount
 			}
-			event.isActionPressed("ui_cancel") -> signalListItemSelected.emit(-1)
-			event.isActionPressed("ui_accept") -> signalListItemSelected.emit(index)
+			event.isActionPressed("ui_cancel") -> callback?.invoke(-1)
+			event.isActionPressed("ui_accept") -> callback?.invoke(index)
 		}
 
 		updateItems()
 	}
 
-	fun bindTitles(titles: List<String>) {
+	fun bind(menuTitle: String, itemTitles: List<String>, callback: (index: Int) -> Unit) {
+		this.callback = callback
 		index = 0
 
-		vBox.getChildren().forEach {
-			vBox.removeChild(it as Node)
+		menuTitleLabel.text = menuTitle
+
+		itemsVBox.getChildren().forEach {
+			itemsVBox.removeChild(it as Node)
 			it.queueFree()
 		}
 
-		for (title in titles) {
+		for (itemTitle in itemTitles) {
 			val item = packedTitleListMenuItem?.instanceAs<TitleListMenuItem>() ?: continue
 
-			item.bind(title)
-			vBox.addChild(item)
+			item.bind(itemTitle)
+			itemsVBox.addChild(item)
 		}
 
 		updateItems()
 	}
 
 	private fun updateItems() {
-		vBox.getChildren().forEachIndexed { i, child ->
+		itemsVBox.getChildren().forEachIndexed { i, child ->
 			when(child) {
 				is TitleListMenuItem -> if (index == i) child.select() else child.deselect()
 			}
 		}
+	}
+
+	companion object {
+		private const val VBOX_PREFIX = "CenterContainer/PanelContainer/VBoxContainer"
 	}
 }
