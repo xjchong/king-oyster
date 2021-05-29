@@ -68,6 +68,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 		tileSelectionScene.signalTilesSelected.connect(this, ::onTilesSelected)
 
 		listMenuScene.pauseMode = PauseMode.PAUSE_MODE_PROCESS.id
+		listMenuScene.hide()
 	}
 
 	@RegisterFunction
