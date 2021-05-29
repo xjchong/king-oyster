@@ -23,7 +23,6 @@ import godot.InputEvent
 import godot.Node2D
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
-import godot.core.Vector2
 import godot.extensions.getNodeAs
 
 @RegisterClass
@@ -68,9 +67,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
-		if (playerScene?.isAnimating == false) {
-			updateNextEntity()
-		}
+		updateNextEntity()
 	}
 
 	@RegisterFunction
@@ -175,10 +172,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 			furthestPosition = nextPosition
 		}
 
-		furthestPosition.neighbors().forEach { neighbor ->
-			world.respondToActions(neighbor, Damage(context, player, 1))
-		}
-		player.respondToAction(Move(context, player, furthestPosition))
+		player.respondToAction(MoveWithImpact(context, player, furthestPosition))
 	}
 
 	private fun performDirectionActions(position: Position) {
