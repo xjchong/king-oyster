@@ -3,13 +3,10 @@ package com.helloworldramen.kingoyster.scenes.entity
 import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
-import com.helloworldramen.kingoyster.eventbus.events.AttackEvent
-import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
-import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
-import com.helloworldramen.kingoyster.eventbus.events.TakeEvent
+import com.helloworldramen.kingoyster.eventbus.events.*
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.health.HealthScene
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
@@ -21,6 +18,7 @@ import godot.core.Vector2
 import godot.extensions.getNodeAs
 import godot.extensions.instanceAs
 import godot.global.GD
+import java.util.*
 
 @RegisterClass
 class EntityScene : Node2D(), EventBusSubscriber {
@@ -35,6 +33,11 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	private var context: Context = Context.UNKNOWN
 	private var entity: Entity = Entity.UNKNOWN
+	private val worldPosition: Position?
+		get() = context.positionOf(entity)
+
+	private val eventQueue: Queue<Event> = ArrayDeque<Event>()
+	private var isProcessingEvent: Boolean = false
 
 	private var isTweening: Boolean = false
 
@@ -42,6 +45,42 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		get() = isTweening || animationPlayer.isPlaying()
 
 	override fun receiveEvent(event: Event) {
+		eventQueue.offer(event)
+		return
+	}
+
+	@RegisterFunction
+	override fun _ready() {
+		EventBus.register(this,
+			AttackEvent::class,
+			DamageEvent::class,
+			DeathEvent::class,
+			MoveEvent::class,
+			TakeEvent::class
+		)
+		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
+	}
+
+	override fun _onDestroy() {
+		EventBus.unregister(this)
+	}
+
+	@RegisterFunction
+	override fun _process(delta: Double) {
+		processEventQueue()
+
+		if (!isAnimating && !isProcessingEvent && worldPosition != null) {
+			visible = context.player.visiblePositions().contains(worldPosition)
+		}
+	}
+
+	private fun processEventQueue() {
+		if (isProcessingEvent || isAnimating || eventQueue.isEmpty()) return
+
+		val event = eventQueue.poll() ?: return
+
+		isProcessingEvent = true
+
 		when (event) {
 			is AttackEvent -> {
 				if (event.attacker == entity) {
@@ -60,42 +99,19 @@ class EntityScene : Node2D(), EventBusSubscriber {
 					animateOnDeath()
 				}
 			}
+			is MoveEvent -> {
+				if (event.entity == entity) {
+					setPosition()
+				}
+			}
 			is TakeEvent -> {
 				if (event.taken == entity) {
 					animatePulse()
 				}
 			}
 		}
-	}
 
-	@RegisterFunction
-	override fun _ready() {
-		EventBus.register(this,
-			AttackEvent::class,
-			DamageEvent::class,
-			DeathEvent::class,
-			TakeEvent::class
-		)
-		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
-	}
-
-	override fun _onDestroy() {
-		EventBus.unregister(this)
-	}
-
-	@RegisterFunction
-	override fun _process(delta: Double) {
-		val worldPosition = context.world[entity]
-
-		if (entity.canChangePosition && worldPosition != null) {
-			if (position != calculateNodePosition(worldPosition)) {
-				setPosition()
-			}
-		}
-
-		if (!isAnimating) {
-			visible = context.player.visiblePositions().contains(worldPosition)
-		}
+		isProcessingEvent = false
 	}
 
 	fun bind(context: Context, entity: Entity) {
@@ -150,7 +166,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private fun setPosition(shouldAnimate: Boolean = true) {
 		if (isAnimating) return
 
-		val worldPosition = context.world[entity]
+		val worldPosition = context.positionOf(entity)
 		val baseZIndex = when {
 			entity.has<MovementPart>() -> 100
 			else -> 50
@@ -177,9 +193,6 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private fun calculateNodePosition(worldPosition: Position): Vector2 {
 		return Vector2(worldPosition.x * 32, worldPosition.y * 32)
 	}
-
-	private val Entity.canChangePosition: Boolean
-		get() = has<MovementPart>() || has<ItemPart>()
 
 	companion object {
 		const val PATH = "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntityScene.tscn"

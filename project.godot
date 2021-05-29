@@ -44,7 +44,7 @@ _global_script_classes=[ {
 "language": "Kotlin",
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/tileoverlay/TileOverlayScene.kt"
 }, {
-"base": "Node2D",
+"base": "Control",
 "class": "com_helloworldramen_kingoyster_scenes_tileselection_TileSelectionScene",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/tileselection/TileSelectionScene.kt"

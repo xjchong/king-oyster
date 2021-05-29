@@ -6,6 +6,8 @@ import com.helloworldramen.kingoyster.actions.MoveWithImpact
 import com.helloworldramen.kingoyster.architecture.Action
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
+import com.helloworldramen.kingoyster.eventbus.EventBus
+import com.helloworldramen.kingoyster.eventbus.events.MoveEvent
 
 class MovementPart : Part {
 
@@ -24,15 +26,20 @@ class MovementPart : Part {
     private fun Entity.respondToMove(action: Move): Boolean {
         val (context, _, position) = action
 
+        val currentPosition = context.positionOf(this) ?: return false
+
         if (context.entitiesAt(position)?.any { !canPass(it) } == true) {
             return false
         }
+
+        EventBus.post(MoveEvent(this, currentPosition, position))
 
         return context.world.move(this, position)
     }
 
     private fun Entity.respondToMoveWithImpact(action: MoveWithImpact): Boolean {
         val (context, _, position) = action
+        val currentPosition = context.positionOf(this) ?: return false
 
         if (context.entitiesAt(position)?.any { !canPass(it) } == true) {
             return false
@@ -41,6 +48,8 @@ class MovementPart : Part {
         if (!context.world.move(this, position)) {
             return false
         }
+
+        EventBus.post(MoveEvent(this, currentPosition, position))
 
         // We successfully moved, so apply impact effect.
         position.neighbors().forEach {
