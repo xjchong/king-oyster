@@ -1,13 +1,8 @@
 package com.helloworldramen.kingoyster.eventbus
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
-object EventBus: CoroutineScope {
-
-    override val coroutineContext: CoroutineContext = Dispatchers.Default
+object EventBus {
 
     private val subscribersForEvent: MutableMap<KClass<out Event>, List<EventBusSubscriber>> = mutableMapOf()
     private val eventsForSubscriber: MutableMap<EventBusSubscriber, List<KClass<out Event>>> = mutableMapOf()
@@ -28,9 +23,7 @@ object EventBus: CoroutineScope {
 
     fun post(event: Event) {
         subscribersForEvent[event::class]?.forEach {
-//            launch { // Disabling this for now until I can figure out how to have UI respond to events in a thread safe way.
-                it.receiveEvent(event)
-//            }
+            it.receiveEvent(event)
         }
     }
 }
