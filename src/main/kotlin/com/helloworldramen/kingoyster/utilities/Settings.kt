@@ -7,7 +7,7 @@ import godot.core.memory.GodotStatic
 object Settings : GodotStatic {
 
     private const val CONFIG_PATH = "user://settings.cfg"
-    private val configFile = ConfigFile()
+    private val configFile = ConfigFile().apply { load(CONFIG_PATH) }
 
     override fun collect() {
         configFile.free()
@@ -19,8 +19,7 @@ object Settings : GodotStatic {
         return configFile.save(CONFIG_PATH) == GodotError.OK
     }
 
-
-    fun load(section: String, key: String, defaultValue: Any): Any? {
-        return configFile.getValue(section, key, defaultValue)
+    fun <T : Any>load(section: String, key: String, defaultValue: T): T {
+        return configFile.getValue(section, key, defaultValue) as? T ?: defaultValue
     }
 }

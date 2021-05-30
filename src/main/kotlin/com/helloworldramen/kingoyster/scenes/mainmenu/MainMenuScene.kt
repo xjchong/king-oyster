@@ -3,6 +3,7 @@ package com.helloworldramen.kingoyster.scenes.mainmenu
 import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
 import com.helloworldramen.kingoyster.scenes.autoload.audio.SFX
 import com.helloworldramen.kingoyster.scenes.game.GameScene
+import com.helloworldramen.kingoyster.scenes.optionsmenu.OptionsMenuScene
 import godot.InputEvent
 import godot.Label
 import godot.MarginContainer
@@ -63,7 +64,7 @@ class MainMenuScene : MarginContainer() {
 			}
 			1 -> {
 				audio.playSfx(SFX.MENU_SELECT)
-				GD.print("TODO: Implement options scene.")
+				getTree()?.changeScene(OptionsMenuScene.PATH)
 			}
 			2 -> getTree()?.quit()
 		}

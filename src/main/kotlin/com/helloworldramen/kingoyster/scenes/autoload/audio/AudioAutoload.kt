@@ -1,5 +1,6 @@
 package com.helloworldramen.kingoyster.scenes.autoload.audio
 
+import com.helloworldramen.kingoyster.utilities.Settings
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -28,9 +29,8 @@ class AudioAutoload : Node() {
 	override fun _ready() {
 		pauseMode = PAUSE_MODE_PROCESS
 
-		// TODO: Load volume settings from settings manager.
-		updateVolume(BGM_BUS_ID, DEFAULT_BGM_VOLUME)
-		updateVolume(SFX_BUS_ID, DEFAULT_SFX_VOLUME)
+		updateVolume(BGM_BUS_ID, Settings.load("bgm_volume", "value", DEFAULT_BGM_VOLUME))
+		updateVolume(SFX_BUS_ID, Settings.load("sfx_volume", "value", DEFAULT_SFX_VOLUME))
 		setupAudioPlayers()
 
 		bgmTween.tweenAllCompleted.connect(this, ::onBGMTweenAllCompleted)
@@ -88,6 +88,12 @@ class AudioAutoload : Node() {
 	private fun updateVolume(busId: Long, volume: Double): Double {
 		with(volume.coerceIn(0.0, 1.0)) {
 			AudioServer.setBusVolumeDb(busId, GD.linear2db(this))
+
+			when (busId) {
+				BGM_BUS_ID -> Settings.save("bgm_volume", "value", this)
+				SFX_BUS_ID -> Settings.save("sfx_volume", "value", this)
+			}
+
 			return this
 		}
 	}
@@ -104,10 +110,12 @@ class AudioAutoload : Node() {
 	}
 
 	companion object {
-		private const val DEFAULT_SFX_VOLUME = 0.7
-		private const val DEFAULT_BGM_VOLUME = 0.6
+		const val TREE_PATH = "/root/AudioAutoload"
+		const val BGM_BUS_ID: Long = 1
+		const val SFX_BUS_ID: Long = 2
+		const val DEFAULT_SFX_VOLUME = 0.7
+		const val DEFAULT_BGM_VOLUME = 0.6
+
 		private const val MAX_AUDIO_PLAYERS = 12
-		private const val BGM_BUS_ID: Long = 1
-		private const val SFX_BUS_ID: Long = 2
 	}
 }
