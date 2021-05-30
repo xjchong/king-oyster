@@ -12,6 +12,7 @@ import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
+import com.helloworldramen.kingoyster.scenes.autoload.audio.SFX
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.listmenu.ListMenuScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
@@ -44,6 +45,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	override fun receiveEvent(event: Event) {
 		when (event) {
 			is AscendEvent -> {
+				audio.playSfx(SFX.STAIRS)
 				with(context) {
 					player.update(this, world)
 					worldScene.bind(this)
