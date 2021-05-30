@@ -11,9 +11,8 @@ import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.parts.*
-import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
-import com.helloworldramen.kingoyster.scenes.autoload.audio.SFX
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
+import com.helloworldramen.kingoyster.scenes.eventaudio.EventAudio
 import com.helloworldramen.kingoyster.scenes.listmenu.ListMenuScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.tileselection.TileSelectionScene
@@ -32,7 +31,7 @@ import kotlin.random.Random
 @RegisterClass
 class GameScene : Node2D(), EventBusSubscriber {
 
-	private val audio: AudioAutoload by lazy { getNodeAs("/root/AudioAutoload")!! }
+	private val eventAudio: EventAudio by lazy { getNodeAs("EventAudio")!! }
 	private val worldScene: WorldScene by lazy { getNodeAs("WorldScene")!! }
 	private val tileSelectionScene: TileSelectionScene by lazy { getNodeAs("TileSelectionScene")!! }
 	private val listMenuScene: ListMenuScene by lazy { getNodeAs("UIScenesBucket/ListMenuScene")!! }
@@ -45,7 +44,6 @@ class GameScene : Node2D(), EventBusSubscriber {
 	override fun receiveEvent(event: Event) {
 		when (event) {
 			is AscendEvent -> {
-				audio.playSfx(SFX.STAIRS)
 				with(context) {
 					player.update(this, world)
 					worldScene.bind(this)
@@ -68,11 +66,14 @@ class GameScene : Node2D(), EventBusSubscriber {
 		playerScene = worldScene.bind(context)
 
 		tileSelectionScene.bind(world.width, world.height)
-		tileSelectionScene.pauseMode = PauseMode.PAUSE_MODE_PROCESS.id
+		tileSelectionScene.pauseMode = PAUSE_MODE_PROCESS
 		tileSelectionScene.signalTilesSelected.connect(this, ::onTilesSelected)
 
-		listMenuScene.pauseMode = PauseMode.PAUSE_MODE_PROCESS.id
+		listMenuScene.pauseMode = PAUSE_MODE_PROCESS
 		listMenuScene.hide()
+
+		eventAudio.bind(context)
+		eventAudio.pauseMode = PAUSE_MODE_PROCESS
 	}
 
 	@RegisterFunction
@@ -184,7 +185,6 @@ class GameScene : Node2D(), EventBusSubscriber {
 	}
 
 	private fun performModifiedDirectionActions(vector: Position) {
-		audio.playSfx(SFX.HIT_CUT_CRIT)
 		val player = context.player
 		val world = context.world
 		val currentPosition = context.positionOf(player) ?: return

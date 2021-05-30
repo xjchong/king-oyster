@@ -10,7 +10,6 @@ import godot.MarginContainer
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.extensions.getNodeAs
-import godot.global.GD
 
 @RegisterClass
 class MainMenuScene : MarginContainer() {
@@ -36,11 +35,11 @@ class MainMenuScene : MarginContainer() {
 	override fun _input(event: InputEvent) {
 		when {
 			event.isActionPressed("ui_down", true) -> {
-				audio.playSfx(SFX.MENU_MOVE)
+				audio.play(SFX.MENU_MOVE)
 				selectedIndex = (selectedIndex + 1) % selectors.size
 			}
 			event.isActionPressed("ui_up", true) -> {
-				audio.playSfx(SFX.MENU_MOVE)
+				audio.play(SFX.MENU_MOVE)
 				selectedIndex = (selectedIndex + selectors.size - 1) % selectors.size
 			}
 			event.isActionPressed("ui_accept") -> handleItemEntered()
@@ -59,11 +58,11 @@ class MainMenuScene : MarginContainer() {
 	private fun handleItemEntered() {
 		when (selectedIndex) {
 			0 -> {
-				audio.playSfx(SFX.MENU_CONFIRM)
+				audio.play(SFX.MENU_CONFIRM)
 				getTree()?.changeScene(GameScene.PATH)
 			}
 			1 -> {
-				audio.playSfx(SFX.MENU_SELECT)
+				audio.play(SFX.MENU_SELECT)
 				getTree()?.changeScene(OptionsMenuScene.PATH)
 			}
 			2 -> getTree()?.quit()

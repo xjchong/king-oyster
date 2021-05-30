@@ -8,8 +8,6 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.eventbus.events.*
 import com.helloworldramen.kingoyster.parts.*
-import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
-import com.helloworldramen.kingoyster.scenes.autoload.audio.SFX
 import com.helloworldramen.kingoyster.scenes.health.HealthScene
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import godot.*
@@ -25,7 +23,6 @@ import java.util.*
 @RegisterClass
 class EntityScene : Node2D(), EventBusSubscriber {
 
-	private val audio: AudioAutoload by lazy { getNodeAs("/root/AudioAutoload")!! }
 	private val backgroundRect: ColorRect by lazy { getNodeAs("BackgroundRect")!! }
 	private val entitySprite: EntitySprite by lazy { getNodeAs("EntitySprite")!! }
 	private val healthScene: HealthScene by lazy { getNodeAs("EntitySprite/HealthScene")!! }
@@ -43,9 +40,6 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private var isProcessingEvent: Boolean = false
 
 	private var isTweening: Boolean = false
-
-	private val isPlayer: Boolean
-		get() = entity.name == "player"
 
 	val isAnimating: Boolean
 		get() = isTweening || animationPlayer.isPlaying()
@@ -93,10 +87,6 @@ class EntityScene : Node2D(), EventBusSubscriber {
 					context.world[event.target]?.let {
 						animateBump(it)
 					}
-
-					if (isPlayer) {
-						audio.playSfx(SFX.HIT_BASH)
-					}
 				}
 			}
 			is DamageEvent -> {
@@ -112,10 +102,6 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			is MoveEvent -> {
 				if (event.entity == entity) {
 					setPosition()
-
-					if (isPlayer) {
-						audio.playSfx(SFX.MOVE_STEP)
-					}
 				}
 			}
 			is TakeEvent -> {

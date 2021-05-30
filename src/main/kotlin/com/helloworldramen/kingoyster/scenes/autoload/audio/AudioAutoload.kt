@@ -55,14 +55,14 @@ class AudioAutoload : Node() {
 		}
 	}
 
-	fun playSfx(sfxPath: String) {
+	fun play(sfxPath: String) {
 		sfxPathQueue.offer(sfxPath)
 	}
 
 	/**
 	 * Note that the related audio resource should be set to loop.
 	 */
-	fun playBgm(bgmPath: String) {
+	fun playLoop(bgmPath: String) {
 		val audioResource = GD.load<AudioStream>(bgmPath)
 
 		if (bgmAudioPlayer.stream == audioResource) return
@@ -71,7 +71,7 @@ class AudioAutoload : Node() {
 		bgmAudioPlayer.play()
 	}
 
-	fun stopBgm() {
+	fun endLoop() {
 		if (!bgmAudioPlayer.playing) return
 
 		lastBgmVolume = bgmAudioPlayer.volumeDb
