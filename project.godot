@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node",
+"class": "com_helloworldramen_kingoyster_scenes_autoload_audio_AudioAutoload",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/autoload/audio/AudioAutoload.kt"
+}, {
 "base": "Node2D",
 "class": "com_helloworldramen_kingoyster_scenes_entity_EntityScene",
 "language": "Kotlin",
@@ -70,6 +75,7 @@ _global_script_classes=[ {
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/world/WorldScene.kt"
 } ]
 _global_script_class_icons={
+"com_helloworldramen_kingoyster_scenes_autoload_audio_AudioAutoload": "",
 "com_helloworldramen_kingoyster_scenes_entity_EntityScene": "",
 "com_helloworldramen_kingoyster_scenes_entity_EntitySprite": "",
 "com_helloworldramen_kingoyster_scenes_game_GameScene": "",
