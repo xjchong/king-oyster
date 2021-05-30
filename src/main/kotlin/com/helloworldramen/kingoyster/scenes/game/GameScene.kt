@@ -200,7 +200,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 			furthestPosition = nextPosition
 		}
 
-		player.respondToAction(MoveWithImpact(context, player, furthestPosition))
+		player.respondToAction(Move(context, player, furthestPosition, MoveType.Charge))
 	}
 
 	private fun performDirectionActions(position: Position) {
