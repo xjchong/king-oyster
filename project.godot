@@ -34,6 +34,11 @@ _global_script_classes=[ {
 "language": "Kotlin",
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/listmenu/ListMenuScene.kt"
 }, {
+"base": "HBoxContainer",
+"class": "com_helloworldramen_kingoyster_scenes_listmenu_TitleListMenuItem",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/listmenu/TitleListMenuItem.kt"
+}, {
 "base": "MarginContainer",
 "class": "com_helloworldramen_kingoyster_scenes_mainmenu_MainMenuScene",
 "language": "Kotlin",
@@ -70,6 +75,7 @@ _global_script_class_icons={
 "com_helloworldramen_kingoyster_scenes_game_GameScene": "",
 "com_helloworldramen_kingoyster_scenes_health_HealthScene": "",
 "com_helloworldramen_kingoyster_scenes_listmenu_ListMenuScene": "",
+"com_helloworldramen_kingoyster_scenes_listmenu_TitleListMenuItem": "",
 "com_helloworldramen_kingoyster_scenes_mainmenu_MainMenuScene": "",
 "com_helloworldramen_kingoyster_scenes_memory_MemoryScene": "",
 "com_helloworldramen_kingoyster_scenes_tileoverlay_TileOverlayScene": "",
@@ -83,6 +89,10 @@ _global_script_class_icons={
 config/name="king-oyster"
 run/main_scene="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/mainmenu/MainMenuScene.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+AudioAutoload="*res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/autoload/audio/AudioAutoload.tscn"
 
 [display]
 

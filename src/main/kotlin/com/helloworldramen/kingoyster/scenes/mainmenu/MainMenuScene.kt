@@ -1,5 +1,7 @@
 package com.helloworldramen.kingoyster.scenes.mainmenu
 
+import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
+import com.helloworldramen.kingoyster.scenes.autoload.audio.SFX
 import com.helloworldramen.kingoyster.scenes.game.GameScene
 import godot.InputEvent
 import godot.Label
@@ -12,6 +14,7 @@ import godot.global.GD
 @RegisterClass
 class MainMenuScene : MarginContainer() {
 
+	private val audio : AudioAutoload by lazy { getNodeAs("/root/AudioAutoload")!! }
 	private val startSelector: Label by lazy { getNodeAs("$ITEMS_VBOX_PATH/StartItem/StartSelector")!! }
 	private val optionsSelector: Label by lazy { getNodeAs("$ITEMS_VBOX_PATH/OptionsItem/OptionsSelector")!! }
 	private val exitSelector: Label by lazy { getNodeAs("$ITEMS_VBOX_PATH/ExitItem/ExitSelector")!! }
@@ -32,9 +35,11 @@ class MainMenuScene : MarginContainer() {
 	override fun _input(event: InputEvent) {
 		when {
 			event.isActionPressed("ui_down", true) -> {
+				audio.playSfx(SFX.MENU_MOVE)
 				selectedIndex = (selectedIndex + 1) % selectors.size
 			}
 			event.isActionPressed("ui_up", true) -> {
+				audio.playSfx(SFX.MENU_MOVE)
 				selectedIndex = (selectedIndex + selectors.size - 1) % selectors.size
 			}
 			event.isActionPressed("ui_accept") -> handleItemEntered()
@@ -52,8 +57,14 @@ class MainMenuScene : MarginContainer() {
 
 	private fun handleItemEntered() {
 		when (selectedIndex) {
-			0 -> getTree()?.changeScene(GameScene.PATH)
-			1 -> GD.print("TODO: Implement options scene.")
+			0 -> {
+				audio.playSfx(SFX.MENU_CONFIRM)
+				getTree()?.changeScene(GameScene.PATH)
+			}
+			1 -> {
+				audio.playSfx(SFX.MENU_SELECT)
+				GD.print("TODO: Implement options scene.")
+			}
 			2 -> getTree()?.quit()
 		}
 	}

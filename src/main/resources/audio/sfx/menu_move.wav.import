@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/menu_move.wav-605f3c4127cc42773a19c8142570929f.sample"
+
+[deps]
+
+source_file="res://src/main/resources/audio/sfx/menu_move.wav"
+dest_files=[ "res://.import/menu_move.wav-605f3c4127cc42773a19c8142570929f.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

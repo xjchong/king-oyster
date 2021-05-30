@@ -11,6 +11,7 @@ import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.parts.*
+import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.listmenu.ListMenuScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
@@ -30,6 +31,7 @@ import kotlin.random.Random
 @RegisterClass
 class GameScene : Node2D(), EventBusSubscriber {
 
+	private val audio: AudioAutoload by lazy { getNodeAs("/root/AudioAutoload")!! }
 	private val worldScene: WorldScene by lazy { getNodeAs("WorldScene")!! }
 	private val tileSelectionScene: TileSelectionScene by lazy { getNodeAs("TileSelectionScene")!! }
 	private val listMenuScene: ListMenuScene by lazy { getNodeAs("UIScenesBucket/ListMenuScene")!! }
