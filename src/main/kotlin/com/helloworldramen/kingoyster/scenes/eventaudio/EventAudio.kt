@@ -65,19 +65,19 @@ class EventAudio : Node(), EventBusSubscriber {
 	}
 
 	private fun onAttack(event: AttackEvent) {
-		if (event.attacker.isPlayer) {
-			audio.play(SFX.HIT_BASH)
-		}
 	}
 
 	private fun onDamage(event: DamageEvent) {
+		if (!event.target.isVisibleToPlayer()) return
+
+		audio.play(SFX.HIT_BASH)
 	}
 
 	private fun onDeath(event: DeathEvent) {
 	}
 
 	private fun onDoor(event: DoorEvent) {
-		if (!player.visiblePositions().contains(context.positionOf(event.actor))) return
+		if (!event.actor.isVisibleToPlayer()) return
 
 		audio.play(if (event.isOpen) SFX.DOOR_OPEN else SFX.DOOR_CLOSE)
 	}
@@ -96,5 +96,9 @@ class EventAudio : Node(), EventBusSubscriber {
 
 	private fun onTake(event: TakeEvent) {
 
+	}
+
+	private fun Entity.isVisibleToPlayer(): Boolean {
+		return player.visiblePositions().contains(context.positionOf(this))
 	}
 }
