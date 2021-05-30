@@ -184,6 +184,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	}
 
 	private fun performModifiedDirectionActions(vector: Position) {
+		audio.playSfx(SFX.HIT_CUT_CRIT)
 		val player = context.player
 		val world = context.world
 		val currentPosition = context.positionOf(player) ?: return
