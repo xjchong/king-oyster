@@ -26,10 +26,10 @@ object WeaponFactory {
             WeaponPart(
                 attackInfo = AttackInfo(
                     damageInfo = DamageInfo(
-                        powerFactor = 1.1,
+                        powerFactor = 1.5,
                         damageType = DamageType.Cut
                     ),
-                    timeFactor = 1.0
+                    timeFactor = 1.2
                 )
             )
         )
@@ -41,10 +41,10 @@ object WeaponFactory {
             WeaponPart(
                 attackInfo = AttackInfo(
                     damageInfo = DamageInfo(
-                        powerFactor = 1.1,
+                        powerFactor = 3.0,
                         damageType = DamageType.Cut
                     ),
-                    timeFactor = 1.0
+                    timeFactor = 2.0
                 )
             )
         )

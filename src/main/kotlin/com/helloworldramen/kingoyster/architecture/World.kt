@@ -39,17 +39,24 @@ class World(val width: Int, val height: Int) {
         return true
     }
 
-    fun move(entity: Entity, position: Position): Boolean {
-        val currentPosition = positionForEntity[entity] ?: return false
+    fun move(entity: Entity, position: Position?): Boolean {
+        val currentPosition = positionForEntity[entity]
         if (currentPosition == position) return true
-        if (entitiesForPosition[currentPosition]?.remove(entity) != true) return false
+        if (currentPosition != null && entitiesForPosition[currentPosition]?.remove(entity) != true) return false
 
-        return if (entitiesForPosition[position]?.add(entity) == true) {
-            positionForEntity[entity] = position
-            true
-        } else {
-            entitiesForPosition[currentPosition]?.add(entity)
-            false
+        return when {
+            position == null -> {
+                positionForEntity.remove(entity)
+                true
+            }
+            entitiesForPosition[position]?.add(entity) == true -> {
+                positionForEntity[entity] = position
+                true
+            }
+            else -> {
+                entitiesForPosition[currentPosition]?.add(entity)
+                false
+            }
         }
     }
 

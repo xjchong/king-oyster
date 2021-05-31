@@ -6,6 +6,7 @@ import com.helloworldramen.kingoyster.entities.ItemFactory
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.World
+import com.helloworldramen.kingoyster.entities.WeaponFactory
 import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlin.random.nextInt
@@ -56,6 +57,15 @@ object WorldGenerator {
 
     private fun placeItems(world: World) {
         world.placeWithDensity(0.02) { ItemFactory.coin(1, 100) }
+        world.placeWithRange(1, 3) {
+            WeaponFactory.newDagger()
+        }
+        world.placeWithRange(1, 3) {
+            WeaponFactory.newSword()
+        }
+        world.placeWithRange(1, 3) {
+            WeaponFactory.newGreatsword()
+        }
     }
 
     private fun placeFeatures(world: World) {

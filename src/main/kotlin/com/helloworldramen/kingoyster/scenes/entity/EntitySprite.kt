@@ -41,6 +41,7 @@ class EntitySprite : Node2D() {
 				Pair("@", Color.yellow)
 			}
 			"wall" -> Pair("#", Color.white)
+			"dagger" -> Pair("|", Color.gray)
 			"door" -> {
 				Pair(
 					if (entity?.find(DoorPart::class)?.isOpen == true) "'" else "+",
@@ -53,6 +54,9 @@ class EntitySprite : Node2D() {
 			"goblin" -> {
 				Pair("g", Color.darkred)
 			}
+			"greatsword" -> {
+				Pair("|", Color.lightblue)
+			}
 			"slime" -> {
 				animatedSprite.visible = true
 				animatedSprite.position -= Vector2(0, 2)
@@ -60,6 +64,7 @@ class EntitySprite : Node2D() {
 				Pair("s", Color.lightgreen)
 			}
 			"stairs" -> Pair("<", Color.white)
+			"sword" -> Pair("|", Color.white)
 			"coin" -> Pair("$", Color.cyan)
 			null -> Pair(" ", Color.white)
 			else -> Pair("?", Color.red)

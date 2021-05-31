@@ -29,7 +29,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
 	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
 
-	private val toastTextScene = GD.load<PackedScene>(ToastTextScene.PATH)
+	private val packedToastTextScene = GD.load<PackedScene>(ToastTextScene.PATH)
 
 	private var context: Context = Context.UNKNOWN
 	private var entity: Entity = Entity.UNKNOWN
@@ -55,6 +55,8 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			WeaponAttackEvent::class,
 			DamageEvent::class,
 			DeathEvent::class,
+			DropWeaponEvent::class,
+			EquipWeaponEvent::class,
 			MoveEvent::class,
 			TakeEvent::class
 		)
@@ -97,6 +99,20 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			is DeathEvent -> {
 				if (event.entity == entity) {
 					animateOnDeath()
+				}
+			}
+			is DropWeaponEvent -> {
+				if (event.weapon == entity) {
+					setPosition()
+				} else if (event.dropper == entity) {
+					animateDropWeapon(event.weapon)
+				}
+			}
+			is EquipWeaponEvent -> {
+				if (event.weapon == entity) {
+					setPosition()
+				} else if (event.equipper == entity) {
+					animateEquipWeapon(event.weapon)
 				}
 			}
 			is MoveEvent -> {
@@ -144,10 +160,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	fun animateOnHit(amount: Int) {
-		toastTextScene?.instanceAs<ToastTextScene>()?.let {
-			it.bind(amount.toString())
-			addChild(it)
-		}
+		toast(amount.toString())
 
 		if (entity.health() > 0) {
 			animationPlayer.play("on_hit")
@@ -158,9 +171,24 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		animationPlayer.play("on_death")
 	}
 
+	fun animateDropWeapon(weapon: Entity) {
+//		toast("-${weapon.name}")
+	}
+
+	fun animateEquipWeapon(weapon: Entity) {
+		toast("+${weapon.name}")
+	}
+
 	@RegisterFunction
 	fun onAllTweenCompleted() {
 		isTweening = false
+	}
+
+	private fun toast(text: String) {
+		packedToastTextScene?.instanceAs<ToastTextScene>()?.let {
+			it.bind(text)
+			addChild(it)
+		}
 	}
 
 	private fun setPosition(shouldAnimate: Boolean = true) {

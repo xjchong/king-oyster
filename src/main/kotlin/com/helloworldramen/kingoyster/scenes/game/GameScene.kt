@@ -190,7 +190,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 		return nearbyPositions.filter { nearbyPosition ->
 			context.entitiesAt(nearbyPosition)?.any {
 				when (nearbyPosition) {
-					position -> it.has<ItemPart>() || it.has<AscendablePart>()
+					position -> it.has<ItemPart>() || it.has<AscendablePart>() || it.has<WeaponPart>()
 					else -> it.has<DoorPart>() || (it.has<CombatPart>() && it.isEnemyOf(context.player))
 				}
 			} == true
@@ -236,6 +236,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 			world.respondToActions(position,
 				WeaponAttack(this, player),
 				Take(this, player),
+				EquipAsWeapon(this, player),
 				Open(this, player),
 				Close(this, player),
 				Ascend(this, player)

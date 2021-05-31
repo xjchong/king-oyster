@@ -18,6 +18,7 @@ object ActorFactory {
                     )
                 )
             ),
+            EquipmentPart(),
             FactionPart(Faction.Player),
             InventoryPart(6),
             PhysicalPart(
@@ -71,6 +72,7 @@ object ActorFactory {
                     )
                 )
             ),
+            EquipmentPart(),
             FactionPart(Faction.Monster),
             PhysicalPart(
                 isPassable = false
