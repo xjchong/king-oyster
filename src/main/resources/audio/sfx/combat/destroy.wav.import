@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/destroy.wav-601febd7037d3edb6604171f6fff19f5.sample"
+
+[deps]
+
+source_file="res://src/main/resources/audio/sfx/combat/destroy.wav"
+dest_files=[ "res://.import/destroy.wav-601febd7037d3edb6604171f6fff19f5.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

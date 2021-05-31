@@ -1,6 +1,8 @@
 package com.helloworldramen.kingoyster.scenes.tileselection
 
 import com.helloworldramen.kingoyster.architecture.Position
+import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
+import com.helloworldramen.kingoyster.scenes.autoload.audio.SFX
 import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
 import godot.*
@@ -23,6 +25,7 @@ class TileSelectionScene : Control() {
 	var selection: List<Position> = listOf()
 		private set
 
+	private val audio: AudioAutoload by lazy { getNodeAs(AudioAutoload.TREE_PATH)!! }
 	private val tileOverlayScenesBucket: Node2D by lazy { getNodeAs("TileOverlayScenesBucket")!! }
 
 	private val packedTileOverlayScene = GD.load<PackedScene>(TileOverlayScene.PATH)
@@ -110,6 +113,7 @@ class TileSelectionScene : Control() {
 	}
 
 	private fun confirmCurrentSelection() {
+		audio.play(SFX.MENU_SELECT_ALT)
 		selection = positionGroups[currentGroupIndex]
 		isSelecting = false
 		tileOverlaySceneForPosition.values.forEach {
@@ -120,6 +124,7 @@ class TileSelectionScene : Control() {
 	}
 
 	private fun cancelSelection() {
+		audio.play(SFX.MENU_BACK)
 		selection = listOf()
 		isSelecting = false
 		tileOverlaySceneForPosition.values.forEach {
@@ -130,6 +135,7 @@ class TileSelectionScene : Control() {
 	}
 
 	private fun selectGroup(nextIndex: Int) {
+		audio.play(SFX.MENU_MOVE_ALT)
 		currentGroupIndex = (nextIndex + positionGroups.size) % positionGroups.size
 
 		val selectedPositions = positionGroups[currentGroupIndex]

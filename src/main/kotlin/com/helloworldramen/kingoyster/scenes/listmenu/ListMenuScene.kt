@@ -1,5 +1,7 @@
 package com.helloworldramen.kingoyster.scenes.listmenu
 
+import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
+import com.helloworldramen.kingoyster.scenes.autoload.audio.SFX
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -10,6 +12,7 @@ import godot.global.GD
 @RegisterClass
 class ListMenuScene : Control() {
 
+	private val audio: AudioAutoload by lazy { getNodeAs(AudioAutoload.TREE_PATH)!! }
 	private val menuTitleLabel: Label by lazy { getNodeAs("$VBOX_PREFIX/MenuTitleLabel")!! }
 	private val itemsVBox: VBoxContainer by lazy { getNodeAs("$VBOX_PREFIX/ItemsVBox")!! }
 	private val packedTitleListMenuItem = GD.load<PackedScene>(TitleListMenuItem.PATH)
@@ -28,13 +31,21 @@ class ListMenuScene : Control() {
 		when {
 			itemCount <= 0 -> return
 			event.isActionPressed("ui_up", true) || event.isActionPressed("ui_left", true) -> {
+				audio.play(SFX.MENU_MOVE_ALT)
 				index = (index + itemCount - 1) % itemCount
 			}
 			event.isActionPressed("ui_down", true) || event.isActionPressed("ui_right", true) -> {
+				audio.play(SFX.MENU_MOVE_ALT)
 				index = (index + itemCount + 1) % itemCount
 			}
-			event.isActionPressed("ui_cancel") -> callback?.invoke(-1)
-			event.isActionPressed("ui_accept") -> callback?.invoke(index)
+			event.isActionPressed("ui_cancel") -> {
+				audio.play(SFX.MENU_BACK)
+				callback?.invoke(-1)
+			}
+			event.isActionPressed("ui_accept") -> {
+				audio.play(SFX.MENU_SELECT_ALT)
+				callback?.invoke(index)
+			}
 		}
 
 		updateItems()

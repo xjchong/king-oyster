@@ -31,6 +31,7 @@ class EventAudio : Node(), EventBusSubscriber {
 			AscendEvent::class,
 			AttackEvent::class,
 			DamageEvent::class,
+			DeathEvent::class,
 			DoorEvent::class,
 			GameOverEvent::class,
 			MoveEvent::class,
@@ -74,6 +75,9 @@ class EventAudio : Node(), EventBusSubscriber {
 	}
 
 	private fun onDeath(event: DeathEvent) {
+		if (!event.entity.isVisibleToPlayer()) return
+
+		audio.play(SFX.DEATH)
 	}
 
 	private fun onDoor(event: DoorEvent) {
@@ -86,16 +90,18 @@ class EventAudio : Node(), EventBusSubscriber {
 	}
 
 	private fun onMove(event: MoveEvent) {
-		if (event.entity.isPlayer.not()) return
+		if (!event.entity.isPlayer) return
 
 		when (event.type) {
-			MoveType.Charge -> audio.play(SFX.HIT_CUT_CRIT)
+			MoveType.Charge -> audio.play(SFX.HIT_SWOOSH_CUT)
 			MoveType.Default -> audio.play(SFX.MOVE_STEP)
 		}
 	}
 
 	private fun onTake(event: TakeEvent) {
+		if (!event.taker.isVisibleToPlayer()) return
 
+		audio.play(SFX.TAKE)
 	}
 
 	private fun Entity.isVisibleToPlayer(): Boolean {
