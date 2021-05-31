@@ -1,6 +1,7 @@
 package com.helloworldramen.kingoyster.scenes.mainmenu
 
 import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
+import com.helloworldramen.kingoyster.scenes.autoload.audio.BGM
 import com.helloworldramen.kingoyster.scenes.autoload.audio.SFX
 import com.helloworldramen.kingoyster.scenes.game.GameScene
 import com.helloworldramen.kingoyster.scenes.optionsmenu.OptionsMenuScene
@@ -29,6 +30,7 @@ class MainMenuScene : MarginContainer() {
 	@RegisterFunction
 	override fun _ready() {
 		selectedIndex = 0
+		audio.playLoop(BGM.MAIN_MENU)
 	}
 
 	@RegisterFunction
@@ -59,6 +61,7 @@ class MainMenuScene : MarginContainer() {
 		when (selectedIndex) {
 			0 -> {
 				audio.play(SFX.MENU_CONFIRM)
+				audio.endLoop()
 				getTree()?.changeScene(GameScene.PATH)
 			}
 			1 -> {
