@@ -10,12 +10,11 @@ object ActorFactory {
         parts = listOf(
             AttackablePart(),
             CombatPart(
-                attackPotency = 1
+                maxHealth = 100,
+                maxMana = 4,
+                power = 10
             ),
             FactionPart(Faction.Player),
-            HealthPart(
-                maxHealth = 100
-            ),
             InventoryPart(6),
             PhysicalPart(
                 isPassable = false
@@ -33,12 +32,11 @@ object ActorFactory {
         name = "ghost",
         parts = listOf(
             CombatPart(
-                attackPotency = 1
+                maxHealth = 10,
+                maxMana = 6,
+                power = 0
             ),
             FactionPart(Faction.Spirit),
-            HealthPart(
-                maxHealth = 1
-            ),
             PhysicalPart(
                 isPassable = true,
                 isCorporeal = false
@@ -56,12 +54,11 @@ object ActorFactory {
         parts = listOf(
             AttackablePart(),
             CombatPart(
-                attackPotency = 1
+                maxHealth = 30,
+                maxMana = 0,
+                power = 5
             ),
             FactionPart(Faction.Monster),
-            HealthPart(
-                maxHealth = 2
-            ),
             PhysicalPart(
                 isPassable = false
             ),
@@ -78,12 +75,11 @@ object ActorFactory {
         parts = listOf(
             AttackablePart(),
             CombatPart(
-                attackPotency = 1
+                maxHealth = 20,
+                maxMana = 0,
+                power = 2
             ),
             FactionPart(Faction.Monster),
-            HealthPart(
-                maxHealth = 2
-            ),
             PhysicalPart(
                 isPassable = false
             ),

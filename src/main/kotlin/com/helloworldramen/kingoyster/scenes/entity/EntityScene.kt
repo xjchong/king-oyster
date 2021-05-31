@@ -149,7 +149,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			addChild(it)
 		}
 
-		if (entity.find(HealthPart::class)?.health ?: 0 > 0) {
+		if (entity.health() > 0) {
 			animationPlayer.play("on_hit")
 		}
 	}

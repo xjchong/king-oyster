@@ -23,7 +23,7 @@ class AttackablePart : Part {
 
     private fun Entity.respondToAttack(action: Attack): Boolean {
         val (context, attacker) = action
-        val amount = attacker.find(CombatPart::class)?.attackPotency ?: return false
+        val amount = attacker.power()
 
         // Don't allow entities with the same faction to hurt each other... for now.
         if (faction() == attacker.faction()) {

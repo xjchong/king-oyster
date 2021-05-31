@@ -1,7 +1,6 @@
 package com.helloworldramen.kingoyster.scenes.health
 
 import com.helloworldramen.kingoyster.architecture.Entity
-import com.helloworldramen.kingoyster.parts.HealthPart
 import com.helloworldramen.kingoyster.parts.health
 import com.helloworldramen.kingoyster.parts.maxHealth
 import godot.Node2D
@@ -33,7 +32,7 @@ class HealthScene : Node2D() {
 	fun bind(entity: Entity) {
 		this.entity = entity
 
-		visible = entity.has<HealthPart>()
+		visible = entity.maxHealth() > 0
 		maxHealth = entity.maxHealth().toDouble()
 		lastHealth = -1
 
@@ -45,7 +44,7 @@ class HealthScene : Node2D() {
 
 		if (currentHealth == lastHealth) return
 
-		val nextValue = (currentHealth / maxHealth) * 100
+		val nextValue = (currentHealth / maxHealth.coerceAtLeast(1.0)) * 100
 
 		healthBarFade.visible = currentHealth != maxHealth.toInt()
 		healthBarFill.visible = currentHealth != maxHealth.toInt()
