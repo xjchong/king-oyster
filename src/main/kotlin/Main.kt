@@ -53,7 +53,7 @@ class ConsoleGameEngine : EventBusSubscriber {
         fun performDirectionActions(position: Position): Boolean {
             return player.respondToAction(Move(context, player, position)) ||
                     world[position].tryActions(
-                        Open(context, player), Attack(context, player)
+                        Open(context, player), WeaponAttack(context, player)
                     )
         }
 

@@ -10,12 +10,10 @@ class PhysicalPart(
 ) : Part {
 
     override fun copy(): Part {
-        return PhysicalPart(isPassable, doesBlockVision)
+        return PhysicalPart(isPassable, doesBlockVision, isCorporeal)
     }
 }
 
 fun Entity.isCorporeal(): Boolean = (find<PhysicalPart>()?.isCorporeal == false).not()
-
 fun Entity.isPassable(): Boolean = (find<PhysicalPart>()?.isPassable == false).not()
-
 fun Entity.canPass(otherEntity: Entity): Boolean = isCorporeal().not() || otherEntity.isPassable()

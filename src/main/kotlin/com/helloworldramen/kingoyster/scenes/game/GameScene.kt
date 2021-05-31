@@ -191,7 +191,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 			context.entitiesAt(nearbyPosition)?.any {
 				when (nearbyPosition) {
 					position -> it.has<ItemPart>() || it.has<AscendablePart>()
-					else -> it.has<DoorPart>() || (it.has<AttackablePart>() && it.isEnemyOf(context.player))
+					else -> it.has<DoorPart>() || (it.has<CombatPart>() && it.isEnemyOf(context.player))
 				}
 			} == true
 		}
@@ -223,7 +223,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 			|| player.respondToAction(Move(context, player, position))
 			|| context.world.respondToActions(position,
 				Open(context, player),
-				Attack(context, player)
+				WeaponAttack(context, player)
 			) != null
 		) return
 
@@ -234,7 +234,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private fun performInteractiveActions(position: Position) {
 		with(context) {
 			world.respondToActions(position,
-				Attack(this, player),
+				WeaponAttack(this, player),
 				Take(this, player),
 				Open(this, player),
 				Close(this, player),

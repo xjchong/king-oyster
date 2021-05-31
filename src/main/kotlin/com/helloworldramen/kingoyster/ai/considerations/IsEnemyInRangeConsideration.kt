@@ -1,10 +1,6 @@
 package com.helloworldramen.kingoyster.ai.considerations
 
 import com.helloworldramen.kingoyster.ai.GameAiOptionContext
-import com.helloworldramen.kingoyster.ai.GameAiStrategyContext
-import com.helloworldramen.kingoyster.parts.AttackablePart
-import com.helloworldramen.kingoyster.parts.FactionPart
-import com.helloworldramen.kingoyster.parts.faction
 
 object IsEnemyInRangeConsideration : BooleanConsideration() {
 

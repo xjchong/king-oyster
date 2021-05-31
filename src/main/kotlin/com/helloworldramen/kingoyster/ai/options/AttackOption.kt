@@ -1,6 +1,6 @@
 package com.helloworldramen.kingoyster.ai.options
 
-import com.helloworldramen.kingoyster.actions.Attack
+import com.helloworldramen.kingoyster.actions.WeaponAttack
 import com.helloworldramen.kingoyster.ai.GameAiOption
 import com.helloworldramen.kingoyster.ai.GameAiOptionContext
 import com.helloworldramen.kingoyster.ai.architecture.AiStrategy
@@ -18,6 +18,6 @@ class AttackOption(
 
         if (target == null) return false
 
-        return target.respondToAction(Attack(context, entity))
+        return target.respondToAction(WeaponAttack(context, entity))
     }
 }

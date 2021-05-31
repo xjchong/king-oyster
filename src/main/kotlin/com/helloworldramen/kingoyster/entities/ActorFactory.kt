@@ -8,11 +8,15 @@ object ActorFactory {
     fun player() = Entity(
         name = "player",
         parts = listOf(
-            AttackablePart(),
             CombatPart(
                 maxHealth = 100,
                 maxMana = 4,
-                power = 10
+                power = 10,
+                defaultAttackInfo = AttackInfo(
+                    damageInfo = DamageInfo(
+                        damageType = DamageType.Bash
+                    )
+                )
             ),
             FactionPart(Faction.Player),
             InventoryPart(6),
@@ -34,7 +38,12 @@ object ActorFactory {
             CombatPart(
                 maxHealth = 10,
                 maxMana = 6,
-                power = 0
+                power = 0,
+                defaultAttackInfo = AttackInfo(
+                    damageInfo = DamageInfo(
+                        powerFactor = 0.0
+                    )
+                )
             ),
             FactionPart(Faction.Spirit),
             PhysicalPart(
@@ -52,11 +61,15 @@ object ActorFactory {
     fun goblin() = Entity(
         name = "goblin",
         parts = listOf(
-            AttackablePart(),
             CombatPart(
                 maxHealth = 30,
                 maxMana = 0,
-                power = 5
+                power = 5,
+                defaultAttackInfo = AttackInfo(
+                    damageInfo = DamageInfo(
+                        damageType = DamageType.Bash
+                    )
+                )
             ),
             FactionPart(Faction.Monster),
             PhysicalPart(
@@ -73,11 +86,11 @@ object ActorFactory {
     fun slime() = Entity(
         name = "slime",
         parts = listOf(
-            AttackablePart(),
             CombatPart(
                 maxHealth = 20,
                 maxMana = 0,
-                power = 2
+                power = 2,
+                defaultAttackInfo = AttackInfo()
             ),
             FactionPart(Faction.Monster),
             PhysicalPart(

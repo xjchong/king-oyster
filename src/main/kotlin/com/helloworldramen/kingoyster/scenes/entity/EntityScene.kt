@@ -52,7 +52,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	@RegisterFunction
 	override fun _ready() {
 		EventBus.register(this,
-			AttackEvent::class,
+			WeaponAttackEvent::class,
 			DamageEvent::class,
 			DeathEvent::class,
 			MoveEvent::class,
@@ -82,7 +82,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		isProcessingEvent = true
 
 		when (event) {
-			is AttackEvent -> {
+			is WeaponAttackEvent -> {
 				if (event.attacker == entity) {
 					context.world[event.target]?.let {
 						animateBump(it)

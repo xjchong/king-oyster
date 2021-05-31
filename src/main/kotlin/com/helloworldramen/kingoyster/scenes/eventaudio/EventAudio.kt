@@ -29,7 +29,7 @@ class EventAudio : Node(), EventBusSubscriber {
 	override fun _ready() {
 		EventBus.register(this,
 			AscendEvent::class,
-			AttackEvent::class,
+			WeaponAttackEvent::class,
 			DamageEvent::class,
 			DeathEvent::class,
 			DoorEvent::class,
@@ -47,7 +47,7 @@ class EventAudio : Node(), EventBusSubscriber {
 	override fun receiveEvent(event: Event) {
 		when (event) {
 			is AscendEvent -> onAscend(event)
-			is AttackEvent -> onAttack(event)
+			is WeaponAttackEvent -> onAttack(event)
 			is DamageEvent -> onDamage(event)
 			is DeathEvent -> onDeath(event)
 			is DoorEvent -> onDoor(event)
@@ -65,7 +65,7 @@ class EventAudio : Node(), EventBusSubscriber {
 		audio.play(SFX.STAIRS)
 	}
 
-	private fun onAttack(event: AttackEvent) {
+	private fun onAttack(event: WeaponAttackEvent) {
 	}
 
 	private fun onDamage(event: DamageEvent) {
