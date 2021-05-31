@@ -59,6 +59,16 @@ _global_script_classes=[ {
 "language": "Kotlin",
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/memory/MemoryScene.kt"
 }, {
+"base": "MarginContainer",
+"class": "com_helloworldramen_kingoyster_scenes_optionsmenu_OptionsMenuScene",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/optionsmenu/OptionsMenuScene.kt"
+}, {
+"base": "Node",
+"class": "com_helloworldramen_kingoyster_scenes_screenshake_ScreenShake",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/screenshake/ScreenShake.kt"
+}, {
 "base": "Node2D",
 "class": "com_helloworldramen_kingoyster_scenes_tileoverlay_TileOverlayScene",
 "language": "Kotlin",
@@ -90,6 +100,8 @@ _global_script_class_icons={
 "com_helloworldramen_kingoyster_scenes_listmenu_TitleListMenuItem": "",
 "com_helloworldramen_kingoyster_scenes_mainmenu_MainMenuScene": "",
 "com_helloworldramen_kingoyster_scenes_memory_MemoryScene": "",
+"com_helloworldramen_kingoyster_scenes_optionsmenu_OptionsMenuScene": "",
+"com_helloworldramen_kingoyster_scenes_screenshake_ScreenShake": "",
 "com_helloworldramen_kingoyster_scenes_tileoverlay_TileOverlayScene": "",
 "com_helloworldramen_kingoyster_scenes_tileselection_TileSelectionScene": "",
 "com_helloworldramen_kingoyster_scenes_toasttext_ToastTextScene": "",

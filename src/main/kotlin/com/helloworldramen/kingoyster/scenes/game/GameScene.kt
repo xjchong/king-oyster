@@ -5,16 +5,19 @@ import com.helloworldramen.kingoyster.ai.Ai
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
+import com.helloworldramen.kingoyster.entities.isPlayer
 import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
+import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.eventaudio.EventAudio
 import com.helloworldramen.kingoyster.scenes.listmenu.ListMenuScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
+import com.helloworldramen.kingoyster.scenes.screenshake.ScreenShake
 import com.helloworldramen.kingoyster.scenes.tileselection.TileSelectionScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
@@ -33,6 +36,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	private val eventAudio: EventAudio by lazy { getNodeAs("EventAudio")!! }
 	private val worldScene: WorldScene by lazy { getNodeAs("WorldScene")!! }
+	private val screenShake: ScreenShake by lazy { getNodeAs("Camera2D/ScreenShake")!! }
 	private val tileSelectionScene: TileSelectionScene by lazy { getNodeAs("TileSelectionScene")!! }
 	private val listMenuScene: ListMenuScene by lazy { getNodeAs("UIScenesBucket/ListMenuScene")!! }
 	private var playerScene: EntityScene? = null
@@ -49,6 +53,15 @@ class GameScene : Node2D(), EventBusSubscriber {
 					worldScene.bind(this)
 				}
 			}
+			is DamageEvent -> {
+				if (event.source.isPlayer) {
+					if (event.target.health() <= 0) {
+						screenShake.startMediumShake()
+					} else {
+						screenShake.startSmallShake()
+					}
+				}
+			}
 			is GameOverEvent -> getTree()?.changeScene(MainMenuScene.PATH)
 		}
 	}
@@ -58,7 +71,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 		val world = World(17, 17)
 		val player = WorldGenerator.repopulate(world, DungeonGenerationStrategy)
 
-		EventBus.register(this, AscendEvent::class, GameOverEvent::class)
+		EventBus.register(this, AscendEvent::class, GameOverEvent::class, DamageEvent::class)
 
 		context = Context(world)
 		context.player = player

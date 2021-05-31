@@ -26,8 +26,8 @@ class HealthPart(var maxHealth: Int, var health: Int = maxHealth) : Part {
         val (context, source, amount) = action
         val currentPosition = context.world[this] ?: return false
 
-        EventBus.post(DamageEvent(currentPosition, this, amount))
         health -= amount
+        EventBus.post(DamageEvent(currentPosition, source, this, amount))
 
         if (health <= 0) {
             EventBus.post(DeathEvent(currentPosition, this))

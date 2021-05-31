@@ -6,6 +6,7 @@ import com.helloworldramen.kingoyster.architecture.Position
 
 data class DamageEvent(
     val position: Position,
+    val source: Entity,
     val target: Entity,
     val value: Int
 ) : Event

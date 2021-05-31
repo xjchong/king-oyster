@@ -11,7 +11,6 @@ object SFX {
     const val MENU_MOVE_ALT = "$SFX_PATH/ui/menu_move_alt.wav"
     const val MENU_SELECT_ALT = "$SFX_PATH/ui/menu_select_alt.wav"
 
-
     const val STAIRS = "$SFX_PATH/dungeon/stairs.wav"
 
     const val MOVE_STEP = "$SFX_PATH/dungeon/move_step.wav"

@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/screenshake/ScreenShake.kt" type="Script" id=1]
+
+[node name="ScreenShake" type="Node"]
+script = ExtResource( 1 )
+
+[node name="FrequencyTimer" type="Timer" parent="."]
+
+[node name="DurationTimer" type="Timer" parent="."]
+
+[node name="Tween" type="Tween" parent="."]
