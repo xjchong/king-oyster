@@ -1,8 +1,5 @@
 package com.helloworldramen.kingoyster.architecture
 
-import com.helloworldramen.kingoyster.parts.isCorporeal
-import com.helloworldramen.kingoyster.parts.isPassable
-
 
 class Context(val world: World) {
     var player = Entity.UNKNOWN
@@ -20,38 +17,36 @@ class Context(val world: World) {
         }
     }
 
-    fun nearestWhere(position: Position, direction: Direction, predicate: (List<Entity>?) -> Boolean): Position {
-        val vector = direction.vector
-        val maxVectorMagnitude = if (direction is Direction.East || direction is Direction.West) {
-            world.width
-        } else world.height
-
-        for (magnitude in 1..maxVectorMagnitude) {
-            val nextPosition = position + (vector * magnitude)
-
-            if (predicate(entitiesAt(nextPosition))) return nextPosition
-        }
-
-        return position + vector
+    fun straightPathUntil(position: Position, direction: Direction, predicate: (Position) -> Boolean): List<Position> {
+        return straightPathWhere(true, position, direction, predicate)
     }
 
-    fun furthestWhere(position: Position, direction: Direction, predicate: (List<Entity>?) -> Boolean): Position {
+    fun straightPathWhile(position: Position, direction: Direction, predicate: (Position) -> Boolean): List<Position> {
+        return straightPathWhere(false, position, direction, predicate)
+    }
+
+    private fun straightPathWhere(isInclusive: Boolean, position: Position, direction: Direction,
+                                  predicate: (Position) -> Boolean): List<Position> {
         val vector = direction.vector
         val maxVectorMagnitude = if (direction is Direction.East || direction is Direction.West) {
             world.width
         } else world.height
 
-        var farthestPosition = position
+        val path = mutableListOf<Position>()
 
-        for (magnitude in 1..maxVectorMagnitude) {
+        for (magnitude in 0..maxVectorMagnitude) {
             val nextPosition = position + (vector * magnitude)
 
-            if (!predicate(entitiesAt(nextPosition))) break
-
-            farthestPosition = nextPosition
+            if (isInclusive) {
+                path.add(nextPosition)
+                if (predicate(nextPosition)) break
+            } else {
+                if (!predicate(nextPosition)) break
+                path.add(nextPosition)
+            }
         }
 
-        return farthestPosition
+        return path
     }
 
     companion object {

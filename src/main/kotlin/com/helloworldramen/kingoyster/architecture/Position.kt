@@ -110,4 +110,8 @@ sealed class Direction(val vector: Position) {
     object East : Direction(Position.EAST)
     object South : Direction(Position.SOUTH)
     object West : Direction(Position.WEST)
+
+    companion object {
+        val ALL = listOf(North, East, South, West)
+    }
 }

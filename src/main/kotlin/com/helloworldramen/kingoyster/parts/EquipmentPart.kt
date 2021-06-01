@@ -3,7 +3,6 @@ package com.helloworldramen.kingoyster.parts
 import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.actions.DropWeapon
 import com.helloworldramen.kingoyster.actions.ThrowWeapon
-import com.helloworldramen.kingoyster.actions.WeaponAttack
 import com.helloworldramen.kingoyster.architecture.Action
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
@@ -46,9 +45,11 @@ class EquipmentPart(
         val (context, _, direction) = action
         val weapon = weapon ?: return false
         val currentPosition = context.positionOf(this) ?: return false
-        val nearestImpassablePosition = context.nearestWhere(currentPosition, direction) { entities ->
-            entities?.any { !it.isPassable() } == true
-        }
+        val nearestImpassablePosition = context.straightPathUntil(currentPosition, direction) { position ->
+            val entities = context.entitiesAt(position)
+
+            entities == null || (entities.any { !it.isPassable() } && !entities.contains(this))
+        }.lastOrNull() ?: return false
 
         // Remove the weapon from inventory.
         this@EquipmentPart.weapon = null

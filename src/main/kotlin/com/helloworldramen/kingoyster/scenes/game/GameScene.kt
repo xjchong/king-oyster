@@ -214,9 +214,11 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private fun performWeaponDirectionSkill(direction: Direction) {
 		val player = context.player
 		val currentPosition = context.positionOf(player) ?: return
-		val furthestPassablePosition = context.furthestWhere(currentPosition, direction) { entities ->
-			entities != null && entities.none { !it.isPassable() }
-		}
+		val furthestPassablePosition = context.straightPathWhile(currentPosition, direction) { position ->
+			val entities = context.entitiesAt(position)
+
+			entities != null && (entities.all { it.isPassable() } || entities.contains(player))
+		}.lastOrNull() ?: return
 
 		player.respondToAction(Move(context, player, furthestPassablePosition, MoveType.Charge))
 	}
