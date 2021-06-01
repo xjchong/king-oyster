@@ -133,46 +133,17 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 		when {
 			Input.isActionPressed("left_modifier") -> {
+				val direction = event.pressedDirection()
 				when {
-					Input.isActionPressed("ui_up") -> {
-						when {
-							event.isActionPressed("ui_accept") -> {
-								performWeaponDirectionSkill(Direction.North)
-							}
-							event.isActionPressed("ui_cancel") -> {
-								throwWeapon(Direction.North)
-							}
-						}
+					Input.isActionPressed("ui_accept") -> {
+						if (direction == null) {
+							// Show weapon skill guide.
+						} else performWeaponDirectionSkill(direction)
 					}
-					Input.isActionPressed("ui_right") -> {
-						when {
-							event.isActionPressed("ui_accept") -> {
-								performWeaponDirectionSkill(Direction.East)
-							}
-							event.isActionPressed("ui_cancel") -> {
-								throwWeapon(Direction.East)
-							}
-						}
-					}
-					Input.isActionPressed("ui_down") -> {
-						when {
-							event.isActionPressed("ui_accept") -> {
-								performWeaponDirectionSkill(Direction.South)
-							}
-							event.isActionPressed("ui_cancel") -> {
-								throwWeapon(Direction.South)
-							}
-						}
-					}
-					Input.isActionPressed("ui_left") -> {
-						when {
-							event.isActionPressed("ui_accept") -> {
-								performWeaponDirectionSkill(Direction.West)
-							}
-							event.isActionPressed("ui_cancel") -> {
-								throwWeapon(Direction.West)
-							}
-						}
+					Input.isActionPressed("ui_cancel") -> {
+						if (direction == null) {
+							// Show throw guide.
+						} else throwWeapon(direction)
 					}
 				}
 			}
@@ -275,6 +246,16 @@ class GameScene : Node2D(), EventBusSubscriber {
 				Close(this, player),
 				Ascend(this, player)
 			)
+		}
+	}
+
+	private fun InputEvent.pressedDirection(): Direction? {
+		return when {
+			isActionPressed("ui_up") -> Direction.North
+			isActionPressed("ui_right") -> Direction.East
+			isActionPressed("ui_down") -> Direction.South
+			isActionPressed("ui_left") -> Direction.West
+			else -> null
 		}
 	}
 
