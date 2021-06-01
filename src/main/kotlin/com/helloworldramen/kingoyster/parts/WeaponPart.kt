@@ -27,10 +27,8 @@ class WeaponPart(
         val (context, actor) = action
         val equipment = actor.find<EquipmentPart>() ?: return false
 
-        println("attempt to remove weapon")
         // Remove the weapon from the floor.
         if (!context.world.move(this, null)) return false
-        println("removing weapon was a success")
 
         // Drop the current weapon if any.
         actor.respondToAction(DropWeapon(context, actor))

@@ -59,7 +59,8 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			DropWeaponEvent::class,
 			EquipWeaponEvent::class,
 			MoveEvent::class,
-			TakeEvent::class
+			TakeEvent::class,
+			ThrowWeaponEvent::class
 		)
 		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
 	}
@@ -80,9 +81,14 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private fun processEventQueue() {
 		if (isProcessingEvent || isAnimating || eventQueue.isEmpty()) return
 
-		val event = eventQueue.poll() ?: return
-
 		isProcessingEvent = true
+
+		val event = eventQueue.poll()
+
+		if (event == null) {
+			isProcessingEvent = false
+			return
+		}
 
 		when (event) {
 			is WeaponAttackEvent -> {
@@ -124,6 +130,11 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			is TakeEvent -> {
 				if (event.taken == entity) {
 					animatePulse()
+				}
+			}
+			is ThrowWeaponEvent -> {
+				if (event.weapon == entity) {
+					animateThrown(event)
 				}
 			}
 		}
@@ -180,6 +191,26 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		toast("+${weapon.name}", Color.lightgray, ToastTextScene.LONG_CONFIG)
 	}
 
+	fun animateThrown(event: ThrowWeaponEvent) {
+		isTweening = true
+		position = calculateNodePosition(event.from)
+		visible = true
+		zIndex = 75
+
+		tween.interpolateProperty(this, NodePath("position"),
+			initialVal = position,
+			finalVal = calculateNodePosition(event.to),
+			duration = 0.1, transType = Tween.TRANS_CUBIC, easeType = Tween.EASE_IN
+		)
+		if (event.willBreak) {
+			tween.interpolateProperty(this, NodePath("modulate:a"),
+				initialVal = 1.0, finalVal = 0.0,
+				duration = 0.05
+			)
+		}
+		tween.start()
+	}
+
 	@RegisterFunction
 	fun onAllTweenCompleted() {
 		isTweening = false
@@ -196,17 +227,13 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		if (isAnimating) return
 
 		val worldPosition = context.positionOf(entity)
-		val baseZIndex = when {
-			entity.has<MovementPart>() -> 100
-			else -> 50
-		}
 
 		if (worldPosition == null) {
 			visible = false
 			return
 		}
 
-		zIndex = (baseZIndex + context.world[worldPosition]!!.indexOf(entity)).toLong()
+		zIndex = getZIndexFor(worldPosition)
 
 		if (shouldAnimate) {
 			isTweening = true
@@ -221,6 +248,15 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	private fun calculateNodePosition(worldPosition: Position): Vector2 {
 		return Vector2(worldPosition.x * 32, worldPosition.y * 32)
+	}
+
+	private fun getZIndexFor(worldPosition: Position): Long {
+		val baseZIndex =  when {
+			entity.has<MovementPart>() -> 100
+			else -> 50
+		}.toLong()
+
+		return baseZIndex + context.entitiesAt(worldPosition)!!.indexOf(entity).toLong()
 	}
 
 	companion object {

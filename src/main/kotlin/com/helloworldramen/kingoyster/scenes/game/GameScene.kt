@@ -3,6 +3,7 @@ package com.helloworldramen.kingoyster.scenes.game
 import com.helloworldramen.kingoyster.actions.*
 import com.helloworldramen.kingoyster.ai.Ai
 import com.helloworldramen.kingoyster.architecture.Context
+import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
 import com.helloworldramen.kingoyster.entities.isPlayer
@@ -133,10 +134,46 @@ class GameScene : Node2D(), EventBusSubscriber {
 		when {
 			Input.isActionPressed("left_modifier") -> {
 				when {
-					event.isActionPressed("ui_up") -> performModifiedDirectionActions(Position.UP)
-					event.isActionPressed("ui_right") -> performModifiedDirectionActions(Position.RIGHT)
-					event.isActionPressed("ui_down") -> performModifiedDirectionActions(Position.DOWN)
-					event.isActionPressed("ui_left") -> performModifiedDirectionActions(Position.LEFT)
+					Input.isActionPressed("ui_up") -> {
+						when {
+							event.isActionPressed("ui_accept") -> {
+								performWeaponDirectionSkill(Direction.North)
+							}
+							event.isActionPressed("ui_cancel") -> {
+								throwWeapon(Direction.North)
+							}
+						}
+					}
+					Input.isActionPressed("ui_right") -> {
+						when {
+							event.isActionPressed("ui_accept") -> {
+								performWeaponDirectionSkill(Direction.East)
+							}
+							event.isActionPressed("ui_cancel") -> {
+								throwWeapon(Direction.East)
+							}
+						}
+					}
+					Input.isActionPressed("ui_down") -> {
+						when {
+							event.isActionPressed("ui_accept") -> {
+								performWeaponDirectionSkill(Direction.South)
+							}
+							event.isActionPressed("ui_cancel") -> {
+								throwWeapon(Direction.South)
+							}
+						}
+					}
+					Input.isActionPressed("ui_left") -> {
+						when {
+							event.isActionPressed("ui_accept") -> {
+								performWeaponDirectionSkill(Direction.West)
+							}
+							event.isActionPressed("ui_cancel") -> {
+								throwWeapon(Direction.West)
+							}
+						}
+					}
 				}
 			}
 			event.isActionPressed("ui_up", true) -> performDirectionActions(currentPosition.north())
@@ -197,23 +234,20 @@ class GameScene : Node2D(), EventBusSubscriber {
 		}
 	}
 
-	private fun performModifiedDirectionActions(vector: Position) {
+	private fun throwWeapon(direction: Direction) {
 		val player = context.player
-		val world = context.world
+
+		player.respondToAction(ThrowWeapon(context, player, direction))
+	}
+
+	private fun performWeaponDirectionSkill(direction: Direction) {
+		val player = context.player
 		val currentPosition = context.positionOf(player) ?: return
-		val maxVectorMagnitude = if (vector.x != 0) world.width else world.height
-		var furthestPosition = currentPosition
-
-		for (i in 1..maxVectorMagnitude) {
-			val nextVector = Position(vector.x * i, vector.y * i)
-			val nextPosition = currentPosition.withRelative(nextVector)
-
-			if (context.entitiesAt(nextPosition)?.any { !it.isPassable() } == true) break
-
-			furthestPosition = nextPosition
+		val furthestPassablePosition = context.furthestWhere(currentPosition, direction) { entities ->
+			entities != null && entities.none { !it.isPassable() }
 		}
 
-		player.respondToAction(Move(context, player, furthestPosition, MoveType.Charge))
+		player.respondToAction(Move(context, player, furthestPassablePosition, MoveType.Charge))
 	}
 
 	private fun performDirectionActions(position: Position) {

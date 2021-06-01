@@ -1,11 +1,24 @@
 package com.helloworldramen.kingoyster.architecture
 
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 data class Position(val x: Int = 0, val y: Int = 0) {
+
+    operator fun plus(position: Position): Position {
+        return Position(this.x + position.x, this.y + position.y)
+    }
+
+    operator fun minus(position: Position): Position {
+        return Position(this.x - position.x, this.y - position.y)
+    }
+
+    operator fun times(scalar: Double): Position {
+        return Position((this.x * scalar).roundToInt(), (this.y * scalar).roundToInt())
+    }
+
+    operator fun times(scalar: Int): Position {
+        return Position(this.x * scalar, this.y * scalar)
+    }
 
     fun withX(x: Int): Position {
         return if (x == this.x) this else copy(x = x)
@@ -85,9 +98,16 @@ data class Position(val x: Int = 0, val y: Int = 0) {
     }
 
     companion object {
-        val UP = Position(0, -1)
-        val RIGHT = Position(1, 0)
-        val DOWN = Position(0, 1)
-        val LEFT = Position(-1, 0)
+        val NORTH = Position(0, -1)
+        val EAST = Position(1, 0)
+        val SOUTH = Position(0, 1)
+        val WEST = Position(-1, 0)
     }
+}
+
+sealed class Direction(val vector: Position) {
+    object North : Direction(Position.NORTH)
+    object East : Direction(Position.EAST)
+    object South : Direction(Position.SOUTH)
+    object West : Direction(Position.WEST)
 }

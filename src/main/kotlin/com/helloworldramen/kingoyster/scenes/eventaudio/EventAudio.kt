@@ -1,6 +1,5 @@
 package com.helloworldramen.kingoyster.scenes.eventaudio
 
-import com.helloworldramen.kingoyster.actions.EquipAsWeapon
 import com.helloworldramen.kingoyster.actions.MoveType
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
@@ -37,7 +36,8 @@ class EventAudio : Node(), EventBusSubscriber {
 			EquipWeaponEvent::class,
 			GameOverEvent::class,
 			MoveEvent::class,
-			TakeEvent::class
+			TakeEvent::class,
+			ThrowWeaponEvent::class
 		)
 	}
 
@@ -57,6 +57,7 @@ class EventAudio : Node(), EventBusSubscriber {
 			is GameOverEvent -> onGameOver(event)
 			is MoveEvent -> onMove(event)
 			is TakeEvent -> onTake(event)
+			is ThrowWeaponEvent -> onThrowWeapon(event)
 		}
 	}
 
@@ -111,6 +112,12 @@ class EventAudio : Node(), EventBusSubscriber {
 		if (!event.taker.isVisibleToPlayer()) return
 
 		audio.play(SFX.TAKE)
+	}
+
+	private fun onThrowWeapon(event: ThrowWeaponEvent) {
+		if (!event.thrower.isVisibleToPlayer()) return
+
+		audio.play(SFX.HIT_CUT_CRIT)
 	}
 
 	private fun Entity.isVisibleToPlayer(): Boolean {
