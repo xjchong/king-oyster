@@ -220,7 +220,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		isTweening = false
 	}
 
-	private fun toast(text: String, color: Color, configuration: String) {
+	fun toast(text: String, color: Color, configuration: String) {
 		packedToastTextScene?.instanceAs<ToastTextScene>()?.let {
 			it.bind(text, color, configuration)
 			addChild(it)

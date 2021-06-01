@@ -21,6 +21,7 @@ import com.helloworldramen.kingoyster.scenes.listmenu.ListMenuScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.screenshake.ScreenShake
 import com.helloworldramen.kingoyster.scenes.tileselection.TileSelectionScene
+import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
@@ -29,6 +30,7 @@ import godot.InputEvent
 import godot.Node2D
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
+import godot.core.Color
 import godot.extensions.getNodeAs
 import java.util.*
 import kotlin.random.Random
@@ -176,12 +178,18 @@ class GameScene : Node2D(), EventBusSubscriber {
 					!directedSelectionScene.visible -> return
 					!modifierContext.isCompatibleWithInput() -> {
 						modifierContext = getBestModifierContext()
+
+						if (modifierContext == MODIFIER_CONTEXT_THROW && player.equippedWeaponPart() == null) {
+							playerScene?.toast("No weapon", Color.gray, ToastTextScene.LONG_CONFIG)
+						}
 						modifierLastDirection = null
 						bindDirectionSelection()
 					}
 					modifierLastDirection != null -> {
 						// Same direction as last time.
-						if (eventDirection != null && eventDirection == modifierLastDirection) {
+						if (eventDirection != null
+							&& eventDirection == modifierLastDirection
+							&& !directedSelectionScene.pathForDirection[eventDirection].isNullOrEmpty()) {
 							// Handle executing (note that the left modifier is still held down though).
 							when (modifierContext) {
 								MODIFIER_CONTEXT_MOVEMENT -> performWeaponDirectionSkill(eventDirection)
@@ -319,7 +327,13 @@ class GameScene : Node2D(), EventBusSubscriber {
 		when (modifierContext) {
 			MODIFIER_CONTEXT_MOVEMENT -> directedSelectionScene.bindPathWhile(context, currentPosition, chargePathPredicate, chargeDestinationPattern)
 			MODIFIER_CONTEXT_WEAPON -> directedSelectionScene.bindPathWhile(context, currentPosition, chargePathPredicate, chargeDestinationPattern)
-			MODIFIER_CONTEXT_THROW -> directedSelectionScene.bindPathUntil(context, currentPosition, throwPathPredicate, throwDestinationPattern)
+			MODIFIER_CONTEXT_THROW -> {
+				if (context.player.equippedWeaponPart() != null) {
+					directedSelectionScene.bindPathUntil(context, currentPosition, throwPathPredicate, throwDestinationPattern)
+				} else {
+					directedSelectionScene.bindNone(context)
+				}
+			}
 		}
 	}
 

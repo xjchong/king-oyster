@@ -21,7 +21,8 @@ class DirectedSelectionScene : Node2D() {
 	private val packedTileOverlayScene = GD.load<PackedScene>(TileOverlayScene.PATH)
 
 	private var overlayForPosition: Map<Position, TileOverlayScene> = mapOf()
-	private var pathForDirection: Map<Direction, List<Position>> = mapOf()
+	var pathForDirection: Map<Direction, List<Position>> = mapOf()
+		private set
 	private var destinationPattern: (Position, Direction) -> List<Position> = { _,_ -> listOf() }
 	private var context: Context = Context.UNKNOWN
 
@@ -66,6 +67,10 @@ class DirectedSelectionScene : Node2D() {
 					  predicate: (Position) -> Boolean,
 					  destinationPattern: (Position, Direction) -> List<Position>) {
 		bindPathsWhere(false, context, position, predicate, destinationPattern)
+	}
+
+	fun bindNone(context: Context) {
+		bindPathWhile(context, Position(0, 0), predicate = { false }, { _, _ -> listOf() })
 	}
 
 	private fun bindPathsWhere(isInclusive: Boolean, context: Context, position: Position,
