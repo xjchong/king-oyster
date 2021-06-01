@@ -135,6 +135,8 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			is ThrowWeaponEvent -> {
 				if (event.weapon == entity) {
 					animateThrown(event)
+				} else if (event.thrower == entity) {
+					animateDropWeapon(event.weapon)
 				}
 			}
 		}
