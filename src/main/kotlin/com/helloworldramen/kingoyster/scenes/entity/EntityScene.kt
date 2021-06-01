@@ -13,6 +13,7 @@ import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
+import godot.core.Color
 import godot.core.NodePath
 import godot.core.Vector2
 import godot.extensions.getNodeAs
@@ -160,7 +161,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	fun animateOnHit(amount: Int) {
-		toast(amount.toString())
+		toast(amount.toString(), Color.white, ToastTextScene.SHORT_CONFIG)
 
 		if (entity.health() > 0) {
 			animationPlayer.play("on_hit")
@@ -172,11 +173,11 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	fun animateDropWeapon(weapon: Entity) {
-//		toast("-${weapon.name}")
+		toast("-${weapon.name}", Color.gray, ToastTextScene.LONG_REVERSE_CONFIG)
 	}
 
 	fun animateEquipWeapon(weapon: Entity) {
-		toast("+${weapon.name}")
+		toast("+${weapon.name}", Color.lightgray, ToastTextScene.LONG_CONFIG)
 	}
 
 	@RegisterFunction
@@ -184,9 +185,9 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		isTweening = false
 	}
 
-	private fun toast(text: String) {
+	private fun toast(text: String, color: Color, configuration: String) {
 		packedToastTextScene?.instanceAs<ToastTextScene>()?.let {
-			it.bind(text)
+			it.bind(text, color, configuration)
 			addChild(it)
 		}
 	}
