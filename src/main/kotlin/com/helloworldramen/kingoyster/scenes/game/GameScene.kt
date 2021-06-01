@@ -208,26 +208,6 @@ class GameScene : Node2D(), EventBusSubscriber {
 			event.isActionPressed("ui_left", true) -> performDirectionActions(currentPosition.west())
 			event.isActionPressed("ui_cancel", true) -> player.idle(world)
 			event.isActionPressed("ui_accept") -> performNearbyInteractiveActions()
-			event.isActionPressed("ui_select") -> {
-				getTree()?.paused = true
-				val testTitles = mutableListOf<String>()
-
-				repeat(Random.nextInt(1, 10)) {
-					testTitles.add("Test $it")
-				}
-
-				listMenuScene.bind("Test Titles", testTitles) {
-					when {
-						it < 0 -> println("cancelled")
-						else -> println("picked test title: ${testTitles[it]}")
-					}
-
-					listMenuScene.hide()
-					getTree()?.paused = false
-				}
-
-				listMenuScene.show()
-			}
 		}
 	}
 
