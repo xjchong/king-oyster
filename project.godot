@@ -15,6 +15,11 @@ _global_script_classes=[ {
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/autoload/audio/AudioAutoload.kt"
 }, {
 "base": "Node2D",
+"class": "com_helloworldramen_kingoyster_scenes_directedselection_DirectedSelectionScene",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/directedselection/DirectedSelectionScene.kt"
+}, {
+"base": "Node2D",
 "class": "com_helloworldramen_kingoyster_scenes_entity_EntityScene",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntityScene.kt"
@@ -91,6 +96,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "com_helloworldramen_kingoyster_scenes_autoload_audio_AudioAutoload": "",
+"com_helloworldramen_kingoyster_scenes_directedselection_DirectedSelectionScene": "",
 "com_helloworldramen_kingoyster_scenes_entity_EntityScene": "",
 "com_helloworldramen_kingoyster_scenes_entity_EntitySprite": "",
 "com_helloworldramen_kingoyster_scenes_eventaudio_EventAudio": "",
