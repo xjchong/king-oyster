@@ -10,6 +10,7 @@ import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
+import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
 import kotlin.math.roundToInt
 
 class CombatPart(
@@ -38,6 +39,8 @@ class CombatPart(
         val attackInfo = attacker.equippedWeaponPart()?.attackInfo ?: attacker.defaultAttackInfo()
         val rawAmount = attacker.power() * attackInfo.powerFactor
         val damage = Damage(context, attacker, rawAmount.roundToInt(), attackInfo.damageType, attackInfo.elementType)
+
+        EventBus.post(WeaponAttackEvent(attacker, this))
 
         return respondToDamage(damage)
     }
