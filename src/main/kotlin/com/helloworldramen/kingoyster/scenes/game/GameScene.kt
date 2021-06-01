@@ -158,22 +158,16 @@ class GameScene : Node2D(), EventBusSubscriber {
 		val world = context.world
 		val player = context.player
 		val currentPosition = world[player] ?: return
+		val eventDirection = event.pressedDirection()
 
 		when {
-			event.isActionReleased("left_modifier") -> {
-				directedSelectionScene.visible = false
-				modifierContext = MODIFIER_CONTEXT_MOVEMENT
-				modifierLastDirection = null
-			}
-			event.isActionPressed("left_modifier") -> {
-				directedSelectionScene.visible = true
+			event.isActionPressed("left_modifier") || event.isActionReleased("left_modifier") -> {
+				directedSelectionScene.visible = event.isActionPressed("left_modifier")
 				modifierContext = MODIFIER_CONTEXT_MOVEMENT
 				modifierLastDirection = null
 				bindDirectionSelection()
 			}
 			Input.isActionPressed("left_modifier") -> { // Overlay is shown. Context by default should be movement.
-				val eventDirection = event.pressedDirection()
-
 				when {
 					!directedSelectionScene.visible -> return
 					!modifierContext.isCompatibleWithInput() -> {
