@@ -197,15 +197,17 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		visible = true
 		zIndex = 75
 
+		val throwDuration = 0.15
+
 		tween.interpolateProperty(this, NodePath("position"),
 			initialVal = position,
 			finalVal = calculateNodePosition(event.to),
-			duration = 0.1, transType = Tween.TRANS_CUBIC, easeType = Tween.EASE_IN
+			duration = throwDuration, transType = Tween.TRANS_CUBIC, easeType = Tween.EASE_IN
 		)
 		if (event.willBreak) {
 			tween.interpolateProperty(this, NodePath("modulate:a"),
 				initialVal = 1.0, finalVal = 0.0,
-				duration = 0.05
+				duration = 0.05, delay = throwDuration
 			)
 		}
 		tween.start()
