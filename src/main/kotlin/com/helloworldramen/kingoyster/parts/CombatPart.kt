@@ -37,22 +37,21 @@ class CombatPart(
         val (context, attacker) = action
         val attackInfo = attacker.equippedWeaponPart()?.attackInfo ?: attacker.defaultAttackInfo()
         val rawAmount = attacker.power() * attackInfo.powerFactor
-        val resFactor = resFactor(attackInfo)
-        val finalAmount = (rawAmount * resFactor).roundToInt()
-        val damage = Damage(context, attacker, finalAmount)
+        val damage = Damage(context, attacker, rawAmount.roundToInt(), attackInfo.damageType, attackInfo.elementType)
 
         return respondToDamage(damage)
     }
 
     private fun Entity.respondToDamage(action: Damage): Boolean {
-        val (context, source, amount) = action
+        val (context, source, amount, damageType, elementType) = action
 
         if (this == source) return false
 
         val currentPosition = context.positionOf(this) ?: return false
+        val finalAmount = (resFactor(damageType, elementType) * amount).roundToInt()
 
-        health -= amount
-        EventBus.post(DamageEvent(currentPosition, source, this, amount))
+        health -= finalAmount
+        EventBus.post(DamageEvent(currentPosition, source, this, finalAmount))
 
         if (health <= 0) {
             EventBus.post(DeathEvent(currentPosition, this))

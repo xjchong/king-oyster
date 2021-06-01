@@ -43,12 +43,12 @@ class MovementPart : Part {
 
             // Apply damage to the destination position.
             context.world[position]?.forEach {
-                if (it != this) it.respondToAction(Damage(context, this, power))
+                if (it != this) it.respondToAction(Damage(context, this, power, DamageType.Bash))
             }
 
             // And apply damage to neighbors of the destination.
             position.neighbors().forEach {
-                context.world.respondToActions(it, Damage(context, this, power))
+                context.world.respondToActions(it, Damage(context, this, power, DamageType.Bash))
             }
         }
 

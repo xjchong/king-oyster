@@ -10,6 +10,7 @@ import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DropWeaponEvent
 import com.helloworldramen.kingoyster.eventbus.events.ThrowWeaponEvent
+import kotlin.math.roundToInt
 
 class EquipmentPart(
     var weapon: Entity? = null
@@ -55,8 +56,13 @@ class EquipmentPart(
         if (context.entitiesAt(nearestImpassablePosition)?.any { it.has<CombatPart>() } == true) {
             EventBus.post(ThrowWeaponEvent(this, weapon, currentPosition, nearestImpassablePosition, true))
 
+            val attackInfo = weapon.find<WeaponPart>()?.attackInfo ?: defaultAttackInfo()
+            val rawAmount = (power() * attackInfo.powerFactor * 3.0).roundToInt() // Throwing gets a power multiplier.
+
             // Damage the entity at the destination.
-            context.world.respondToActions(nearestImpassablePosition, WeaponAttack(context, this))
+            context.world.respondToActions(nearestImpassablePosition,
+                Damage(context, this, rawAmount, attackInfo.damageType, attackInfo.elementType)
+            )
 
             // Remove the weapon from the world.
             context.world.remove(weapon)

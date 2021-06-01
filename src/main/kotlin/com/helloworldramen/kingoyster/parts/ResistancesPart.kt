@@ -39,6 +39,12 @@ class ResistancesPart(
     }
 }
 
+fun Entity.resFactor(damageType: DamageType, elementType: ElementType): Double {
+    val resistancesPart = find<ResistancesPart>() ?: return 1.0
+
+    return resistancesPart.resFactor(damageType) * resistancesPart.resFactor(elementType)
+}
+
 fun Entity.resFactor(damageInfo: DamageInfo): Double {
     return find<ResistancesPart>()?.resFactor(damageInfo) ?: 1.0
 }
