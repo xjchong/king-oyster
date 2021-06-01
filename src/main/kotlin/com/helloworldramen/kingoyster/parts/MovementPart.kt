@@ -8,6 +8,7 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.MoveEvent
+import kotlin.math.roundToInt
 
 class MovementPart : Part {
 
@@ -38,7 +39,7 @@ class MovementPart : Part {
 
         if (action.type == MoveType.Charge) {
             // We successfully moved, so apply impact effect.
-            val power = power()
+            val power = (power() * 1.5).roundToInt()
 
             // Apply damage to the destination position.
             context.world[position]?.forEach {
