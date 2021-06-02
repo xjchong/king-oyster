@@ -9,5 +9,5 @@ data class Ascend(
     override val actor: Entity
 ) : Action {
 
-    override val timeFactor: Double = 1.0
+    override val timeFactor: Double = 0.0
 }

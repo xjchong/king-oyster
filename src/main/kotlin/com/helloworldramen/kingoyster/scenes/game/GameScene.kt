@@ -51,12 +51,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	override fun receiveEvent(event: Event) {
 		when (event) {
-			is AscendEvent -> {
-				with(context) {
-					player.update(this, world)
-					worldScene.bind(this)
-				}
-			}
+			is AscendEvent -> worldScene.bind(context)
 			is DamageEvent -> {
 				if (event.source.isPlayer) {
 					if (event.target.health() <= 0) {

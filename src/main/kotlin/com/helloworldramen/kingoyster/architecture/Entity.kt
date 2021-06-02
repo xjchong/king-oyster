@@ -9,6 +9,9 @@ class Entity (
     var time: Double = 0.0
 ) {
 
+    private var lastSuccessfulResponse: Long = System.nanoTime()
+    private var lastSuccessfulUpdate: Long = 0
+
     fun copy(): Entity {
         return Entity(name, parts.map { it.copy() }, timeFactor, time)
     }
@@ -20,18 +23,22 @@ class Entity (
         val didRespond = parts.sumBy { if (it.respondToAction(this, action)) 1 else 0 } > 0
 
         if (didRespond) {
-            with (action.actor) {
-                time += (BASE_TIME_STEP * timeFactor * action.timeFactor)
-            }
+            action.actor.time += (BASE_TIME_STEP * action.actor.timeFactor * action.timeFactor)
+            action.actor.lastSuccessfulResponse = System.nanoTime()
         }
 
         return didRespond
     }
 
-    fun update(context: Context, world: World) {
-        if (time > world.currentTime) return
+    fun update(context: Context, world: World): Boolean {
+        if (time > world.currentTime) return false
+        if (lastSuccessfulUpdate > lastSuccessfulResponse) return false
+
+        lastSuccessfulUpdate = System.nanoTime()
 
         parts.forEach { it.update(context, this) }
+
+        return true
     }
 
     fun idle(world: World): Boolean {
