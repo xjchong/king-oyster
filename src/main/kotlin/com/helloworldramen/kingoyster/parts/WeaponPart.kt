@@ -51,12 +51,12 @@ class WeaponPart(
 
         durability -= amount
 
+        EventBus.post(DamageWeaponEvent(this, owner, amount, durability <= 0))
+
         if (durability <= 0) {
             context.world.remove(this)
             owner?.find<EquipmentPart>()?.weapon = null
         }
-
-        EventBus.post(DamageWeaponEvent(this, owner, amount, durability <= 0))
 
         return true
     }

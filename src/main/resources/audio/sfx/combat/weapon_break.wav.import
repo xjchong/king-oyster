@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/weapon_break.wav-259a0223a42265c29020ad9e6d32f918.sample"
+
+[deps]
+
+source_file="res://src/main/resources/audio/sfx/combat/weapon_break.wav"
+dest_files=[ "res://.import/weapon_break.wav-259a0223a42265c29020ad9e6d32f918.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

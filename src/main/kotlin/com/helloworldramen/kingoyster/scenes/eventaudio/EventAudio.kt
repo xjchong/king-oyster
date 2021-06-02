@@ -8,6 +8,7 @@ import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.*
+import com.helloworldramen.kingoyster.parts.weapon
 import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
 import com.helloworldramen.kingoyster.scenes.autoload.audio.SFX
 import godot.Node
@@ -28,6 +29,7 @@ class EventAudio : Node(), EventBusSubscriber {
 			AscendEvent::class,
 			WeaponAttackEvent::class,
 			DamageEvent::class,
+			DamageWeaponEvent::class,
 			DeathEvent::class,
 			DoorEvent::class,
 			EquipWeaponEvent::class,
@@ -48,6 +50,7 @@ class EventAudio : Node(), EventBusSubscriber {
 			is AscendEvent -> onAscend(event)
 			is WeaponAttackEvent -> onAttack(event)
 			is DamageEvent -> onDamage(event)
+			is DamageWeaponEvent -> onDamageWeapon(event)
 			is DeathEvent -> onDeath(event)
 			is DoorEvent -> onDoor(event)
 			is EquipWeaponEvent -> onEquipWeapon(event)
@@ -73,6 +76,19 @@ class EventAudio : Node(), EventBusSubscriber {
 		if (!event.target.isVisibleToPlayer(context)) return
 
 		audio.play(SFX.HIT_BASH)
+	}
+
+	private fun onDamageWeapon(event: DamageWeaponEvent) {
+		val isWeaponOwned = event.owner?.weapon() == event.weapon
+
+		if ((!isWeaponOwned && !event.weapon.isVisibleToPlayer(context))
+			|| isWeaponOwned && event.owner?.isVisibleToPlayer(context) == false) {
+			return
+		}
+
+		if (event.isBroken) {
+			audio.play(SFX.WEAPON_BREAK)
+		}
 	}
 
 	private fun onDeath(event: DeathEvent) {
