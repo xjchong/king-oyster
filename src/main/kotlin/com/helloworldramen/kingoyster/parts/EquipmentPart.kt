@@ -4,9 +4,7 @@ import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.actions.DamageWeapon
 import com.helloworldramen.kingoyster.actions.DropWeapon
 import com.helloworldramen.kingoyster.actions.ThrowWeapon
-import com.helloworldramen.kingoyster.architecture.Action
-import com.helloworldramen.kingoyster.architecture.Entity
-import com.helloworldramen.kingoyster.architecture.Part
+import com.helloworldramen.kingoyster.architecture.*
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DropWeaponEvent
 import com.helloworldramen.kingoyster.eventbus.events.ThrowWeaponEvent
@@ -59,7 +57,7 @@ class EquipmentPart(
             EventBus.post(ThrowWeaponEvent(this, weapon, currentPosition, nearestImpassablePosition))
 
             // Drop the weapon at the destination.
-            context.world.move(weapon, nearestImpassablePosition)
+            context.world.move(weapon, nearestImpassablePosition.findUnoccupiedPosition(context))
 
             val attackInfo = weapon.find<WeaponPart>()?.attackInfo ?: defaultAttackInfo()
             val rawAmount = (power() * attackInfo.powerFactor * 1.2).roundToInt() // Throwing gets a power multiplier.
@@ -76,10 +74,39 @@ class EquipmentPart(
             EventBus.post(ThrowWeaponEvent(this, weapon, currentPosition, furthestPassablePosition))
 
             // Drop the weapon at the destination.
-            context.world.move(weapon, furthestPassablePosition)
+            context.world.move(weapon, furthestPassablePosition.findUnoccupiedPosition(context))
         }
 
         return true
+    }
+
+    private fun Position.findUnoccupiedPosition(context: Context): Position {
+        if (!isOccupied(context)) {
+            return this
+        }
+
+        val unoccupiedAdjacentNeighbor = neighborsShuffled().firstOrNull {
+            !it.isOccupied(context)
+        }
+
+        if (unoccupiedAdjacentNeighbor != null) return unoccupiedAdjacentNeighbor
+
+        val unoccupiedDiagonalNeighbor = listOf(
+            this.withRelative(1, -1),
+            this.withRelative(1, 1),
+            this.withRelative(-1, 1),
+            this.withRelative(-1, -1)
+        ).shuffled().firstOrNull {
+            !it.isOccupied(context)
+        }
+
+        return unoccupiedDiagonalNeighbor ?: this
+    }
+
+    private fun Position.isOccupied(context: Context): Boolean {
+        return context.entitiesAt(this)?.any {
+            it.has<WeaponPart>() || it.has<ItemPart>() || (!it.isPassable() && !it.has<MovementPart>())
+        } != false
     }
 }
 

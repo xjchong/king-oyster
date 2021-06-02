@@ -81,6 +81,13 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 		if (!isAnimating && !isProcessingEvent && worldPosition != null) {
 			appearance.visible = context.player.visiblePositions().contains(worldPosition)
+
+			// Sometimes the position should be updated.
+			context.positionOf(entity)?.let { worldPosition ->
+				if (position != calculateNodePosition(worldPosition)) {
+					setPosition(false)
+				}
+			}
 		}
 	}
 
