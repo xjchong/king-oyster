@@ -2,6 +2,7 @@ package com.helloworldramen.kingoyster.scenes.world
 
 import com.helloworldramen.kingoyster.architecture.*
 import com.helloworldramen.kingoyster.architecture.World
+import com.helloworldramen.kingoyster.parts.EquipmentPart
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
 import godot.*
@@ -51,6 +52,15 @@ class WorldScene : Node2D() {
 
 					if (entity.name == "wall") {
 						tileMap.setCell(position.x.toLong(), position.y.toLong(), 1)
+					}
+				}
+
+				// Also add scenes for entities that are not explicitly visible.
+				entity.find<EquipmentPart>()?.weapon?.let { weapon ->
+					packedEntityScene?.instanceAs<EntityScene>()?.let {
+						entityScenesBucket.addChild(it)
+						it.bind(context, weapon)
+						sceneForEntity[weapon] = it
 					}
 				}
 			}

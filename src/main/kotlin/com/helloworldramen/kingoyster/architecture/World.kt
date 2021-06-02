@@ -19,7 +19,7 @@ class World(val width: Int, val height: Int) {
     operator fun get(x: Int, y: Int): List<Entity>? = entitiesForPosition[Position(x, y)]
     operator fun get(entity: Entity): Position? = positionForEntity[entity]
 
-    fun add(entity: Entity, position: Position? = null): Boolean {
+    fun add(entity: Entity, position: Position? = null, index: Int? = null): Boolean {
         if (allEntities.contains(entity)) return false
 
         allEntities.add(entity)
@@ -31,7 +31,11 @@ class World(val width: Int, val height: Int) {
 
         if (position != null) {
             entitiesForPosition[position]?.let {
-                it.add(entity)
+                if (index != null) {
+                    it.add(index, entity)
+                } else {
+                    it.add(entity)
+                }
                 positionForEntity[entity] = position
             }
         }
@@ -39,7 +43,10 @@ class World(val width: Int, val height: Int) {
         return true
     }
 
-    fun move(entity: Entity, position: Position?): Boolean {
+    fun move(entity: Entity, position: Position?, index: Int? = null): Boolean {
+        if (position != null && !allEntities.contains(entity)) {
+            add(entity, position, index)
+        }
         val currentPosition = positionForEntity[entity]
         if (currentPosition == position) return true
         if (currentPosition != null && entitiesForPosition[currentPosition]?.remove(entity) != true) return false

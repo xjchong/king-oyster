@@ -112,14 +112,14 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			}
 			is DropWeaponEvent -> {
 				if (event.weapon == entity) {
-					setPosition()
+					setPosition(false)
 				} else if (event.dropper == entity) {
 					animateDropWeapon(event.weapon)
 				}
 			}
 			is EquipWeaponEvent -> {
 				if (event.weapon == entity) {
-					setPosition()
+					setPosition(false)
 				} else if (event.equipper == entity) {
 					animateEquipWeapon(event.weapon)
 				}

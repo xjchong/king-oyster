@@ -159,7 +159,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 					else -> println("WEAPON SKILL")
 				}
 			}
-            event.isActionPressed("menu") -> println("MENU")
+			event.isActionPressed("menu") -> println("MENU")
 			event.isActionPressed("ui_cancel", true) -> player.idle(world)
 			event.isActionPressed("ui_accept") -> performNearbyInteractiveActions()
 			event.isDirectionPressed(true) -> performDirectionActions(event.direction(true))
