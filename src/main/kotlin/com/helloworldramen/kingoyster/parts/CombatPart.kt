@@ -3,6 +3,7 @@ package com.helloworldramen.kingoyster.parts
 import com.helloworldramen.kingoyster.actions.WeaponAttack
 import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.actions.DamageWeapon
+import com.helloworldramen.kingoyster.actions.DropWeapon
 import com.helloworldramen.kingoyster.architecture.Action
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
@@ -61,8 +62,11 @@ class CombatPart(
         EventBus.post(DamageEvent(currentPosition, source, this, finalAmount))
 
         if (health <= 0) {
+            respondToAction(DropWeapon(context, this))
+
             EventBus.post(DeathEvent(currentPosition, this))
             context.world.remove(this)
+
 
             if (isPlayer) {
                 EventBus.post(GameOverEvent(false))

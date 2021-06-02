@@ -4,7 +4,7 @@ import com.helloworldramen.kingoyster.ai.GameAiOptionContext
 import com.helloworldramen.kingoyster.parts.visiblePositions
 
 
-object IsEnemyInSightConsideration : BooleanConsideration() {
+class IsEnemyInSightConsideration(preferTrue: Boolean) : BooleanConsideration(preferTrue) {
 
     override fun isConditionTrue(optionContext: GameAiOptionContext): Boolean {
         val (context, entity, target) = optionContext

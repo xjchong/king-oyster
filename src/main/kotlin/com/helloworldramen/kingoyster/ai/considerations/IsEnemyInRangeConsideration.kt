@@ -2,7 +2,7 @@ package com.helloworldramen.kingoyster.ai.considerations
 
 import com.helloworldramen.kingoyster.ai.GameAiOptionContext
 
-object IsEnemyInRangeConsideration : BooleanConsideration() {
+class IsEnemyInRangeConsideration(preferTrue: Boolean = true) : BooleanConsideration(preferTrue) {
 
     override fun isConditionTrue(optionContext: GameAiOptionContext): Boolean {
         val (context, entity, target) = optionContext
