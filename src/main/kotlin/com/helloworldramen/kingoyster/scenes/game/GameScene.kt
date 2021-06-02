@@ -13,6 +13,7 @@ import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
 import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
+import com.helloworldramen.kingoyster.eventbus.events.PlayerToastEvent
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.directedselection.DirectedSelectionScene
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
@@ -21,7 +22,6 @@ import com.helloworldramen.kingoyster.scenes.listmenu.ListMenuScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.screenshake.ScreenShake
 import com.helloworldramen.kingoyster.scenes.tileselection.TileSelectionScene
-import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
@@ -33,7 +33,6 @@ import godot.annotation.RegisterFunction
 import godot.core.Color
 import godot.extensions.getNodeAs
 import java.util.*
-import kotlin.random.Random
 
 @RegisterClass
 class GameScene : Node2D(), EventBusSubscriber {
@@ -47,29 +46,8 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private var playerScene: EntityScene? = null
 
 	private var context: Context = Context.UNKNOWN
-	private var modifierContext: String = MODIFIER_CONTEXT_MOVEMENT
-	private var modifierLastDirection: Direction? = null
 
 	private val inputQueue: Queue<InputEvent> = ArrayDeque()
-
-
-	private val chargePathPredicate: (Position) -> Boolean = { position ->
-		val entities = context.entitiesAt(position)
-
-		entities != null && (entities.all { it.isPassable() } || entities.contains(context.player))
-	}
-	private val chargeDestinationPattern: (Position, Direction) -> List<Position> = { position, _ ->
-		listOf(position) + position.neighbors()
-	}
-
-	private val throwPathPredicate: (Position) -> Boolean = { position ->
-		val entities = context.entitiesAt(position)
-
-		entities == null || (entities.any { !it.isPassable() } && !entities.contains(context.player))
-	}
-	private val throwDestinationPattern: (Position, Direction) -> List<Position> = { position, _ ->
-		listOf(position)
-	}
 
 	override fun receiveEvent(event: Event) {
 		when (event) {
@@ -157,59 +135,34 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private fun parseInput(event: InputEvent) {
 		val world = context.world
 		val player = context.player
-		val currentPosition = world[player] ?: return
-		val eventDirection = event.pressedDirection()
+		val hasWeapon = player.equippedWeaponPart() != null
 
 		when {
-			event.isActionPressed("left_modifier") || event.isActionReleased("left_modifier") -> {
-				directedSelectionScene.visible = event.isActionPressed("left_modifier")
-				modifierContext = MODIFIER_CONTEXT_MOVEMENT
-				modifierLastDirection = null
-				bindDirectionSelection()
-			}
-			Input.isActionPressed("left_modifier") -> { // Overlay is shown. Context by default should be movement.
+			Input.isActionPressed("left_modifier") -> {
 				when {
-					!directedSelectionScene.visible -> return
-					!modifierContext.isCompatibleWithInput() -> {
-						modifierContext = getBestModifierContext()
-
-						if (modifierContext == MODIFIER_CONTEXT_THROW && player.equippedWeaponPart() == null) {
-							playerScene?.toast("No weapon", Color.gray, ToastTextScene.LONG_CONFIG)
-						}
-						modifierLastDirection = null
-						bindDirectionSelection()
-					}
-					modifierLastDirection != null -> {
-						// Same direction as last time.
-						if (eventDirection != null
-							&& eventDirection == modifierLastDirection
-							&& !directedSelectionScene.pathForDirection[eventDirection].isNullOrEmpty()) {
-							// Handle executing (note that the left modifier is still held down though).
-							when (modifierContext) {
-								MODIFIER_CONTEXT_MOVEMENT -> performWeaponDirectionSkill(eventDirection)
-								MODIFIER_CONTEXT_WEAPON -> performWeaponDirectionSkill(eventDirection)
-								MODIFIER_CONTEXT_THROW -> throwWeapon(eventDirection)
-							}
-
-							modifierContext = MODIFIER_CONTEXT_MOVEMENT
-							modifierLastDirection = null
-							directedSelectionScene.hide()
-						} else if (eventDirection != null) {
-							// Changed directions.
-							modifierLastDirection = eventDirection
-						}
-					}
-					eventDirection != null -> {
-						modifierLastDirection = eventDirection
-					}
+					event.isDirectionPressed() -> performMovementDirectionSkill(event.direction())
+					event.isActionPressed("ui_accept") -> println("ABILITY")
+					event.isActionPressed("ui_cancel") -> println("EXAMINE")
+					event.isActionPressed("secondary") -> println("ACCESSORY")
+					event.isActionPressed("tertiary") -> println("ITEM")
 				}
 			}
-			event.isActionPressed("ui_up", true) -> performDirectionActions(currentPosition.north())
-			event.isActionPressed("ui_right", true) -> performDirectionActions(currentPosition.east())
-			event.isActionPressed("ui_down", true) -> performDirectionActions(currentPosition.south())
-			event.isActionPressed("ui_left", true) -> performDirectionActions(currentPosition.west())
+			Input.isActionPressed("secondary") && event.isDirectionPressed() -> {
+				when {
+					!hasWeapon -> EventBus.post(PlayerToastEvent("No weapon", Color.lightgray))
+					else -> performThrow(event.direction())
+				}
+			}
+			Input.isActionPressed("tertiary") && event.isDirectionPressed() -> {
+				when {
+					!hasWeapon -> EventBus.post(PlayerToastEvent("No weapon", Color.lightgray))
+					else -> println("WEAPON SKILL")
+				}
+			}
+            event.isActionPressed("menu") -> println("MENU")
 			event.isActionPressed("ui_cancel", true) -> player.idle(world)
 			event.isActionPressed("ui_accept") -> performNearbyInteractiveActions()
+			event.isDirectionPressed(true) -> performDirectionActions(event.direction(true))
 		}
 	}
 
@@ -242,13 +195,17 @@ class GameScene : Node2D(), EventBusSubscriber {
 		}
 	}
 
-	private fun throwWeapon(direction: Direction) {
+	private fun performThrow(direction: Direction?) {
+		if (direction == null) return
+
 		val player = context.player
 
 		player.respondToAction(ThrowWeapon(context, player, direction))
 	}
 
-	private fun performWeaponDirectionSkill(direction: Direction) {
+	private fun performMovementDirectionSkill(direction: Direction?) {
+		if (direction == null) return
+
 		val player = context.player
 		val currentPosition = context.positionOf(player) ?: return
 		val furthestPassablePosition = context.straightPathWhile(currentPosition, direction) { position ->
@@ -260,19 +217,23 @@ class GameScene : Node2D(), EventBusSubscriber {
 		player.respondToAction(Move(context, player, furthestPassablePosition, MoveType.Charge))
 	}
 
-	private fun performDirectionActions(position: Position) {
+	private fun performDirectionActions(direction: Direction?) {
+		if (direction == null) return
+
 		val player = context.player
+		val currentPosition = context.positionOf(player) ?: return
+		val actionPosition = direction.vector + currentPosition
 
 		if (player.time > context.world.currentTime // Don't read any direction input when not player's turn.
-			|| player.respondToAction(Move(context, player, position))
-			|| context.world.respondToActions(position,
+			|| player.respondToAction(Move(context, player, actionPosition))
+			|| context.world.respondToActions(actionPosition,
 				Open(context, player),
 				WeaponAttack(context, player)
 			) != null
 		) return
 
 		// If we didn't successfully perform a direction action, indicate the failure with a bump animation.
-		worldScene.animateBump(player, position)
+		worldScene.animateBump(player, actionPosition)
 	}
 
 	private fun performInteractiveActions(position: Position) {
@@ -288,47 +249,18 @@ class GameScene : Node2D(), EventBusSubscriber {
 		}
 	}
 
-	private fun InputEvent.pressedDirection(): Direction? {
+	private fun InputEvent.direction(allowEcho: Boolean = false): Direction? {
 		return when {
-			isActionPressed("ui_up") -> Direction.North
-			isActionPressed("ui_right") -> Direction.East
-			isActionPressed("ui_down") -> Direction.South
-			isActionPressed("ui_left") -> Direction.West
+			isActionPressed("ui_up", allowEcho) -> Direction.North
+			isActionPressed("ui_right", allowEcho) -> Direction.East
+			isActionPressed("ui_down", allowEcho) -> Direction.South
+			isActionPressed("ui_left", allowEcho) -> Direction.West
 			else -> null
 		}
 	}
 
-	private fun String.isCompatibleWithInput(): Boolean {
-		return when (this) {
-			MODIFIER_CONTEXT_WEAPON -> Input.isActionPressed("ui_accept")
-			MODIFIER_CONTEXT_THROW -> Input.isActionPressed("ui_cancel")
-			MODIFIER_CONTEXT_MOVEMENT -> !Input.isActionPressed("ui_accept") && !Input.isActionPressed("ui_cancel")
-			else -> true
-		}
-	}
-
-	private fun getBestModifierContext(): String {
-		return when {
-			Input.isActionPressed("ui_accept") -> MODIFIER_CONTEXT_WEAPON
-			Input.isActionPressed("ui_cancel") -> MODIFIER_CONTEXT_THROW
-			else -> MODIFIER_CONTEXT_MOVEMENT
-		}
-	}
-
-	private fun bindDirectionSelection() {
-		val currentPosition = context.positionOf(context.player) ?: return
-
-		when (modifierContext) {
-			MODIFIER_CONTEXT_MOVEMENT -> directedSelectionScene.bindPathWhile(context, currentPosition, chargePathPredicate, chargeDestinationPattern)
-			MODIFIER_CONTEXT_WEAPON -> directedSelectionScene.bindPathWhile(context, currentPosition, chargePathPredicate, chargeDestinationPattern)
-			MODIFIER_CONTEXT_THROW -> {
-				if (context.player.equippedWeaponPart() != null) {
-					directedSelectionScene.bindPathUntil(context, currentPosition, throwPathPredicate, throwDestinationPattern)
-				} else {
-					directedSelectionScene.bindNone(context)
-				}
-			}
-		}
+	private fun InputEvent.isDirectionPressed(allowEcho: Boolean = false): Boolean {
+		return direction(allowEcho) != null
 	}
 
 	companion object {
@@ -336,9 +268,5 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 		private const val SELECTION_REASON_INTERACT = "interact"
 		private const val MAX_INPUT_QUEUE_SIZE = 2
-
-		private const val MODIFIER_CONTEXT_THROW = "throw"
-		private const val MODIFIER_CONTEXT_WEAPON = "weapon"
-		private const val MODIFIER_CONTEXT_MOVEMENT = "movement"
 	}
 }

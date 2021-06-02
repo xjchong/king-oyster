@@ -6,6 +6,7 @@ import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
+import com.helloworldramen.kingoyster.entities.isPlayer
 import com.helloworldramen.kingoyster.eventbus.events.*
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.health.HealthScene
@@ -59,8 +60,9 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			DropWeaponEvent::class,
 			EquipWeaponEvent::class,
 			MoveEvent::class,
+			PlayerToastEvent::class,
 			TakeEvent::class,
-			ThrowWeaponEvent::class
+			ThrowWeaponEvent::class,
 		)
 		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
 	}
@@ -125,6 +127,11 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			is MoveEvent -> {
 				if (event.entity == entity) {
 					setPosition()
+				}
+			}
+			is PlayerToastEvent -> {
+				if (entity.isPlayer) {
+					toast(event.message, event.color, ToastTextScene.LONG_CONFIG)
 				}
 			}
 			is TakeEvent -> {
