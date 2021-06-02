@@ -43,11 +43,15 @@ class CombatPart(
         val rawAmount = attacker.power() * attackInfo.powerFactor
         val damage = Damage(context, attacker, rawAmount.roundToInt(), attackInfo.damageType, attackInfo.elementType)
 
-        EventBus.post(WeaponAttackEvent(attacker, this))
+        return if (respondToDamage(damage)) {
+            EventBus.post(WeaponAttackEvent(attacker, this))
 
-        weapon?.respondToAction(DamageWeapon(context, attacker, attacker, 1))
+            weapon?.respondToAction(DamageWeapon(context, attacker, attacker, 1))
 
-        return respondToDamage(damage)
+            true
+        } else {
+            false
+        }
     }
 
     private fun Entity.respondToDamage(action: Damage): Boolean {
