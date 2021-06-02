@@ -7,10 +7,12 @@ import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.entities.isPlayer
+import com.helloworldramen.kingoyster.entities.isVisibleToPlayer
 import com.helloworldramen.kingoyster.eventbus.events.*
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.health.HealthScene
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
+import com.helloworldramen.kingoyster.scenes.world.WorldScene
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -21,13 +23,14 @@ import godot.extensions.getNodeAs
 import godot.extensions.instanceAs
 import godot.global.GD
 import java.util.*
+import kotlin.math.roundToInt
 
 @RegisterClass
 class EntityScene : Node2D(), EventBusSubscriber {
 
-	private val backgroundRect: ColorRect by lazy { getNodeAs("BackgroundRect")!! }
-	private val entitySprite: EntitySprite by lazy { getNodeAs("EntitySprite")!! }
-	private val healthScene: HealthScene by lazy { getNodeAs("EntitySprite/HealthScene")!! }
+	private val appearance: Node2D by lazy { getNodeAs("AppearanceNode2D")!! }
+	private val entitySprite: EntitySprite by lazy { getNodeAs("AppearanceNode2D/EntitySprite")!! }
+	private val healthScene: HealthScene by lazy { getNodeAs("AppearanceNode2D/EntitySprite/HealthScene")!! }
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
 	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
 
@@ -56,6 +59,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		EventBus.register(this,
 			WeaponAttackEvent::class,
 			DamageEvent::class,
+			DamageWeaponEvent::class,
 			DeathEvent::class,
 			DropWeaponEvent::class,
 			EquipWeaponEvent::class,
@@ -76,7 +80,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		processEventQueue()
 
 		if (!isAnimating && !isProcessingEvent && worldPosition != null) {
-			visible = context.player.visiblePositions().contains(worldPosition)
+			appearance.visible = context.player.visiblePositions().contains(worldPosition)
 		}
 	}
 
@@ -103,6 +107,18 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			is DamageEvent -> {
 				if (event.target == entity) {
 					animateOnHit(event.value)
+				}
+			}
+			is DamageWeaponEvent -> {
+				if (event.owner == entity) {
+					if (event.isBroken) {
+						toast("-${event.weapon.name} break!", Color.orange, ToastTextScene.LONG_REVERSE_CONFIG)
+					}
+				} else if (event.weapon == entity && event.owner == null) {
+					if (event.isBroken) {
+						toast("break!", Color.orange, ToastTextScene.SHORT_CONFIG)
+						animateOnBreak()
+					}
 				}
 			}
 			is DeathEvent -> {
@@ -159,7 +175,6 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		healthScene.bind(entity)
 		setPosition(shouldAnimate = false)
 
-		backgroundRect.visible = entity.name != "wall"
 		entitySprite.visible = entity.name != "wall"
 	}
 
@@ -188,6 +203,10 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		}
 	}
 
+	fun animateOnBreak() {
+		animationPlayer.play("on_break")
+	}
+
 	fun animateOnDeath() {
 		animationPlayer.play("on_death")
 	}
@@ -203,7 +222,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	fun animateThrown(event: ThrowWeaponEvent) {
 		isTweening = true
 		position = calculateNodePosition(event.from)
-		visible = true
+		appearance.visible = true
 		zIndex = 75
 
 		val throwDuration = 0.15
@@ -213,12 +232,6 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			finalVal = calculateNodePosition(event.to),
 			duration = throwDuration, transType = Tween.TRANS_CUBIC, easeType = Tween.EASE_IN
 		)
-		if (event.willBreak) {
-			tween.interpolateProperty(this, NodePath("modulate:a"),
-				initialVal = 1.0, finalVal = 0.0,
-				duration = 0.05, delay = throwDuration
-			)
-		}
 		tween.start()
 	}
 
@@ -228,6 +241,8 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	fun toast(text: String, color: Color, configuration: String) {
+		if (!calculateWorldPosition(position).isVisibleToPlayer(context)) return
+
 		packedToastTextScene?.instanceAs<ToastTextScene>()?.let {
 			it.bind(text, color, configuration)
 			addChild(it)
@@ -240,7 +255,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		val worldPosition = context.positionOf(entity)
 
 		if (worldPosition == null) {
-			visible = false
+			appearance.visible = false
 			return
 		}
 
@@ -258,7 +273,13 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	private fun calculateNodePosition(worldPosition: Position): Vector2 {
-		return Vector2(worldPosition.x * 32, worldPosition.y * 32)
+		return Vector2(worldPosition.x * WorldScene.TILE_SIZE, worldPosition.y * WorldScene.TILE_SIZE)
+	}
+
+	private fun calculateWorldPosition(nodePosition: Vector2): Position {
+		return Position(
+			(nodePosition.x / WorldScene.TILE_SIZE).roundToInt(),
+			(nodePosition.y / WorldScene.TILE_SIZE).roundToInt())
 	}
 
 	private fun getZIndexFor(worldPosition: Position): Long {

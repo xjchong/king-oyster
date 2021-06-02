@@ -2,6 +2,7 @@ package com.helloworldramen.kingoyster.parts
 
 import com.helloworldramen.kingoyster.actions.WeaponAttack
 import com.helloworldramen.kingoyster.actions.Damage
+import com.helloworldramen.kingoyster.actions.DamageWeapon
 import com.helloworldramen.kingoyster.architecture.Action
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
@@ -36,11 +37,14 @@ class CombatPart(
 
     private fun Entity.respondToWeaponAttack(action: WeaponAttack): Boolean {
         val (context, attacker) = action
+        val weapon = attacker.weapon()
         val attackInfo = attacker.equippedWeaponPart()?.attackInfo ?: attacker.defaultAttackInfo()
         val rawAmount = attacker.power() * attackInfo.powerFactor
         val damage = Damage(context, attacker, rawAmount.roundToInt(), attackInfo.damageType, attackInfo.elementType)
 
         EventBus.post(WeaponAttackEvent(attacker, this))
+
+        weapon?.respondToAction(DamageWeapon(context, attacker, attacker, 1))
 
         return respondToDamage(damage)
     }

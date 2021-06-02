@@ -2,13 +2,12 @@ package com.helloworldramen.kingoyster.scenes.eventaudio
 
 import com.helloworldramen.kingoyster.actions.MoveType
 import com.helloworldramen.kingoyster.architecture.Context
-import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.entities.isPlayer
+import com.helloworldramen.kingoyster.entities.isVisibleToPlayer
 import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.*
-import com.helloworldramen.kingoyster.parts.visiblePositions
 import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
 import com.helloworldramen.kingoyster.scenes.autoload.audio.SFX
 import godot.Node
@@ -22,8 +21,6 @@ class EventAudio : Node(), EventBusSubscriber {
 	private val audio: AudioAutoload by lazy { getNodeAs(AudioAutoload.TREE_PATH)!! }
 
 	private var context: Context = Context.UNKNOWN
-	private val player: Entity
-		get() = context.player
 
 	@RegisterFunction
 	override fun _ready() {
@@ -73,25 +70,25 @@ class EventAudio : Node(), EventBusSubscriber {
 	}
 
 	private fun onDamage(event: DamageEvent) {
-		if (!event.target.isVisibleToPlayer()) return
+		if (!event.target.isVisibleToPlayer(context)) return
 
 		audio.play(SFX.HIT_BASH)
 	}
 
 	private fun onDeath(event: DeathEvent) {
-		if (!event.entity.isVisibleToPlayer()) return
+		if (!event.entity.isVisibleToPlayer(context)) return
 
 		audio.play(SFX.DEATH)
 	}
 
 	private fun onDoor(event: DoorEvent) {
-		if (!event.actor.isVisibleToPlayer()) return
+		if (!event.actor.isVisibleToPlayer(context)) return
 
 		audio.play(if (event.isOpen) SFX.DOOR_OPEN else SFX.DOOR_CLOSE)
 	}
 
 	private fun onEquipWeapon(event: EquipWeaponEvent) {
-		if (!event.equipper.isVisibleToPlayer()) return
+		if (!event.equipper.isVisibleToPlayer(context)) return
 
 		audio.play(SFX.TAKE)
 	}
@@ -109,18 +106,14 @@ class EventAudio : Node(), EventBusSubscriber {
 	}
 
 	private fun onTake(event: TakeEvent) {
-		if (!event.taker.isVisibleToPlayer()) return
+		if (!event.taker.isVisibleToPlayer(context)) return
 
 		audio.play(SFX.TAKE)
 	}
 
 	private fun onThrowWeapon(event: ThrowWeaponEvent) {
-		if (!event.thrower.isVisibleToPlayer()) return
+		if (!event.thrower.isVisibleToPlayer(context)) return
 
 		audio.play(SFX.HIT_CUT_CRIT)
-	}
-
-	private fun Entity.isVisibleToPlayer(): Boolean {
-		return player.visiblePositions().contains(context.positionOf(this))
 	}
 }

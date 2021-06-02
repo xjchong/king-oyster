@@ -15,7 +15,8 @@ object WeaponFactory {
                         damageType = DamageType.Cut
                     ),
                     timeFactor = 1.0
-                )
+                ),
+                maxDurability = 5
             )
         )
     )
@@ -30,7 +31,8 @@ object WeaponFactory {
                         damageType = DamageType.Cut
                     ),
                     timeFactor = 1.2
-                )
+                ),
+                maxDurability = 5
             )
         )
     )
@@ -45,7 +47,8 @@ object WeaponFactory {
                         damageType = DamageType.Cut
                     ),
                     timeFactor = 2.0
-                )
+                ),
+                maxDurability = 4
             )
         )
     )

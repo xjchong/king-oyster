@@ -1,5 +1,7 @@
 package com.helloworldramen.kingoyster.architecture
 
+import com.helloworldramen.kingoyster.parts.visiblePositions
+
 
 class Context(val world: World) {
     var player = Entity.UNKNOWN

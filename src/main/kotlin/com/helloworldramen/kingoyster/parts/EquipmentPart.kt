@@ -1,6 +1,7 @@
 package com.helloworldramen.kingoyster.parts
 
 import com.helloworldramen.kingoyster.actions.Damage
+import com.helloworldramen.kingoyster.actions.DamageWeapon
 import com.helloworldramen.kingoyster.actions.DropWeapon
 import com.helloworldramen.kingoyster.actions.ThrowWeapon
 import com.helloworldramen.kingoyster.architecture.Action
@@ -42,7 +43,7 @@ class EquipmentPart(
     }
 
     private fun Entity.respondToThrowWeapon(action: ThrowWeapon): Boolean {
-        val (context, _, direction) = action
+        val (context, thrower, direction) = action
         val weapon = weapon ?: return false
         val currentPosition = context.positionOf(this) ?: return false
         val nearestImpassablePosition = context.straightPathUntil(currentPosition, direction) { position ->
@@ -55,7 +56,10 @@ class EquipmentPart(
         this@EquipmentPart.weapon = null
 
         if (context.entitiesAt(nearestImpassablePosition)?.any { it.has<CombatPart>() } == true) {
-            EventBus.post(ThrowWeaponEvent(this, weapon, currentPosition, nearestImpassablePosition, true))
+            EventBus.post(ThrowWeaponEvent(this, weapon, currentPosition, nearestImpassablePosition))
+
+            // Drop the weapon at the destination.
+            context.world.move(weapon, nearestImpassablePosition)
 
             val attackInfo = weapon.find<WeaponPart>()?.attackInfo ?: defaultAttackInfo()
             val rawAmount = (power() * attackInfo.powerFactor * 3.0).roundToInt() // Throwing gets a power multiplier.
@@ -65,21 +69,26 @@ class EquipmentPart(
                 Damage(context, this, rawAmount, attackInfo.damageType, attackInfo.elementType)
             )
 
-            // Remove the weapon from the world.
-            context.world.remove(weapon)
+            weapon.respondToAction(DamageWeapon(context, thrower, null, 3))
         } else {
             val furthestPassablePosition = nearestImpassablePosition - direction.vector
 
-            EventBus.post(ThrowWeaponEvent(this, weapon, currentPosition, furthestPassablePosition, false))
+            EventBus.post(ThrowWeaponEvent(this, weapon, currentPosition, furthestPassablePosition))
 
             // Drop the weapon at the destination.
             context.world.move(weapon, furthestPassablePosition)
+
+            weapon.respondToAction(DamageWeapon(context, thrower, null, 2))
         }
 
         return true
     }
 }
 
+fun Entity.weapon(): Entity? {
+    return find<EquipmentPart>()?.weapon
+}
+
 fun Entity.equippedWeaponPart(): WeaponPart? {
-    return find<EquipmentPart>()?.weapon?.find()
+    return weapon()?.find()
 }
