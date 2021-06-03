@@ -34,42 +34,33 @@ class EntitySprite : Node2D() {
 		animatedSprite.visible = false
 		animatedSprite.position = Vector2(16, 16)
 
-		val (text, color)= when(entity?.name) {
-			"player" -> {
-				animatedSprite.visible = true
-				animatedSprite.play("knight")
-				Pair("@", Color.yellow)
-			}
-			"wall" -> Pair("#", Color.white)
-			"dagger" -> Pair("|", Color.gray)
+		val (text, color, sprite)= when(entity?.name) {
+			"player" -> Triple("@", Color.yellow, "knight")
+			"wall" -> Triple("#", Color.white, null)
+			"dagger" -> Triple("|", Color.gray, "dagger")
 			"door" -> {
-				Pair(
+				Triple(
 					if (entity?.find(DoorPart::class)?.isOpen == true) "'" else "+",
-					Color.orange
+					Color.orange, null
 				)
 			}
-			"ghost" -> {
-				animatedSprite.visible = true
-				animatedSprite.play("ghost")
-				Pair("G", Color.darkblue)
-			}
-			"goblin" -> {
-				Pair("g", Color.darkred)
-			}
-			"greatsword" -> {
-				Pair("|", Color.lightblue)
-			}
+			"ghost" -> Triple("G", Color.darkblue, null)
+			"goblin" -> Triple("g", Color.darkred, null)
+			"greatsword" -> Triple("|", Color.lightblue, "greatsword")
 			"slime" -> {
-				animatedSprite.visible = true
 				animatedSprite.position -= Vector2(0, 2)
-				animatedSprite.play("blue_slime")
-				Pair("s", Color.lightgreen)
+				Triple("s", Color.lightgreen, "blue_slime")
 			}
-			"stairs" -> Pair("<", Color.white)
-			"sword" -> Pair("|", Color.white)
-			"coin" -> Pair("$", Color.cyan)
-			null -> Pair(" ", Color.white)
-			else -> Pair("?", Color.red)
+			"stairs" -> Triple("<", Color.white, null)
+			"sword" -> Triple("|", Color.white, "sword")
+			"coin" -> Triple("$", Color.cyan, null)
+			null -> Triple(" ", Color.white, null)
+			else -> Triple("?", Color.red, null)
+		}
+
+		if (sprite != null) {
+			animatedSprite.visible = true
+			animatedSprite.play(sprite)
 		}
 
 		label.text = text
