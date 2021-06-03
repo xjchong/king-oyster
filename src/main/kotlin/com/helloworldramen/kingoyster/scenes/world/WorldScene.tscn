@@ -77,4 +77,3 @@ tile_data = PoolIntArray( -1, 1, 1, -65536, 1, 196610, -65535, 1, 196610, -65534
 [node name="MemoryScenesBucket" type="Node2D" parent="."]
 
 [node name="TileSelectionScene" parent="." instance=ExtResource( 4 )]
-z_index = 2000
