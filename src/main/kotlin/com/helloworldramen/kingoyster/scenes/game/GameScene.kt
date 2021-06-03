@@ -51,6 +51,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private var context: Context = Context.UNKNOWN
 
 	private val inputQueue: Queue<InputEvent> = ArrayDeque()
+	private var isUpdating: Boolean = false
 
 	override fun receiveEvent(event: Event) {
 		when (event) {
@@ -67,7 +68,9 @@ class GameScene : Node2D(), EventBusSubscriber {
 					}
 				}
 			}
-			is GameOverEvent -> getTree()?.changeScene(MainMenuScene.PATH)
+			is GameOverEvent -> {
+				getTree()?.changeScene(MainMenuScene.PATH)
+			}
 		}
 	}
 
@@ -101,7 +104,6 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
-		updateNextEntity()
 		context.player.find<SensoryPart>()?.update(context, context.player)
 		inputQueue.poll()?.let { parseInput(it) }
 	}
@@ -126,14 +128,22 @@ class GameScene : Node2D(), EventBusSubscriber {
 		}
 	}
 
-	private fun updateNextEntity() {
-		context.world.next()?.let { entity ->
-			entity.update(context, context.world)
+	private fun updateNonPlayerEntities() {
+		if (isUpdating) return else isUpdating = true
 
-			if (entity.name != "player") {
-				Ai.actForEntity(context, entity)
+		while (context.player.health() > 0) {
+			val nextEntity = context.world.next() ?: break
+
+			nextEntity.update(context, context.world)
+
+			if (nextEntity.isPlayer) {
+				break
+			} else {
+				Ai.actForEntity(context, nextEntity)
 			}
 		}
+
+		isUpdating = false
 	}
 
 	private fun parseInput(event: InputEvent) {
@@ -167,7 +177,10 @@ class GameScene : Node2D(), EventBusSubscriber {
 			event.isActionPressed("ui_cancel", true) -> player.idle(world)
 			event.isActionPressed("ui_accept") -> performNearbyInteractiveActions()
 			event.isDirectionPressed(true) -> performDirectionActions(event.direction(true))
+			else -> return
 		}
+
+		updateNonPlayerEntities()
 	}
 
 	private fun performNearbyInteractiveActions() {

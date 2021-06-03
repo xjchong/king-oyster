@@ -43,7 +43,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		get() = context.positionOf(entity)
 
 	private val eventQueue: Queue<Event> = ArrayDeque()
-	private var isProcessingEvent: Boolean = false
+	private var isProcessingEvents: Boolean = false
 
 	private var isTweening: Boolean = false
 
@@ -80,100 +80,102 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	override fun _process(delta: Double) {
 		processEventQueue()
 
-		if (!isAnimating && !isProcessingEvent && worldPosition != null) {
+		if (!isAnimating && !isProcessingEvents && worldPosition != null) {
 			appearance.visible = context.player.visiblePositions().contains(worldPosition)
 
-			// Sometimes the position should be updated.
-			context.positionOf(entity)?.let { worldPosition ->
-				if (position != calculateNodePosition(worldPosition)) {
-					setPosition(false)
+			if (eventQueue.isEmpty()) {
+				// Sometimes the position should be updated.
+				context.positionOf(entity)?.let { worldPosition ->
+					if (position != calculateNodePosition(worldPosition)) {
+						setPosition(false)
+					}
 				}
 			}
 		}
 	}
 
 	private fun processEventQueue() {
-		if (isProcessingEvent || isAnimating || eventQueue.isEmpty()) return
+		if (isProcessingEvents || isAnimating || eventQueue.isEmpty()) return
 
-		isProcessingEvent = true
+		isProcessingEvents = true
 
-		val event = eventQueue.poll()
+		while (true) {
+			val event = eventQueue.poll()
 
-		if (event == null) {
-			isProcessingEvent = false
-			return
+			if (event == null) {
+				isProcessingEvents = false
+				return
+			}
+
+			when (event) {
+				is WeaponAttackEvent -> {
+					if (event.attacker == entity) {
+						context.world[event.target]?.let {
+							animateBump(it)
+						}
+					}
+				}
+				is DamageEvent -> {
+					if (event.target == entity) {
+						animateOnHit(event.value)
+					}
+				}
+				is DamageWeaponEvent -> {
+					if (event.owner == entity) {
+						if (event.isBroken) {
+							toast("-${event.weapon.name} break!", Color.orange, ToastTextScene.LONG_REVERSE_CONFIG)
+						}
+					} else if (event.weapon == entity) {
+						updateDurabilityLabel()
+						if (event.owner == null && event.isBroken) {
+							toast("break!", Color.orange, ToastTextScene.SHORT_CONFIG)
+							animateOnBreak()
+						}
+					}
+				}
+				is DeathEvent -> {
+					if (event.entity == entity) {
+						animateOnDeath()
+					}
+				}
+				is DropWeaponEvent -> {
+					if (event.weapon == entity) {
+						setPosition(false)
+					} else if (event.dropper == entity) {
+						animateDropWeapon(event.weapon)
+					}
+				}
+				is EquipWeaponEvent -> {
+					if (event.weapon == entity) {
+						setPosition(false)
+					} else if (event.equipper == entity) {
+						animateEquipWeapon(event.weapon)
+					}
+				}
+				is MoveEvent -> {
+					if (event.entity == entity) {
+						setPosition()
+					}
+				}
+				is PlayerToastEvent -> {
+					if (entity.isPlayer) {
+						toast(event.message, event.color, ToastTextScene.LONG_CONFIG)
+					}
+				}
+				is TakeEvent -> {
+					if (event.taken == entity) {
+						animatePulse()
+					}
+				}
+				is ThrowWeaponEvent -> {
+					if (event.weapon == entity) {
+						animateThrown(event)
+					} else if (event.thrower == entity) {
+						animateDropWeapon(event.weapon)
+					}
+				}
+			}
 		}
-
-		when (event) {
-			is WeaponAttackEvent -> {
-				if (event.attacker == entity) {
-					context.world[event.target]?.let {
-						animateBump(it)
-					}
-				}
-			}
-			is DamageEvent -> {
-				if (event.target == entity) {
-					animateOnHit(event.value)
-				}
-			}
-			is DamageWeaponEvent -> {
-				if (event.owner == entity) {
-					if (event.isBroken) {
-						toast("-${event.weapon.name} break!", Color.orange, ToastTextScene.LONG_REVERSE_CONFIG)
-					}
-				} else if (event.weapon == entity) {
-					updateDurabilityLabel()
-					if (event.owner == null && event.isBroken) {
-						toast("break!", Color.orange, ToastTextScene.SHORT_CONFIG)
-						animateOnBreak()
-					}
-				}
-			}
-			is DeathEvent -> {
-				if (event.entity == entity) {
-					animateOnDeath()
-				}
-			}
-			is DropWeaponEvent -> {
-				if (event.weapon == entity) {
-					setPosition(false)
-				} else if (event.dropper == entity) {
-					animateDropWeapon(event.weapon)
-				}
-			}
-			is EquipWeaponEvent -> {
-				if (event.weapon == entity) {
-					setPosition(false)
-				} else if (event.equipper == entity) {
-					animateEquipWeapon(event.weapon)
-				}
-			}
-			is MoveEvent -> {
-				if (event.entity == entity) {
-					setPosition()
-				}
-			}
-			is PlayerToastEvent -> {
-				if (entity.isPlayer) {
-					toast(event.message, event.color, ToastTextScene.LONG_CONFIG)
-				}
-			}
-			is TakeEvent -> {
-				if (event.taken == entity) {
-					animatePulse()
-				}
-			}
-			is ThrowWeaponEvent -> {
-				if (event.weapon == entity) {
-					animateThrown(event)
-				} else if (event.thrower == entity) {
-					animateDropWeapon(event.weapon)
-				}
-			}
-		}
-
-		isProcessingEvent = false
 	}
 
 	fun bind(context: Context, entity: Entity) {
