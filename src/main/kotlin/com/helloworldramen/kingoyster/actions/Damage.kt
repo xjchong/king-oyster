@@ -3,6 +3,7 @@ package com.helloworldramen.kingoyster.actions
 import com.helloworldramen.kingoyster.architecture.Action
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.architecture.World
 import com.helloworldramen.kingoyster.parts.DamageInfo
 import com.helloworldramen.kingoyster.parts.DamageType
 import com.helloworldramen.kingoyster.parts.ElementType
@@ -15,5 +16,6 @@ data class Damage(
     val elementType: ElementType = ElementType.None
 ) : Action {
 
+    override val world: World = context.world
     override val timeFactor: Double = 0.0
 }

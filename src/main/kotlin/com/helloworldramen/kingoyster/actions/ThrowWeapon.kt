@@ -9,7 +9,7 @@ data class ThrowWeapon(
     val direction: Direction
 ) : Action {
 
-    // Throwing a weapon takes longer than swinging it.
+    override val world: World = context.world
     override val timeFactor: Double
-        get() = actor.equippedWeaponPart()?.attackInfo?.timeFactor ?: 1.0 * 1.5
+        get() = actor.equippedWeaponPart()?.attackInfo?.timeFactor ?: 1.0
 }

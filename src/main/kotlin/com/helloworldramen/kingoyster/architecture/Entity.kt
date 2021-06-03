@@ -17,14 +17,17 @@ class Entity (
     }
 
     fun respondToAction(action: Action): Boolean {
+        val world = action.world
+        val actor = action.actor
+
         // Actors shouldn't be able to perform actions if its not their turn yet.
-        if (action.context.world.currentTime < action.actor.time) return false
+        if (world.next() != actor) return false
 
         val didRespond = parts.sumBy { if (it.respondToAction(this, action)) 1 else 0 } > 0
 
         if (didRespond) {
-            action.actor.time += (BASE_TIME_STEP * action.actor.timeFactor * action.timeFactor)
-            action.actor.lastSuccessfulResponse = System.nanoTime()
+            actor.time += (BASE_TIME_STEP * actor.timeFactor * action.timeFactor)
+            actor.lastSuccessfulResponse = System.nanoTime()
         }
 
         return didRespond
