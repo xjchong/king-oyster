@@ -61,3 +61,7 @@ class WeaponPart(
         return true
     }
 }
+
+fun Entity.durability(): Int {
+    return find<WeaponPart>()?.durability ?: 0
+}

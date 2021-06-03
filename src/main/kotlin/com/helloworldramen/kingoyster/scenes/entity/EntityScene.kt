@@ -31,6 +31,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private val appearance: Node2D by lazy { getNodeAs("AppearanceNode2D")!! }
 	private val entitySprite: EntitySprite by lazy { getNodeAs("AppearanceNode2D/EntitySprite")!! }
 	private val healthScene: HealthScene by lazy { getNodeAs("AppearanceNode2D/EntitySprite/HealthScene")!! }
+	private val durabilityLabel: Label by lazy { getNodeAs("AppearanceNode2D/EntitySprite/DurabilityLabel")!! }
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
 	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
 
@@ -121,8 +122,9 @@ class EntityScene : Node2D(), EventBusSubscriber {
 					if (event.isBroken) {
 						toast("-${event.weapon.name} break!", Color.orange, ToastTextScene.LONG_REVERSE_CONFIG)
 					}
-				} else if (event.weapon == entity && event.owner == null) {
-					if (event.isBroken) {
+				} else if (event.weapon == entity) {
+					updateDurabilityLabel()
+					if (event.owner == null && event.isBroken) {
 						toast("break!", Color.orange, ToastTextScene.SHORT_CONFIG)
 						animateOnBreak()
 					}
@@ -180,6 +182,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 		entitySprite.bind(entity)
 		healthScene.bind(entity)
+		updateDurabilityLabel()
 		setPosition(shouldAnimate = false)
 
 		entitySprite.visible = entity.name != "wall"
@@ -277,6 +280,11 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		} else {
 			position = calculateNodePosition(worldPosition)
 		}
+	}
+
+	private fun updateDurabilityLabel() {
+		durabilityLabel.visible = entity.has<WeaponPart>()
+		durabilityLabel.text = entity.durability().toString()
 	}
 
 	private fun calculateNodePosition(worldPosition: Position): Vector2 {
