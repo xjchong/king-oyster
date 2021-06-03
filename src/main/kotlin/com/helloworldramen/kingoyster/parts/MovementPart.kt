@@ -50,6 +50,8 @@ class MovementPart : Part {
             position.neighbors().forEach {
                 context.world.respondToActions(it, Damage(context, this, power, DamageType.Bash))
             }
+
+            this.respondToAction(Damage(context, Entity.UNKNOWN, 1, DamageType.Special))
         }
 
         return true

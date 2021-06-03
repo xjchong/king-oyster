@@ -14,7 +14,8 @@ object ActorFactory {
                 power = 10,
                 defaultAttackInfo = AttackInfo(
                     damageInfo = DamageInfo(
-                        damageType = DamageType.Bash
+                        damageType = DamageType.Bash,
+                        powerFactor = 0.5
                     )
                 )
             ),
