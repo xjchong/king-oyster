@@ -44,26 +44,26 @@ object WorldGenerator {
     }
 
     private fun placeEnemies(world: World) {
-        world.placeWithDensity(0.050) {
+        world.placeWithDensity(0.040) {
             ActorFactory.slime()
         }
-        world.placeWithDensity(0.050) {
+        world.placeWithDensity(0.040) {
             ActorFactory.goblin()
         }
-        world.placeWithRange(1, 4) {
+        world.placeWithRange(1, 2) {
             ActorFactory.ghost()
         }
     }
 
     private fun placeItems(world: World) {
         world.placeWithDensity(0.02) { ItemFactory.coin(1, 100) }
-        world.placeWithRange(1, 3) {
+        world.placeWithRange(2, 4) {
             WeaponFactory.newDagger()
         }
-        world.placeWithRange(1, 3) {
+        world.placeWithRange(2, 4) {
             WeaponFactory.newSword()
         }
-        world.placeWithRange(1, 3) {
+        world.placeWithRange(2, 4) {
             WeaponFactory.newGreatsword()
         }
     }

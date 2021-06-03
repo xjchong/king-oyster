@@ -16,7 +16,7 @@ object WeaponFactory {
                     ),
                     timeFactor = 1.0
                 ),
-                maxDurability = 5
+                maxDurability = 10
             )
         )
     )
@@ -32,7 +32,7 @@ object WeaponFactory {
                     ),
                     timeFactor = 1.2
                 ),
-                maxDurability = 5
+                maxDurability = 9
             )
         )
     )
@@ -48,7 +48,7 @@ object WeaponFactory {
                     ),
                     timeFactor = 2.0
                 ),
-                maxDurability = 4
+                maxDurability = 8
             )
         )
     )

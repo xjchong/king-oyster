@@ -60,6 +60,10 @@ class WeaponPart(
 
         return true
     }
+
+    companion object {
+        const val BREAK_POWER_FACTOR = 3.0
+    }
 }
 
 fun Entity.durability(): Int {

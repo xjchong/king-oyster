@@ -114,7 +114,7 @@ class World(val width: Int, val height: Int) {
         val entities = get(position) ?: return null
 
         for (action in actions) {
-            return entities.lastOrNull { it.respondToAction(action) } ?: continue
+            return entities.lastOrNull { it != action.actor && it.respondToAction(action) } ?: continue
         }
 
         return null

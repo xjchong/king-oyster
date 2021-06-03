@@ -56,9 +56,6 @@ class CombatPart(
 
     private fun Entity.respondToDamage(action: Damage): Boolean {
         val (context, source, amount, damageType, elementType) = action
-
-        if (this == source) return false
-
         val currentPosition = context.positionOf(this) ?: return false
         val finalAmount = (resFactor(damageType, elementType) * amount).roundToInt()
 
