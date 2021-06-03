@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/game/GameScene.kt" type="Script" id=1]
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/tileselection/TileSelectionScene.tscn" type="PackedScene" id=2]
@@ -8,18 +8,6 @@
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/screenshake/ScreenShake.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/directedselection/DirectedSelectionScene.tscn" type="PackedScene" id=7]
 [ext_resource path="res://src/main/resources/fonts/small_pixel-7.ttf" type="DynamicFontData" id=8]
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.6, 0.6, 0.6, 0 )
-border_width_left = 32
-border_width_top = 32
-border_width_right = 32
-border_width_bottom = 32
-border_color = Color( 0, 0, 0, 1 )
-expand_margin_left = 32.0
-expand_margin_right = 32.0
-expand_margin_top = 32.0
-expand_margin_bottom = 32.0
 
 [sub_resource type="DynamicFont" id=2]
 size = 32
@@ -52,20 +40,6 @@ __meta__ = {
 }
 
 [node name="ListMenuScene" parent="UIScenesBucket" instance=ExtResource( 4 )]
-
-[node name="MaxZIndexNode2D" type="Node2D" parent="."]
-z_index = 1000
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="LetterBoxPanel" type="Panel" parent="MaxZIndexNode2D"]
-margin_right = 544.0
-margin_bottom = 544.0
-custom_styles/panel = SubResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="HUDLayer" type="CanvasLayer" parent="."]
 

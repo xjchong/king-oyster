@@ -233,7 +233,6 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		isTweening = true
 		position = calculateNodePosition(event.from)
 		appearance.visible = true
-		zIndex = 75
 
 		val throwDuration = 0.15
 
@@ -269,8 +268,6 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			return
 		}
 
-		zIndex = getZIndexFor(worldPosition)
-
 		if (shouldAnimate) {
 			isTweening = true
 			tween.interpolateProperty(this, NodePath("position"),
@@ -288,22 +285,16 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	private fun calculateNodePosition(worldPosition: Position): Vector2 {
-		return Vector2(worldPosition.x * WorldScene.TILE_SIZE, worldPosition.y * WorldScene.TILE_SIZE)
+		val defaultPosition = Vector2(worldPosition.x * WorldScene.TILE_SIZE, worldPosition.y * WorldScene.TILE_SIZE)
+		val zIndexOffset = (context.entitiesAt(worldPosition)?.indexOf(entity) ?: 0) / 10.0
+
+		return defaultPosition + Vector2(0, zIndexOffset)
 	}
 
 	private fun calculateWorldPosition(nodePosition: Vector2): Position {
 		return Position(
 			(nodePosition.x / WorldScene.TILE_SIZE).roundToInt(),
 			(nodePosition.y / WorldScene.TILE_SIZE).roundToInt())
-	}
-
-	private fun getZIndexFor(worldPosition: Position): Long {
-		val baseZIndex =  when {
-			entity.has<MovementPart>() -> 100
-			else -> 50
-		}.toLong()
-
-		return baseZIndex + context.entitiesAt(worldPosition)!!.indexOf(entity).toLong()
 	}
 
 	companion object {

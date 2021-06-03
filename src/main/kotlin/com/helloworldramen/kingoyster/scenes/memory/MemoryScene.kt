@@ -19,8 +19,8 @@ class MemoryScene : Node2D() {
 
 	private val memoryRect: ColorRect by lazy { getNodeAs("MemoryRect")!! }
 	private val fogRect: ColorRect by lazy { getNodeAs("FogRect")!! }
-	private val entitySprite: EntitySprite by lazy { getNodeAs("MemoryRect/EntitySprite")!! }
-	private val durabilityLabel: Label by lazy { getNodeAs("MemoryRect/EntitySprite/DurabilityLabel")!! }
+	private val entitySprite: EntitySprite by lazy { getNodeAs("EntitySprite")!! }
+	private val durabilityLabel: Label by lazy { getNodeAs("EntitySprite/DurabilityLabel")!! }
 
 	private var entity: Entity = Entity.UNKNOWN
 	private var worldPosition: Position = Position(0, 0)
@@ -47,7 +47,6 @@ class MemoryScene : Node2D() {
 				visible = true
 				entitySprite.hide()
 				fogRect.visible = true
-				zIndex = 1000
 			}
 			else -> { // Memory tile.
 				val topEntity = rememberedEntities.lastOrNull()
@@ -59,7 +58,6 @@ class MemoryScene : Node2D() {
 				entitySprite.show()
 
 				fogRect.visible = false
-				zIndex = 0
 			}
 		}
 	}
