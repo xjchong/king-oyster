@@ -49,6 +49,8 @@ class EntitySprite : Node2D() {
 				)
 			}
 			"ghost" -> {
+				animatedSprite.visible = true
+				animatedSprite.play("ghost")
 				Pair("G", Color.darkblue)
 			}
 			"goblin" -> {
