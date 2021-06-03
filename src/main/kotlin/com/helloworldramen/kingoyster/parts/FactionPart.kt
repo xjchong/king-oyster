@@ -26,3 +26,10 @@ fun Entity.isEnemyOf(otherEntity: Entity): Boolean {
 
     return otherFaction != ownFaction
 }
+
+fun Entity.isAllyOf(otherEntity: Entity): Boolean {
+    val otherFaction = otherEntity.faction() ?: return false
+    val ownFaction = faction() ?: return false
+
+    return otherFaction == ownFaction
+}

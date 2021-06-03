@@ -54,6 +54,13 @@ data class Position(val x: Int = 0, val y: Int = 0) {
 
     fun neighborsShuffled(): List<Position> = neighbors().shuffled()
 
+    fun diagonalNeighbors(): List<Position> = listOf(
+        this.withRelative(1, -1),
+        this.withRelative(1, 1),
+        this.withRelative(-1, 1),
+        this.withRelative(-1, -1)
+    )
+
     fun distanceFrom(position: Position): Double {
         return sqrt((x - position.x).toDouble().pow(2) + (y - position.y).toDouble().pow(2))
     }

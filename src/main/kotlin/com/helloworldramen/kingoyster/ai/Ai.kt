@@ -2,6 +2,7 @@ package com.helloworldramen.kingoyster.ai
 
 import com.helloworldramen.kingoyster.ai.considerations.ConstantConsideration
 import com.helloworldramen.kingoyster.ai.considerations.HasWeaponConsideration
+import com.helloworldramen.kingoyster.ai.considerations.VisibleAlliesConsideration
 import com.helloworldramen.kingoyster.ai.considerations.OwnHealthConsideration
 import com.helloworldramen.kingoyster.ai.curves.LinearCurve
 import com.helloworldramen.kingoyster.ai.reasoners.HighestValueReasoner
@@ -39,7 +40,8 @@ object Ai {
                     HasWeaponConsideration(false)
                 ),
                 FleeFromVisibleEnemyStrategy(
-                    OwnHealthConsideration(LinearCurve(2.0, 0.0))
+                    OwnHealthConsideration(LinearCurve(2.0, 0.5)),
+                    VisibleAlliesConsideration(LinearCurve(1.0, 0.5))
                 ),
                 WanderStrategy(
                     ConstantConsideration(0.5)
