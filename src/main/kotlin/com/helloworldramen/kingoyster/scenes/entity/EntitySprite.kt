@@ -36,7 +36,10 @@ class EntitySprite : Node2D() {
 
 		val (text, color, sprite)= when(entity?.name) {
 			"player" -> Triple("@", Color.yellow, "knight")
-			"wall" -> Triple("#", Color.white, null)
+			"wall" -> {
+				animatedSprite.position += Vector2(0, 8)
+				Triple("#", Color.white, "grass_stone_wall")
+			}
 			"dagger" -> Triple("|", Color.gray, "dagger")
 			"door" -> {
 				Triple(

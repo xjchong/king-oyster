@@ -17,11 +17,10 @@ import godot.extensions.getNodeAs
 @RegisterClass
 class MemoryScene : Node2D() {
 
-	private val backgroundRect: ColorRect by lazy { getNodeAs ("BackgroundRect")!! }
 	private val memoryRect: ColorRect by lazy { getNodeAs("MemoryRect")!! }
 	private val fogRect: ColorRect by lazy { getNodeAs("FogRect")!! }
-	private val entitySprite: EntitySprite by lazy { getNodeAs("EntitySprite")!! }
-	private val durabilityLabel: Label by lazy { getNodeAs("EntitySprite/DurabilityLabel")!! }
+	private val entitySprite: EntitySprite by lazy { getNodeAs("MemoryRect/EntitySprite")!! }
+	private val durabilityLabel: Label by lazy { getNodeAs("MemoryRect/EntitySprite/DurabilityLabel")!! }
 
 	private var entity: Entity = Entity.UNKNOWN
 	private var worldPosition: Position = Position(0, 0)
@@ -46,7 +45,9 @@ class MemoryScene : Node2D() {
 			}
 			rememberedEntities == null -> { // Unvisited (fog) tile.
 				visible = true
+				entitySprite.hide()
 				fogRect.visible = true
+				zIndex = 1000
 			}
 			else -> { // Memory tile.
 				val topEntity = rememberedEntities.lastOrNull()
@@ -55,9 +56,10 @@ class MemoryScene : Node2D() {
 				entitySprite.bind(topEntity)
 				durabilityLabel.visible = topEntity?.has<WeaponPart>() == true
 				durabilityLabel.text = topEntity?.durability().toString()
+				entitySprite.show()
 
-				entitySprite.visible = topEntity?.name != "wall"
 				fogRect.visible = false
+				zIndex = 0
 			}
 		}
 	}

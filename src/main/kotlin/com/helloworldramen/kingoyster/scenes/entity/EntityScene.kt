@@ -186,8 +186,6 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		healthScene.bind(entity)
 		updateDurabilityLabel()
 		setPosition(shouldAnimate = false)
-
-		entitySprite.visible = entity.name != "wall"
 	}
 
 	fun animateBump(position: Position) {

@@ -17,7 +17,7 @@ class WorldScene : Node2D() {
 
 	private val tileMap: TileMap by lazy { getNodeAs("TileMap")!! }
 	private val entityScenesBucket: Node2D by lazy { getNodeAs("EntityScenesBucket")!! }
-	private val memoryScenesBucket: Node2D by lazy { getNodeAs("MemoryScenesBucket")!! }
+	private val memoryScenesBucket: YSort by lazy { getNodeAs("MemoryScenesBucket")!! }
 
 	private val packedMemoryScene = GD.load<PackedScene>(MemoryScene.PATH)
 	private val packedEntityScene = GD.load<PackedScene>(EntityScene.PATH)
@@ -49,10 +49,6 @@ class WorldScene : Node2D() {
 					entityScenesBucket.addChild(it)
 					it.bind(context, entity)
 					sceneForEntity[entity] = it
-
-					if (entity.name == "wall") {
-						tileMap.setCell(position.x.toLong(), position.y.toLong(), 1)
-					}
 				}
 
 				// Also add scenes for entities that are not explicitly visible.
@@ -70,7 +66,6 @@ class WorldScene : Node2D() {
 				memoryScenesBucket.addChild(memoryScene)
 				memoryScene.bind(context.player, position)
 				memoryScene.position = Vector2(position.x * 32, position.y * 32)
-				memoryScene.zIndex = 1000
 			}
 		}
 
@@ -103,6 +98,5 @@ class WorldScene : Node2D() {
 		const val TILE_SIZE = 32
 
 		const val SELECTION_REASON_INTERACT = "interact"
-		const val SELECTION_REASON_TEST = "test"
 	}
 }
