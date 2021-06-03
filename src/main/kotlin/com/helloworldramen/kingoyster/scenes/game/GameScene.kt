@@ -102,6 +102,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	@RegisterFunction
 	override fun _process(delta: Double) {
 		updateNextEntity()
+		context.player.find<SensoryPart>()?.update(context, context.player)
 		inputQueue.poll()?.let { parseInput(it) }
 	}
 
