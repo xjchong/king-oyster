@@ -24,19 +24,19 @@ __meta__ = {
 }
 
 [node name="BackgroundPanel" type="Panel" parent="."]
-margin_right = 544.0
-margin_bottom = 544.0
+margin_right = 800.0
+margin_bottom = 600.0
 custom_styles/panel = SubResource( 1 )
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
-margin_right = 544.0
-margin_bottom = 544.0
+margin_right = 800.0
+margin_bottom = 600.0
 
 [node name="VBox" type="VBoxContainer" parent="CenterContainer"]
-margin_left = 133.0
-margin_top = 176.0
-margin_right = 411.0
-margin_bottom = 368.0
+margin_left = 261.0
+margin_top = 204.0
+margin_right = 539.0
+margin_bottom = 396.0
 custom_constants/separation = 24
 
 [node name="TitleCenterContainer" type="CenterContainer" parent="CenterContainer/VBox"]

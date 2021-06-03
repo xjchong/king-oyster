@@ -27,6 +27,7 @@ import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrate
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
 import godot.Input
 import godot.InputEvent
+import godot.Label
 import godot.Node2D
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -45,13 +46,18 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private val listMenuScene: ListMenuScene by lazy { getNodeAs("UIScenesBucket/ListMenuScene")!! }
 	private var playerScene: EntityScene? = null
 
+	private val floorLabel: Label by lazy { getNodeAs("HUDLayer/FloorLabel")!! }
+
 	private var context: Context = Context.UNKNOWN
 
 	private val inputQueue: Queue<InputEvent> = ArrayDeque()
 
 	override fun receiveEvent(event: Event) {
 		when (event) {
-			is AscendEvent -> worldScene.bind(context)
+			is AscendEvent -> {
+				worldScene.bind(context)
+				updateFloorLabel()
+			}
 			is DamageEvent -> {
 				if (event.source.isPlayer) {
 					if (event.target.health() <= 0) {
@@ -89,6 +95,8 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 		eventAudio.bind(context)
 		eventAudio.pauseMode = PAUSE_MODE_PROCESS
+
+		updateFloorLabel()
 	}
 
 	@RegisterFunction
@@ -256,6 +264,10 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	private fun InputEvent.isDirectionPressed(allowEcho: Boolean = false): Boolean {
 		return direction(allowEcho) != null
+	}
+
+	private fun updateFloorLabel() {
+		floorLabel.text = "Floor ${context.level}"
 	}
 
 	companion object {
