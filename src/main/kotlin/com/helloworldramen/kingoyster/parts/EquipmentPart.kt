@@ -31,7 +31,7 @@ class EquipmentPart(
         val currentPosition = context.positionOf(this) ?: return false
         val weapon = weapon ?: return false
 
-        if (!context.world.move(weapon, currentPosition)) return false
+        if (!context.world.move(weapon, currentPosition.findUnoccupiedPosition(context))) return false
 
         this@EquipmentPart.weapon = null
 
