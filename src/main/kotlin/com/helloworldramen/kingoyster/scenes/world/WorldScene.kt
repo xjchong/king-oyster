@@ -1,11 +1,17 @@
 package com.helloworldramen.kingoyster.scenes.world
 
 import com.helloworldramen.kingoyster.architecture.*
+import com.helloworldramen.kingoyster.extensions.freeChildren
+import com.helloworldramen.kingoyster.extensions.positionsForEach
 import com.helloworldramen.kingoyster.parts.EquipmentPart
+import com.helloworldramen.kingoyster.parts.health
+import com.helloworldramen.kingoyster.parts.telegraphedPositions
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
+import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
 import godot.*
 import godot.annotation.RegisterClass
+import godot.annotation.RegisterFunction
 import godot.core.Vector2
 import godot.extensions.getNodeAs
 import godot.extensions.instanceAs
@@ -14,26 +20,43 @@ import godot.global.GD
 @RegisterClass
 class WorldScene : Node2D() {
 
+	private val telegraphBucket: YSort by lazy { getNodeAs("TelegraphBucket")!! }
 	private val tileBucket: YSort by lazy { getNodeAs("TileBucket")!! }
 	private val blackoutRect: ColorRect by lazy { getNodeAs("BlackoutRect")!! }
 	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
 
+	private val packedTileOverlayScene = GD.load<PackedScene>(TileOverlayScene.PATH)
 	private val packedMemoryScene = GD.load<PackedScene>(MemoryScene.PATH)
 	private val packedEntityScene = GD.load<PackedScene>(EntityScene.PATH)
 
 	private val sceneForEntity: MutableMap<Entity, EntityScene> = mutableMapOf()
+	private var telegraphOverlayForPosition: MutableMap<Position, TileOverlayScene> = mutableMapOf()
+
+	private var context: Context = Context.UNKNOWN
+
+	@RegisterFunction
+	override fun _process(delta: Double) {
+		val telegraphedPositions = sceneForEntity.keys.filter {
+			it.health() > 0
+		}.flatMap {
+			it.telegraphedPositions()
+		}.toSet()
+
+		context.world.positionsForEach { position ->
+			telegraphOverlayForPosition[position]?.visible = telegraphedPositions.contains(position)
+		}
+	}
 
 	fun bind(context: Context): EntityScene? {
+		this.context = context
 		val world = context.world
 
-		tileBucket.getChildren().forEach {
-			tileBucket.removeChild(it as Node)
-			it.queueFree()
-		}
-
+		telegraphBucket.freeChildren()
+		tileBucket.freeChildren()
 		sceneForEntity.clear()
+		telegraphOverlayForPosition.clear()
 
-		Position(world.width - 1, world.height - 1).forEach { position ->
+		world.positionsForEach { position ->
 			// Add the entities for this position.
 			world[position]?.forEach { entity ->
 				packedEntityScene?.instanceAs<EntityScene>()?.let {
@@ -52,11 +75,20 @@ class WorldScene : Node2D() {
 				}
 			}
 
+			// Setup the telegraph for this position.
+			packedTileOverlayScene?.instanceAs<TileOverlayScene>()?.let { overlayScene ->
+				telegraphBucket.addChild(overlayScene)
+				telegraphOverlayForPosition[position] = overlayScene
+				overlayScene.position = calculateNodePosition(position)
+				overlayScene.showTelegraph()
+				overlayScene.hide()
+			}
+
 			// Setup the memory for this position.
 			packedMemoryScene?.instanceAs<MemoryScene>()?.let { memoryScene ->
 				tileBucket.addChild(memoryScene)
 				memoryScene.bind(context.player, position)
-				memoryScene.position = Vector2(position.x * 32, position.y * 32)
+				memoryScene.position = calculateNodePosition(position)
 			}
 		}
 
@@ -75,11 +107,13 @@ class WorldScene : Node2D() {
 		animationPlayer.play("fade_in")
 	}
 
+	private fun calculateNodePosition(worldPosition: Position): Vector2 {
+		return Vector2(worldPosition.x * TILE_SIZE, worldPosition.y * TILE_SIZE)
+	}
+
 	companion object {
 		const val PATH = "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/world/WorldScene.tscn"
-
 		const val TILE_SIZE = 32
-
 		const val SELECTION_REASON_INTERACT = "interact"
 	}
 }

@@ -10,10 +10,16 @@ import com.helloworldramen.kingoyster.ai.reasoners.PurelyRandomReasoner
 import com.helloworldramen.kingoyster.ai.strategies.*
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.parts.telegraphedPositions
 
 object Ai {
 
     fun actForEntity(context: Context, entity: Entity) {
+        if (entity.telegraphedPositions().isNotEmpty()) {
+            entity.idle(context.world)
+            return
+        }
+
         val startTime = System.nanoTime()
         val aiContext = GameAiStrategyContext(context, entity)
 

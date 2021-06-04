@@ -28,6 +28,11 @@ class TileOverlayScene: Node2D() {
 		show()
 	}
 
+	fun showTelegraph() {
+		animationPlayer.play("telegraph")
+		show()
+	}
+
 	companion object {
 		const val PATH = "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/tileoverlay/TileOverlayScene.tscn"
 	}

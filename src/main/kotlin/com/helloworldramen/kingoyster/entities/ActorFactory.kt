@@ -81,7 +81,8 @@ object ActorFactory {
             MovementPart(),
             SensoryPart(
                 visionRange = 7
-            )
+            ),
+            TelegraphPart()
         ),
         timeFactor = 1.0
     )

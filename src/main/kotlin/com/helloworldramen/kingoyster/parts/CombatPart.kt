@@ -38,6 +38,9 @@ class CombatPart(
 
     private fun Entity.respondToWeaponAttack(action: WeaponAttack): Boolean {
         val (context, attacker) = action
+
+        if (!isEnemyOf(attacker)) return false
+
         val weapon = attacker.weapon()
         val attackInfo = attacker.equippedWeaponPart()?.attackInfo ?: attacker.defaultAttackInfo()
         val rawAmount = attacker.power() * attackInfo.powerFactor
@@ -67,7 +70,6 @@ class CombatPart(
 
             EventBus.post(DeathEvent(currentPosition, this))
             context.world.remove(this)
-
 
             if (isPlayer) {
                 EventBus.post(GameOverEvent(false))
