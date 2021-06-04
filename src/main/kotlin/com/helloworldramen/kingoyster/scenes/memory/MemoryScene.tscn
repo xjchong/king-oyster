@@ -14,8 +14,10 @@ default_font = SubResource( 1 )
 script = ExtResource( 2 )
 
 [node name="EntitySprite" parent="." instance=ExtResource( 1 )]
+visible = false
 
 [node name="DurabilityLabel" type="Label" parent="EntitySprite"]
+visible = false
 margin_top = 18.0
 margin_right = 32.0
 margin_bottom = 34.0
@@ -30,7 +32,7 @@ __meta__ = {
 [node name="MemoryRect" type="ColorRect" parent="."]
 margin_right = 32.0
 margin_bottom = 32.0
-color = Color( 0, 0, 0, 0.443137 )
+color = Color( 0, 0, 0, 0.470588 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -43,3 +45,5 @@ color = Color( 0, 0, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Tween" type="Tween" parent="."]
