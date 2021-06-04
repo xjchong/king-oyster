@@ -47,7 +47,7 @@ class EntitySprite : Node2D() {
 					Color.orange, null
 				)
 			}
-			"ghost" -> Triple("G", Color.darkblue, null)
+			"ghost" -> Triple("G", Color.darkblue, "ghost")
 			"goblin" -> Triple("g", Color.darkred, null)
 			"greatsword" -> Triple("|", Color.lightblue, "greatsword")
 			"slime" -> {
