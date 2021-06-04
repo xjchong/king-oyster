@@ -143,6 +143,8 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 			nextEntity.update(context, context.world)
 
+			if (context.world.next() != nextEntity) continue
+
 			if (nextEntity.isPlayer) {
 				break
 			} else {
