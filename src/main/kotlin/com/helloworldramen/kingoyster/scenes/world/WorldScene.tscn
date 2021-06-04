@@ -46,9 +46,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TelegraphBucket" type="YSort" parent="."]
-
 [node name="TileBucket" type="YSort" parent="."]
+
+[node name="TelegraphBucket" type="YSort" parent="."]
 
 [node name="TileSelectionScene" parent="." instance=ExtResource( 4 )]
 

@@ -6,6 +6,7 @@ import com.helloworldramen.kingoyster.extensions.positionsForEach
 import com.helloworldramen.kingoyster.parts.EquipmentPart
 import com.helloworldramen.kingoyster.parts.health
 import com.helloworldramen.kingoyster.parts.telegraphedPositions
+import com.helloworldramen.kingoyster.parts.visiblePositions
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
 import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
@@ -36,10 +37,11 @@ class WorldScene : Node2D() {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
-		val telegraphedPositions = sceneForEntity.keys.filter {
-			it.health() > 0
-		}.flatMap {
-			it.telegraphedPositions()
+		val playerVisiblePositions = context.player.visiblePositions()
+		val telegraphedPositions = sceneForEntity.keys.filter { entity ->
+			entity.health() > 0
+		}.flatMap { entity ->
+			entity.telegraphedPositions().filter { playerVisiblePositions.contains(it) }
 		}.toSet()
 
 		context.world.positionsForEach { position ->
