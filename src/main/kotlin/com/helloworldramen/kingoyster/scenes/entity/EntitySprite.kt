@@ -63,7 +63,7 @@ class EntitySprite : Node2D() {
 		}
 
 		if (sprite != null) {
-		    // Play the sprite first to get the right frame count.
+			// Play the sprite first to get the right frame count.
 			animatedSprite.play(sprite)
 
 			val frameCount = animatedSprite.frames?.getFrameCount(sprite) ?: 1

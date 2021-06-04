@@ -30,10 +30,11 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	private val appearance: Node2D by lazy { getNodeAs("AppearanceNode2D")!! }
 	private val entitySprite: EntitySprite by lazy { getNodeAs("AppearanceNode2D/EntitySprite")!! }
-	private val healthScene: HealthScene by lazy { getNodeAs("AppearanceNode2D/EntitySprite/HealthScene")!! }
-	private val durabilityLabel: Label by lazy { getNodeAs("AppearanceNode2D/EntitySprite/DurabilityLabel")!! }
+	private val healthScene: HealthScene by lazy { getNodeAs("AppearanceNode2D/HealthScene")!! }
+	private val durabilityLabel: Label by lazy { getNodeAs("AppearanceNode2D/DurabilityLabel")!! }
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
 	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
+	private val animationLooper: AnimationPlayer by lazy { getNodeAs("AnimationLooper")!! }
 
 	private val packedToastTextScene = GD.load<PackedScene>(ToastTextScene.PATH)
 
@@ -67,6 +68,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			MoveEvent::class,
 			PlayerToastEvent::class,
 			TakeEvent::class,
+			TelegraphEvent::class,
 			ThrowWeaponEvent::class,
 		)
 		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
@@ -167,6 +169,11 @@ class EntityScene : Node2D(), EventBusSubscriber {
 						animatePulse()
 					}
 				}
+				is TelegraphEvent -> {
+					if (event.entity == entity) {
+						animateTelegraph(event.telegraphs.isNotEmpty())
+					}
+				}
 				is ThrowWeaponEvent -> {
 					if (event.weapon == entity) {
 						animateThrown(event)
@@ -186,6 +193,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		healthScene.bind(entity)
 		updateDurabilityLabel()
 		setPosition(shouldAnimate = false)
+		resetAppearance()
 	}
 
 	fun animateBump(position: Position) {
@@ -214,10 +222,14 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	fun animateOnBreak() {
+		animationLooper.stop()
+		resetAppearance()
 		animationPlayer.play("on_break")
 	}
 
 	fun animateOnDeath() {
+		animationLooper.stop()
+		resetAppearance()
 		animationPlayer.play("on_death")
 	}
 
@@ -227,6 +239,15 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	fun animateEquipWeapon(weapon: Entity) {
 		toast("+${weapon.name}", Color.lightgray, ToastTextScene.LONG_CONFIG)
+	}
+
+	fun animateTelegraph(isActive: Boolean) {
+		if (isActive) {
+			if (!animationLooper.isPlaying()) animationLooper.play("flash")
+		} else {
+			animationLooper.stop()
+			resetAppearance()
+		}
 	}
 
 	fun animateThrown(event: ThrowWeaponEvent) {
@@ -282,6 +303,12 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private fun updateDurabilityLabel() {
 		durabilityLabel.visible = entity.has<WeaponPart>()
 		durabilityLabel.text = entity.durability().toString()
+	}
+
+	private fun resetAppearance() {
+		entitySprite.modulate = Color(1, 1, 1, 1)
+		healthScene.modulate = Color(1, 1, 1, 0.5)
+		durabilityLabel.modulate = Color(1, 1, 1, 1)
 	}
 
 	private fun calculateNodePosition(worldPosition: Position): Vector2 {

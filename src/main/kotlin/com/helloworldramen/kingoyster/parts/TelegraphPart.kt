@@ -2,6 +2,8 @@ package com.helloworldramen.kingoyster.parts
 
 import com.helloworldramen.kingoyster.actions.TelegraphActions
 import com.helloworldramen.kingoyster.architecture.*
+import com.helloworldramen.kingoyster.eventbus.EventBus
+import com.helloworldramen.kingoyster.eventbus.events.TelegraphEvent
 
 class TelegraphPart private constructor(telegraphs: List<Telegraph>) : Part {
 
@@ -28,6 +30,8 @@ class TelegraphPart private constructor(telegraphs: List<Telegraph>) : Part {
         }
 
         telegraphs = remainingTelegraphs
+
+        EventBus.post(TelegraphEvent(partOwner, telegraphs))
     }
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
@@ -41,6 +45,8 @@ class TelegraphPart private constructor(telegraphs: List<Telegraph>) : Part {
         if (action.actor != this) return false
 
         telegraphs = telegraphs + listOf(action.telegraph)
+
+        EventBus.post(TelegraphEvent(this, telegraphs))
 
         return true
     }
