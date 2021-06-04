@@ -10,6 +10,7 @@ import godot.annotation.RegisterFunction
 import godot.core.Color
 import godot.core.Vector2
 import godot.extensions.getNodeAs
+import kotlin.random.Random
 
 @RegisterClass
 class EntitySprite : Node2D() {
@@ -48,7 +49,7 @@ class EntitySprite : Node2D() {
 				)
 			}
 			"ghost" -> Triple("G", Color.darkblue, "ghost")
-			"goblin" -> Triple("g", Color.darkred, null)
+			"goblin" -> Triple("g", Color.darkred, "goblin")
 			"greatsword" -> Triple("|", Color.lightblue, "greatsword")
 			"slime" -> {
 				animatedSprite.position -= Vector2(0, 2)
@@ -62,8 +63,12 @@ class EntitySprite : Node2D() {
 		}
 
 		if (sprite != null) {
-			animatedSprite.visible = true
+		    // Play the sprite first to get the right frame count.
 			animatedSprite.play(sprite)
+
+			val frameCount = animatedSprite.frames?.getFrameCount(sprite) ?: 1
+			animatedSprite.frame = Random.nextLong(0, frameCount)
+			animatedSprite.visible = true
 		}
 
 		label.text = text
