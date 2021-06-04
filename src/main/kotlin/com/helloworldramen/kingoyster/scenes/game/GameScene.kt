@@ -4,7 +4,6 @@ import com.helloworldramen.kingoyster.actions.*
 import com.helloworldramen.kingoyster.ai.Ai
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Direction
-import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
 import com.helloworldramen.kingoyster.extensions.isPlayer
 import com.helloworldramen.kingoyster.eventbus.Event
@@ -15,13 +14,12 @@ import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.eventbus.events.PlayerToastEvent
 import com.helloworldramen.kingoyster.parts.*
-import com.helloworldramen.kingoyster.scenes.directedselection.DirectedSelectionScene
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.eventaudio.EventAudio
 import com.helloworldramen.kingoyster.scenes.listmenu.ListMenuScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.screenshake.ScreenShake
-import com.helloworldramen.kingoyster.scenes.tileselection.TileSelectionScene
+import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
 import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
 import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
@@ -41,8 +39,6 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private val eventAudio: EventAudio by lazy { getNodeAs("EventAudio")!! }
 	private val worldScene: WorldScene by lazy { getNodeAs("WorldScene")!! }
 	private val screenShake: ScreenShake by lazy { getNodeAs("Camera2D/ScreenShake")!! }
-	private val tileSelectionScene: TileSelectionScene by lazy { getNodeAs("TileSelectionScene")!! }
-	private val directedSelectionScene: DirectedSelectionScene by lazy { getNodeAs("DirectedSelectionScene")!! }
 	private val listMenuScene: ListMenuScene by lazy { getNodeAs("UIScenesBucket/ListMenuScene")!! }
 	private var playerScene: EntityScene? = null
 
@@ -88,13 +84,6 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 		playerScene = worldScene.bind(context)
 
-		tileSelectionScene.bind(world.width, world.height)
-		tileSelectionScene.pauseMode = PAUSE_MODE_PROCESS
-		tileSelectionScene.signalTilesSelected.connect(this, ::onTilesSelected)
-
-		directedSelectionScene.updateContext(context)
-		directedSelectionScene.hide()
-
 		listMenuScene.pauseMode = PAUSE_MODE_PROCESS
 		listMenuScene.hide()
 
@@ -119,19 +108,6 @@ class GameScene : Node2D(), EventBusSubscriber {
 	override fun _input(event: InputEvent) {
 		if (inputQueue.size <= MAX_INPUT_QUEUE_SIZE) {
 			inputQueue.offer(event)
-		}
-	}
-
-	@RegisterFunction
-	fun onTilesSelected(selectionReason: String) {
-		getTree()?.paused = false
-
-		when (selectionReason) {
-			SELECTION_REASON_INTERACT -> {
-				tileSelectionScene.selection.firstOrNull()?.let {
-					performInteractiveActions(it)
-				}
-			}
 		}
 	}
 
@@ -183,42 +159,13 @@ class GameScene : Node2D(), EventBusSubscriber {
 				}
 			}
 			event.isActionPressed("menu") -> println("MENU")
-			event.isActionPressed("ui_cancel", true) -> player.idle(world)
-			event.isActionPressed("ui_accept") -> performNearbyInteractiveActions()
+			event.isActionPressed("ui_cancel", true) -> player.idle(world) // TODO: Make this a guard action.
+			event.isActionPressed("ui_accept") -> performStandingActions()
 			event.isDirectionPressed(true) -> performDirectionActions(event.direction(true))
 			else -> return
 		}
 
 		updateNonPlayerEntities()
-	}
-
-	private fun performNearbyInteractiveActions() {
-		val currentPosition = context.positionOf(context.player) ?: return
-		val interactivePositions = getNearbyInteractivePositions(currentPosition)
-
-		when (interactivePositions.size) {
-			0 -> return
-			1 -> performInteractiveActions(interactivePositions.first())
-			else -> {
-				getTree()?.paused = true
-				tileSelectionScene.startTileSelection(
-					WorldScene.SELECTION_REASON_INTERACT,
-					interactivePositions.map { listOf(it) })
-			}
-		}
-	}
-
-	private fun getNearbyInteractivePositions(position: Position): List<Position> {
-		val nearbyPositions = listOf(position) + position.neighbors()
-
-		return nearbyPositions.filter { nearbyPosition ->
-			context.entitiesAt(nearbyPosition)?.any {
-				when (nearbyPosition) {
-					position -> it.has<ItemPart>() || it.has<AscendablePart>() || it.has<WeaponPart>()
-					else -> it.has<DoorPart>() || (it.has<CombatPart>() && it.isEnemyOf(context.player))
-				}
-			} == true
-		}
 	}
 
 	private fun performThrow(direction: Direction?) {
@@ -262,17 +209,17 @@ class GameScene : Node2D(), EventBusSubscriber {
 		worldScene.animateBump(player, actionPosition)
 	}
 
-	private fun performInteractiveActions(position: Position) {
+	private fun performStandingActions() {
 		with(context) {
-			if (world.respondToActions(position,
-					WeaponAttack(this, player),
-					Take(this, player),
-					EquipAsWeapon(this, player),
-					Open(this, player),
-					Close(this, player)) != null) {
-				return
-			} else if (world.respondToActions(position, Ascend(this, player)) != null) {
-				worldScene.fadeOut()
+			val currentPosition = positionOf(player)
+
+			when {
+				currentPosition == null -> return
+				world.respondToActions(currentPosition, Take(this, player)) != null -> return
+				world.respondToActions(currentPosition, Ascend(this, player)) != null -> {
+					worldScene.fadeOut()
+				}
+				else -> playerScene?.toast("?", Color.lightgray, ToastTextScene.SHORT_CONFIG)
 			}
 		}
 	}
@@ -298,7 +245,6 @@ class GameScene : Node2D(), EventBusSubscriber {
 	companion object {
 		const val PATH = "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/game/GameScene.tscn"
 
-		private const val SELECTION_REASON_INTERACT = "interact"
 		private const val MAX_INPUT_QUEUE_SIZE = 2
 	}
 }

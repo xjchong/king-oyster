@@ -1,6 +1,6 @@
 package com.helloworldramen.kingoyster.ai.options
 
-import com.helloworldramen.kingoyster.actions.EquipAsWeapon
+import com.helloworldramen.kingoyster.actions.Take
 import com.helloworldramen.kingoyster.ai.GameAiOption
 import com.helloworldramen.kingoyster.ai.GameAiOptionContext
 import com.helloworldramen.kingoyster.ai.architecture.AiStrategy
@@ -19,6 +19,6 @@ class EquipWeaponOption(
         if (weapon == null) return false
         if (context.positionOf(entity) != context.positionOf(weapon)) return false
 
-        return weapon.respondToAction(EquipAsWeapon(context, entity))
+        return weapon.respondToAction(Take(context, entity))
     }
 }

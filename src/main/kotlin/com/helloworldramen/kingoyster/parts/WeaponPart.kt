@@ -2,7 +2,7 @@ package com.helloworldramen.kingoyster.parts
 
 import com.helloworldramen.kingoyster.actions.DamageWeapon
 import com.helloworldramen.kingoyster.actions.DropWeapon
-import com.helloworldramen.kingoyster.actions.EquipAsWeapon
+import com.helloworldramen.kingoyster.actions.Take
 import com.helloworldramen.kingoyster.architecture.Action
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
@@ -23,12 +23,12 @@ class WeaponPart(
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
         return when (action) {
             is DamageWeapon -> partOwner.respondToDamageWeapon(action)
-            is EquipAsWeapon -> partOwner.respondToEquipAsWeapon(action)
+            is Take -> partOwner.respondToTake(action)
             else -> false
         }
     }
 
-    private fun Entity.respondToEquipAsWeapon(action: EquipAsWeapon): Boolean {
+    private fun Entity.respondToTake(action: Take): Boolean {
         val (context, actor) = action
         val equipment = actor.find<EquipmentPart>() ?: return false
 
