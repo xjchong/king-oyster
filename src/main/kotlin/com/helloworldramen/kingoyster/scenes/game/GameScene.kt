@@ -52,12 +52,14 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	private val inputQueue: Queue<InputEvent> = ArrayDeque()
 	private var isUpdating: Boolean = false
+	private var doesWorldNeedFadeIn: Boolean = true
 
 	override fun receiveEvent(event: Event) {
 		when (event) {
 			is AscendEvent -> {
-				worldScene.bind(context)
 				updateFloorLabel()
+				worldScene.bind(context)
+				doesWorldNeedFadeIn = true
 			}
 			is DamageEvent -> {
 				if (event.source.isPlayer) {
@@ -104,6 +106,11 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
+		if (doesWorldNeedFadeIn) {
+			doesWorldNeedFadeIn = false
+			worldScene.fadeIn()
+		}
+
 		context.player.find<SensoryPart>()?.update(context, context.player)
 		inputQueue.poll()?.let { parseInput(it) }
 	}
@@ -255,14 +262,16 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	private fun performInteractiveActions(position: Position) {
 		with(context) {
-			world.respondToActions(position,
-				WeaponAttack(this, player),
-				Take(this, player),
-				EquipAsWeapon(this, player),
-				Open(this, player),
-				Close(this, player),
-				Ascend(this, player)
-			)
+			if (world.respondToActions(position,
+					WeaponAttack(this, player),
+					Take(this, player),
+					EquipAsWeapon(this, player),
+					Open(this, player),
+					Close(this, player)) != null) {
+				return
+			} else if (world.respondToActions(position, Ascend(this, player)) != null) {
+				worldScene.fadeOut()
+			}
 		}
 	}
 

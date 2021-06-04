@@ -67,7 +67,7 @@ class MemoryScene : Node2D() {
 
 	private fun animateVisible() {
 		entitySprite.hide()
-        tweenModulate(0.0)
+		tweenModulate(0.0)
 	}
 
 	private fun animateMemory() {
@@ -79,12 +79,12 @@ class MemoryScene : Node2D() {
 		durabilityLabel.visible = topEntity?.has<WeaponPart>() == true
 		durabilityLabel.text = topEntity?.durability().toString()
 
-        tweenModulate(0.5)
+		tweenModulate(0.5)
 	}
 
 	private fun animateUnknown() {
 		entitySprite.hide()
-        tweenModulate(1.0)
+		tweenModulate(1.0)
 	}
 
 	private fun tweenModulate(alpha: Double) {

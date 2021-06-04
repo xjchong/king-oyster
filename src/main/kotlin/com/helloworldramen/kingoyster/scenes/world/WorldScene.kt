@@ -15,6 +15,8 @@ import godot.global.GD
 class WorldScene : Node2D() {
 
 	private val tileBucket: YSort by lazy { getNodeAs("TileBucket")!! }
+	private val blackoutRect: ColorRect by lazy { getNodeAs("BlackoutRect")!! }
+	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
 
 	private val packedMemoryScene = GD.load<PackedScene>(MemoryScene.PATH)
 	private val packedEntityScene = GD.load<PackedScene>(EntityScene.PATH)
@@ -63,6 +65,14 @@ class WorldScene : Node2D() {
 
 	fun animateBump(entity: Entity, position: Position) {
 		sceneForEntity[entity]?.animateBump(position)
+	}
+
+	fun fadeOut() {
+		animationPlayer.play("fade_out")
+	}
+
+	fun fadeIn() {
+		animationPlayer.play("fade_in")
 	}
 
 	companion object {
