@@ -6,8 +6,8 @@ import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
-import com.helloworldramen.kingoyster.entities.isPlayer
-import com.helloworldramen.kingoyster.entities.isVisibleToPlayer
+import com.helloworldramen.kingoyster.extensions.isPlayer
+import com.helloworldramen.kingoyster.extensions.isVisibleToPlayer
 import com.helloworldramen.kingoyster.eventbus.events.*
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.health.HealthScene

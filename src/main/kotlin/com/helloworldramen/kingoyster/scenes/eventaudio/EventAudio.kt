@@ -2,8 +2,8 @@ package com.helloworldramen.kingoyster.scenes.eventaudio
 
 import com.helloworldramen.kingoyster.actions.MoveType
 import com.helloworldramen.kingoyster.architecture.Context
-import com.helloworldramen.kingoyster.entities.isPlayer
-import com.helloworldramen.kingoyster.entities.isVisibleToPlayer
+import com.helloworldramen.kingoyster.extensions.isPlayer
+import com.helloworldramen.kingoyster.extensions.isVisibleToPlayer
 import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber

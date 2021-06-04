@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.entities
+package com.helloworldramen.kingoyster.extensions
 
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
