@@ -90,7 +90,7 @@ class MemoryScene : Node2D() {
 	private fun tweenModulate(alpha: Double) {
 		tween.interpolateProperty(memoryRect, NodePath("color"),
 			initialVal = memoryRect.color, finalVal = Color(0.0, 0.0, 0.0, alpha),
-			duration = 0.2, Tween.TRANS_QUAD, Tween.EASE_IN
+			duration = 0.18, Tween.TRANS_QUAD, Tween.EASE_IN
 		)
 		tween.start()
 	}
