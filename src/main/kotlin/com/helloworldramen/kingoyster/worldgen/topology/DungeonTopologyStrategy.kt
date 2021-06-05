@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.worldgen.generation
+package com.helloworldramen.kingoyster.worldgen.topology
 
 import com.helloworldramen.kingoyster.entities.FeatureFactory
 import com.helloworldramen.kingoyster.architecture.Entity
@@ -9,7 +9,7 @@ import com.helloworldramen.kingoyster.utilities.percentChance
 import java.util.*
 import kotlin.math.roundToInt
 
-class DungeonGenerationStrategy(
+class DungeonTopologyStrategy(
     private val roomAttemptsPercent: Double = 0.2,
     private val roomMeanWidthPercent: Double = 0.25,
     private val roomMeanHeightPercent: Double = 0.25,
@@ -21,7 +21,7 @@ class DungeonGenerationStrategy(
     private val pillarRemovalPercent: Probability = 50.percentChance(),
     private val shouldRemoveDeadEnds: Boolean = true
 
-): GenerationStrategy() {
+): TopologyStrategy() {
 
     private var regionIds: MutableMap<Position, Int> = mutableMapOf()
     private var nextRegionId: Int = 0

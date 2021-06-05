@@ -1,10 +1,10 @@
-package com.helloworldramen.kingoyster.worldgen.generation
+package com.helloworldramen.kingoyster.worldgen.topology
 
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
 import com.helloworldramen.kingoyster.entities.FeatureFactory
 
-class DrunkGenerationStrategy(private val clearPercentage: Double = DEFAULT_CLEAR_PERCENTAGE) : GenerationStrategy() {
+class DrunkTopologyStrategy(private val clearPercentage: Double = DEFAULT_CLEAR_PERCENTAGE) : TopologyStrategy() {
 
     override fun generate(width: Int, height: Int, playerPosition: Position?): World {
         return World(width, height).apply {

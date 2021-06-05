@@ -10,7 +10,7 @@ class StairsPopulationRule : PopulationRule(
         val playerPosition = world[player]
 
         when {
-            world[position]?.isEmpty() != true -> false
+            !IS_EMPTY(world, position, player) -> false
             playerPosition == null -> true
             else -> {
                 val otherEmptyPosition = world.randomPositionWhere { _, entities ->

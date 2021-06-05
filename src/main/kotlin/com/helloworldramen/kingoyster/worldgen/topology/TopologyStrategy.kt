@@ -1,10 +1,10 @@
-package com.helloworldramen.kingoyster.worldgen.generation
+package com.helloworldramen.kingoyster.worldgen.topology
 
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
 
-abstract class GenerationStrategy {
+abstract class TopologyStrategy {
 
     abstract fun generate(width: Int, height: Int, playerPosition: Position?): World
 
