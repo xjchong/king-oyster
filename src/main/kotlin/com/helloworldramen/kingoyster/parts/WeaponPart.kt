@@ -14,11 +14,12 @@ import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 class WeaponPart(
     val damageInfo: DamageInfo,
     val maxDurability: Int,
+    val throwFactor: Double = 2.0,
     var durability: Int = maxDurability
 ) : Part {
 
     override fun copy(): Part {
-        return WeaponPart(damageInfo, maxDurability, durability)
+        return WeaponPart(damageInfo, maxDurability, throwFactor, durability)
     }
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {

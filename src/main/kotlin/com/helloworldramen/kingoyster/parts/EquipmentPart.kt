@@ -46,6 +46,7 @@ class EquipmentPart(
     private fun Entity.respondToThrowWeapon(action: ThrowWeapon): Boolean {
         val (context, thrower, direction) = action
         val weapon = weapon ?: return false
+        val equippedWeaponPart = thrower.equippedWeaponPart() ?: return false
         val currentPosition = context.positionOf(this) ?: return false
         val nearestImpassablePosition = context.straightPathUntil(currentPosition, direction) { position ->
             val entities = context.entitiesAt(position)
@@ -63,9 +64,9 @@ class EquipmentPart(
             context.world.move(weapon, nearestImpassablePosition.findUnoccupiedPosition(context))
             weapon.respondToAction(DamageWeapon(context, thrower, null, THROW_DURABILITY_LOSS))
 
-            val damageInfo = weapon.find<WeaponPart>()?.damageInfo ?: defaultDamageInfo()
+            val damageInfo = equippedWeaponPart.damageInfo
             val breakFactor = if (weapon.durability() <= 0) WeaponPart.BREAK_FACTOR else 1.0
-            val rawAmount = (power() * damageInfo.powerFactor * breakFactor * THROW_POWER_FACTOR).roundToInt()
+            val rawAmount = (power() * damageInfo.powerFactor * breakFactor * equippedWeaponPart.throwFactor).roundToInt()
 
             // Damage the entity at the destination.
             context.world.respondToActions(nearestImpassablePosition,
@@ -113,7 +114,6 @@ class EquipmentPart(
     }
 
     companion object {
-        private const val THROW_POWER_FACTOR = 2.0
         private const val THROW_DURABILITY_LOSS = 2
     }
 }

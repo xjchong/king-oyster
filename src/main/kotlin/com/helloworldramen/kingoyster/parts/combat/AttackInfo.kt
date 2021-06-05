@@ -7,7 +7,7 @@ import com.helloworldramen.kingoyster.architecture.Position
 
 abstract class AttackInfo {
 
-    abstract fun isTriggered(context: Context, entity: Entity, direction: Direction): Boolean
+    abstract fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean
     abstract fun calculateDamageForPosition(context: Context, entity: Entity, direction: Direction): Map<Position, DamageInfo>
     open fun followupPath(context: Context, entity: Entity, direction: Direction): List<Position> { return listOf() }
     open fun afterEffect(context: Context, entity: Entity, direction: Direction) {}

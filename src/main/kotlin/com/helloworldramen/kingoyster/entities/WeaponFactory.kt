@@ -14,9 +14,10 @@ object WeaponFactory {
             WeaponPart(
                 damageInfo = DamageInfo(
                     powerFactor = 1.0,
-                    damageType = DamageType.Cut
+                    damageType = DamageType.Cut,
                 ),
-                maxDurability = 10
+                maxDurability = 10,
+                throwFactor = 6.0
             )
         )
     )
