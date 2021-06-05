@@ -1,7 +1,11 @@
-package com.helloworldramen.kingoyster.parts
+package com.helloworldramen.kingoyster.parts.combat
 
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
+import com.helloworldramen.kingoyster.parts.combat.AttackInfo
+import com.helloworldramen.kingoyster.parts.combat.DamageInfo
+import com.helloworldramen.kingoyster.parts.combat.DamageType
+import com.helloworldramen.kingoyster.parts.combat.ElementType
 
 class ResistancesPart(
     val cutResFactor: Double = 1.0,

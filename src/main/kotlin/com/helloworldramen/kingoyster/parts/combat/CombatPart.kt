@@ -12,6 +12,9 @@ import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
+import com.helloworldramen.kingoyster.parts.combat.AttackInfo
+import com.helloworldramen.kingoyster.parts.combat.DamageInfo
+import com.helloworldramen.kingoyster.parts.combat.resFactor
 import kotlin.math.roundToInt
 
 class CombatPart(
@@ -78,36 +81,6 @@ class CombatPart(
         return true
     }
 }
-
-sealed class DamageType {
-    object Cut : DamageType()
-    object Bash : DamageType()
-    object Stab : DamageType()
-    object Special : DamageType()
-}
-
-sealed class ElementType {
-    object Fire : ElementType()
-    object Ice : ElementType()
-    object Volt : ElementType()
-    object None : ElementType()
-}
-
-data class AttackInfo(
-    val damageInfo: DamageInfo = DamageInfo(),
-    val timeFactor: Double = 1.0
-) {
-
-    val powerFactor = damageInfo.powerFactor
-    val damageType = damageInfo.damageType
-    val elementType = damageInfo.elementType
-}
-
-data class DamageInfo(
-    val powerFactor: Double = 1.0,
-    val damageType: DamageType = DamageType.Special,
-    val elementType: ElementType = ElementType.None
-)
 
 fun Entity.maxHealth(): Int = find<CombatPart>()?.maxHealth ?: 0
 fun Entity.health(): Int = find<CombatPart>()?.health ?: 0

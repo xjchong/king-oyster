@@ -9,6 +9,7 @@ import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DamageWeaponEvent
 import com.helloworldramen.kingoyster.eventbus.events.EquipWeaponEvent
+import com.helloworldramen.kingoyster.parts.combat.AttackInfo
 
 class WeaponPart(
     val attackInfo: AttackInfo,

@@ -4,9 +4,8 @@ import com.helloworldramen.kingoyster.architecture.Action
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.World
-import com.helloworldramen.kingoyster.parts.DamageInfo
-import com.helloworldramen.kingoyster.parts.DamageType
-import com.helloworldramen.kingoyster.parts.ElementType
+import com.helloworldramen.kingoyster.parts.combat.DamageType
+import com.helloworldramen.kingoyster.parts.combat.ElementType
 
 data class Damage(
     override val context: Context,

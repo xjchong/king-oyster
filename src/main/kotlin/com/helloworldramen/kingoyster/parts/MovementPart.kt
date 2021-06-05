@@ -8,6 +8,7 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.MoveEvent
+import com.helloworldramen.kingoyster.parts.combat.DamageType
 import kotlin.math.roundToInt
 
 class MovementPart : Part {
