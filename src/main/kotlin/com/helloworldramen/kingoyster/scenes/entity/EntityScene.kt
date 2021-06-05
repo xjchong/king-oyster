@@ -9,6 +9,7 @@ import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.extensions.isVisibleToPlayer
 import com.helloworldramen.kingoyster.eventbus.events.*
 import com.helloworldramen.kingoyster.parts.*
+import com.helloworldramen.kingoyster.parts.combat.health
 import com.helloworldramen.kingoyster.scenes.health.HealthScene
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
@@ -125,6 +126,8 @@ class EntityScene : Node2D(), EventBusSubscriber {
 					if (event.owner == entity) {
 						if (event.isBroken) {
 							toast("-${event.weapon.name} break!", Color.orange, ToastTextScene.LONG_REVERSE_CONFIG)
+						} else if (event.weapon.durability() == 1) {
+							toast("${event.weapon.name} weak!", Color.orange, ToastTextScene.LONG_CONFIG)
 						}
 					} else if (event.weapon == entity) {
 						updateDurabilityLabel()

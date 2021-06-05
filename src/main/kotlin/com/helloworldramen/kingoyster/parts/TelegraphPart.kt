@@ -4,6 +4,7 @@ import com.helloworldramen.kingoyster.actions.TelegraphActions
 import com.helloworldramen.kingoyster.architecture.*
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.TelegraphEvent
+import com.helloworldramen.kingoyster.parts.combat.health
 
 class TelegraphPart private constructor(telegraphs: List<Telegraph>) : Part {
 

@@ -1,8 +1,8 @@
 package com.helloworldramen.kingoyster.scenes.health
 
 import com.helloworldramen.kingoyster.architecture.Entity
-import com.helloworldramen.kingoyster.parts.health
-import com.helloworldramen.kingoyster.parts.maxHealth
+import com.helloworldramen.kingoyster.parts.combat.health
+import com.helloworldramen.kingoyster.parts.combat.maxHealth
 import godot.Node2D
 import godot.TextureProgress
 import godot.Tween

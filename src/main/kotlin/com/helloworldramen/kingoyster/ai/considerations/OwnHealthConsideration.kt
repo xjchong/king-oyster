@@ -3,8 +3,8 @@ package com.helloworldramen.kingoyster.ai.considerations
 import com.helloworldramen.kingoyster.ai.GameAiConsideration
 import com.helloworldramen.kingoyster.ai.GameAiOptionContext
 import com.helloworldramen.kingoyster.ai.architecture.AiCurve
-import com.helloworldramen.kingoyster.parts.health
-import com.helloworldramen.kingoyster.parts.maxHealth
+import com.helloworldramen.kingoyster.parts.combat.health
+import com.helloworldramen.kingoyster.parts.combat.maxHealth
 
 class OwnHealthConsideration(override val curve: AiCurve) : GameAiConsideration() {
 

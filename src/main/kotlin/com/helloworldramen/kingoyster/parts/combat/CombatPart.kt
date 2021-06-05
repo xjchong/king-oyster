@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.parts
+package com.helloworldramen.kingoyster.parts.combat
 
 import com.helloworldramen.kingoyster.actions.WeaponAttack
 import com.helloworldramen.kingoyster.actions.Damage
@@ -12,8 +12,10 @@ import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
-import com.helloworldramen.kingoyster.parts.combat.DamageInfo
-import com.helloworldramen.kingoyster.parts.combat.resFactor
+import com.helloworldramen.kingoyster.parts.durability
+import com.helloworldramen.kingoyster.parts.equippedWeaponPart
+import com.helloworldramen.kingoyster.parts.isEnemyOf
+import com.helloworldramen.kingoyster.parts.weapon
 import kotlin.math.roundToInt
 
 class CombatPart(
@@ -44,7 +46,8 @@ class CombatPart(
 
         val weapon = attacker.weapon()
         val damageInfo = attacker.equippedWeaponPart()?.damageInfo ?: attacker.defaultDamageInfo()
-        val rawAmount = attacker.power() * damageInfo.powerFactor
+        val breakFactor = if (weapon != null && weapon.durability() == 1) 2.0 else 1.0
+        val rawAmount = attacker.power() * damageInfo.powerFactor * breakFactor
         val damage = Damage(context, attacker, rawAmount.roundToInt(), damageInfo.damageType, damageInfo.elementType)
 
         return if (respondToDamage(damage)) {

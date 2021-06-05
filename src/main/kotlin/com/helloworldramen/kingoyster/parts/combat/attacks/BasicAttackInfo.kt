@@ -6,7 +6,7 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.parts.combat.AttackInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
-import com.helloworldramen.kingoyster.parts.defaultDamageInfo
+import com.helloworldramen.kingoyster.parts.combat.defaultDamageInfo
 import com.helloworldramen.kingoyster.parts.equippedWeaponPart
 import com.helloworldramen.kingoyster.parts.isEnemyOf
 

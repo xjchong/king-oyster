@@ -4,7 +4,7 @@ import com.helloworldramen.kingoyster.architecture.*
 import com.helloworldramen.kingoyster.extensions.freeChildren
 import com.helloworldramen.kingoyster.extensions.positionsForEach
 import com.helloworldramen.kingoyster.parts.EquipmentPart
-import com.helloworldramen.kingoyster.parts.health
+import com.helloworldramen.kingoyster.parts.combat.health
 import com.helloworldramen.kingoyster.parts.telegraphedPositions
 import com.helloworldramen.kingoyster.parts.visiblePositions
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene

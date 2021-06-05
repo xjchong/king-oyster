@@ -8,6 +8,9 @@ import com.helloworldramen.kingoyster.architecture.*
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DropWeaponEvent
 import com.helloworldramen.kingoyster.eventbus.events.ThrowWeaponEvent
+import com.helloworldramen.kingoyster.parts.combat.CombatPart
+import com.helloworldramen.kingoyster.parts.combat.defaultDamageInfo
+import com.helloworldramen.kingoyster.parts.combat.power
 import kotlin.math.roundToInt
 
 class EquipmentPart(
@@ -61,7 +64,8 @@ class EquipmentPart(
             weapon.respondToAction(DamageWeapon(context, thrower, null, THROW_DURABILITY_LOSS))
 
             val damageInfo = weapon.find<WeaponPart>()?.damageInfo ?: defaultDamageInfo()
-            val rawAmount = (power() * damageInfo.powerFactor * THROW_POWER_FACTOR).roundToInt() // Throwing gets a power multiplier.
+            val breakFactor = if (weapon.durability() <= 0) WeaponPart.BREAK_FACTOR else 1.0
+            val rawAmount = (power() * damageInfo.powerFactor * breakFactor * THROW_POWER_FACTOR).roundToInt()
 
             // Damage the entity at the destination.
             context.world.respondToActions(nearestImpassablePosition,
@@ -109,8 +113,8 @@ class EquipmentPart(
     }
 
     companion object {
-        private const val THROW_POWER_FACTOR = 1.8
-        private const val THROW_DURABILITY_LOSS = 3
+        private const val THROW_POWER_FACTOR = 2.0
+        private const val THROW_DURABILITY_LOSS = 2
     }
 }
 
