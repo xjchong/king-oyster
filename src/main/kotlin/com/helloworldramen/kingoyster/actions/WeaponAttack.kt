@@ -12,6 +12,5 @@ data class WeaponAttack(
 ) : Action {
 
     override val world: World = context.world
-    override val timeFactor: Double
-        get() = actor.equippedWeaponPart()?.attackInfo?.timeFactor ?: 1.0
+    override val timeFactor: Double = 1.0
 }

@@ -9,16 +9,16 @@ import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DamageWeaponEvent
 import com.helloworldramen.kingoyster.eventbus.events.EquipWeaponEvent
-import com.helloworldramen.kingoyster.parts.combat.AttackInfo
+import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 
 class WeaponPart(
-    val attackInfo: AttackInfo,
-    var maxDurability: Int,
+    val damageInfo: DamageInfo,
+    val maxDurability: Int,
     var durability: Int = maxDurability
 ) : Part {
 
     override fun copy(): Part {
-        return WeaponPart(attackInfo, maxDurability, durability)
+        return WeaponPart(damageInfo, maxDurability, durability)
     }
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
@@ -60,10 +60,6 @@ class WeaponPart(
         }
 
         return true
-    }
-
-    companion object {
-        const val BREAK_POWER_FACTOR = 3.0
     }
 }
 

@@ -10,6 +10,7 @@ sealed class DamageType {
     object Cut : DamageType()
     object Bash : DamageType()
     object Stab : DamageType()
+    object Magic : DamageType()
     object Special : DamageType()
 }
 

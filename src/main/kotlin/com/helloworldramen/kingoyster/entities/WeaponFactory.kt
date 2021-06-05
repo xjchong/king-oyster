@@ -12,12 +12,9 @@ object WeaponFactory {
         name = "dagger",
         parts = listOf(
             WeaponPart(
-                attackInfo = AttackInfo(
-                    damageInfo = DamageInfo(
-                        powerFactor = 1.1,
-                        damageType = DamageType.Cut
-                    ),
-                    timeFactor = 1.0
+                damageInfo = DamageInfo(
+                    powerFactor = 1.0,
+                    damageType = DamageType.Cut
                 ),
                 maxDurability = 10
             )
@@ -28,12 +25,9 @@ object WeaponFactory {
         name = "sword",
         parts = listOf(
             WeaponPart(
-                attackInfo = AttackInfo(
-                    damageInfo = DamageInfo(
-                        powerFactor = 1.5,
-                        damageType = DamageType.Cut
-                    ),
-                    timeFactor = 1.2
+                damageInfo = DamageInfo(
+                    powerFactor = 1.5,
+                    damageType = DamageType.Cut
                 ),
                 maxDurability = 9
             )
@@ -44,12 +38,9 @@ object WeaponFactory {
         name = "greatsword",
         parts = listOf(
             WeaponPart(
-                attackInfo = AttackInfo(
-                    damageInfo = DamageInfo(
-                        powerFactor = 3.0,
-                        damageType = DamageType.Cut
-                    ),
-                    timeFactor = 2.0
+                damageInfo = DamageInfo(
+                    powerFactor = 3.0,
+                    damageType = DamageType.Cut
                 ),
                 maxDurability = 8
             )

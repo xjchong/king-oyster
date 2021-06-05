@@ -52,7 +52,3 @@ fun Entity.resFactor(damageType: DamageType, elementType: ElementType): Double {
 fun Entity.resFactor(damageInfo: DamageInfo): Double {
     return find<ResistancesPart>()?.resFactor(damageInfo) ?: 1.0
 }
-
-fun Entity.resFactor(attackInfo: AttackInfo): Double {
-    return resFactor(attackInfo.damageInfo)
-}

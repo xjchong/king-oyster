@@ -60,14 +60,13 @@ class EquipmentPart(
             context.world.move(weapon, nearestImpassablePosition.findUnoccupiedPosition(context))
             weapon.respondToAction(DamageWeapon(context, thrower, null, THROW_DURABILITY_LOSS))
 
-            val attackInfo = weapon.find<WeaponPart>()?.attackInfo ?: defaultAttackInfo()
-            val rawAmount = (power() * attackInfo.powerFactor * THROW_POWER_FACTOR).roundToInt() // Throwing gets a power multiplier.
+            val damageInfo = weapon.find<WeaponPart>()?.damageInfo ?: defaultDamageInfo()
+            val rawAmount = (power() * damageInfo.powerFactor * THROW_POWER_FACTOR).roundToInt() // Throwing gets a power multiplier.
 
             // Damage the entity at the destination.
             context.world.respondToActions(nearestImpassablePosition,
-                Damage(context, this, rawAmount, attackInfo.damageType, attackInfo.elementType)
+                Damage(context, this, rawAmount, damageInfo.damageType, damageInfo.elementType)
             )
-
         } else {
             val furthestPassablePosition = nearestImpassablePosition - direction.vector
 

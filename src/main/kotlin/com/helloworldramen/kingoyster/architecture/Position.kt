@@ -50,6 +50,24 @@ data class Position(val x: Int = 0, val y: Int = 0) {
 
     fun west(): Position = withRelativeX(-1)
 
+    fun rotated(origin: Position, direction: Direction,
+                   originalDirection: Direction = Direction.South): Position {
+        if (direction == originalDirection) return this
+
+        val clockwiseDirections = listOf(Direction.North, Direction.East, Direction.South, Direction.West)
+        val normalizedPosition = this - origin
+        val rotationDelta = (clockwiseDirections.indexOf(direction) - clockwiseDirections.indexOf(originalDirection) + 4) % 4
+
+        val normalizedRotatedPosition = when (rotationDelta) {
+            1 -> Position(-normalizedPosition.y, normalizedPosition.x) // Clockwise 1/4
+            2 -> Position(-normalizedPosition.x, -normalizedPosition.y) // Clockwise 2/4
+            3 -> Position(-normalizedPosition.y, -normalizedPosition.x) // Clockwise 3/4 (CCW 1/4)
+            else -> normalizedPosition // No change (should already be handled).
+        }
+
+        return normalizedRotatedPosition + origin
+    }
+
     fun neighbors(): List<Position> = listOf(north(), east(), south(), west())
 
     fun neighborsShuffled(): List<Position> = neighbors().shuffled()

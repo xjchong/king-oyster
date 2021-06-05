@@ -15,11 +15,9 @@ object ActorFactory {
                 maxHealth = 1000,
                 maxMana = 4,
                 power = 10,
-                defaultAttackInfo = AttackInfo(
-                    damageInfo = DamageInfo(
-                        damageType = DamageType.Bash,
-                        powerFactor = 0.5
-                    )
+                defaultDamageInfo = DamageInfo(
+                    powerFactor = 0.5,
+                    damageType = DamageType.Bash
                 )
             ),
             EquipmentPart(),
@@ -45,10 +43,8 @@ object ActorFactory {
                 maxHealth = 10,
                 maxMana = 6,
                 power = 0,
-                defaultAttackInfo = AttackInfo(
-                    damageInfo = DamageInfo(
-                        powerFactor = 0.0
-                    )
+                defaultDamageInfo = DamageInfo(
+                    powerFactor = 0.0
                 )
             ),
             FactionPart(Faction.Spirit),
@@ -71,10 +67,9 @@ object ActorFactory {
                 maxHealth = 30,
                 maxMana = 0,
                 power = 5,
-                defaultAttackInfo = AttackInfo(
-                    damageInfo = DamageInfo(
-                        damageType = DamageType.Bash
-                    )
+                defaultDamageInfo = DamageInfo(
+                    powerFactor = 1.0,
+                    damageType = DamageType.Bash
                 )
             ),
             EquipmentPart(),
@@ -98,7 +93,7 @@ object ActorFactory {
                 maxHealth = 20,
                 maxMana = 0,
                 power = 2,
-                defaultAttackInfo = AttackInfo()
+                defaultDamageInfo = DamageInfo()
             ),
             FactionPart(Faction.Monster),
             PhysicalPart(

@@ -12,7 +12,6 @@ import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
-import com.helloworldramen.kingoyster.parts.combat.AttackInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.resFactor
 import kotlin.math.roundToInt
@@ -21,13 +20,13 @@ class CombatPart(
     var maxHealth: Int,
     var maxMana: Int,
     var power: Int,
-    var defaultAttackInfo: AttackInfo,
+    var defaultDamageInfo: DamageInfo,
     var health: Int = maxHealth,
     var mana: Int = maxMana,
 ) : Part {
 
     override fun copy(): Part {
-        return CombatPart(maxHealth, maxMana, power, defaultAttackInfo, health, mana)
+        return CombatPart(maxHealth, maxMana, power, defaultDamageInfo, health, mana)
     }
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
@@ -44,9 +43,9 @@ class CombatPart(
         if (!isEnemyOf(attacker)) return false
 
         val weapon = attacker.weapon()
-        val attackInfo = attacker.equippedWeaponPart()?.attackInfo ?: attacker.defaultAttackInfo()
-        val rawAmount = attacker.power() * attackInfo.powerFactor
-        val damage = Damage(context, attacker, rawAmount.roundToInt(), attackInfo.damageType, attackInfo.elementType)
+        val damageInfo = attacker.equippedWeaponPart()?.damageInfo ?: attacker.defaultDamageInfo()
+        val rawAmount = attacker.power() * damageInfo.powerFactor
+        val damage = Damage(context, attacker, rawAmount.roundToInt(), damageInfo.damageType, damageInfo.elementType)
 
         return if (respondToDamage(damage)) {
             EventBus.post(WeaponAttackEvent(attacker, this))
@@ -87,4 +86,4 @@ fun Entity.health(): Int = find<CombatPart>()?.health ?: 0
 fun Entity.maxMana(): Int = find<CombatPart>()?.maxMana ?: 0
 fun Entity.mana(): Int = find<CombatPart>()?.mana ?: 0
 fun Entity.power(): Int = find<CombatPart>()?.power ?: 0
-fun Entity.defaultAttackInfo(): AttackInfo = find<CombatPart>()?.defaultAttackInfo ?: AttackInfo(DamageInfo())
+fun Entity.defaultDamageInfo(): DamageInfo = find<CombatPart>()?.defaultDamageInfo ?: DamageInfo()
