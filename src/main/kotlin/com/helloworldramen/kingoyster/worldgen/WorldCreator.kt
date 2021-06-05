@@ -1,17 +1,17 @@
-package com.helloworldramen.kingoyster.utilities.worldgen
+package com.helloworldramen.kingoyster.worldgen
 
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
 import com.helloworldramen.kingoyster.utilities.WeightedCollection
 import com.helloworldramen.kingoyster.utilities.WeightedEntry
-import com.helloworldramen.kingoyster.utilities.worldgen.generation.DrunkGenerationStrategy
-import com.helloworldramen.kingoyster.utilities.worldgen.generation.DungeonGenerationStrategy
-import com.helloworldramen.kingoyster.utilities.worldgen.generation.EmptyGenerationStrategy
-import com.helloworldramen.kingoyster.utilities.worldgen.generation.GenerationStrategy
-import com.helloworldramen.kingoyster.utilities.worldgen.population.strategies.EmptyPopulationStrategy
-import com.helloworldramen.kingoyster.utilities.worldgen.population.PopulationStrategy
-import com.helloworldramen.kingoyster.utilities.worldgen.population.strategies.SmorgasbordPopulationStrategy
+import com.helloworldramen.kingoyster.worldgen.generation.DrunkGenerationStrategy
+import com.helloworldramen.kingoyster.worldgen.generation.DungeonGenerationStrategy
+import com.helloworldramen.kingoyster.worldgen.generation.EmptyGenerationStrategy
+import com.helloworldramen.kingoyster.worldgen.generation.GenerationStrategy
+import com.helloworldramen.kingoyster.worldgen.population.strategies.EmptyPopulationStrategy
+import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
+import com.helloworldramen.kingoyster.worldgen.population.strategies.SmorgasbordPopulationStrategy
 
 object WorldCreator {
 

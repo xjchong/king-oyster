@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.utilities.worldgen.population
+package com.helloworldramen.kingoyster.worldgen.population
 
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.World

@@ -20,7 +20,7 @@ import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.screenshake.ScreenShake
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
-import com.helloworldramen.kingoyster.utilities.worldgen.WorldCreator
+import com.helloworldramen.kingoyster.worldgen.WorldCreator
 import godot.Input
 import godot.InputEvent
 import godot.Label

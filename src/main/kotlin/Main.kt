@@ -8,7 +8,7 @@ import com.helloworldramen.kingoyster.architecture.*
 import com.helloworldramen.kingoyster.entities.ActorFactory
 import com.helloworldramen.kingoyster.parts.AscendablePart
 import com.helloworldramen.kingoyster.parts.ItemPart
-import com.helloworldramen.kingoyster.utilities.worldgen.WorldCreator
+import com.helloworldramen.kingoyster.worldgen.WorldCreator
 import kotlin.system.exitProcess
 
 

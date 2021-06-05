@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.utilities.worldgen.generation
+package com.helloworldramen.kingoyster.worldgen.generation
 
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World

@@ -1,8 +1,8 @@
-package com.helloworldramen.kingoyster.utilities.worldgen.population.rules
+package com.helloworldramen.kingoyster.worldgen.population.rules
 
 import com.helloworldramen.kingoyster.entities.FeatureFactory
 import com.helloworldramen.kingoyster.extensions.randomPositionWhere
-import com.helloworldramen.kingoyster.utilities.worldgen.population.PopulationRule
+import com.helloworldramen.kingoyster.worldgen.population.PopulationRule
 
 class StairsPopulationRule : PopulationRule(
     { FeatureFactory.stairs() },
