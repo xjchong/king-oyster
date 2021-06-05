@@ -34,6 +34,7 @@ __meta__ = {
 }
 
 [node name="ListMenuScene" parent="UIScenesBucket" instance=ExtResource( 4 )]
+visible = false
 
 [node name="HUDLayer" type="CanvasLayer" parent="."]
 

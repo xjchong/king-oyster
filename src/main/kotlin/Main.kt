@@ -5,10 +5,10 @@ import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.architecture.*
+import com.helloworldramen.kingoyster.entities.ActorFactory
 import com.helloworldramen.kingoyster.parts.AscendablePart
 import com.helloworldramen.kingoyster.parts.ItemPart
-import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
-import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
+import com.helloworldramen.kingoyster.utilities.worldgen.WorldCreator
 import kotlin.system.exitProcess
 
 
@@ -30,13 +30,12 @@ class ConsoleGameEngine : EventBusSubscriber {
     }
 
     fun run() {
-        val world = World(19, 19)
-        WorldGenerator.repopulate(world, DungeonGenerationStrategy)
-        val context = Context(world)
+        val player = ActorFactory.player()
+        val world = WorldCreator.create(1, player, null)
+        val context = Context(world, player)
 
         while (true) {
             val startTime = System.nanoTime()
-            val player = world.next() ?: break
             println((System.nanoTime() - startTime) / 1000000.0)
             WorldConsoleView.display(context.world, player)
 

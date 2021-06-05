@@ -1,30 +1,52 @@
-package com.helloworldramen.kingoyster.utilities.worldgen
+package com.helloworldramen.kingoyster.utilities.worldgen.generation
 
 import com.helloworldramen.kingoyster.entities.FeatureFactory
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
+import com.helloworldramen.kingoyster.utilities.Probability
+import com.helloworldramen.kingoyster.utilities.percentChance
 import java.util.*
 import kotlin.math.roundToInt
 
-object DungeonGenerationStrategy: WorldGenerationStrategy {
+class DungeonGenerationStrategy(
+    private val roomAttemptsPercent: Double = 0.2,
+    private val roomMeanWidthPercent: Double = 0.25,
+    private val roomMeanHeightPercent: Double = 0.25,
+    private val roomWidthStandardDeviationPercent: Double = 0.0,
+    private val roomHeightStandardDeviationPercent: Double = 0.0,
+    private val cyclePercent: Probability = 5.percentChance(),
+    private val extraDoorPercent: Probability = 5.percentChance(),
+    private val maxExtraDoorsPercent: Probability = 4.percentChance(),
+    private val pillarRemovalPercent: Probability = 50.percentChance(),
+    private val shouldRemoveDeadEnds: Boolean = true
 
-    private const val WALL_REGION_ID = -1
-    private const val DOOR_OPEN_CHANCE = 0.2
+): GenerationStrategy() {
 
     private var regionIds: MutableMap<Position, Int> = mutableMapOf()
     private var nextRegionId: Int = 0
     private var mergedRegionIds: MutableSet<MutableSet<Int>> = mutableSetOf()
-    override fun generate(world: World) {
-        with(world) {
-            clear()
-            clear()
+
+    override fun generate(width: Int, height: Int, playerPosition: Position?): World {
+        return World(width, height).apply {
             fill(WALL_REGION_ID) { FeatureFactory.wall() }
-            placeRooms(area() / 5, width / 4, height / 4, area() / 1000.0)
-            placeCorridors(0.05)
-            placeDoors(0.05, 12)
-            removePillars(0.5)
-            removeDeadEnds()
+
+            placeRooms(
+                (area() * roomAttemptsPercent).roundToInt(),
+                (width * roomMeanWidthPercent).roundToInt(),
+                (height * roomMeanHeightPercent).roundToInt(),
+                (width * roomWidthStandardDeviationPercent),
+                (height * roomHeightStandardDeviationPercent))
+
+            placeCorridors(cyclePercent.double)
+
+            placeDoors(
+                extraDoorPercent.double,
+                (area() * maxExtraDoorsPercent.double).roundToInt())
+
+            removePillars(pillarRemovalPercent.double)
+
+            if (shouldRemoveDeadEnds) removeDeadEnds()
         }
     }
 
@@ -43,12 +65,13 @@ object DungeonGenerationStrategy: WorldGenerationStrategy {
         }
     }
 
-    private fun World.placeRooms(attempts: Int, meanWidth: Int, meanHeight: Int, standardDeviation: Double) {
+    private fun World.placeRooms(attempts: Int, meanWidth: Int, meanHeight: Int,
+                                 widthStandardDeviation: Double, heightStandardDeviation: Double) {
         repeat(attempts) {
             val x = getOdd((Math.random() * width).roundToInt())
             val y = getOdd((Math.random() * height).roundToInt())
-            val roomWidth = getOdd(nextGaussian(meanWidth, standardDeviation).toInt())
-            val roomHeight = getOdd(nextGaussian(meanHeight, standardDeviation).toInt())
+            val roomWidth = getOdd(nextGaussian(meanWidth, widthStandardDeviation).roundToInt())
+            val roomHeight = getOdd(nextGaussian(meanHeight, heightStandardDeviation).roundToInt())
 
             if (isRoomSafe(x, y, roomWidth, roomHeight)) {
                 placeRoom(x, y, roomWidth, roomHeight)
@@ -219,5 +242,10 @@ object DungeonGenerationStrategy: WorldGenerationStrategy {
 
     private fun World.area(): Int {
         return width * height
+    }
+
+    companion object {
+        private const val WALL_REGION_ID = -1
+        private const val DOOR_OPEN_CHANCE = 0.2
     }
 }

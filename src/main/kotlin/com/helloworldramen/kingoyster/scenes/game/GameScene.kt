@@ -4,7 +4,7 @@ import com.helloworldramen.kingoyster.actions.*
 import com.helloworldramen.kingoyster.ai.Ai
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Direction
-import com.helloworldramen.kingoyster.architecture.World
+import com.helloworldramen.kingoyster.entities.ActorFactory
 import com.helloworldramen.kingoyster.extensions.isPlayer
 import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
@@ -21,8 +21,7 @@ import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.screenshake.ScreenShake
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
-import com.helloworldramen.kingoyster.utilities.worldgen.DungeonGenerationStrategy
-import com.helloworldramen.kingoyster.utilities.worldgen.WorldGenerator
+import com.helloworldramen.kingoyster.utilities.worldgen.WorldCreator
 import godot.Input
 import godot.InputEvent
 import godot.Label
@@ -48,14 +47,14 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	private val inputQueue: Queue<InputEvent> = ArrayDeque()
 	private var isUpdating: Boolean = false
-	private var doesWorldNeedFadeIn: Boolean = true
+	private var needsFadeIn: Boolean = false
+	private var shouldLoadNewLevel: Boolean = false
 
 	override fun receiveEvent(event: Event) {
 		when (event) {
 			is AscendEvent -> {
-				updateFloorLabel()
-				worldScene.bind(context)
-				doesWorldNeedFadeIn = true
+				worldScene.fadeOut()
+				shouldLoadNewLevel = true
 			}
 			is DamageEvent -> {
 				if (event.source.isPlayer) {
@@ -74,29 +73,40 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _ready() {
-		val world = World(17, 17)
-		val player = WorldGenerator.repopulate(world, DungeonGenerationStrategy)
+		val player = ActorFactory.player()
+		val world = WorldCreator.create(1, player, null)
+
+		listMenuScene.pauseMode = PAUSE_MODE_PROCESS
+		eventAudio.pauseMode = PAUSE_MODE_PROCESS
 
 		EventBus.register(this, AscendEvent::class, GameOverEvent::class, DamageEvent::class)
 
-		context = Context(world)
-		context.player = player
+		context = Context(world, player)
 
+		bind(context)
+	}
+
+	private fun bind(context: Context) {
 		playerScene = worldScene.bind(context)
-
-		listMenuScene.pauseMode = PAUSE_MODE_PROCESS
-		listMenuScene.hide()
-
 		eventAudio.bind(context)
-		eventAudio.pauseMode = PAUSE_MODE_PROCESS
-
 		updateFloorLabel()
+
+		needsFadeIn = true
 	}
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
-		if (doesWorldNeedFadeIn) {
-			doesWorldNeedFadeIn = false
+		if (shouldLoadNewLevel && !worldScene.animationPlayer.isPlaying()) {
+			shouldLoadNewLevel = false
+			with(context) {
+				player.find<MemoryPart>()?.clear()
+				val newWorld = WorldCreator.create(level, player, positionOf(player))
+				context.world = newWorld
+
+				bind(this)
+			}
+		} else if (needsFadeIn && !worldScene.animationPlayer.isPlaying()) {
+			needsFadeIn = false
 			worldScene.fadeIn()
 		}
 
@@ -215,10 +225,9 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 			when {
 				currentPosition == null -> return
-				world.respondToActions(currentPosition, Take(this, player)) != null -> return
-				world.respondToActions(currentPosition, Ascend(this, player)) != null -> {
-					worldScene.fadeOut()
-				}
+				world.respondToActions(currentPosition,
+					Take(this, player),
+					Ascend(this, player)) != null -> return
 				else -> playerScene?.toast("?", Color.lightgray, ToastTextScene.SHORT_CONFIG)
 			}
 		}

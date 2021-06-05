@@ -22,9 +22,9 @@ import godot.global.GD
 class WorldScene : Node2D() {
 
 	private val telegraphBucket: YSort by lazy { getNodeAs("TelegraphBucket")!! }
-	private val tileBucket: YSort by lazy { getNodeAs("TileBucket")!! }
+	private val tileBucket: YSort by lazy { getNodeAs("FloorRect/TileBucket")!! }
 	private val blackoutRect: ColorRect by lazy { getNodeAs("BlackoutRect")!! }
-	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
+	val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
 
 	private val packedTileOverlayScene = GD.load<PackedScene>(TileOverlayScene.PATH)
 	private val packedMemoryScene = GD.load<PackedScene>(MemoryScene.PATH)
@@ -116,6 +116,5 @@ class WorldScene : Node2D() {
 	companion object {
 		const val PATH = "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/world/WorldScene.tscn"
 		const val TILE_SIZE = 32
-		const val SELECTION_REASON_INTERACT = "interact"
 	}
 }

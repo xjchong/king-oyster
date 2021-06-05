@@ -1,12 +1,16 @@
-package com.helloworldramen.kingoyster.utilities.worldgen
+package com.helloworldramen.kingoyster.utilities.worldgen.generation
 
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
+import com.helloworldramen.kingoyster.entities.FeatureFactory
 
-object DrunkGenerationStrategy : WorldGenerationStrategy {
+class DrunkGenerationStrategy(private val clearPercentage: Double = DEFAULT_CLEAR_PERCENTAGE) : GenerationStrategy() {
 
-    override fun generate(world: World) {
-        drunkWalk(world, 0.45, Position(world.width / 2, world.height / 2))
+    override fun generate(width: Int, height: Int, playerPosition: Position?): World {
+        return World(width, height).apply {
+            fill { FeatureFactory.wall() }
+            drunkWalk(this, clearPercentage, Position(width / 2, height / 2))
+        }
     }
 
     private fun drunkWalk(world: World, clearPercentage: Double, startingPosition: Position) {
@@ -43,7 +47,7 @@ object DrunkGenerationStrategy : WorldGenerationStrategy {
         }
     }
 
-    private fun Position.isOutOfBounds(world: World): Boolean {
-        return x <= 0 || y <= 0 || x >= world.width - 1 || y >= world.height - 1
+    companion object {
+        private const val DEFAULT_CLEAR_PERCENTAGE = 0.45
     }
 }
