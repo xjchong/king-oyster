@@ -5,7 +5,6 @@ import com.helloworldramen.kingoyster.ai.Ai
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.entities.ActorFactory
-import com.helloworldramen.kingoyster.extensions.isPlayer
 import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber

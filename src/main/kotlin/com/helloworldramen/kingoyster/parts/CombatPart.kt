@@ -7,7 +7,6 @@ import com.helloworldramen.kingoyster.actions.DropWeapon
 import com.helloworldramen.kingoyster.architecture.Action
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
-import com.helloworldramen.kingoyster.extensions.isPlayer
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.DeathEvent

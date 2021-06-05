@@ -31,7 +31,8 @@ object ActorFactory {
                 visionRange = 10
             )
         ),
-        timeFactor = 1.0
+        timeFactor = 1.0,
+        isPlayer = true
     )
 
     fun ghost() = Entity(

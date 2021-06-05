@@ -6,7 +6,8 @@ class Entity (
     val name: String,
     val parts: List<Part> = listOf(),
     var timeFactor: Double = 0.0, // 0 means this entity needs no updates.
-    var time: Double = 0.0
+    var time: Double = 0.0,
+    var isPlayer: Boolean = false
 ) {
 
     private var lastSuccessfulResponse: Long = System.nanoTime()
