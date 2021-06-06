@@ -11,7 +11,7 @@ import com.helloworldramen.kingoyster.ai.options.PathCloserOption
 import com.helloworldramen.kingoyster.parts.WeaponPart
 import com.helloworldramen.kingoyster.parts.visiblePositions
 
-class EquipVisibleWeaponStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy() {
+class EquipWeaponStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy() {
 
     override val tag: String = "EQW"
     override val considerations: List<AiConsideration<GameAiOptionContext>> = considerations.toList()

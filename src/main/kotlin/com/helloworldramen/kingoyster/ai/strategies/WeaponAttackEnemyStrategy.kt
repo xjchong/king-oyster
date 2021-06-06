@@ -3,7 +3,7 @@ package com.helloworldramen.kingoyster.ai.strategies
 import com.helloworldramen.kingoyster.ai.*
 import com.helloworldramen.kingoyster.ai.architecture.AiConsideration
 import com.helloworldramen.kingoyster.ai.architecture.AiOption
-import com.helloworldramen.kingoyster.ai.options.AttackOption
+import com.helloworldramen.kingoyster.ai.options.WeaponAttackOption
 import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.parts.combat.AttackPattern
 import com.helloworldramen.kingoyster.parts.combat.defaultAttackPattern
@@ -11,7 +11,7 @@ import com.helloworldramen.kingoyster.parts.isEnemyOf
 import com.helloworldramen.kingoyster.parts.weapon
 import com.helloworldramen.kingoyster.parts.weaponAttackPattern
 
-class AttackInRangeEnemyStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy() {
+class WeaponAttackEnemyStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy() {
 
     override val tag: String = "ATK"
     override val considerations: List<AiConsideration<GameAiOptionContext>> = considerations.toList()
@@ -41,7 +41,7 @@ class AttackInRangeEnemyStrategy(vararg considerations: GameAiConsideration) : G
                 context.entitiesAt(position)?.any { it.isEnemyOf(attacker) } != null
             }
         }.keys.map {
-            AttackOption(this, strategyContext.withDirection(it))
+            WeaponAttackOption(this, strategyContext.withDirection(it))
         }
     }
 }
