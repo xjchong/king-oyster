@@ -93,7 +93,7 @@ object ActorFactory {
                 maxHealth = 20,
                 maxMana = 0,
                 power = 2,
-                defaultAttackPattern = BasicAttackPattern()
+                defaultAttackPattern = BasicAttackPattern(1.0)
             ),
             FactionPart(Faction.Monster),
             PhysicalPart(
