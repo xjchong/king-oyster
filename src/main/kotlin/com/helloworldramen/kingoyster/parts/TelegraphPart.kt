@@ -59,18 +59,16 @@ class TelegraphInfo(val actor: Entity, turnsRemaining: Int, val payloads: List<T
         private set
 
     fun update() {
-        turnsRemaining--
+        if (--turnsRemaining > 0) return
 
-        if (turnsRemaining <= 0) {
-            // Execute the payloads.
-            for (payload in payloads) {
-                val (action, _) = payload
-                val actor = action.actor
+        // Execute the payloads.
+        for (payload in payloads) {
+            val (action, _) = payload
+            val actor = action.actor
 
-                if (actor.health() <= 0) break
+            if (actor.health() <= 0) break
 
-                actor.respondToAction(action)
-            }
+            actor.respondToAction(action)
         }
     }
 }
