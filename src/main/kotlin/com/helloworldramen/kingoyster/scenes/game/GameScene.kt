@@ -88,6 +88,10 @@ class GameScene : Node2D(), EventBusSubscriber {
 		bind(context)
 	}
 
+	override fun _onDestroy() {
+		EventBus.unregister(this)
+	}
+
 	private fun bind(context: Context) {
 		playerScene = worldScene.bind(context)
 		hudScene.bind(context.player)

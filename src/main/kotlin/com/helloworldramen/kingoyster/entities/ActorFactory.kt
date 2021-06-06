@@ -14,7 +14,7 @@ object ActorFactory {
         name = "player",
         parts = listOf(
             CombatPart(
-                maxHealth = 1000,
+                maxHealth = 100,
                 maxMana = 4,
                 power = 10,
                 defaultAttackPattern = BasicAttackPattern(
