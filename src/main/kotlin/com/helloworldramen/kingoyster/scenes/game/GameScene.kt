@@ -208,9 +208,9 @@ class GameScene : Node2D(), EventBusSubscriber {
 		val actionPosition = direction.vector + currentPosition
 
 		if (player.time > context.world.currentTime // Don't read any direction input when not player's turn.
-			|| player.respondToAction(Move(context, player, actionPosition))
 			|| context.world.respondToActions(actionPosition, Open(context, player)) != null
 			|| player.respondToAction(WeaponAttack(context, player, direction))
+			|| player.respondToAction(Move(context, player, actionPosition))
 		) return
 
 		// If we didn't successfully perform a direction action, indicate the failure with a bump animation.

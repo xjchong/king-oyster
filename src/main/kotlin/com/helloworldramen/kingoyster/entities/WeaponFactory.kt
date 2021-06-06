@@ -6,6 +6,7 @@ import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
 import com.helloworldramen.kingoyster.parts.combat.attacks.DaggerAttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attacks.GreatswordAttackPattern
 import com.helloworldramen.kingoyster.parts.combat.attacks.LongswordAttackPattern
 
 object WeaponFactory {
@@ -42,9 +43,9 @@ object WeaponFactory {
         name = "greatsword",
         parts = listOf(
             WeaponPart(
-                attackPattern = DaggerAttackPattern(3.0),
+                attackPattern = GreatswordAttackPattern(1.5),
                 throwInfo = DamageInfo(
-                    powerFactor = 6.0,
+                    powerFactor = 3.0,
                     damageType = DamageType.Cut,
                 ),
                 maxDurability = 8
