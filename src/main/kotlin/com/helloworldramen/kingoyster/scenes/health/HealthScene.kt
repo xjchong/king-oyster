@@ -21,6 +21,7 @@ class HealthScene : Node2D() {
 	private var entity: Entity = Entity.UNKNOWN
 	private var maxHealth: Double = 0.0
 	private var lastHealth: Int = 0
+	private var shouldShowWhenFull = false
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
@@ -29,8 +30,9 @@ class HealthScene : Node2D() {
 		updateHealth()
 	}
 
-	fun bind(entity: Entity) {
+	fun bind(entity: Entity, shouldShowWhenFull: Boolean = false) {
 		this.entity = entity
+		this.shouldShowWhenFull = shouldShowWhenFull
 
 		visible = entity.maxHealth() > 0
 		maxHealth = entity.maxHealth().toDouble()
@@ -46,8 +48,8 @@ class HealthScene : Node2D() {
 
 		val nextValue = (currentHealth / maxHealth.coerceAtLeast(1.0)) * 100
 
-		healthBarFade.visible = currentHealth != maxHealth.toInt()
-		healthBarFill.visible = currentHealth != maxHealth.toInt()
+		healthBarFade.visible = shouldShowWhenFull || currentHealth != maxHealth.toInt()
+		healthBarFill.visible = shouldShowWhenFull || currentHealth != maxHealth.toInt()
 		healthBarFill.value = nextValue
 		lastHealth = currentHealth
 

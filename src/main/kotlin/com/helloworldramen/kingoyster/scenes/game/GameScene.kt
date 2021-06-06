@@ -16,6 +16,7 @@ import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.health
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.eventaudio.EventAudio
+import com.helloworldramen.kingoyster.scenes.hud.HUDScene
 import com.helloworldramen.kingoyster.scenes.listmenu.ListMenuScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.screenshake.ScreenShake
@@ -39,6 +40,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private val worldScene: WorldScene by lazy { getNodeAs("WorldScene")!! }
 	private val screenShake: ScreenShake by lazy { getNodeAs("Camera2D/ScreenShake")!! }
 	private val listMenuScene: ListMenuScene by lazy { getNodeAs("UIScenesBucket/ListMenuScene")!! }
+	private val hudScene: HUDScene by lazy { getNodeAs("HUDScene")!! }
 	private var playerScene: EntityScene? = null
 
 	private val floorLabel: Label by lazy { getNodeAs("HUDLayer/FloorLabel")!! }
@@ -88,6 +90,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	private fun bind(context: Context) {
 		playerScene = worldScene.bind(context)
+		hudScene.bind(context.player)
 		eventAudio.bind(context)
 		updateFloorLabel()
 

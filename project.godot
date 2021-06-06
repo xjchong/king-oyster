@@ -44,6 +44,11 @@ _global_script_classes=[ {
 "language": "Kotlin",
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/health/HealthScene.kt"
 }, {
+"base": "MarginContainer",
+"class": "com_helloworldramen_kingoyster_scenes_hud_HUDScene",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/hud/HUDScene.kt"
+}, {
 "base": "Control",
 "class": "com_helloworldramen_kingoyster_scenes_listmenu_ListMenuScene",
 "language": "Kotlin",
@@ -102,6 +107,7 @@ _global_script_class_icons={
 "com_helloworldramen_kingoyster_scenes_eventaudio_EventAudio": "",
 "com_helloworldramen_kingoyster_scenes_game_GameScene": "",
 "com_helloworldramen_kingoyster_scenes_health_HealthScene": "",
+"com_helloworldramen_kingoyster_scenes_hud_HUDScene": "",
 "com_helloworldramen_kingoyster_scenes_listmenu_ListMenuScene": "",
 "com_helloworldramen_kingoyster_scenes_listmenu_TitleListMenuItem": "",
 "com_helloworldramen_kingoyster_scenes_mainmenu_MainMenuScene": "",
