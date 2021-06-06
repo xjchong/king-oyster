@@ -132,3 +132,5 @@ anims/can_select = SubResource( 1 )
 anims/non_interactive = SubResource( 2 )
 anims/selected = SubResource( 3 )
 anims/telegraph = SubResource( 4 )
+
+[node name="Tween" type="Tween" parent="."]

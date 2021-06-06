@@ -4,6 +4,7 @@ import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.architecture.Context
+import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.extensions.isVisibleToPlayer
@@ -74,6 +75,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
 	}
 
+	@RegisterFunction
 	override fun _onDestroy() {
 		EventBus.unregister(this)
 	}
@@ -112,9 +114,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			when (event) {
 				is WeaponAttackEvent -> {
 					if (event.attacker == entity) {
-						context.world[event.target]?.let {
-							animateBump(it)
-						}
+						animateBump(event.direction)
 					}
 				}
 				is DamageEvent -> {
@@ -127,7 +127,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 						if (event.isBroken) {
 							toast("-${event.weapon.name} break!", Color.orange, ToastTextScene.LONG_REVERSE_CONFIG)
 						} else if (event.weapon.durability() == 1) {
-							toast("${event.weapon.name} weak!", Color.orange, ToastTextScene.LONG_CONFIG)
+							toast("${event.weapon.name} weak!", Color.khaki, ToastTextScene.LONG_CONFIG)
 						}
 					} else if (event.weapon == entity) {
 						updateDurabilityLabel()
@@ -198,16 +198,14 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		resetAppearance()
 	}
 
-	fun animateBump(position: Position) {
+	fun animateBump(direction: Direction) {
 		if (animationPlayer.isPlaying()) return
-		val currentPosition = context.world[entity] ?: return
 
-		when(position) {
-			currentPosition.north() -> animationPlayer.play("bump_north")
-			currentPosition.east() -> animationPlayer.play("bump_east")
-			currentPosition.south() -> animationPlayer.play("bump_south")
-			currentPosition.west() -> animationPlayer.play("bump_west")
-			else -> return
+		when(direction) {
+			Direction.North -> animationPlayer.play("bump_north")
+			Direction.East -> animationPlayer.play("bump_east")
+			Direction.South -> animationPlayer.play("bump_south")
+			Direction.West -> animationPlayer.play("bump_west")
 		}
 	}
 

@@ -96,7 +96,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
-		if (shouldLoadNewLevel && !worldScene.animationPlayer.isPlaying()) {
+		if (shouldLoadNewLevel && !worldScene.isAnimating) {
 			shouldLoadNewLevel = false
 			with(context) {
 				player.find<MemoryPart>()?.clear()
@@ -105,7 +105,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 				bind(this)
 			}
-		} else if (needsFadeIn && !worldScene.animationPlayer.isPlaying()) {
+		} else if (needsFadeIn && !worldScene.isAnimating) {
 			needsFadeIn = false
 			worldScene.fadeIn()
 		}
@@ -214,7 +214,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 		) return
 
 		// If we didn't successfully perform a direction action, indicate the failure with a bump animation.
-		worldScene.animateBump(player, actionPosition)
+		worldScene.animateBump(player, direction)
 	}
 
 	private fun performStandingActions() {

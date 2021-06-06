@@ -11,6 +11,7 @@ import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
+import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
 import kotlin.math.roundToInt
@@ -48,6 +49,8 @@ class CombatPart(
         weapon()?.respondToAction(DamageWeapon(context, this, this, 1))
 
         val breakFactor = if (weapon != null && weapon.durability() <= 0) 2.0 else 1.0
+
+        EventBus.post(WeaponAttackEvent(this, direction, damageForPosition.keys))
 
         damageForPosition.forEach { (position, damageInfo) ->
             val amount = (power() * damageInfo.powerFactor * breakFactor).roundToInt()

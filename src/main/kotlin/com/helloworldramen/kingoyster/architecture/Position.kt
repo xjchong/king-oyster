@@ -61,7 +61,7 @@ data class Position(val x: Int = 0, val y: Int = 0) {
         val normalizedRotatedPosition = when (rotationDelta) {
             1 -> Position(-normalizedPosition.y, normalizedPosition.x) // Clockwise 1/4
             2 -> Position(-normalizedPosition.x, -normalizedPosition.y) // Clockwise 2/4
-            3 -> Position(-normalizedPosition.y, -normalizedPosition.x) // Clockwise 3/4 (CCW 1/4)
+            3 -> Position(normalizedPosition.y, -normalizedPosition.x) // Clockwise 3/4 (CCW 1/4)
             else -> normalizedPosition // No change (should already be handled).
         }
 

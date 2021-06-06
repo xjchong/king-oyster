@@ -1,6 +1,10 @@
 package com.helloworldramen.kingoyster.scenes.world
 
 import com.helloworldramen.kingoyster.architecture.*
+import com.helloworldramen.kingoyster.eventbus.Event
+import com.helloworldramen.kingoyster.eventbus.EventBus
+import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
+import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
 import com.helloworldramen.kingoyster.extensions.freeChildren
 import com.helloworldramen.kingoyster.extensions.positionsForEach
 import com.helloworldramen.kingoyster.parts.EquipmentPart
@@ -13,18 +17,20 @@ import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
+import godot.core.Color
 import godot.core.Vector2
 import godot.extensions.getNodeAs
 import godot.extensions.instanceAs
 import godot.global.GD
 
 @RegisterClass
-class WorldScene : Node2D() {
+class WorldScene : Node2D(), EventBusSubscriber {
 
 	private val telegraphBucket: YSort by lazy { getNodeAs("TelegraphBucket")!! }
+	private val flashBucket: YSort by lazy { getNodeAs("FlashBucket")!! }
 	private val tileBucket: YSort by lazy { getNodeAs("FloorRect/TileBucket")!! }
 	private val blackoutRect: ColorRect by lazy { getNodeAs("BlackoutRect")!! }
-	val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
+	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
 
 	private val packedTileOverlayScene = GD.load<PackedScene>(TileOverlayScene.PATH)
 	private val packedMemoryScene = GD.load<PackedScene>(MemoryScene.PATH)
@@ -32,8 +38,32 @@ class WorldScene : Node2D() {
 
 	private val sceneForEntity: MutableMap<Entity, EntityScene> = mutableMapOf()
 	private var telegraphOverlayForPosition: MutableMap<Position, TileOverlayScene> = mutableMapOf()
+	private var flashOverlayForPosition: MutableMap<Position, TileOverlayScene> = mutableMapOf()
 
 	private var context: Context = Context.UNKNOWN
+
+	val isAnimating: Boolean
+		get() = animationPlayer.isPlaying()
+
+	override fun receiveEvent(event: Event) {
+		when (event) {
+			is WeaponAttackEvent -> {
+				if (event.attacker.isPlayer) {
+					animateWeaponAttack(event.positions)
+				}
+			}
+		}
+	}
+
+	@RegisterFunction
+	override fun _ready() {
+		EventBus.register(this, WeaponAttackEvent::class)
+	}
+
+	@RegisterFunction
+	override fun _onDestroy() {
+		EventBus.unregister(this)
+	}
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
@@ -54,9 +84,11 @@ class WorldScene : Node2D() {
 		val world = context.world
 
 		telegraphBucket.freeChildren()
+		flashBucket.freeChildren()
 		tileBucket.freeChildren()
 		sceneForEntity.clear()
 		telegraphOverlayForPosition.clear()
+		flashOverlayForPosition.clear()
 
 		world.positionsForEach { position ->
 			// Add the entities for this position.
@@ -86,6 +118,14 @@ class WorldScene : Node2D() {
 				overlayScene.hide()
 			}
 
+			// Setup the flash for this position.
+			packedTileOverlayScene?.instanceAs<TileOverlayScene>()?.let { overlayScene ->
+				flashBucket.addChild(overlayScene)
+				flashOverlayForPosition[position] = overlayScene
+				overlayScene.position = calculateNodePosition(position)
+				overlayScene.hide()
+			}
+
 			// Setup the memory for this position.
 			packedMemoryScene?.instanceAs<MemoryScene>()?.let { memoryScene ->
 				tileBucket.addChild(memoryScene)
@@ -97,8 +137,8 @@ class WorldScene : Node2D() {
 		return sceneForEntity[context.player]
 	}
 
-	fun animateBump(entity: Entity, position: Position) {
-		sceneForEntity[entity]?.animateBump(position)
+	fun animateBump(entity: Entity, direction: Direction) {
+		sceneForEntity[entity]?.animateBump(direction)
 	}
 
 	fun fadeOut() {
@@ -107,6 +147,12 @@ class WorldScene : Node2D() {
 
 	fun fadeIn() {
 		animationPlayer.play("fade_in")
+	}
+
+	private fun animateWeaponAttack(positions: Set<Position>) {
+		positions.forEach {
+			flashOverlayForPosition[it]?.showFlash(Color.white)
+		}
 	}
 
 	private fun calculateNodePosition(worldPosition: Position): Vector2 {
