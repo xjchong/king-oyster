@@ -51,12 +51,12 @@ class EntitySprite : Node2D() {
 			"ghost" -> Triple("G", Color.darkblue, "ghost")
 			"goblin" -> Triple("g", Color.darkred, "goblin")
 			"greatsword" -> Triple("|", Color.lightblue, "greatsword")
+			"longsword" -> Triple("|", Color.white, "longsword")
 			"slime" -> {
 				animatedSprite.position -= Vector2(0, 2)
 				Triple("s", Color.lightgreen, "blue_slime")
 			}
 			"stairs" -> Triple("<", Color.white, null)
-			"sword" -> Triple("|", Color.white, "sword")
 			"coin" -> Triple("$", Color.cyan, null)
 			null -> Triple(" ", Color.white, null)
 			else -> Triple("?", Color.red, null)

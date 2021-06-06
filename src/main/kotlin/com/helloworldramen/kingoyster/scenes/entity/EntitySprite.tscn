@@ -130,10 +130,6 @@ region = Rect2( 48, 0, 16, 16 )
 atlas = ExtResource( 7 )
 region = Rect2( 0, 64, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=31]
-atlas = ExtResource( 7 )
-region = Rect2( 16, 0, 16, 16 )
-
 [sub_resource type="AtlasTexture" id=32]
 atlas = ExtResource( 7 )
 region = Rect2( 96, 0, 16, 16 )
@@ -141,6 +137,10 @@ region = Rect2( 96, 0, 16, 16 )
 [sub_resource type="AtlasTexture" id=33]
 atlas = ExtResource( 8 )
 region = Rect2( 0, 0, 16, 24 )
+
+[sub_resource type="AtlasTexture" id=31]
+atlas = ExtResource( 7 )
+region = Rect2( 16, 0, 16, 16 )
 
 [sub_resource type="SpriteFrames" id=34]
 animations = [ {
@@ -174,11 +174,6 @@ animations = [ {
 "name": "dagger",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 31 ) ],
-"loop": true,
-"name": "sword",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 32 ) ],
 "loop": true,
 "name": "greatsword",
@@ -187,6 +182,11 @@ animations = [ {
 "frames": [ SubResource( 33 ) ],
 "loop": true,
 "name": "grass_stone_wall",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 31 ) ],
+"loop": true,
+"name": "longsword",
 "speed": 5.0
 } ]
 
@@ -209,4 +209,4 @@ __meta__ = {
 position = Vector2( 16, 16 )
 scale = Vector2( 2, 2 )
 frames = SubResource( 34 )
-animation = "goblin"
+animation = "longsword"

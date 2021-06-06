@@ -16,7 +16,7 @@ class SmorgasbordPopulationStrategy : PopulationStrategy() {
         MonoculturePopulationTemplate(0.04, PopulationRule({ ActorFactory.slime() })),
         MonoculturePopulationTemplate(1, 2, PopulationRule({ ActorFactory.ghost() })),
         MonoculturePopulationTemplate(2, 4, PopulationRule({ WeaponFactory.newDagger() })),
-        MonoculturePopulationTemplate(2, 4, PopulationRule({ WeaponFactory.newSword() })),
+        MonoculturePopulationTemplate(2, 4, PopulationRule({ WeaponFactory.newLongsword() })),
         MonoculturePopulationTemplate(2, 4, PopulationRule({ WeaponFactory.newGreatsword() })),
         SingletonPopulationTemplate(StairsPopulationRule())
     )

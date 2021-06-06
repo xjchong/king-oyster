@@ -6,6 +6,7 @@ import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
 import com.helloworldramen.kingoyster.parts.combat.attacks.DaggerAttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attacks.LongswordAttackPattern
 
 object WeaponFactory {
 
@@ -23,11 +24,11 @@ object WeaponFactory {
         )
     )
 
-    fun newSword() = Entity(
-        name = "sword",
+    fun newLongsword() = Entity(
+        name = "longsword",
         parts = listOf(
             WeaponPart(
-                attackPattern = DaggerAttackPattern(1.5),
+                attackPattern = LongswordAttackPattern(1.5),
                 throwInfo = DamageInfo(
                     powerFactor = 3.0,
                     damageType = DamageType.Cut,
