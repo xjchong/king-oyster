@@ -34,11 +34,13 @@ class WeaponAttackEnemyStrategy(vararg considerations: GameAiConsideration) : Ga
     private fun calculateAttackOptions(strategyContext: GameAiStrategyContext, attackPattern: AttackPattern): List<GameAiOption> {
         val (context, attacker) = strategyContext
 
-        return Direction.all().associateWith { direction ->
+        return Direction.all().filter{ direction ->
+            attackPattern.isUsable(context, attacker, direction)
+        }.associateWith { direction ->
             attackPattern.calculateDamageForPosition(context, attacker, direction).keys
         }.filter { (_, positions) ->
             positions.any { position ->
-                context.entitiesAt(position)?.any { it.isEnemyOf(attacker) } != null
+                context.entitiesAt(position)?.any { it.isEnemyOf(attacker) } == true
             }
         }.keys.map {
             WeaponAttackOption(this, strategyContext.withDirection(it))

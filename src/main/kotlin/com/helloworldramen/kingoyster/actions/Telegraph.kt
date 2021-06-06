@@ -4,12 +4,12 @@ import com.helloworldramen.kingoyster.architecture.Action
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.World
-import com.helloworldramen.kingoyster.parts.Telegraph
+import com.helloworldramen.kingoyster.parts.TelegraphInfo
 
-data class TelegraphActions(
+data class Telegraph(
     override val context: Context,
     override val actor: Entity,
-    val telegraph: Telegraph
+    val telegraph: TelegraphInfo
 ) : Action {
 
     override val world: World = context.world

@@ -1,14 +1,14 @@
 package com.helloworldramen.kingoyster.parts
 
-import com.helloworldramen.kingoyster.actions.TelegraphActions
+import com.helloworldramen.kingoyster.actions.Telegraph
 import com.helloworldramen.kingoyster.architecture.*
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.TelegraphEvent
 import com.helloworldramen.kingoyster.parts.combat.health
 
-class TelegraphPart private constructor(telegraphs: List<Telegraph>) : Part {
+class TelegraphPart private constructor(telegraphs: List<TelegraphInfo>) : Part {
 
-    var telegraphs: List<Telegraph> = listOf()
+    var telegraphs: List<TelegraphInfo> = listOf()
         private set
 
     constructor(): this(listOf())
@@ -18,7 +18,7 @@ class TelegraphPart private constructor(telegraphs: List<Telegraph>) : Part {
     }
 
     override fun update(context: Context, partOwner: Entity) {
-        val remainingTelegraphs = mutableListOf<Telegraph>()
+        val remainingTelegraphs = mutableListOf<TelegraphInfo>()
 
         for (telegraph in telegraphs) {
             if (partOwner.health() < 0) break
@@ -37,12 +37,12 @@ class TelegraphPart private constructor(telegraphs: List<Telegraph>) : Part {
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
         return when (action) {
-            is TelegraphActions -> partOwner.respondToTelegraphActions(action)
+            is Telegraph -> partOwner.respondToTelegraph(action)
             else -> false
         }
     }
 
-    private fun Entity.respondToTelegraphActions(action: TelegraphActions): Boolean {
+    private fun Entity.respondToTelegraph(action: Telegraph): Boolean {
         if (action.actor != this) return false
 
         telegraphs = telegraphs + listOf(action.telegraph)
@@ -53,12 +53,10 @@ class TelegraphPart private constructor(telegraphs: List<Telegraph>) : Part {
     }
 }
 
-class Telegraph(val actor: Entity, turnsRemaining: Int, vararg payloads: TelegraphPayload){
+class TelegraphInfo(val actor: Entity, turnsRemaining: Int, val payloads: List<TelegraphPayload>){
 
     var turnsRemaining: Int = turnsRemaining
         private set
-    
-    val payloads: List<TelegraphPayload> = payloads.toList()
 
     fun update() {
         turnsRemaining--
@@ -66,23 +64,23 @@ class Telegraph(val actor: Entity, turnsRemaining: Int, vararg payloads: Telegra
         if (turnsRemaining <= 0) {
             // Execute the payloads.
             for (payload in payloads) {
-                val (action, position) = payload
+                val (action, _) = payload
                 val actor = action.actor
 
                 if (actor.health() <= 0) break
 
-                action.world.respondToActions(position, action)
+                actor.respondToAction(action)
             }
         }
     }
 }
 
-data class TelegraphPayload(val action: Action, val position: Position)
+data class TelegraphPayload(val action: Action, val positions: List<Position>)
 
 fun Entity.telegraphedPositions(): List<Position> {
     return find<TelegraphPart>()?.telegraphs?.flatMap { telegraph ->
-        telegraph.payloads.map { payload ->
-            payload.position
+        telegraph.payloads.flatMap { payload ->
+            payload.positions
         }
     } ?: listOf()
 }
