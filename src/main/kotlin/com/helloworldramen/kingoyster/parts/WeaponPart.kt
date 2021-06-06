@@ -11,18 +11,17 @@ import com.helloworldramen.kingoyster.eventbus.events.DamageWeaponEvent
 import com.helloworldramen.kingoyster.eventbus.events.EquipWeaponEvent
 import com.helloworldramen.kingoyster.parts.combat.AttackPattern
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
-import com.helloworldramen.kingoyster.parts.combat.attacks.DefaultAttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
 
 class WeaponPart(
-    val attackPattern: AttackPattern = DefaultAttackPattern(),
-    val damageInfo: DamageInfo,
+    val attackPattern: AttackPattern = BasicAttackPattern(),
+    val throwInfo: DamageInfo,
     val maxDurability: Int,
-    val throwFactor: Double = 2.0,
     var durability: Int = maxDurability
 ) : Part {
 
     override fun copy(): Part {
-        return WeaponPart(attackPattern, damageInfo, maxDurability, throwFactor, durability)
+        return WeaponPart(attackPattern, throwInfo, maxDurability, durability)
     }
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
@@ -69,6 +68,14 @@ class WeaponPart(
     companion object {
         const val BREAK_FACTOR = 2.0
     }
+}
+
+fun Entity.weaponAttackPattern(): AttackPattern? {
+    return find<WeaponPart>()?.attackPattern
+}
+
+fun Entity.throwInfo(): DamageInfo {
+    return find<WeaponPart>()?.throwInfo ?: DamageInfo()
 }
 
 fun Entity.durability(): Int {

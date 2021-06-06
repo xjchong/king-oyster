@@ -11,22 +11,21 @@ import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
-import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
 import com.helloworldramen.kingoyster.parts.*
-import com.helloworldramen.kingoyster.parts.combat.attacks.DefaultAttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
 import kotlin.math.roundToInt
 
 class CombatPart(
     var maxHealth: Int,
     var maxMana: Int,
     var power: Int,
-    var defaultDamageInfo: DamageInfo,
+    var defaultAttackPattern: AttackPattern,
     var health: Int = maxHealth,
     var mana: Int = maxMana,
 ) : Part {
 
     override fun copy(): Part {
-        return CombatPart(maxHealth, maxMana, power, defaultDamageInfo, health, mana)
+        return CombatPart(maxHealth, maxMana, power, defaultAttackPattern, health, mana)
     }
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
@@ -40,7 +39,7 @@ class CombatPart(
     private fun Entity.respondToWeaponAttack(action: WeaponAttack): Boolean {
         val (context, _, direction) = action
         val weapon = weapon()
-        val attackPattern = attackPattern()
+        val attackPattern = weapon?.weaponAttackPattern() ?: defaultAttackPattern()
 
         if (!attackPattern.isUsable(context, this, direction)) return false
 
@@ -89,7 +88,6 @@ fun Entity.health(): Int = find<CombatPart>()?.health ?: 0
 fun Entity.maxMana(): Int = find<CombatPart>()?.maxMana ?: 0
 fun Entity.mana(): Int = find<CombatPart>()?.mana ?: 0
 fun Entity.power(): Int = find<CombatPart>()?.power ?: 0
-fun Entity.defaultDamageInfo(): DamageInfo = find<CombatPart>()?.defaultDamageInfo ?: DamageInfo()
-fun Entity.attackPattern(): AttackPattern {
-    return weapon()?.attackPattern() ?: DefaultAttackPattern()
+fun Entity.defaultAttackPattern(): AttackPattern {
+    return find<CombatPart>()?.defaultAttackPattern ?: BasicAttackPattern()
 }

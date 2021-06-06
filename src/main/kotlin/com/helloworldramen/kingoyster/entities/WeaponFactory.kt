@@ -4,6 +4,8 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageType
+import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attacks.DaggerAttackPattern
 
 object WeaponFactory {
 
@@ -11,12 +13,12 @@ object WeaponFactory {
         name = "dagger",
         parts = listOf(
             WeaponPart(
-                damageInfo = DamageInfo(
-                    powerFactor = 1.0,
-                    damageType = DamageType.Cut,
+                attackPattern = DaggerAttackPattern(1.0),
+                throwInfo = DamageInfo(
+                    powerFactor = 6.0,
+                    damageType = DamageType.Stab,
                 ),
-                maxDurability = 10,
-                throwFactor = 6.0
+                maxDurability = 10
             )
         )
     )
@@ -25,9 +27,10 @@ object WeaponFactory {
         name = "sword",
         parts = listOf(
             WeaponPart(
-                damageInfo = DamageInfo(
-                    powerFactor = 1.5,
-                    damageType = DamageType.Cut
+                attackPattern = DaggerAttackPattern(1.5),
+                throwInfo = DamageInfo(
+                    powerFactor = 3.0,
+                    damageType = DamageType.Cut,
                 ),
                 maxDurability = 9
             )
@@ -38,9 +41,10 @@ object WeaponFactory {
         name = "greatsword",
         parts = listOf(
             WeaponPart(
-                damageInfo = DamageInfo(
-                    powerFactor = 3.0,
-                    damageType = DamageType.Cut
+                attackPattern = DaggerAttackPattern(3.0),
+                throwInfo = DamageInfo(
+                    powerFactor = 6.0,
+                    damageType = DamageType.Cut,
                 ),
                 maxDurability = 8
             )

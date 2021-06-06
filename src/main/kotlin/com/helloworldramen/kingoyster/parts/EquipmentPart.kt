@@ -9,7 +9,6 @@ import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DropWeaponEvent
 import com.helloworldramen.kingoyster.eventbus.events.ThrowWeaponEvent
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
-import com.helloworldramen.kingoyster.parts.combat.defaultDamageInfo
 import com.helloworldramen.kingoyster.parts.combat.power
 import kotlin.math.roundToInt
 
@@ -46,7 +45,6 @@ class EquipmentPart(
     private fun Entity.respondToThrowWeapon(action: ThrowWeapon): Boolean {
         val (context, thrower, direction) = action
         val weapon = weapon ?: return false
-        val equippedWeaponPart = thrower.equippedWeaponPart() ?: return false
         val currentPosition = context.positionOf(this) ?: return false
         val nearestImpassablePosition = context.straightPathUntil(currentPosition, direction) { position ->
             val entities = context.entitiesAt(position)
@@ -64,13 +62,13 @@ class EquipmentPart(
             context.world.move(weapon, nearestImpassablePosition.findUnoccupiedPosition(context))
             weapon.respondToAction(DamageWeapon(context, thrower, null, THROW_DURABILITY_LOSS))
 
-            val damageInfo = equippedWeaponPart.damageInfo
+            val throwInfo = weapon.throwInfo()
             val breakFactor = if (weapon.durability() <= 0) WeaponPart.BREAK_FACTOR else 1.0
-            val rawAmount = (power() * damageInfo.powerFactor * breakFactor * equippedWeaponPart.throwFactor).roundToInt()
+            val rawAmount = (power() * throwInfo.powerFactor * breakFactor).roundToInt()
 
             // Damage the entity at the destination.
             context.world.respondToActions(nearestImpassablePosition,
-                Damage(context, this, rawAmount, damageInfo.damageType, damageInfo.elementType)
+                Damage(context, this, rawAmount, throwInfo.damageType, throwInfo.elementType)
             )
         } else {
             val furthestPassablePosition = nearestImpassablePosition - direction.vector
@@ -120,8 +118,4 @@ class EquipmentPart(
 
 fun Entity.weapon(): Entity? {
     return find<EquipmentPart>()?.weapon
-}
-
-fun Entity.equippedWeaponPart(): WeaponPart? {
-    return weapon()?.find()
 }

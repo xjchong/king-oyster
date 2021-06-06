@@ -1,7 +1,7 @@
 package com.helloworldramen.kingoyster.parts.combat
 
 data class DamageInfo(
-    val powerFactor: Double = 1.0,
+    val powerFactor: Double = 0.0,
     val damageType: DamageType = DamageType.Special,
     val elementType: ElementType = ElementType.None
 )

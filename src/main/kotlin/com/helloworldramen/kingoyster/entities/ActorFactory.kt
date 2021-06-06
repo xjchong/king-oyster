@@ -2,9 +2,11 @@ package com.helloworldramen.kingoyster.entities
 
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.parts.*
+import com.helloworldramen.kingoyster.parts.combat.AttackPattern
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageType
+import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
 
 object ActorFactory {
 
@@ -15,7 +17,7 @@ object ActorFactory {
                 maxHealth = 1000,
                 maxMana = 4,
                 power = 10,
-                defaultDamageInfo = DamageInfo(
+                defaultAttackPattern = BasicAttackPattern(
                     powerFactor = 0.5,
                     damageType = DamageType.Bash
                 )
@@ -43,9 +45,7 @@ object ActorFactory {
                 maxHealth = 10,
                 maxMana = 6,
                 power = 0,
-                defaultDamageInfo = DamageInfo(
-                    powerFactor = 0.0
-                )
+                defaultAttackPattern = BasicAttackPattern(0.0)
             ),
             FactionPart(Faction.Spirit),
             PhysicalPart(
@@ -67,7 +67,7 @@ object ActorFactory {
                 maxHealth = 30,
                 maxMana = 0,
                 power = 5,
-                defaultDamageInfo = DamageInfo(
+                defaultAttackPattern = BasicAttackPattern(
                     powerFactor = 1.0,
                     damageType = DamageType.Bash
                 )
@@ -93,7 +93,7 @@ object ActorFactory {
                 maxHealth = 20,
                 maxMana = 0,
                 power = 2,
-                defaultDamageInfo = DamageInfo()
+                defaultAttackPattern = BasicAttackPattern()
             ),
             FactionPart(Faction.Monster),
             PhysicalPart(

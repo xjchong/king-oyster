@@ -144,7 +144,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private fun parseInput(event: InputEvent) {
 		val world = context.world
 		val player = context.player
-		val hasWeapon = player.equippedWeaponPart() != null
+		val hasWeapon = player.weapon() != null
 
 		when {
 			Input.isActionPressed("left_modifier") -> {

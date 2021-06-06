@@ -1,7 +1,6 @@
 package com.helloworldramen.kingoyster.actions
 
 import com.helloworldramen.kingoyster.architecture.*
-import com.helloworldramen.kingoyster.parts.equippedWeaponPart
 
 data class WeaponAttack(
     override val context: Context,
