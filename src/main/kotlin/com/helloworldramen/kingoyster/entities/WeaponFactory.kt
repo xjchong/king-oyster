@@ -2,7 +2,6 @@ package com.helloworldramen.kingoyster.entities
 
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.parts.*
-import com.helloworldramen.kingoyster.parts.combat.AttackInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 

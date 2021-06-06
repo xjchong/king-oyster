@@ -130,13 +130,3 @@ data class Position(val x: Int = 0, val y: Int = 0) {
     }
 }
 
-sealed class Direction(val vector: Position) {
-    object North : Direction(Position.NORTH)
-    object East : Direction(Position.EAST)
-    object South : Direction(Position.SOUTH)
-    object West : Direction(Position.WEST)
-
-    companion object {
-        val ALL = listOf(North, East, South, West)
-    }
-}

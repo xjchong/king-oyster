@@ -5,7 +5,7 @@ import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 
-abstract class AttackInfo {
+abstract class AttackPattern {
 
     abstract fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean
     abstract fun calculateDamageForPosition(context: Context, entity: Entity, direction: Direction): Map<Position, DamageInfo>

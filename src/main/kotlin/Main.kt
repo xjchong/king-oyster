@@ -52,7 +52,8 @@ class ConsoleGameEngine : EventBusSubscriber {
         fun performDirectionActions(position: Position): Boolean {
             return player.respondToAction(Move(context, player, position)) ||
                     world[position].tryActions(
-                        Open(context, player), WeaponAttack(context, player)
+                        Open(context, player) // Removed weapon attack because lazy. Can I deprecate this console view yet?
+                    // Or better would be to make a view independent input parser.
                     )
         }
 

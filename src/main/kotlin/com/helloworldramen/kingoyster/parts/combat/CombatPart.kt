@@ -12,10 +12,8 @@ import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
-import com.helloworldramen.kingoyster.parts.durability
-import com.helloworldramen.kingoyster.parts.equippedWeaponPart
-import com.helloworldramen.kingoyster.parts.isEnemyOf
-import com.helloworldramen.kingoyster.parts.weapon
+import com.helloworldramen.kingoyster.parts.*
+import com.helloworldramen.kingoyster.parts.combat.attacks.DefaultAttackPattern
 import kotlin.math.roundToInt
 
 class CombatPart(
@@ -40,25 +38,27 @@ class CombatPart(
     }
 
     private fun Entity.respondToWeaponAttack(action: WeaponAttack): Boolean {
-        val (context, attacker) = action
+        val (context, _, direction) = action
+        val weapon = weapon()
+        val attackPattern = attackPattern()
 
-        if (!isEnemyOf(attacker)) return false
+        if (!attackPattern.isUsable(context, this, direction)) return false
 
-        val weapon = attacker.weapon()
-        val damageInfo = attacker.equippedWeaponPart()?.damageInfo ?: attacker.defaultDamageInfo()
-        val breakFactor = if (weapon != null && weapon.durability() == 1) 2.0 else 1.0
-        val rawAmount = attacker.power() * damageInfo.powerFactor * breakFactor
-        val damage = Damage(context, attacker, rawAmount.roundToInt(), damageInfo.damageType, damageInfo.elementType)
+        val damageForPosition = attackPattern.calculateDamageForPosition(context, this, direction)
 
-        return if (respondToDamage(damage)) {
-            EventBus.post(WeaponAttackEvent(attacker, this))
+        weapon()?.respondToAction(DamageWeapon(context, this, this, 1))
 
-            weapon?.respondToAction(DamageWeapon(context, attacker, attacker, 1))
+        val breakFactor = if (weapon != null && weapon.durability() <= 0) 2.0 else 1.0
 
-            true
-        } else {
-            false
+        damageForPosition.forEach { (position, damageInfo) ->
+            val amount = (power() * damageInfo.powerFactor * breakFactor).roundToInt()
+
+            context.world.respondToActions(position,
+                Damage(context, this, amount, damageInfo.damageType, damageInfo.elementType)
+            )
         }
+
+        return true
     }
 
     private fun Entity.respondToDamage(action: Damage): Boolean {
@@ -90,3 +90,6 @@ fun Entity.maxMana(): Int = find<CombatPart>()?.maxMana ?: 0
 fun Entity.mana(): Int = find<CombatPart>()?.mana ?: 0
 fun Entity.power(): Int = find<CombatPart>()?.power ?: 0
 fun Entity.defaultDamageInfo(): DamageInfo = find<CombatPart>()?.defaultDamageInfo ?: DamageInfo()
+fun Entity.attackPattern(): AttackPattern {
+    return weapon()?.attackPattern() ?: DefaultAttackPattern()
+}

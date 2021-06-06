@@ -18,19 +18,12 @@ class AttackOption(
     override val tag: String = "atk"
 
     override fun execute(): Boolean {
-        val (context, entity, target) = optionContext
-        val targetPosition = context.positionOf(target) ?: return false
+        val (context, entity, _, _, direction) = optionContext
 
-        if (target == null) return false
+        if (direction == null) return false
 
-        val attackAction = WeaponAttack(context, entity)
+        val attackOption = WeaponAttack(context, entity, direction)
 
-        return if (entity.has<TelegraphPart>()) {
-            entity.respondToAction(TelegraphActions(context, entity,
-                Telegraph(entity, 1, TelegraphPayload(attackAction, targetPosition))
-            ))
-        } else {
-            target.respondToAction(attackAction)
-        }
+        return entity.respondToAction(attackOption)
     }
 }
