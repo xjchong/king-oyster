@@ -23,7 +23,13 @@ object ActorFactory {
                 )
             ),
             EquipmentPart(),
-            FactionPart(Faction.Player),
+            FactionPart(Faction.Player,
+                enemies = setOf(
+                    Faction.Goblin,
+                    Faction.Monster,
+                    Faction.Spirit
+                )
+            ),
             InventoryPart(6),
             PhysicalPart(
                 isPassable = false
@@ -73,7 +79,9 @@ object ActorFactory {
                 )
             ),
             EquipmentPart(),
-            FactionPart(Faction.Monster),
+            FactionPart(Faction.Goblin,
+                enemies = setOf(Faction.Player, Faction.Spirit)
+            ),
             PhysicalPart(
                 isPassable = false
             ),
@@ -95,7 +103,9 @@ object ActorFactory {
                 power = 2,
                 defaultAttackPattern = BasicAttackPattern(1.0)
             ),
-            FactionPart(Faction.Monster),
+            FactionPart(Faction.Monster,
+                enemies = setOf(Faction.Player, Faction.Goblin)
+            ),
             PhysicalPart(
                 isPassable = false
             ),

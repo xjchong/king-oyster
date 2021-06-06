@@ -4,32 +4,32 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
 
 class FactionPart(
-    val faction: Faction
+    val faction: Faction,
+    val enemies: Set<Faction> = setOf(),
+    val allies: Set<Faction> = setOf(faction)
 ) : Part {
 
     override fun copy(): Part {
-        return FactionPart(faction)
+        return FactionPart(faction, enemies, allies)
     }
 }
 
 sealed class Faction {
+    object None : Faction()
     object Player : Faction()
+    object Goblin : Faction()
     object Monster : Faction()
     object Spirit : Faction()
 }
 
-fun Entity.faction(): Faction? = find<FactionPart>()?.faction
+fun Entity.allies(): Set<Faction> = find<FactionPart>()?.allies ?: setOf()
+fun Entity.enemies(): Set<Faction> = find<FactionPart>()?.enemies ?: setOf()
+fun Entity.faction(): Faction = find<FactionPart>()?.faction ?: Faction.None
 
 fun Entity.isEnemyOf(otherEntity: Entity): Boolean {
-    val otherFaction = otherEntity.faction() ?: return false
-    val ownFaction = faction() ?: return false
-
-    return otherFaction != ownFaction
+    return otherEntity.enemies().contains(faction())
 }
 
 fun Entity.isAllyOf(otherEntity: Entity): Boolean {
-    val otherFaction = otherEntity.faction() ?: return false
-    val ownFaction = faction() ?: return false
-
-    return otherFaction == ownFaction
+    return otherEntity.allies().contains(faction())
 }

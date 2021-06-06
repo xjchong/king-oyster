@@ -11,10 +11,10 @@ class FleeFromEnemyStrategy(vararg considerations: GameAiConsideration) : GameAi
     override val considerations: List<GameAiConsideration> = considerations.toList()
 
     override fun listOptions(strategyContext: GameAiStrategyContext): List<GameAiOption> {
-        val (context, chaser) = strategyContext
-        val visiblePositions = chaser.visiblePositions()
+        val (context, fleer) = strategyContext
+        val visiblePositions = fleer.visiblePositions()
         val enemyAndPosition = visiblePositions.flatMap { visiblePosition ->
-            (context.entitiesAt(visiblePosition)?.filter { it.isEnemyOf(chaser) } ?: listOf()).map { enemy ->
+            (context.entitiesAt(visiblePosition)?.filter { fleer.isEnemyOf(it) } ?: listOf()).map { enemy ->
                 Pair(enemy, visiblePosition)
             }
         }
