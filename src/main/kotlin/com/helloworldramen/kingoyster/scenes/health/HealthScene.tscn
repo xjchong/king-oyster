@@ -1,10 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/health/HealthScene.kt" type="Script" id=1]
-[ext_resource path="res://src/main/resources/sprites/health-bar-border.png" type="Texture" id=3]
-[ext_resource path="res://src/main/resources/sprites/health-bar-background.png" type="Texture" id=4]
-[ext_resource path="res://src/main/resources/sprites/health-bar-fade.png" type="Texture" id=5]
-[ext_resource path="res://src/main/resources/sprites/health-bar-fill.png" type="Texture" id=6]
+[ext_resource path="res://src/main/resources/sprites/ui/health-bar-border.png" type="Texture" id=3]
+[ext_resource path="res://src/main/resources/sprites/ui/health-bar-fill.png" type="Texture" id=4]
+[ext_resource path="res://src/main/resources/sprites/ui/health-bar-background.png" type="Texture" id=5]
 
 [node name="HealthScene" type="Node2D"]
 script = ExtResource( 1 )
@@ -13,9 +12,9 @@ script = ExtResource( 1 )
 margin_right = 32.0
 margin_bottom = 8.0
 value = 75.0
-texture_under = ExtResource( 4 )
+texture_under = ExtResource( 5 )
 texture_over = ExtResource( 3 )
-texture_progress = ExtResource( 5 )
+texture_progress = ExtResource( 4 )
 tint_under = Color( 0.168627, 0.168627, 0.168627, 1 )
 nine_patch_stretch = true
 __meta__ = {
@@ -27,7 +26,7 @@ margin_right = 32.0
 margin_bottom = 8.0
 value = 50.0
 texture_over = ExtResource( 3 )
-texture_progress = ExtResource( 6 )
+texture_progress = ExtResource( 4 )
 tint_progress = Color( 0.266667, 0.901961, 0.247059, 1 )
 nine_patch_stretch = true
 __meta__ = {

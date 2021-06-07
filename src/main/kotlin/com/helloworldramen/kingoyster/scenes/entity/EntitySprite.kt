@@ -57,7 +57,7 @@ class EntitySprite : Node2D() {
 				animatedSprite.position -= Vector2(0, 2)
 				Triple("s", Color.lightgreen, "blue_slime")
 			}
-			"stairs" -> Triple("<", Color.white, null)
+			"stairs" -> Triple("<", Color.white, "stone_stairs_up")
 			null -> Triple(" ", Color.white, null)
 			else -> Triple("?", Color.red, null)
 		}

@@ -53,7 +53,7 @@ rect_min_size = Vector2( 0, 32 )
 custom_styles/panel = SubResource( 1 )
 
 [node name="HealthScene" parent="VBoxContainer/HealthVBox/HealthPanel" instance=ExtResource( 2 )]
-position = Vector2( -0.11499, 9.0539 )
+position = Vector2( 0, 9 )
 scale = Vector2( 7, 5 )
 
 [node name="HealthLabelsContainer" type="MarginContainer" parent="VBoxContainer/HealthVBox"]
