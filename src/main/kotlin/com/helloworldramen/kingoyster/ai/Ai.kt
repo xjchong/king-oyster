@@ -35,19 +35,18 @@ object Ai {
             "goblin" -> HighestValueReasoner.prioritize(aiContext, listOf(
                 WeaponAttackEnemyStrategy(
                     ConstantConsideration(0.9),
-                    OwnHealthConsideration(LinearCurve(0.6, 1.0))
                 ),
                 ChaseEnemyStrategy(
                     ConstantConsideration(0.8),
-                    OwnHealthConsideration(LinearCurve(0.5, 1.0))
                 ),
                 TakeWeaponStrategy(
-                    ConstantConsideration(0.9),
-                    HasWeaponConsideration(false)
+                    HasWeaponConsideration(0.0, 1.0),
+                    ConstantConsideration(0.9)
                 ),
                 FleeFromEnemyStrategy(
                     OwnHealthConsideration(LinearCurve(2.0, 0.5)),
-                    VisibleAlliesConsideration(LinearCurve(1.0, 0.5))
+                    VisibleAlliesConsideration(LinearCurve(1.0, 0.3)),
+                    HasWeaponConsideration(0.8, 1.0)
                 ),
                 WanderStrategy(
                     ConstantConsideration(0.5)
