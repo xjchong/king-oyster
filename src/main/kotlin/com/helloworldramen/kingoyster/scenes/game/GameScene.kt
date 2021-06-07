@@ -123,6 +123,10 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _input(event: InputEvent) {
+		if (shouldLoadNewLevel && worldScene.isAnimating) {
+			return
+		}
+
 		if (inputQueue.size <= MAX_INPUT_QUEUE_SIZE) {
 			inputQueue.offer(event)
 		}
