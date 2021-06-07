@@ -53,7 +53,9 @@ object ActorFactory {
                 power = 0,
                 defaultAttackPattern = BasicAttackPattern(0.0)
             ),
-            FactionPart(Faction.Spirit),
+            FactionPart(Faction.Spirit,
+                enemies = setOf(Faction.Goblin, Faction.Player)
+            ),
             PhysicalPart(
                 isPassable = true,
                 isCorporeal = false
