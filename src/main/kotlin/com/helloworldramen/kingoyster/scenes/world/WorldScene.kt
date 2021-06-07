@@ -13,8 +13,10 @@ import com.helloworldramen.kingoyster.parts.combat.health
 import com.helloworldramen.kingoyster.parts.telegraphedPositions
 import com.helloworldramen.kingoyster.parts.visiblePositions
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
+import com.helloworldramen.kingoyster.scenes.floor.FloorScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
 import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
+import com.helloworldramen.kingoyster.utilities.WeightedCollection
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -27,12 +29,14 @@ import godot.global.GD
 @RegisterClass
 class WorldScene : Node2D(), EventBusSubscriber {
 
+	private val floorBucket: YSort by lazy { getNodeAs("FloorRect/FloorBucket")!! }
+	private val tileBucket: YSort by lazy { getNodeAs("FloorRect/TileBucket")!! }
 	private val telegraphBucket: YSort by lazy { getNodeAs("TelegraphBucket")!! }
 	private val flashBucket: YSort by lazy { getNodeAs("FlashBucket")!! }
-	private val tileBucket: YSort by lazy { getNodeAs("FloorRect/TileBucket")!! }
 	private val blackoutRect: ColorRect by lazy { getNodeAs("BlackoutRect")!! }
 	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
 
+	private val packedFloorScene = GD.load<PackedScene>(FloorScene.PATH)
 	private val packedTileOverlayScene = GD.load<PackedScene>(TileOverlayScene.PATH)
 	private val packedMemoryScene = GD.load<PackedScene>(MemoryScene.PATH)
 	private val packedEntityScene = GD.load<PackedScene>(EntityScene.PATH)
@@ -84,9 +88,10 @@ class WorldScene : Node2D(), EventBusSubscriber {
 		this.context = context
 		val world = context.world
 
+		floorBucket.freeChildren()
+		tileBucket.freeChildren()
 		telegraphBucket.freeChildren()
 		flashBucket.freeChildren()
-		tileBucket.freeChildren()
 		sceneForEntity.clear()
 		telegraphOverlayForPosition.clear()
 		flashOverlayForPosition.clear()
@@ -115,6 +120,19 @@ class WorldScene : Node2D(), EventBusSubscriber {
 						sceneForEntity[item] = it
 					}
 				}
+			}
+
+			// Setup the floor for this position.
+			packedFloorScene?.instanceAs<FloorScene>()?.let { floorScene ->
+				floorBucket.addChild(floorScene)
+				floorScene.bind("dry_grass_floor", WeightedCollection(
+					500 to 0, 30 to 1, 30 to 2, 30 to 3,
+					25 to 4, 25 to 5, 25 to 6, 25 to 7,
+					25 to 8, 25 to 9, 25 to 10, 25 to 11,
+					25 to 12, 25 to 13, 25 to 14, 25 to 15,
+					25 to 16, 25 to 17, 25 to 18, 25 to 19
+				))
+				floorScene.position = calculateNodePosition(position)
 			}
 
 			// Setup the telegraph for this position.

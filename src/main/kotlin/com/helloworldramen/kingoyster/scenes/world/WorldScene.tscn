@@ -46,6 +46,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="FloorBucket" type="YSort" parent="FloorRect"]
+
 [node name="TileBucket" type="YSort" parent="FloorRect"]
 
 [node name="TelegraphBucket" type="YSort" parent="."]
