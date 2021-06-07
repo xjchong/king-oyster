@@ -66,6 +66,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			DeathEvent::class,
 			DropItemEvent::class,
 			DropWeaponEvent::class,
+			HealEvent::class,
 			TakeItemEvent::class,
 			TakeWeaponEvent::class,
 			MoveEvent::class,
@@ -121,7 +122,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 				}
 				is DamageEvent -> {
 					if (event.target == entity) {
-						animateOnHit(event.value)
+						animateOnDamage(event.value)
 					}
 				}
 				is DamageWeaponEvent -> {
@@ -156,6 +157,11 @@ class EntityScene : Node2D(), EventBusSubscriber {
 						setPosition(false)
 					} else if (event.dropper == entity) {
 						animateDrop(event.weapon)
+					}
+				}
+				is HealEvent -> {
+					if (event.target == entity) {
+						animateOnHeal(event.amount)
 					}
 				}
 				is TakeItemEvent -> {
@@ -226,12 +232,16 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		animationPlayer.play("pulse")
 	}
 
-	fun animateOnHit(amount: Int) {
+	fun animateOnDamage(amount: Int) {
 		toast(amount.toString(), Color.white, ToastTextScene.SHORT_CONFIG)
 
 		if (entity.health() > 0) {
-			animationPlayer.play("on_hit")
+			animationPlayer.play("on_damage")
 		}
+	}
+
+	fun animateOnHeal(amount: Int) {
+		toast(amount.toString(), Color.mediumseagreen, ToastTextScene.SHORT_CONFIG)
 	}
 
 	fun animateOnBreak() {

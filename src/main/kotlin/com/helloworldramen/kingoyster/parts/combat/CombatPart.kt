@@ -6,10 +6,7 @@ import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
-import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
-import com.helloworldramen.kingoyster.eventbus.events.DeathEvent
-import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
-import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
+import com.helloworldramen.kingoyster.eventbus.events.*
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
 import kotlin.math.roundToInt
@@ -32,8 +29,9 @@ class CombatPart(
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
         return when (action) {
-            is WeaponAttack -> partOwner.respondToWeaponAttack(action)
             is Damage -> partOwner.respondToDamage(action)
+            is Heal ->partOwner.respondToHeal(action)
+            is WeaponAttack -> partOwner.respondToWeaponAttack(action)
             else -> false
         }
     }
@@ -86,11 +84,19 @@ class CombatPart(
 
     private fun Entity.respondToDamage(action: Damage): Boolean {
         val (context, source, amount, damageType, elementType) = action
-        val currentPosition = context.positionOf(this) ?: return false
         val finalAmount = (resFactor(damageType, elementType) * amount).roundToInt()
 
-        EventBus.post(DamageEvent(currentPosition, source, this, finalAmount))
+        EventBus.post(DamageEvent(source, this, finalAmount))
         modifyHealth(context, this, -finalAmount)
+
+        return true
+    }
+
+    private fun Entity.respondToHeal(action: Heal): Boolean {
+        val (context, source, amount) = action
+
+        EventBus.post(HealEvent(source, this, amount))
+        modifyHealth(context, this, amount)
 
         return true
     }

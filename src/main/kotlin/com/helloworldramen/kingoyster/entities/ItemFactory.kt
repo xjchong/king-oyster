@@ -1,5 +1,6 @@
 package com.helloworldramen.kingoyster.entities
 
+import com.helloworldramen.kingoyster.actions.Heal
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.parts.ItemPart
 import com.helloworldramen.kingoyster.parts.MoneyPart
@@ -14,7 +15,7 @@ object ItemFactory {
             ItemPart(
                 uses = 1,
                 effect = { context, user ->
-                    user.find<CombatPart>()?.modifyHealth(context, user, 10)
+                    user.respondToAction(Heal(context, user, 10))
 
                     true
                 }
