@@ -6,11 +6,11 @@ data class Move(
     override val context: Context,
     override val actor: Entity,
     val position: Position,
-    val type: MoveType = MoveType.Default
+    val type: MoveType = MoveType.Default,
+    override val timeFactor: Double = 1.0
 ) : Action {
 
     override val world: World = context.world
-    override val timeFactor: Double = 1.0
 }
 
 sealed class MoveType {

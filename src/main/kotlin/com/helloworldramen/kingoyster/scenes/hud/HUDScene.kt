@@ -4,7 +4,7 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.parts.combat.health
 import com.helloworldramen.kingoyster.parts.durability
 import com.helloworldramen.kingoyster.parts.item
-import com.helloworldramen.kingoyster.parts.uses
+import com.helloworldramen.kingoyster.parts.itemUses
 import com.helloworldramen.kingoyster.parts.weapon
 import com.helloworldramen.kingoyster.scenes.entity.EntitySprite
 import com.helloworldramen.kingoyster.scenes.health.HealthScene
@@ -70,7 +70,7 @@ class HUDScene : MarginContainer() {
 			itemNameLabel.text = "(no item)"
 			itemSprite.hide()
 		} else {
-			itemUsesLabel.text = "(${item.uses()})"
+			itemUsesLabel.text = "(${item.itemUses()})"
 			itemNameLabel.text = item.name.capitalize()
 			itemSprite.bind(item)
 			itemSprite.show()

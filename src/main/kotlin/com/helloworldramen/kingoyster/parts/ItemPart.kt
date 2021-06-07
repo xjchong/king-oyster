@@ -44,4 +44,4 @@ class ItemPart(
     }
 }
 
-fun Entity.uses(): Int = find<ItemPart>()?.uses ?: -1
+fun Entity.itemUses(): Int = find<ItemPart>()?.uses ?: -1

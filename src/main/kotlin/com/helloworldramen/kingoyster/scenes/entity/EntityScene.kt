@@ -67,12 +67,13 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			DropItemEvent::class,
 			DropWeaponEvent::class,
 			HealEvent::class,
-			TakeItemEvent::class,
-			TakeWeaponEvent::class,
 			MoveEvent::class,
 			PlayerToastEvent::class,
+			TakeItemEvent::class,
+			TakeWeaponEvent::class,
 			TelegraphEvent::class,
 			ThrowWeaponEvent::class,
+			TriggerTrapEvent::class,
 			UseItemEvent::class,
 		)
 		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
@@ -203,12 +204,19 @@ class EntityScene : Node2D(), EventBusSubscriber {
 						animateDrop(event.weapon)
 					}
 				}
+				is TriggerTrapEvent -> {
+					if (event.trap == entity) {
+						if (event.trap.trapUses() == 0) {
+							setPosition(false)
+						}
+					}
+				}
 				is UseItemEvent -> {
 					if (event.user == entity) {
 						val item = event.item
 						toast("used ${item.name}", Color.lightgray, ToastTextScene.LONG_CONFIG)
 
-						if (item.uses() <= 0) {
+						if (item.itemUses() <= 0) {
 							toast("-${item.name}", Color.gray, ToastTextScene.LONG_REVERSE_CONFIG)
 						}
 					}
@@ -349,7 +357,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			}
 			entity.has<ItemPart>() -> {
 				durabilityLabel.visible = true
-				durabilityLabel.text = entity.uses().toString()
+				durabilityLabel.text = entity.itemUses().toString()
 			}
 			else -> {
 				durabilityLabel.visible = false

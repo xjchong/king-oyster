@@ -84,7 +84,7 @@ class MemoryScene : Node2D() {
 			}
 			topEntity.has<ItemPart>() -> {
 				durabilityLabel.visible = true
-				durabilityLabel.text = topEntity.uses().toString()
+				durabilityLabel.text = topEntity.itemUses().toString()
 			}
 			else -> {
 				durabilityLabel.visible = false

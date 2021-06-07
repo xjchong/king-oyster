@@ -139,7 +139,12 @@ object ActorFactory {
                     Faction.Monster,
                     enemies = setOf(Faction.Player, Faction.Goblin)
                 ),
-                ItemSlotPart(),
+                ItemSlotPart(
+                    EntityTable(
+                        50 to FeatureFactory.healingPuddle(),
+                        50 to EntityTable.NULL
+                    ).generate()
+                ),
                 PhysicalPart(
                     isPassable = false
                 ),

@@ -26,18 +26,15 @@ class MovementPart : Part {
     }
 
     private fun Entity.respondToMove(action: Move): Boolean {
-        val (context, _, position) = action
-        val currentPosition = context.positionOf(this) ?: return false
+        val (context, actor, position) = action
+        if (actor != this) return false
+        val currentPosition = context.positionOf(actor) ?: return false
+        val entitiesAtPosition = context.entitiesAt(position) ?: return false
 
-        if (context.entitiesAt(position)?.any { !canPass(it) } == true) {
-            return false
-        }
+        if (entitiesAtPosition.any { !canPass(it) }) return false
+        if (!context.world.move(actor, position)) return false
 
-        if (!context.world.move(this, position)) {
-            return false
-        }
-
-        EventBus.post(MoveEvent(this, currentPosition, position, action.type))
+        EventBus.post(MoveEvent(actor, currentPosition, position, action.type))
 
         if (action.type == MoveType.Charge) {
             // We successfully moved, so apply impact effect.
@@ -45,15 +42,19 @@ class MovementPart : Part {
 
             // Apply damage to the destination position.
             context.world[position]?.forEach {
-                if (it != this) it.respondToAction(Damage(context, this, power, DamageType.Bash))
+                if (it != actor) it.respondToAction(Damage(context, actor, power, DamageType.Bash))
             }
 
             // And apply damage to neighbors of the destination.
             position.neighbors().forEach {
-                context.world.respondToActions(it, Damage(context, this, power, DamageType.Bash))
+                context.world.respondToActions(it, Damage(context, actor, power, DamageType.Bash))
             }
 
-            this.respondToAction(Damage(context, this, 1, DamageType.Special))
+            this.respondToAction(Damage(context, actor, 1, DamageType.Special))
+        }
+
+        entitiesAtPosition.forEach { otherEntity ->
+            otherEntity.trigger(context, actor)
         }
 
         return true
