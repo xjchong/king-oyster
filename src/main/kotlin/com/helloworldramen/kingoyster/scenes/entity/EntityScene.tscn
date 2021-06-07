@@ -173,7 +173,7 @@ tracks/2/keys = {
 "values": [ Color( 0.137255, 0.137255, 0.137255, 1 ), Color( 0, 0, 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=9]
 resource_name = "on_damage"
 length = 0.1
 tracks/0/type = "value"
@@ -189,7 +189,7 @@ tracks/0/keys = {
 "values": [ Color( 5, 3, 3, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=10]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath("AppearanceNode2D/EntitySprite:modulate")
@@ -228,7 +228,7 @@ tracks/2/keys = {
 "values": [ Color( 7.05882, 0.156863, 0.156863, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=11]
 resource_name = "on_heal"
 length = 0.1
 tracks/0/type = "value"
@@ -244,7 +244,7 @@ tracks/0/keys = {
 "values": [ Color( 0.258824, 0.607843, 0.392157, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=12]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath("AppearanceNode2D:scale")
@@ -295,9 +295,8 @@ tracks/3/keys = {
 "values": [ 500 ]
 }
 
-[sub_resource type="Animation" id=12]
-resource_name = "flash"
-length = 0.9
+[sub_resource type="Animation" id=13]
+length = 0.6
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("AppearanceNode2D/EntitySprite:modulate")
@@ -306,10 +305,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.0566021, 0.142498, 0.19476 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.0566021, 0.142498, 0.19476, 0.277759, 0.328366 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ Color( 4, 1.17647, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 4, 1.17647, 1, 1 ), Color( 1, 1, 1, 1 ) ]
+"values": [ Color( 4, 1.17647, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 4, 1.17647, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 4, 1.17647, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
 [node name="EntityScene" type="Node2D"]
@@ -344,10 +343,10 @@ anims/bump_south = SubResource( 5 )
 anims/bump_west = SubResource( 6 )
 anims/none = SubResource( 7 )
 anims/on_break = SubResource( 8 )
-anims/on_damage = SubResource( 10 )
-anims/on_death = SubResource( 9 )
-anims/on_heal = SubResource( 13 )
-anims/pulse = SubResource( 11 )
+anims/on_damage = SubResource( 9 )
+anims/on_death = SubResource( 10 )
+anims/on_heal = SubResource( 11 )
+anims/pulse = SubResource( 12 )
 
-[node name="AnimationLooper" type="AnimationPlayer" parent="."]
-anims/flash = SubResource( 12 )
+[node name="FlashAnimator" type="AnimationPlayer" parent="."]
+anims/flash = SubResource( 13 )

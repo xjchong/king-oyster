@@ -41,6 +41,22 @@ class ToastTextScene : Node2D() {
 					finalVal = 0.0,
 					duration = 0.1, Tween.TRANS_LINEAR, Tween.EASE_OUT, delay = 0.25)
 			}
+			MEDIUM_CONFIG -> {
+				tween.interpolateProperty(this, NodePath("scale"),
+					initialVal = Vector2.ZERO,
+					finalVal = Vector2.ONE,
+					duration = 0.1, Tween.TRANS_QUART, Tween.EASE_OUT)
+
+				tween.interpolateProperty(this, NodePath("scale"),
+					initialVal = Vector2.ONE,
+					finalVal = Vector2(0.8, 0.8),
+					duration = 0.4, Tween.TRANS_QUART, Tween.EASE_OUT, 0.3)
+
+				tween.interpolateProperty(this, NodePath("modulate:a"),
+					initialVal = modulate.a,
+					finalVal = 0.0,
+					duration = 0.2, Tween.TRANS_LINEAR, Tween.EASE_OUT, delay = 0.4)
+			}
 			LONG_CONFIG, LONG_REVERSE_CONFIG -> {
 				tween.interpolateProperty(this, NodePath("modulate:a"),
 					initialVal = modulate.a,
@@ -58,6 +74,7 @@ class ToastTextScene : Node2D() {
 	override fun _process(delta: Double) {
 		velocity = when (configuration) {
 			SHORT_CONFIG -> Vector2(velocity.x, min(0.0, velocity.y + (700 * delta)))
+			MEDIUM_CONFIG -> Vector2(velocity.x, min(0.0, velocity.y + (400 * delta)))
 			LONG_CONFIG -> Vector2(velocity.x, (velocity.y + (300 * delta)).coerceAtMost(-8.0))
 			LONG_REVERSE_CONFIG -> Vector2(velocity.x, (velocity.y - (300 * delta)).coerceAtLeast(8.0))
 			else -> Vector2.ZERO
@@ -81,6 +98,10 @@ class ToastTextScene : Node2D() {
 				position = Vector2.ZERO
 				velocity = Vector2(Random.nextInt(-15, 15), -150)
 			}
+			MEDIUM_CONFIG -> {
+				position = Vector2.ZERO
+				velocity = Vector2(Random.nextInt(-10, 10), -100)
+			}
 			LONG_CONFIG -> {
 				modulate.a = 1.0
 				position = Vector2(0, -16)
@@ -99,6 +120,7 @@ class ToastTextScene : Node2D() {
 	companion object {
 		const val PATH = "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/toasttext/ToastTextScene.tscn"
 		const val SHORT_CONFIG = "short"
+		const val MEDIUM_CONFIG = "medium"
 		const val LONG_CONFIG = "long"
 		const val LONG_REVERSE_CONFIG = "long_reverse"
 	}

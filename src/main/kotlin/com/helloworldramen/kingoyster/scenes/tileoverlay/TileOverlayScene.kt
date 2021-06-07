@@ -51,7 +51,7 @@ class TileOverlayScene: Node2D() {
 		tween.interpolateProperty(colorRect, NodePath("color"),
 			initialVal = color,
 			finalVal = Color(color.r, color.g, color.b, 0.0),
-			duration = 0.3,
+			duration = 0.35,
 			transType = Tween.TRANS_SINE,
 			easeType = Tween.EASE_IN,
 			delay = 0.05

@@ -35,7 +35,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private val durabilityLabel: Label by lazy { getNodeAs("AppearanceNode2D/DurabilityLabel")!! }
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
 	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
-	private val animationLooper: AnimationPlayer by lazy { getNodeAs("AnimationLooper")!! }
+	private val flashAnimator: AnimationPlayer by lazy { getNodeAs("FlashAnimator")!! }
 
 	private val packedToastTextScene = GD.load<PackedScene>(ToastTextScene.PATH)
 
@@ -252,17 +252,17 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	fun animateOnHeal(amount: Int) {
-		toast(amount.toString(), Color.mediumseagreen, ToastTextScene.SHORT_CONFIG)
+		toast(amount.toString(), Color.mediumseagreen, ToastTextScene.MEDIUM_CONFIG)
 	}
 
 	fun animateOnBreak() {
-		animationLooper.stop()
+		flashAnimator.stop()
 		resetAppearance()
 		animationPlayer.play("on_break")
 	}
 
 	fun animateOnDeath() {
-		animationLooper.stop()
+		flashAnimator.stop()
 		resetAppearance()
 		animationPlayer.play("on_death")
 	}
@@ -277,9 +277,9 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	fun animateTelegraph(isActive: Boolean) {
 		if (isActive) {
-			if (!animationLooper.isPlaying()) animationLooper.play("flash")
+			if (!flashAnimator.isPlaying()) flashAnimator.play("flash")
 		} else {
-			animationLooper.stop()
+			flashAnimator.stop()
 			resetAppearance()
 		}
 	}
