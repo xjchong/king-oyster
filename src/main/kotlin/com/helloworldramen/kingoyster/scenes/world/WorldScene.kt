@@ -25,6 +25,7 @@ import godot.core.Vector2
 import godot.extensions.getNodeAs
 import godot.extensions.instanceAs
 import godot.global.GD
+import kotlin.random.Random
 
 @RegisterClass
 class WorldScene : Node2D(), EventBusSubscriber {
@@ -87,6 +88,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 	fun bind(context: Context): EntityScene? {
 		this.context = context
 		val world = context.world
+		val floorSprite = if (Random.nextBoolean()) "dry_grass_floor" else "lush_grass_floor"
 
 		floorBucket.freeChildren()
 		tileBucket.freeChildren()
@@ -125,8 +127,8 @@ class WorldScene : Node2D(), EventBusSubscriber {
 			// Setup the floor for this position.
 			packedFloorScene?.instanceAs<FloorScene>()?.let { floorScene ->
 				floorBucket.addChild(floorScene)
-				floorScene.bind("dry_grass_floor", WeightedCollection(
-					500 to 0, 30 to 1, 30 to 2, 30 to 3,
+				floorScene.bind(floorSprite, WeightedCollection(
+					550 to 0, 30 to 1, 30 to 2, 30 to 3,
 					25 to 4, 25 to 5, 25 to 6, 25 to 7,
 					25 to 8, 25 to 9, 25 to 10, 25 to 11,
 					25 to 12, 25 to 13, 25 to 14, 25 to 15,
