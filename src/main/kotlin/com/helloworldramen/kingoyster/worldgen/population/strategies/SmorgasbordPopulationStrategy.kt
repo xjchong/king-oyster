@@ -1,26 +1,26 @@
 package com.helloworldramen.kingoyster.worldgen.population.strategies
 
 import com.helloworldramen.kingoyster.entities.ActorFactory
-import com.helloworldramen.kingoyster.entities.ItemFactory
 import com.helloworldramen.kingoyster.entities.WeaponFactory
 import com.helloworldramen.kingoyster.worldgen.population.PopulationRule
 import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
 import com.helloworldramen.kingoyster.worldgen.population.PopulationTemplate
 import com.helloworldramen.kingoyster.worldgen.population.rules.StairsPopulationRule
-import com.helloworldramen.kingoyster.worldgen.population.templates.MonoculturePopulationTemplate
-import com.helloworldramen.kingoyster.worldgen.population.templates.SingletonPopulationTemplate
 
-class SmorgasbordPopulationStrategy : PopulationStrategy() {
-
-    override val templates: List<PopulationTemplate> = listOf(
-        MonoculturePopulationTemplate(0.04, PopulationRule(ActorFactory.goblin())),
-        MonoculturePopulationTemplate(0.03, PopulationRule(ActorFactory.blueSlime())),
-        MonoculturePopulationTemplate(0.01, PopulationRule(ActorFactory.redSlime())),
-        MonoculturePopulationTemplate(1, 2, PopulationRule(ActorFactory.ghost())),
-        MonoculturePopulationTemplate(2, 4, PopulationRule(WeaponFactory.newDagger())),
-        MonoculturePopulationTemplate(2, 4, PopulationRule(WeaponFactory.newLongsword())),
-        MonoculturePopulationTemplate(2, 4, PopulationRule(WeaponFactory.newGreatsword())),
-        MonoculturePopulationTemplate(2, 4, PopulationRule(ItemFactory.medicine())),
-        SingletonPopulationTemplate(StairsPopulationRule())
-    )
-}
+class SmorgasbordPopulationStrategy(densityFactor: Double = 1.0) : PopulationStrategy(
+    PopulationTemplate(PopulationRule(ActorFactory.goblin()))
+        .withDensity(0.04 * densityFactor),
+    PopulationTemplate(PopulationRule(ActorFactory.blueSlime()))
+        .withDensity(0.03 * densityFactor),
+    PopulationTemplate(PopulationRule(ActorFactory.redSlime()))
+        .withDensity(0.01 * densityFactor),
+    PopulationTemplate(PopulationRule(ActorFactory.ghost()))
+        .withCount(1 * densityFactor, 2 * densityFactor),
+    PopulationTemplate(PopulationRule(WeaponFactory.newDagger()))
+        .withCount(2 * densityFactor, 4 * densityFactor),
+    PopulationTemplate(PopulationRule(WeaponFactory.newLongsword()))
+        .withCount(2 * densityFactor, 4 * densityFactor),
+    PopulationTemplate(PopulationRule(WeaponFactory.newGreatsword()))
+        .withCount(2 * densityFactor, 4 * densityFactor),
+    PopulationTemplate(StairsPopulationRule()).withCount(1)
+)

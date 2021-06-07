@@ -4,13 +4,13 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
 import com.helloworldramen.kingoyster.utilities.WeightedCollection
-import com.helloworldramen.kingoyster.utilities.WeightedEntry
 import com.helloworldramen.kingoyster.worldgen.topology.DrunkTopologyStrategy
 import com.helloworldramen.kingoyster.worldgen.topology.DungeonTopologyStrategy
 import com.helloworldramen.kingoyster.worldgen.topology.EmptyTopologyStrategy
 import com.helloworldramen.kingoyster.worldgen.topology.TopologyStrategy
 import com.helloworldramen.kingoyster.worldgen.population.strategies.EmptyPopulationStrategy
 import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
+import com.helloworldramen.kingoyster.worldgen.population.strategies.SlimesPopulationStrategy
 import com.helloworldramen.kingoyster.worldgen.population.strategies.SmorgasbordPopulationStrategy
 
 object WorldCreator {
@@ -31,35 +31,38 @@ object WorldCreator {
 
     private val KITS_FOR_LEVEL: Map<Int, WeightedCollection<WorldCreationKit>> = mapOf(
         1 to WeightedCollection(
-            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy(0.5)),
         ),
         2 to WeightedCollection(
-            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
-            20 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy(0.5)),
+            20 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy(0.5)),
         ),
         3 to WeightedCollection(
-            80 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
-            100 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            80 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy(0.6)),
+            100 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy(0.6)),
         ),
         4 to WeightedCollection(
-            90 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
-            100 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            90 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy(0.7)),
+            100 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy(0.7)),
+            30 to WorldCreationKit(DrunkTopologyStrategy(), SlimesPopulationStrategy())
         ),
         5 to WeightedCollection(
-            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
-            100 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy(0.8)),
+            100 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy(0.8)),
         ),
         6 to WeightedCollection(
-            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
-            20 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy(0.8)),
+            20 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy(0.8)),
+            10 to WorldCreationKit(DrunkTopologyStrategy(), SlimesPopulationStrategy())
         ),
         7 to WeightedCollection(
-            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
-            20 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy(0.9)),
+            20 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy(0.9)),
         ),
         8 to WeightedCollection(
-            30 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
-            100 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            30 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy(0.9)),
+            100 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy(0.9)),
+            10 to WorldCreationKit(DrunkTopologyStrategy(), SlimesPopulationStrategy())
         ),
         9 to WeightedCollection(
             100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
