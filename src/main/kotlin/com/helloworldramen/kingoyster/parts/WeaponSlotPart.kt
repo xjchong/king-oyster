@@ -12,12 +12,12 @@ import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.power
 import kotlin.math.roundToInt
 
-class EquipmentPart(
+class WeaponSlotPart(
     var weapon: Entity? = null
 ) : Part {
 
     override fun copy(): Part {
-        return EquipmentPart(weapon = weapon?.copy())
+        return WeaponSlotPart(weapon = weapon?.copy())
     }
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
@@ -29,15 +29,18 @@ class EquipmentPart(
     }
 
     private fun Entity.respondToDropWeapon(action: DropWeapon): Boolean {
-        val (context, _) = action
-        val currentPosition = context.positionOf(this) ?: return false
+        val (context, actor) = action
+
+        if (this != actor) return false
+
+        val currentPosition = context.positionOf(actor) ?: return false
         val weapon = weapon ?: return false
 
-        if (!context.world.move(weapon, currentPosition.findUnoccupiedPosition(context))) return false
+        if (!context.world.move(weapon, context.findDropPosition(currentPosition))) return false
 
-        this@EquipmentPart.weapon = null
+        this@WeaponSlotPart.weapon = null
 
-        EventBus.post(DropWeaponEvent(this, weapon))
+        EventBus.post(DropWeaponEvent(actor, weapon))
 
         return true
     }
@@ -53,13 +56,13 @@ class EquipmentPart(
         }.lastOrNull() ?: return false
 
         // Remove the weapon from inventory.
-        this@EquipmentPart.weapon = null
+        this@WeaponSlotPart.weapon = null
 
         if (context.entitiesAt(nearestImpassablePosition)?.any { it.has<CombatPart>() } == true) {
             EventBus.post(ThrowWeaponEvent(this, weapon, currentPosition, nearestImpassablePosition))
 
             // Drop the weapon at the destination.
-            context.world.move(weapon, nearestImpassablePosition.findUnoccupiedPosition(context))
+            context.world.move(weapon, context.findDropPosition(nearestImpassablePosition))
             weapon.respondToAction(DamageWeapon(context, thrower, null, THROW_DURABILITY_LOSS))
 
             val throwInfo = weapon.throwInfo()
@@ -76,39 +79,10 @@ class EquipmentPart(
             EventBus.post(ThrowWeaponEvent(this, weapon, currentPosition, furthestPassablePosition))
 
             // Drop the weapon at the destination.
-            context.world.move(weapon, furthestPassablePosition.findUnoccupiedPosition(context))
+            context.world.move(weapon, context.findDropPosition(furthestPassablePosition))
         }
 
         return true
-    }
-
-    private fun Position.findUnoccupiedPosition(context: Context): Position {
-        if (!isOccupied(context)) {
-            return this
-        }
-
-        val unoccupiedAdjacentNeighbor = neighborsShuffled().firstOrNull {
-            !it.isOccupied(context)
-        }
-
-        if (unoccupiedAdjacentNeighbor != null) return unoccupiedAdjacentNeighbor
-
-        val unoccupiedDiagonalNeighbor = listOf(
-            this.withRelative(1, -1),
-            this.withRelative(1, 1),
-            this.withRelative(-1, 1),
-            this.withRelative(-1, -1)
-        ).shuffled().firstOrNull {
-            !it.isOccupied(context)
-        }
-
-        return unoccupiedDiagonalNeighbor ?: this
-    }
-
-    private fun Position.isOccupied(context: Context): Boolean {
-        return context.entitiesAt(this)?.any {
-            it.has<WeaponPart>() || it.has<ItemPart>() || (!it.isPassable() && !it.has<MovementPart>())
-        } != false
     }
 
     companion object {
@@ -117,5 +91,5 @@ class EquipmentPart(
 }
 
 fun Entity.weapon(): Entity? {
-    return find<EquipmentPart>()?.weapon
+    return find<WeaponSlotPart>()?.weapon
 }

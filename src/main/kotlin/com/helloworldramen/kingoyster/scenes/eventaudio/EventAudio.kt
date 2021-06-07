@@ -31,7 +31,8 @@ class EventAudio : Node(), EventBusSubscriber {
 			DamageWeaponEvent::class,
 			DeathEvent::class,
 			DoorEvent::class,
-			EquipWeaponEvent::class,
+			TakeItemEvent::class,
+			TakeWeaponEvent::class,
 			GameOverEvent::class,
 			MoveEvent::class,
 			TakeEvent::class,
@@ -52,7 +53,8 @@ class EventAudio : Node(), EventBusSubscriber {
 			is DamageWeaponEvent -> onDamageWeapon(event)
 			is DeathEvent -> onDeath(event)
 			is DoorEvent -> onDoor(event)
-			is EquipWeaponEvent -> onEquipWeapon(event)
+			is TakeItemEvent -> onTakeItem(event)
+			is TakeWeaponEvent -> onTakeWeapon(event)
 			is GameOverEvent -> onGameOver(event)
 			is MoveEvent -> onMove(event)
 			is TakeEvent -> onTake(event)
@@ -102,8 +104,14 @@ class EventAudio : Node(), EventBusSubscriber {
 		audio.play(if (event.isOpen) SFX.DOOR_OPEN else SFX.DOOR_CLOSE)
 	}
 
-	private fun onEquipWeapon(event: EquipWeaponEvent) {
-		if (!event.equipper.isVisibleToPlayer(context)) return
+	private fun onTakeItem(event: TakeItemEvent) {
+		if (!event.taker.isVisibleToPlayer(context)) return
+
+		audio.play(SFX.TAKE)
+	}
+
+	private fun onTakeWeapon(event: TakeWeaponEvent) {
+		if (!event.taker.isVisibleToPlayer(context)) return
 
 		audio.play(SFX.TAKE)
 	}

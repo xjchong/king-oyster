@@ -1,10 +1,8 @@
 package com.helloworldramen.kingoyster.parts.combat
 
-import com.helloworldramen.kingoyster.actions.WeaponAttack
-import com.helloworldramen.kingoyster.actions.Damage
-import com.helloworldramen.kingoyster.actions.DamageWeapon
-import com.helloworldramen.kingoyster.actions.DropWeapon
+import com.helloworldramen.kingoyster.actions.*
 import com.helloworldramen.kingoyster.architecture.Action
+import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
@@ -21,9 +19,12 @@ class CombatPart(
     var maxMana: Int,
     var power: Int,
     var defaultAttackPattern: AttackPattern,
-    var health: Int = maxHealth,
+    health: Int = maxHealth,
     var mana: Int = maxMana,
 ) : Part {
+
+    var health: Int = health
+        private set
 
     override fun copy(): Part {
         return CombatPart(maxHealth, maxMana, power, defaultAttackPattern, health, mana)
@@ -34,6 +35,26 @@ class CombatPart(
             is WeaponAttack -> partOwner.respondToWeaponAttack(action)
             is Damage -> partOwner.respondToDamage(action)
             else -> false
+        }
+    }
+
+    fun modifyHealth(context: Context, partOwner: Entity, amount: Int) {
+        if (partOwner.find<CombatPart>() != this) return
+
+        health = (health + amount).coerceAtMost(maxHealth)
+
+        if (health <= 0) {
+            val currentPosition = context.positionOf(partOwner) ?: return
+
+            partOwner.respondToAction(DropWeapon(context, partOwner))
+            partOwner.respondToAction(DropItem(context, partOwner))
+
+            EventBus.post(DeathEvent(currentPosition, partOwner))
+            context.world.remove(partOwner)
+
+            if (partOwner.isPlayer) {
+                EventBus.post(GameOverEvent(false))
+            }
         }
     }
 
@@ -68,19 +89,8 @@ class CombatPart(
         val currentPosition = context.positionOf(this) ?: return false
         val finalAmount = (resFactor(damageType, elementType) * amount).roundToInt()
 
-        health -= finalAmount
         EventBus.post(DamageEvent(currentPosition, source, this, finalAmount))
-
-        if (health <= 0) {
-            respondToAction(DropWeapon(context, this))
-
-            EventBus.post(DeathEvent(currentPosition, this))
-            context.world.remove(this)
-
-            if (isPlayer) {
-                EventBus.post(GameOverEvent(false))
-            }
-        }
+        modifyHealth(context, this, -finalAmount)
 
         return true
     }

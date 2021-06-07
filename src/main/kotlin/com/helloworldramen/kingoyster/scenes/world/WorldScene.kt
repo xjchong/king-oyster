@@ -7,7 +7,8 @@ import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
 import com.helloworldramen.kingoyster.extensions.freeChildren
 import com.helloworldramen.kingoyster.extensions.positionsForEach
-import com.helloworldramen.kingoyster.parts.EquipmentPart
+import com.helloworldramen.kingoyster.parts.ItemSlotPart
+import com.helloworldramen.kingoyster.parts.WeaponSlotPart
 import com.helloworldramen.kingoyster.parts.combat.health
 import com.helloworldramen.kingoyster.parts.telegraphedPositions
 import com.helloworldramen.kingoyster.parts.visiblePositions
@@ -100,11 +101,18 @@ class WorldScene : Node2D(), EventBusSubscriber {
 				}
 
 				// Also add scenes for entities that are not explicitly visible.
-				entity.find<EquipmentPart>()?.weapon?.let { weapon ->
+				entity.find<WeaponSlotPart>()?.weapon?.let { weapon ->
 					packedEntityScene?.instanceAs<EntityScene>()?.let {
 						tileBucket.addChild(it)
 						it.bind(context, weapon)
 						sceneForEntity[weapon] = it
+					}
+				}
+				entity.find<ItemSlotPart>()?.item?.let { item ->
+					packedEntityScene?.instanceAs<EntityScene>()?.let {
+						tileBucket.addChild(it)
+						it.bind(context, item)
+						sceneForEntity[item] = it
 					}
 				}
 			}

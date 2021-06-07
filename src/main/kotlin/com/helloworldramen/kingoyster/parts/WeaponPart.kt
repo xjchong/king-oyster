@@ -8,7 +8,7 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DamageWeaponEvent
-import com.helloworldramen.kingoyster.eventbus.events.EquipWeaponEvent
+import com.helloworldramen.kingoyster.eventbus.events.TakeWeaponEvent
 import com.helloworldramen.kingoyster.parts.combat.AttackPattern
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
@@ -34,7 +34,7 @@ class WeaponPart(
 
     private fun Entity.respondToTake(action: Take): Boolean {
         val (context, actor) = action
-        val equipment = actor.find<EquipmentPart>() ?: return false
+        val weaponSlot = actor.find<WeaponSlotPart>() ?: return false
 
         // Remove the weapon from the floor.
         if (!context.world.move(this, null)) return false
@@ -42,10 +42,10 @@ class WeaponPart(
         // Drop the current weapon if any.
         actor.respondToAction(DropWeapon(context, actor))
 
-        // Equip this weapon.
-        equipment.weapon = this
+        // Take this weapon.
+        weaponSlot.weapon = this
 
-        EventBus.post(EquipWeaponEvent(actor, this))
+        EventBus.post(TakeWeaponEvent(actor, this))
 
         return true
     }
@@ -59,7 +59,7 @@ class WeaponPart(
 
         if (durability <= 0) {
             context.world.remove(this)
-            owner?.find<EquipmentPart>()?.weapon = null
+            owner?.find<WeaponSlotPart>()?.weapon = null
         }
 
         return true
@@ -79,5 +79,5 @@ fun Entity.throwInfo(): DamageInfo {
 }
 
 fun Entity.durability(): Int {
-    return find<WeaponPart>()?.durability ?: 0
+    return find<WeaponPart>()?.durability ?: -1
 }

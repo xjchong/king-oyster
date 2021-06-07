@@ -6,12 +6,12 @@ import com.helloworldramen.kingoyster.ai.GameAiOptionContext
 import com.helloworldramen.kingoyster.ai.architecture.AiStrategy
 import com.helloworldramen.kingoyster.ai.architecture.AiStrategyContext
 
-class EquipWeaponOption(
+class TakeWeaponOption(
     override val parentStrategy: AiStrategy<out AiStrategyContext, GameAiOptionContext>,
     override val optionContext: GameAiOptionContext
 ) : GameAiOption() {
 
-    override val tag: String = "eqw"
+    override val tag: String = "tkw"
 
     override fun execute(): Boolean {
         val (context, entity, weapon) = optionContext

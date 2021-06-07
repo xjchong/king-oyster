@@ -1,13 +1,6 @@
 package com.helloworldramen.kingoyster.scenes.hud
 
 import com.helloworldramen.kingoyster.architecture.Entity
-import com.helloworldramen.kingoyster.eventbus.Event
-import com.helloworldramen.kingoyster.eventbus.EventBus
-import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
-import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
-import com.helloworldramen.kingoyster.eventbus.events.DamageWeaponEvent
-import com.helloworldramen.kingoyster.eventbus.events.EquipWeaponEvent
-import com.helloworldramen.kingoyster.eventbus.events.ThrowWeaponEvent
 import com.helloworldramen.kingoyster.parts.combat.health
 import com.helloworldramen.kingoyster.parts.durability
 import com.helloworldramen.kingoyster.parts.weapon

@@ -157,22 +157,19 @@ class GameScene : Node2D(), EventBusSubscriber {
 			Input.isActionPressed("left_modifier") -> {
 				when {
 					event.isDirectionPressed() -> performMovementDirectionSkill(event.direction())
-					event.isActionPressed("ui_accept") -> println("ABILITY")
-					event.isActionPressed("ui_cancel") -> println("EXAMINE")
-					event.isActionPressed("secondary") -> println("ACCESSORY")
-					event.isActionPressed("tertiary") -> println("ITEM")
+					event.isActionPressed("ui_accept") -> println("EXAMINE")
+					event.isActionPressed("ui_cancel") -> println("ACCESSORY")
+					event.isActionPressed("triangle") -> println("ABILITY")
+					event.isActionPressed("square") -> performItem()
 				}
 			}
-			Input.isActionPressed("secondary") && event.isDirectionPressed() -> {
+			Input.isActionPressed("triangle") && event.isDirectionPressed() -> {
+				println("DIRECTED PERSONAL SKILL")
+			}
+			Input.isActionPressed("square") && event.isDirectionPressed() -> {
 				when {
 					!hasWeapon -> EventBus.post(PlayerToastEvent("No weapon", Color.lightgray))
 					else -> performThrow(event.direction())
-				}
-			}
-			Input.isActionPressed("tertiary") && event.isDirectionPressed() -> {
-				when {
-					!hasWeapon -> EventBus.post(PlayerToastEvent("No weapon", Color.lightgray))
-					else -> println("WEAPON SKILL")
 				}
 			}
 			event.isActionPressed("menu") -> println("MENU")
@@ -185,12 +182,24 @@ class GameScene : Node2D(), EventBusSubscriber {
 		updateNonPlayerEntities()
 	}
 
+	private fun performItem() {
+		with (context) {
+			if (player.item() == null) {
+				playerScene?.toast("No item", Color.lightgray, ToastTextScene.LONG_CONFIG)
+				return
+			} else {
+
+				player.respondToAction(UseItem(this, player))
+			}
+		}
+	}
+
 	private fun performThrow(direction: Direction?) {
 		if (direction == null) return
 
-		val player = context.player
-
-		player.respondToAction(ThrowWeapon(context, player, direction))
+		with (context) {
+	   		player.respondToAction(ThrowWeapon(this, player, direction))
+		}
 	}
 
 	private fun performMovementDirectionSkill(direction: Direction?) {

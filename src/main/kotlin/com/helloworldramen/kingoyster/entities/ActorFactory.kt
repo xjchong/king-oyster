@@ -2,9 +2,7 @@ package com.helloworldramen.kingoyster.entities
 
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.parts.*
-import com.helloworldramen.kingoyster.parts.combat.AttackPattern
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
-import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
 
@@ -22,7 +20,8 @@ object ActorFactory {
                     damageType = DamageType.Bash
                 )
             ),
-            EquipmentPart(),
+            ItemSlotPart(),
+            WeaponSlotPart(),
             FactionPart(Faction.Player,
                 enemies = setOf(
                     Faction.Goblin,
@@ -78,7 +77,7 @@ object ActorFactory {
                     damageType = DamageType.Bash
                 )
             ),
-            EquipmentPart(),
+            WeaponSlotPart(),
             FactionPart(Faction.Goblin,
                 enemies = setOf(Faction.Player, Faction.Spirit)
             ),

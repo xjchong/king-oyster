@@ -1,6 +1,7 @@
 package com.helloworldramen.kingoyster.worldgen.population.strategies
 
 import com.helloworldramen.kingoyster.entities.ActorFactory
+import com.helloworldramen.kingoyster.entities.ItemFactory
 import com.helloworldramen.kingoyster.entities.WeaponFactory
 import com.helloworldramen.kingoyster.worldgen.population.PopulationRule
 import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
@@ -18,6 +19,7 @@ class SmorgasbordPopulationStrategy : PopulationStrategy() {
         MonoculturePopulationTemplate(2, 4, PopulationRule({ WeaponFactory.newDagger() })),
         MonoculturePopulationTemplate(2, 4, PopulationRule({ WeaponFactory.newLongsword() })),
         MonoculturePopulationTemplate(2, 4, PopulationRule({ WeaponFactory.newGreatsword() })),
+        MonoculturePopulationTemplate(2, 4, PopulationRule({ ItemFactory.medicine() })),
         SingletonPopulationTemplate(StairsPopulationRule())
     )
 }

@@ -41,7 +41,7 @@ object Ai {
                     ConstantConsideration(0.8),
                     OwnHealthConsideration(LinearCurve(0.5, 1.0))
                 ),
-                EquipWeaponStrategy(
+                TakeWeaponStrategy(
                     ConstantConsideration(0.9),
                     HasWeaponConsideration(false)
                 ),

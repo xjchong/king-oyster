@@ -64,8 +64,10 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			DamageEvent::class,
 			DamageWeaponEvent::class,
 			DeathEvent::class,
+			DropItemEvent::class,
 			DropWeaponEvent::class,
-			EquipWeaponEvent::class,
+			TakeItemEvent::class,
+			TakeWeaponEvent::class,
 			MoveEvent::class,
 			PlayerToastEvent::class,
 			TakeEvent::class,
@@ -142,18 +144,32 @@ class EntityScene : Node2D(), EventBusSubscriber {
 						animateOnDeath()
 					}
 				}
+				is DropItemEvent -> {
+					if (event.item == entity) {
+						setPosition(false)
+					} else if (event.dropper == entity) {
+						animateDrop(event.item)
+					}
+				}
 				is DropWeaponEvent -> {
 					if (event.weapon == entity) {
 						setPosition(false)
 					} else if (event.dropper == entity) {
-						animateDropWeapon(event.weapon)
+						animateDrop(event.weapon)
 					}
 				}
-				is EquipWeaponEvent -> {
+				is TakeItemEvent -> {
+					if (event.item == entity) {
+						setPosition(false)
+					} else if (event.taker == entity) {
+						animateTake(event.item)
+					}
+				}
+				is TakeWeaponEvent -> {
 					if (event.weapon == entity) {
 						setPosition(false)
-					} else if (event.equipper == entity) {
-						animateEquipWeapon(event.weapon)
+					} else if (event.taker == entity) {
+						animateTake(event.weapon)
 					}
 				}
 				is MoveEvent -> {
@@ -180,7 +196,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 					if (event.weapon == entity) {
 						animateThrown(event)
 					} else if (event.thrower == entity) {
-						animateDropWeapon(event.weapon)
+						animateDrop(event.weapon)
 					}
 				}
 			}
@@ -233,12 +249,12 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		animationPlayer.play("on_death")
 	}
 
-	fun animateDropWeapon(weapon: Entity) {
-		toast("-${weapon.name}", Color.gray, ToastTextScene.LONG_REVERSE_CONFIG)
+	fun animateDrop(dropped: Entity) {
+		toast("-${dropped.name}", Color.gray, ToastTextScene.LONG_REVERSE_CONFIG)
 	}
 
-	fun animateEquipWeapon(weapon: Entity) {
-		toast("+${weapon.name}", Color.lightgray, ToastTextScene.LONG_CONFIG)
+	fun animateTake(taken: Entity) {
+		toast("+${taken.name}", Color.lightgray, ToastTextScene.LONG_CONFIG)
 	}
 
 	fun animateTelegraph(isActive: Boolean) {
@@ -301,8 +317,20 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	private fun updateDurabilityLabel() {
-		durabilityLabel.visible = entity.has<WeaponPart>()
-		durabilityLabel.text = entity.durability().toString()
+		when {
+			entity.has<WeaponPart>() -> {
+				durabilityLabel.visible = true
+				durabilityLabel.text = entity.durability().toString()
+			}
+			entity.has<ItemPart>() -> {
+				durabilityLabel.visible = true
+				durabilityLabel.text = entity.uses().toString()
+			}
+			else -> {
+				durabilityLabel.visible = false
+				durabilityLabel.text = ""
+			}
+		}
 	}
 
 	private fun resetAppearance() {
