@@ -4,12 +4,11 @@ import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.actions.Heal
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
-import com.helloworldramen.kingoyster.parts.AscendablePart
-import com.helloworldramen.kingoyster.parts.PhysicalPart
-import com.helloworldramen.kingoyster.parts.OpenablePart
-import com.helloworldramen.kingoyster.parts.TrapPart
+import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.ElementType
+import godot.core.Color
+import godot.core.Vector2
 
 object FeatureFactory {
 
@@ -17,6 +16,10 @@ object FeatureFactory {
         Entity(
             name = "door",
             parts = listOf(
+                AppearancePart(
+                    ascii = '+',
+                    color = Color.orange
+                ),
                 PhysicalPart(
                     isPassable = false,
                     doesBlockVision = true
@@ -30,6 +33,11 @@ object FeatureFactory {
         Entity(
             name = "stairs",
             parts = listOf(
+                AppearancePart(
+                    ascii = '<',
+                    color = Color.white,
+                    sprite = "stone_stairs_up"
+                ),
                 AscendablePart()
             )
         )
@@ -39,6 +47,12 @@ object FeatureFactory {
         Entity(
             name = "wall",
             parts = listOf(
+                AppearancePart(
+                    ascii = '#',
+                    color = Color.white,
+                    sprite = "grass_stone_wall",
+                    offset = Vector2(0, 8)
+                ),
                 PhysicalPart(
                     isPassable = false,
                     doesBlockVision = true
@@ -51,6 +65,10 @@ object FeatureFactory {
         Entity(
             name = "healing puddle",
             parts = listOf(
+                AppearancePart(
+                    ascii = '^',
+                    color = Color.mediumseagreen,
+                ),
                 TrapPart({ context, entity ->
                     entity.respondToAction(Heal(context, entity, 5))
 
@@ -64,6 +82,10 @@ object FeatureFactory {
         Entity(
             name = "fire puddle",
             parts = listOf(
+                AppearancePart(
+                    ascii = '^',
+                    color = Color.red,
+                ),
                 TrapPart({ context, entity ->
                     entity.respondToAction(
                         Damage(context, Entity.UNKNOWN, 10,

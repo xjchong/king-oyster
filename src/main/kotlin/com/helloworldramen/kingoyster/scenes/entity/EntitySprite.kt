@@ -1,13 +1,12 @@
 package com.helloworldramen.kingoyster.scenes.entity
 
 import com.helloworldramen.kingoyster.architecture.Entity
-import com.helloworldramen.kingoyster.parts.OpenablePart
-import com.helloworldramen.kingoyster.utilities.EntityAppearanceDirectory
+import com.helloworldramen.kingoyster.parts.AppearancePart
 import godot.AnimatedSprite
 import godot.Label
 import godot.Node2D
 import godot.annotation.RegisterClass
-import godot.annotation.RegisterFunction
+import godot.core.Color
 import godot.core.Vector2
 import godot.extensions.getNodeAs
 import kotlin.random.Random
@@ -30,7 +29,11 @@ class EntitySprite : Node2D() {
 		animatedSprite.visible = false
 		animatedSprite.position = Vector2(16, 16)
 
-		val (ascii, color, sprite, offset) = EntityAppearanceDirectory[entity]
+		val appearancePart = entity?.find<AppearancePart>()
+		val ascii = appearancePart?.ascii ?: ' '
+		val color = appearancePart?.color ?: Color.white
+		val sprite = appearancePart?.sprite
+		val offset = appearancePart?.offset ?: Vector2.ZERO
 
 		if (sprite != null) {
 			// Play the sprite first to get the right frame count.

@@ -7,6 +7,8 @@ import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.ResistancesPart
 import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
+import godot.core.Color
+import godot.core.Vector2
 
 object ActorFactory {
 
@@ -14,6 +16,11 @@ object ActorFactory {
         Entity(
             name = "player",
             parts = listOf(
+                AppearancePart(
+                    ascii = '@',
+                    color = Color.gold,
+                    sprite = "knight"
+                ),
                 CombatPart(
                     maxHealth = 100,
                     maxMana = 4,
@@ -50,6 +57,11 @@ object ActorFactory {
         Entity(
             name = "ghost",
             parts = listOf(
+                AppearancePart(
+                    ascii = 'G',
+                    color = Color.darkblue,
+                    sprite = "ghost"
+                ),
                 CombatPart(
                     maxHealth = 10,
                     maxMana = 6,
@@ -86,6 +98,11 @@ object ActorFactory {
         Entity(
             name = "goblin",
             parts = listOf(
+                AppearancePart(
+                    ascii = 'g',
+                    color = Color.darkred,
+                    sprite = "goblin"
+                ),
                 CombatPart(
                     maxHealth = 30,
                     maxMana = 0,
@@ -134,6 +151,16 @@ object ActorFactory {
             else -> "blue slime"
         }
 
+        val asciiColor = when (color) {
+            "red" -> Color.red
+            else -> Color.lightgreen
+        }
+
+        val sprite = when (color) {
+            "red" -> "red_slime"
+            else -> "blue_slime"
+        }
+
         val puddle = when(color) {
             "red" -> FeatureFactory.firePuddle()
             else -> FeatureFactory.healingPuddle()
@@ -142,6 +169,12 @@ object ActorFactory {
         Entity(
             name = name,
             parts = listOf(
+                AppearancePart(
+                    ascii = 's',
+                    color = asciiColor,
+                    sprite = sprite,
+                    offset = Vector2(0, -2)
+                ),
                 CombatPart(
                     maxHealth = 20,
                     maxMana = 0,

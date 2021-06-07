@@ -1,8 +1,8 @@
 package com.helloworldramen.kingoyster.scenes.mainmenu
 
 import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
-import com.helloworldramen.kingoyster.directories.BGM
-import com.helloworldramen.kingoyster.directories.SFX
+import com.helloworldramen.kingoyster.utilities.BGM
+import com.helloworldramen.kingoyster.utilities.SFX
 import com.helloworldramen.kingoyster.scenes.game.GameScene
 import com.helloworldramen.kingoyster.scenes.optionsmenu.OptionsMenuScene
 import godot.InputEvent

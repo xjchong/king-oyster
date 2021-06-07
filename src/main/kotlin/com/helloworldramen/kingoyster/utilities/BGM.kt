@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.directories
+package com.helloworldramen.kingoyster.utilities
 
 object BGM {
 
