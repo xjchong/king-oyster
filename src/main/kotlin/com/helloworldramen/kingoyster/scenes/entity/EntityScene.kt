@@ -73,6 +73,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			PlayerToastEvent::class,
 			TelegraphEvent::class,
 			ThrowWeaponEvent::class,
+			UseItemEvent::class,
 		)
 		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
 		animationPlayer.animationFinished.connect(this, ::onAnimationFinished)
@@ -200,6 +201,16 @@ class EntityScene : Node2D(), EventBusSubscriber {
 						animateThrown(event)
 					} else if (event.thrower == entity) {
 						animateDrop(event.weapon)
+					}
+				}
+				is UseItemEvent -> {
+					if (event.user == entity) {
+						val item = event.item
+						toast("used ${item.name}", Color.lightgray, ToastTextScene.LONG_CONFIG)
+
+						if (item.uses() <= 0) {
+							toast("-${item.name}", Color.gray, ToastTextScene.LONG_REVERSE_CONFIG)
+						}
 					}
 				}
 			}
