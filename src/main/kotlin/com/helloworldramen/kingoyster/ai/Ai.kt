@@ -52,7 +52,7 @@ object Ai {
                     ConstantConsideration(0.5)
                 ),
             ))
-            "slime" -> PurelyRandomReasoner.prioritize(aiContext, listOf(
+            "blue slime", "red slime" -> PurelyRandomReasoner.prioritize(aiContext, listOf(
                 WeaponAttackEnemyStrategy(
                     ConstantConsideration(0.5)
                 ),
