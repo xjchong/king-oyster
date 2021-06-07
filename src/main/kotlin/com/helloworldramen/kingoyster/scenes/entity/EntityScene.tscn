@@ -230,7 +230,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id=11]
 length = 0.3
 tracks/0/type = "value"
-tracks/0/path = NodePath("AppearanceNode2D/EntitySprite:scale")
+tracks/0/path = NodePath("AppearanceNode2D:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -242,7 +242,7 @@ tracks/0/keys = {
 "values": [ Vector2( 1, 1 ), Vector2( 1.5, 1.5 ), Vector2( 1.8, 1.8 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("AppearanceNode2D/EntitySprite:position")
+tracks/1/path = NodePath("AppearanceNode2D:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -254,7 +254,7 @@ tracks/1/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( -8, -8 ), Vector2( -12.8, -12.8 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("AppearanceNode2D/EntitySprite:modulate")
+tracks/2/path = NodePath("AppearanceNode2D:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false

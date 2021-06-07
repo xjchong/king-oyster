@@ -24,5 +24,6 @@ object SFX {
     const val HIT_CUT_CRIT = "$SFX_PATH/combat/hit_cut_crit.wav"
     const val HIT_SWOOSH_CUT = "$SFX_PATH/combat/hit_swoosh_cut.wav"
     const val HIT_BASH = "$SFX_PATH/combat/hit_bash.wav"
+    const val ITEM_BREAK = "$SFX_PATH/combat/item_break.wav"
     const val WEAPON_BREAK = "$SFX_PATH/combat/weapon_break.wav"
 }

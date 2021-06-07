@@ -31,12 +31,12 @@ class EventAudio : Node(), EventBusSubscriber {
 			DamageWeaponEvent::class,
 			DeathEvent::class,
 			DoorEvent::class,
-			TakeItemEvent::class,
-			TakeWeaponEvent::class,
 			GameOverEvent::class,
 			MoveEvent::class,
-			TakeEvent::class,
-			ThrowWeaponEvent::class
+			TakeItemEvent::class,
+			TakeWeaponEvent::class,
+			ThrowWeaponEvent::class,
+			UseItemEvent::class
 		)
 	}
 
@@ -53,12 +53,12 @@ class EventAudio : Node(), EventBusSubscriber {
 			is DamageWeaponEvent -> onDamageWeapon(event)
 			is DeathEvent -> onDeath(event)
 			is DoorEvent -> onDoor(event)
-			is TakeItemEvent -> onTakeItem(event)
-			is TakeWeaponEvent -> onTakeWeapon(event)
 			is GameOverEvent -> onGameOver(event)
 			is MoveEvent -> onMove(event)
-			is TakeEvent -> onTake(event)
+			is TakeItemEvent -> onTakeItem(event)
+			is TakeWeaponEvent -> onTakeWeapon(event)
 			is ThrowWeaponEvent -> onThrowWeapon(event)
+			is UseItemEvent -> onUseItem(event)
 		}
 	}
 
@@ -128,15 +128,15 @@ class EventAudio : Node(), EventBusSubscriber {
 		}
 	}
 
-	private fun onTake(event: TakeEvent) {
-		if (!event.taker.isVisibleToPlayer(context)) return
-
-		audio.play(SFX.TAKE)
-	}
-
 	private fun onThrowWeapon(event: ThrowWeaponEvent) {
 		if (!event.thrower.isVisibleToPlayer(context)) return
 
 		audio.play(SFX.HIT_CUT_CRIT)
+	}
+
+	private fun onUseItem(event: UseItemEvent) {
+		if (!event.user.isVisibleToPlayer(context)) return
+
+		audio.play(SFX.ITEM_BREAK)
 	}
 }

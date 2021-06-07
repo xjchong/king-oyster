@@ -70,11 +70,11 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			TakeWeaponEvent::class,
 			MoveEvent::class,
 			PlayerToastEvent::class,
-			TakeEvent::class,
 			TelegraphEvent::class,
 			ThrowWeaponEvent::class,
 		)
 		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
+		animationPlayer.animationFinished.connect(this, ::onAnimationFinished)
 	}
 
 	@RegisterFunction
@@ -86,12 +86,12 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	override fun _process(delta: Double) {
 		processEventQueue()
 
-		if (!isAnimating && !isProcessingEvents && worldPosition != null) {
+		if (!isAnimating && !isProcessingEvents) {
 			appearance.visible = context.player.visiblePositions().contains(worldPosition)
 
 			if (eventQueue.isEmpty()) {
 				// Sometimes the position should be updated.
-				context.positionOf(entity)?.let { worldPosition ->
+				worldPosition?.let { worldPosition ->
 					if (position != calculateNodePosition(worldPosition)) {
 						setPosition(false)
 					}
@@ -160,6 +160,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 				}
 				is TakeItemEvent -> {
 					if (event.item == entity) {
+						animatePulse()
 						setPosition(false)
 					} else if (event.taker == entity) {
 						animateTake(event.item)
@@ -167,6 +168,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 				}
 				is TakeWeaponEvent -> {
 					if (event.weapon == entity) {
+						animatePulse()
 						setPosition(false)
 					} else if (event.taker == entity) {
 						animateTake(event.weapon)
@@ -180,11 +182,6 @@ class EntityScene : Node2D(), EventBusSubscriber {
 				is PlayerToastEvent -> {
 					if (entity.isPlayer) {
 						toast(event.message, event.color, ToastTextScene.LONG_CONFIG)
-					}
-				}
-				is TakeEvent -> {
-					if (event.taken == entity) {
-						animatePulse()
 					}
 				}
 				is TelegraphEvent -> {
@@ -286,6 +283,13 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		isTweening = false
 	}
 
+	@RegisterFunction
+	fun onAnimationFinished(animation: String) {
+		if (animation == "pulse") {
+			resetAppearance()
+		}
+	}
+
 	fun toast(text: String, color: Color, configuration: String) {
 		if (!calculateWorldPosition(position).isVisibleToPlayer(context)) return
 
@@ -334,6 +338,10 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	private fun resetAppearance() {
+		appearance.scale = Vector2(1, 1)
+		appearance.zIndex = 0
+		appearance.position = Vector2.ZERO
+		appearance.modulate = Color(1, 1, 1, 1)
 		entitySprite.modulate = Color(1, 1, 1, 1)
 		healthScene.modulate = Color(1, 1, 1, 0.5)
 		durabilityLabel.modulate = Color(1, 1, 1, 1)
