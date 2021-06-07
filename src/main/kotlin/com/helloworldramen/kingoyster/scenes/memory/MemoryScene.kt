@@ -2,10 +2,7 @@ package com.helloworldramen.kingoyster.scenes.memory
 
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
-import com.helloworldramen.kingoyster.parts.MemoryPart
-import com.helloworldramen.kingoyster.parts.WeaponPart
-import com.helloworldramen.kingoyster.parts.durability
-import com.helloworldramen.kingoyster.parts.visiblePositions
+import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.entity.EntitySprite
 import godot.ColorRect
 import godot.Label
@@ -76,8 +73,24 @@ class MemoryScene : Node2D() {
 		entitySprite.bind(topEntity)
 		entitySprite.show()
 
-		durabilityLabel.visible = topEntity?.has<WeaponPart>() == true
-		durabilityLabel.text = topEntity?.durability().toString()
+		when {
+			topEntity == null -> {
+				durabilityLabel.visible = false
+				durabilityLabel.text = ""
+			}
+			topEntity.has<WeaponPart>() -> {
+				durabilityLabel.visible = true
+				durabilityLabel.text = topEntity.durability().toString()
+			}
+			topEntity.has<ItemPart>() -> {
+				durabilityLabel.visible = true
+				durabilityLabel.text = topEntity.uses().toString()
+			}
+			else -> {
+				durabilityLabel.visible = false
+				durabilityLabel.text = ""
+			}
+		}
 
 		tweenModulate(0.5)
 	}
