@@ -159,7 +159,6 @@ class DungeonTopologyStrategy(
             var needsMerge = true
             var isDisjoint = true
             val canCreateExtra = extraDoorsCount < maxExtraDoors && Math.random() < extraDoorPercent
-            val isDoorOpen = Math.random() < DOOR_OPEN_CHANCE
 
             for (mergedSet in mergedRegionIds) {
                 val intersectionSize = mergedSet.intersect(adjacentRegions).size
@@ -173,11 +172,11 @@ class DungeonTopologyStrategy(
 
             if (needsMerge) {
                 removeAll(pos)
-                add(FeatureFactory.door(isDoorOpen)(), pos)
+                add(FeatureFactory.door()(), pos)
                 if (isDisjoint) mergedRegionIds.add(adjacentRegions)
             } else if (canCreateExtra) {
                 removeAll(pos)
-                add(FeatureFactory.door(isDoorOpen)(), pos)
+                add(FeatureFactory.door()(), pos)
                 extraDoorsCount++
             }
         }
@@ -246,6 +245,5 @@ class DungeonTopologyStrategy(
 
     companion object {
         private const val WALL_REGION_ID = -1
-        private const val DOOR_OPEN_CHANCE = 0.2
     }
 }

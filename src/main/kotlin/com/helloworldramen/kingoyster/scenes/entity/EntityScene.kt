@@ -68,6 +68,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			DropWeaponEvent::class,
 			HealEvent::class,
 			MoveEvent::class,
+			OpenEvent::class,
 			PlayerToastEvent::class,
 			TakeItemEvent::class,
 			TakeWeaponEvent::class,
@@ -166,6 +167,21 @@ class EntityScene : Node2D(), EventBusSubscriber {
 						animateOnHeal(event.amount)
 					}
 				}
+				is MoveEvent -> {
+					if (event.entity == entity) {
+						setPosition()
+					}
+				}
+				is OpenEvent -> {
+					if (event.openable == entity) {
+						animatePulse()
+					}
+				}
+				is PlayerToastEvent -> {
+					if (entity.isPlayer) {
+						toast(event.message, event.color, ToastTextScene.LONG_CONFIG)
+					}
+				}
 				is TakeItemEvent -> {
 					if (event.item == entity) {
 						animatePulse()
@@ -180,16 +196,6 @@ class EntityScene : Node2D(), EventBusSubscriber {
 						setPosition(false)
 					} else if (event.taker == entity) {
 						animateTake(event.weapon)
-					}
-				}
-				is MoveEvent -> {
-					if (event.entity == entity) {
-						setPosition()
-					}
-				}
-				is PlayerToastEvent -> {
-					if (entity.isPlayer) {
-						toast(event.message, event.color, ToastTextScene.LONG_CONFIG)
 					}
 				}
 				is TelegraphEvent -> {

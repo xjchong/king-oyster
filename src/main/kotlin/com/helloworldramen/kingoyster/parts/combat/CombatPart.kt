@@ -36,7 +36,7 @@ class CombatPart(
         }
     }
 
-    fun modifyHealth(context: Context, partOwner: Entity, amount: Int) {
+    private fun modifyHealth(context: Context, partOwner: Entity, amount: Int) {
         if (partOwner.find<CombatPart>() != this) return
 
         health = (health + amount).coerceAtMost(maxHealth)

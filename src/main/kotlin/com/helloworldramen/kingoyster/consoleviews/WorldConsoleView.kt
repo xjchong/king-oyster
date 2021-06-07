@@ -75,9 +75,7 @@ object WorldConsoleView : EventBusSubscriber {
             "wall" -> "#"
             "stairs" -> "<"
             "coin" -> "$".color(ANSIColor.YELLOW)
-            "door" -> {
-                (if (this.find(DoorPart::class)?.isOpen == false) "+" else "'").color(ANSIColor.BLUE)
-            }
+            "door" -> "+".color(ANSIColor.YELLOW)
             else -> "?"
         }
     }

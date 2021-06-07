@@ -6,22 +6,22 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.AscendablePart
 import com.helloworldramen.kingoyster.parts.PhysicalPart
-import com.helloworldramen.kingoyster.parts.DoorPart
+import com.helloworldramen.kingoyster.parts.OpenablePart
 import com.helloworldramen.kingoyster.parts.TrapPart
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.ElementType
 
 object FeatureFactory {
 
-    fun door(isOpen: Boolean): EntityFactoryFn = {
+    fun door(): EntityFactoryFn = {
         Entity(
             name = "door",
             parts = listOf(
                 PhysicalPart(
-                    isPassable = isOpen,
-                    doesBlockVision = !isOpen
+                    isPassable = false,
+                    doesBlockVision = true
                 ),
-                DoorPart(isOpen)
+                OpenablePart()
             )
         )
     }

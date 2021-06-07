@@ -1,14 +1,13 @@
 package com.helloworldramen.kingoyster.scenes.entity
 
 import com.helloworldramen.kingoyster.architecture.Entity
-import com.helloworldramen.kingoyster.parts.DoorPart
+import com.helloworldramen.kingoyster.parts.OpenablePart
 import com.helloworldramen.kingoyster.utilities.EntityAppearanceDirectory
 import godot.AnimatedSprite
 import godot.Label
 import godot.Node2D
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
-import godot.core.Color
 import godot.core.Vector2
 import godot.extensions.getNodeAs
 import kotlin.random.Random
@@ -20,11 +19,6 @@ class EntitySprite : Node2D() {
 	private val animatedSprite: AnimatedSprite by lazy { getNodeAs("AnimatedSprite")!! }
 
 	private var entity: Entity? = null
-
-	@RegisterFunction
-	override fun _process(delta: Double) {
-		if (entity?.canChangeAppearance == true) updateAppearance()
-	}
 
 	fun bind(entity: Entity?) {
 		this.entity = entity
@@ -52,7 +46,4 @@ class EntitySprite : Node2D() {
 		label.set("custom_colors/font_color", color)
 		label.visible = !animatedSprite.visible
 	}
-
-	private val Entity.canChangeAppearance: Boolean
-		get() = has(DoorPart::class)
 }

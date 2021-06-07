@@ -1,7 +1,7 @@
 package com.helloworldramen.kingoyster.utilities
 
 import com.helloworldramen.kingoyster.architecture.Entity
-import com.helloworldramen.kingoyster.parts.DoorPart
+import com.helloworldramen.kingoyster.parts.OpenablePart
 import godot.core.Color
 import godot.core.Vector2
 
@@ -42,7 +42,7 @@ object EntityAppearanceDirectory {
 
             // FEATURES
             "door" -> EntityAppearance(
-                ascii = if (entity.find<DoorPart>()?.isOpen == true) '\'' else '+',
+                ascii = '+',
                 color = Color.orange
             )
             "healing puddle" -> EntityAppearance(

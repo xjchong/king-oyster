@@ -30,7 +30,7 @@ class EventAudio : Node(), EventBusSubscriber {
 			DamageEvent::class,
 			DamageWeaponEvent::class,
 			DeathEvent::class,
-			DoorEvent::class,
+			OpenEvent::class,
 			HealEvent::class,
 			GameOverEvent::class,
 			MoveEvent::class,
@@ -53,7 +53,7 @@ class EventAudio : Node(), EventBusSubscriber {
 			is DamageEvent -> onDamage(event)
 			is DamageWeaponEvent -> onDamageWeapon(event)
 			is DeathEvent -> onDeath(event)
-			is DoorEvent -> onDoor(event)
+			is OpenEvent -> onDoor(event)
 			is HealEvent -> onHeal(event)
 			is GameOverEvent -> onGameOver(event)
 			is MoveEvent -> onMove(event)
@@ -100,10 +100,10 @@ class EventAudio : Node(), EventBusSubscriber {
 		audio.play(SFX.DEATH)
 	}
 
-	private fun onDoor(event: DoorEvent) {
+	private fun onDoor(event: OpenEvent) {
 		if (!event.actor.isVisibleToPlayer(context)) return
 
-		audio.play(if (event.isOpen) SFX.DOOR_OPEN else SFX.DOOR_CLOSE)
+		audio.play(SFX.DOOR_OPEN)
 	}
 
 	private fun onHeal(event: HealEvent) {
