@@ -125,9 +125,22 @@ object ActorFactory {
         )
     }
 
-    fun slime(): EntityFactoryFn = {
+    fun blueSlime(): EntityFactoryFn = slime("blue")
+    fun redSlime(): EntityFactoryFn = slime("red")
+
+    private fun slime(color: String): EntityFactoryFn = {
+        val name = when (color) {
+            "red" -> "red slime"
+            else -> "blue slime"
+        }
+
+        val puddle = when(color) {
+            "red" -> FeatureFactory.firePuddle()
+            else -> FeatureFactory.healingPuddle()
+        }
+
         Entity(
-            name = "slime",
+            name = name,
             parts = listOf(
                 CombatPart(
                     maxHealth = 20,
@@ -141,7 +154,7 @@ object ActorFactory {
                 ),
                 ItemSlotPart(
                     EntityTable(
-                        50 to FeatureFactory.healingPuddle(),
+                        50 to puddle,
                         50 to EntityTable.NULL
                     ).generate()
                 ),

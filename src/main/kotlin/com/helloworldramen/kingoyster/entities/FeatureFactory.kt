@@ -1,5 +1,6 @@
 package com.helloworldramen.kingoyster.entities
 
+import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.actions.Heal
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
@@ -7,6 +8,8 @@ import com.helloworldramen.kingoyster.parts.AscendablePart
 import com.helloworldramen.kingoyster.parts.PhysicalPart
 import com.helloworldramen.kingoyster.parts.DoorPart
 import com.helloworldramen.kingoyster.parts.TrapPart
+import com.helloworldramen.kingoyster.parts.combat.DamageType
+import com.helloworldramen.kingoyster.parts.combat.ElementType
 
 object FeatureFactory {
 
@@ -50,6 +53,23 @@ object FeatureFactory {
             parts = listOf(
                 TrapPart({ context, entity ->
                     entity.respondToAction(Heal(context, entity, 5))
+
+                    true
+                })
+            )
+        )
+    }
+
+    fun firePuddle(): EntityFactoryFn = {
+        Entity(
+            name = "fire puddle",
+            parts = listOf(
+                TrapPart({ context, entity ->
+                    entity.respondToAction(
+                        Damage(context, Entity.UNKNOWN, 10,
+                            damageType = DamageType.Special,
+                            elementType = ElementType.Fire
+                        ))
 
                     true
                 })
