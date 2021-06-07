@@ -8,5 +8,5 @@ import com.helloworldramen.kingoyster.worldgen.population.PopulationTemplate
 class SingletonPopulationTemplate(rule: PopulationRule) : PopulationTemplate(
     1,
     1,
-    WeightedCollection(WeightedEntry(1, rule))
+    WeightedCollection(1 to rule)
 )

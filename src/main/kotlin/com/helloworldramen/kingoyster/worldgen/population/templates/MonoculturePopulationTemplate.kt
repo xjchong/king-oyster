@@ -16,7 +16,7 @@ class MonoculturePopulationTemplate : PopulationTemplate {
     companion object {
 
         private fun weightedCollectionFrom(rule: PopulationRule): WeightedCollection<PopulationRule> {
-            return WeightedCollection(WeightedEntry(1, rule))
+            return WeightedCollection(1 to rule)
         }
     }
 }

@@ -5,6 +5,9 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.parts.visiblePositions
 
+typealias EntityFactoryFn = () -> Entity
+typealias EntityFactoryFnNullable = () -> Entity?
+
 fun Entity.isVisibleToPlayer(context: Context): Boolean {
     with(context) {
         return player.visiblePositions().contains(positionOf(this@isVisibleToPlayer))

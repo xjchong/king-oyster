@@ -30,7 +30,6 @@ object ActorFactory {
                     Faction.Spirit
                 )
             ),
-            InventoryPart(6),
             PhysicalPart(
                 isPassable = false
             ),
@@ -89,7 +88,20 @@ object ActorFactory {
                     damageType = DamageType.Bash
                 )
             ),
-            WeaponSlotPart(),
+            ItemSlotPart(
+                EntityTable(
+                    10 to { ItemFactory.medicine() },
+                    90 to { null }
+                ).generate()
+            ),
+            WeaponSlotPart(
+                EntityTable(
+                    5 to { WeaponFactory.newDagger() },
+                    4 to { WeaponFactory.newLongsword() },
+                    3 to { WeaponFactory.newGreatsword() },
+                    88 to { null }
+                ).generate()
+            ),
             FactionPart(Faction.Goblin,
                 enemies = setOf(Faction.Player, Faction.Spirit)
             ),
@@ -117,6 +129,7 @@ object ActorFactory {
             FactionPart(Faction.Monster,
                 enemies = setOf(Faction.Player, Faction.Goblin)
             ),
+            ItemSlotPart(),
             PhysicalPart(
                 isPassable = false
             ),

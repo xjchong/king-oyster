@@ -65,7 +65,7 @@ object WorldConsoleView : EventBusSubscriber {
     }
 
     private fun displayEntityStatus(entity: Entity) {
-        println("Gil: ${entity.find(InventoryPart::class)?.money ?: 0}")
+//        println("Gil: ${entity.find(InventoryPart::class)?.money ?: 0}")
     }
 
     private fun Entity.appearance(): String {

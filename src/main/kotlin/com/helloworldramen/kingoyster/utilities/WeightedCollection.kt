@@ -2,11 +2,14 @@ package com.helloworldramen.kingoyster.utilities
 
 import kotlin.random.Random
 
-data class WeightedEntry<T: Any>(val weight: Int, val item: T)
+data class WeightedEntry<T: Any>(val weight: Int, val item: T) {
 
-class WeightedCollection<T: Any>(vararg entries: WeightedEntry<T>) {
+    constructor(weightItemPair: Pair<Int, T>): this(weightItemPair.first, weightItemPair.second)
+}
 
-    private val entries = entries.toList()
+class WeightedCollection<T: Any>(private val entries: List<WeightedEntry<T>>) {
+
+    constructor(vararg entryPairs: Pair<Int, T>): this(entryPairs.map { WeightedEntry<T>(it) })
 
     fun sample(): T? {
         var totalWeight = entries.fold(0) { acc: Int, entry: WeightedEntry<T> ->

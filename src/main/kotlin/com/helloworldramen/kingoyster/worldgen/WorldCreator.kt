@@ -31,42 +31,42 @@ object WorldCreator {
 
     private val KITS_FOR_LEVEL: Map<Int, WeightedCollection<WorldCreationKit>> = mapOf(
         1 to WeightedCollection(
-            WeightedEntry(100, WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy())),
+            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
         ),
         2 to WeightedCollection(
-            WeightedEntry(100, WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy())),
-            WeightedEntry(20, WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy())),
+            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            20 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
         ),
         3 to WeightedCollection(
-            WeightedEntry(80, WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy())),
-            WeightedEntry(100, WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy())),
+            80 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            100 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
         ),
         4 to WeightedCollection(
-            WeightedEntry(90, WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy())),
-            WeightedEntry(100, WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy())),
+            90 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            100 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
         ),
         5 to WeightedCollection(
-            WeightedEntry(100, WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy())),
-            WeightedEntry(100, WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy())),
+            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            100 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
         ),
         6 to WeightedCollection(
-            WeightedEntry(100, WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy())),
-            WeightedEntry(20, WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy())),
+            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            20 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
         ),
         7 to WeightedCollection(
-            WeightedEntry(100, WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy())),
-            WeightedEntry(20, WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy())),
+            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            20 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
         ),
         8 to WeightedCollection(
-            WeightedEntry(30, WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy())),
-            WeightedEntry(100, WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy())),
+            30 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            100 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
         ),
         9 to WeightedCollection(
-            WeightedEntry(100, WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy())),
-            WeightedEntry(20, WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy())),
+            100 to WorldCreationKit(DungeonTopologyStrategy(), SmorgasbordPopulationStrategy()),
+            20 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
         ),
         10 to WeightedCollection(
-            WeightedEntry(100, WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy())),
+            100 to WorldCreationKit(DrunkTopologyStrategy(), SmorgasbordPopulationStrategy()),
         )
     )
 
