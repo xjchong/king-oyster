@@ -154,8 +154,8 @@ object ActorFactory {
                 ),
                 ItemSlotPart(
                     EntityTable(
-                        50 to puddle,
-                        50 to EntityTable.NULL
+                        30 to puddle,
+                        70 to EntityTable.NULL
                     ).generate()
                 ),
                 PhysicalPart(
