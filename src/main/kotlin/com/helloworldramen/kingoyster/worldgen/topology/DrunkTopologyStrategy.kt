@@ -8,7 +8,7 @@ class DrunkTopologyStrategy(private val clearPercentage: Double = DEFAULT_CLEAR_
 
     override fun generate(width: Int, height: Int, playerPosition: Position?): World {
         return World(width, height).apply {
-            fill { FeatureFactory.wall() }
+            fill { FeatureFactory.wall()() }
             drunkWalk(this, clearPercentage, Position(width / 2, height / 2))
         }
     }

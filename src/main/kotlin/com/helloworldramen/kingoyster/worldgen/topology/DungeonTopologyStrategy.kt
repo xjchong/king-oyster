@@ -29,7 +29,7 @@ class DungeonTopologyStrategy(
 
     override fun generate(width: Int, height: Int, playerPosition: Position?): World {
         return World(width, height).apply {
-            fill(WALL_REGION_ID) { FeatureFactory.wall() }
+            fill(WALL_REGION_ID) { FeatureFactory.wall()() }
 
             placeRooms(
                 (area() * roomAttemptsPercent).roundToInt(),
@@ -173,11 +173,11 @@ class DungeonTopologyStrategy(
 
             if (needsMerge) {
                 removeAll(pos)
-                add(FeatureFactory.door(isDoorOpen), pos)
+                add(FeatureFactory.door(isDoorOpen)(), pos)
                 if (isDisjoint) mergedRegionIds.add(adjacentRegions)
             } else if (canCreateExtra) {
                 removeAll(pos)
-                add(FeatureFactory.door(isDoorOpen), pos)
+                add(FeatureFactory.door(isDoorOpen)(), pos)
                 extraDoorsCount++
             }
         }
@@ -193,7 +193,7 @@ class DungeonTopologyStrategy(
         if (!isDeadEnd(position)) return
 
         removeAll(position)
-        add(FeatureFactory.wall(), position)
+        add(FeatureFactory.wall()(), position)
         regionIds[position] = WALL_REGION_ID
 
         position.neighbors().forEach {

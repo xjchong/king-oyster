@@ -5,7 +5,7 @@ import com.helloworldramen.kingoyster.extensions.randomPositionWhere
 import com.helloworldramen.kingoyster.worldgen.population.PopulationRule
 
 class StairsPopulationRule : PopulationRule(
-    { FeatureFactory.stairs() },
+    FeatureFactory.stairs(),
     predicate = { world, position, player ->
         val playerPosition = world[player]
 

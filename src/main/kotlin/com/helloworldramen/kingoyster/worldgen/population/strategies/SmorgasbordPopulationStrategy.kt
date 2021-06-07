@@ -13,13 +13,13 @@ import com.helloworldramen.kingoyster.worldgen.population.templates.SingletonPop
 class SmorgasbordPopulationStrategy : PopulationStrategy() {
 
     override val templates: List<PopulationTemplate> = listOf(
-        MonoculturePopulationTemplate(0.04, PopulationRule({ ActorFactory.goblin() })),
-        MonoculturePopulationTemplate(0.04, PopulationRule({ ActorFactory.slime() })),
-        MonoculturePopulationTemplate(1, 2, PopulationRule({ ActorFactory.ghost() })),
-        MonoculturePopulationTemplate(2, 4, PopulationRule({ WeaponFactory.newDagger() })),
-        MonoculturePopulationTemplate(2, 4, PopulationRule({ WeaponFactory.newLongsword() })),
-        MonoculturePopulationTemplate(2, 4, PopulationRule({ WeaponFactory.newGreatsword() })),
-        MonoculturePopulationTemplate(2, 4, PopulationRule({ ItemFactory.medicine() })),
+        MonoculturePopulationTemplate(0.04, PopulationRule(ActorFactory.goblin())),
+        MonoculturePopulationTemplate(0.04, PopulationRule(ActorFactory.slime())),
+        MonoculturePopulationTemplate(1, 2, PopulationRule(ActorFactory.ghost())),
+        MonoculturePopulationTemplate(2, 4, PopulationRule(WeaponFactory.newDagger())),
+        MonoculturePopulationTemplate(2, 4, PopulationRule(WeaponFactory.newLongsword())),
+        MonoculturePopulationTemplate(2, 4, PopulationRule(WeaponFactory.newGreatsword())),
+        MonoculturePopulationTemplate(2, 4, PopulationRule(ItemFactory.medicine())),
         SingletonPopulationTemplate(StairsPopulationRule())
     )
 }

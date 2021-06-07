@@ -3,9 +3,10 @@ package com.helloworldramen.kingoyster.worldgen.population
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
+import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 
 open class PopulationRule(
-     val entityFactory: () -> Entity,
+     val entityFactoryFn: EntityFactoryFn,
      val predicate: (World, Position, player: Entity) -> Boolean = IS_EMPTY
 ) {
 

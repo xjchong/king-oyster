@@ -75,7 +75,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _ready() {
-		val player = ActorFactory.player()
+		val player = ActorFactory.player()()
 		val world = WorldCreator.create(1, player, null)
 
 		listMenuScene.pauseMode = PAUSE_MODE_PROCESS

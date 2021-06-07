@@ -18,4 +18,8 @@ class EntityTable(entries: List<WeightedEntry<EntityFactoryFnNullable>>) {
     fun generate(): Entity? {
         return collection.sample()?.invoke()
     }
+
+    companion object {
+        val NULL: EntityFactoryFnNullable = { null }
+    }
 }

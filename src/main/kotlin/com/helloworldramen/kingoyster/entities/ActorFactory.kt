@@ -1,6 +1,7 @@
 package com.helloworldramen.kingoyster.entities
 
 import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.DamageType
@@ -9,136 +10,146 @@ import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
 
 object ActorFactory {
 
-    fun player() = Entity(
-        name = "player",
-        parts = listOf(
-            CombatPart(
-                maxHealth = 100,
-                maxMana = 4,
-                power = 10,
-                defaultAttackPattern = BasicAttackPattern(
-                    powerFactor = 0.5,
-                    damageType = DamageType.Bash
+    fun player(): EntityFactoryFn = {
+        Entity(
+            name = "player",
+            parts = listOf(
+                CombatPart(
+                    maxHealth = 100,
+                    maxMana = 4,
+                    power = 10,
+                    defaultAttackPattern = BasicAttackPattern(
+                        powerFactor = 0.5,
+                        damageType = DamageType.Bash
+                    )
+                ),
+                ItemSlotPart(),
+                WeaponSlotPart(),
+                FactionPart(Faction.Player,
+                    enemies = setOf(
+                        Faction.Goblin,
+                        Faction.Monster,
+                        Faction.Spirit
+                    )
+                ),
+                PhysicalPart(
+                    isPassable = false
+                ),
+                MemoryPart(),
+                MovementPart(),
+                SensoryPart(
+                    visionRange = 10
                 )
             ),
-            ItemSlotPart(),
-            WeaponSlotPart(),
-            FactionPart(Faction.Player,
-                enemies = setOf(
-                    Faction.Goblin,
+            timeFactor = 1.0,
+            isPlayer = true
+        )
+    }
+
+    fun ghost(): EntityFactoryFn = {
+        Entity(
+            name = "ghost",
+            parts = listOf(
+                CombatPart(
+                    maxHealth = 10,
+                    maxMana = 6,
+                    power = 0,
+                    defaultAttackPattern = BasicAttackPattern(0.0)
+                ),
+                FactionPart(
+                    Faction.Spirit,
+                    enemies = setOf(Faction.Goblin, Faction.Player)
+                ),
+                PhysicalPart(
+                    isPassable = true,
+                    isCorporeal = false
+                ),
+                MovementPart(),
+                ResistancesPart(
+                    cutResFactor = 0.0,
+                    bashResFactor = 0.0,
+                    stabResFactor = 0.0,
+                    magicResFactor = 1.5,
+                    fireResFactor = 1.5,
+                    iceResFactor = 1.5,
+                    voltResFactor = 1.5
+                ),
+                SensoryPart(
+                    visionRange = 4
+                )
+            ),
+            timeFactor = 1.0
+        )
+    }
+
+    fun goblin(): EntityFactoryFn = {
+        Entity(
+            name = "goblin",
+            parts = listOf(
+                CombatPart(
+                    maxHealth = 30,
+                    maxMana = 0,
+                    power = 5,
+                    defaultAttackPattern = BasicAttackPattern(
+                        powerFactor = 1.0,
+                        damageType = DamageType.Bash
+                    )
+                ),
+                ItemSlotPart(
+                    EntityTable(
+                        10 to ItemFactory.medicine(),
+                        90 to EntityTable.NULL
+                    ).generate()
+                ),
+                WeaponSlotPart(
+                    EntityTable(
+                        5 to WeaponFactory.newDagger(),
+                        4 to WeaponFactory.newLongsword(),
+                        3 to WeaponFactory.newGreatsword(),
+                        88 to EntityTable.NULL
+                    ).generate()
+                ),
+                FactionPart(Faction.Goblin,
+                    enemies = setOf(Faction.Player, Faction.Spirit)
+                ),
+                PhysicalPart(
+                    isPassable = false
+                ),
+                MovementPart(),
+                SensoryPart(
+                    visionRange = 7
+                ),
+                TelegraphPart()
+            ),
+            timeFactor = 1.0
+        )
+    }
+
+    fun slime(): EntityFactoryFn = {
+        Entity(
+            name = "slime",
+            parts = listOf(
+                CombatPart(
+                    maxHealth = 20,
+                    maxMana = 0,
+                    power = 2,
+                    defaultAttackPattern = BasicAttackPattern(1.0)
+                ),
+                FactionPart(
                     Faction.Monster,
-                    Faction.Spirit
-                )
+                    enemies = setOf(Faction.Player, Faction.Goblin)
+                ),
+                ItemSlotPart(),
+                PhysicalPart(
+                    isPassable = false
+                ),
+                MovementPart(),
+                SensoryPart(
+                    visionRange = 4
+                ),
+                TelegraphPart()
             ),
-            PhysicalPart(
-                isPassable = false
-            ),
-            MemoryPart(),
-            MovementPart(),
-            SensoryPart(
-                visionRange = 10
-            )
-        ),
-        timeFactor = 1.0,
-        isPlayer = true
-    )
-
-    fun ghost() = Entity(
-        name = "ghost",
-        parts = listOf(
-            CombatPart(
-                maxHealth = 10,
-                maxMana = 6,
-                power = 0,
-                defaultAttackPattern = BasicAttackPattern(0.0)
-            ),
-            FactionPart(Faction.Spirit,
-                enemies = setOf(Faction.Goblin, Faction.Player)
-            ),
-            PhysicalPart(
-                isPassable = true,
-                isCorporeal = false
-            ),
-            MovementPart(),
-            ResistancesPart(
-                cutResFactor = 0.0,
-                bashResFactor = 0.0,
-                stabResFactor = 0.0,
-                magicResFactor = 1.5,
-                fireResFactor = 1.5,
-                iceResFactor = 1.5,
-                voltResFactor = 1.5
-            ),
-            SensoryPart(
-                visionRange = 4
-            )
-        ),
-        timeFactor = 1.0
-    )
-
-    fun goblin() = Entity(
-        name = "goblin",
-        parts = listOf(
-            CombatPart(
-                maxHealth = 30,
-                maxMana = 0,
-                power = 5,
-                defaultAttackPattern = BasicAttackPattern(
-                    powerFactor = 1.0,
-                    damageType = DamageType.Bash
-                )
-            ),
-            ItemSlotPart(
-                EntityTable(
-                    10 to { ItemFactory.medicine() },
-                    90 to { null }
-                ).generate()
-            ),
-            WeaponSlotPart(
-                EntityTable(
-                    5 to { WeaponFactory.newDagger() },
-                    4 to { WeaponFactory.newLongsword() },
-                    3 to { WeaponFactory.newGreatsword() },
-                    88 to { null }
-                ).generate()
-            ),
-            FactionPart(Faction.Goblin,
-                enemies = setOf(Faction.Player, Faction.Spirit)
-            ),
-            PhysicalPart(
-                isPassable = false
-            ),
-            MovementPart(),
-            SensoryPart(
-                visionRange = 7
-            ),
-            TelegraphPart()
-        ),
-        timeFactor = 1.0
-    )
-
-    fun slime() = Entity(
-        name = "slime",
-        parts = listOf(
-            CombatPart(
-                maxHealth = 20,
-                maxMana = 0,
-                power = 2,
-                defaultAttackPattern = BasicAttackPattern(1.0)
-            ),
-            FactionPart(Faction.Monster,
-                enemies = setOf(Faction.Player, Faction.Goblin)
-            ),
-            ItemSlotPart(),
-            PhysicalPart(
-                isPassable = false
-            ),
-            MovementPart(),
-            SensoryPart(
-                visionRange = 4
-            ),
-            TelegraphPart()
-        ),
-        timeFactor = 1.0
-    )
+            timeFactor = 1.0
+        )
+    }
 }
