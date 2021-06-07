@@ -2,7 +2,7 @@ package com.helloworldramen.kingoyster.scenes.tileselection
 
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
-import com.helloworldramen.kingoyster.scenes.autoload.audio.SFX
+import com.helloworldramen.kingoyster.directories.SFX
 import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
 import godot.*

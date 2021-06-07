@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.scenes.autoload.audio
+package com.helloworldramen.kingoyster.directories
 
 object BGM {
 

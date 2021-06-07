@@ -9,7 +9,7 @@ import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.*
 import com.helloworldramen.kingoyster.parts.weapon
 import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
-import com.helloworldramen.kingoyster.scenes.autoload.audio.SFX
+import com.helloworldramen.kingoyster.directories.SFX
 import godot.Node
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction

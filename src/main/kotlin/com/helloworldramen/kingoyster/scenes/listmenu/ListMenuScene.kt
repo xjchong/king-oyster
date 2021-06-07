@@ -1,7 +1,7 @@
 package com.helloworldramen.kingoyster.scenes.listmenu
 
 import com.helloworldramen.kingoyster.scenes.autoload.audio.AudioAutoload
-import com.helloworldramen.kingoyster.scenes.autoload.audio.SFX
+import com.helloworldramen.kingoyster.directories.SFX
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
