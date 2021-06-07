@@ -34,12 +34,20 @@ class EntitySprite : Node2D() {
 		val color = appearancePart?.color ?: Color.white
 		val sprite = appearancePart?.sprite
 		val offset = appearancePart?.offset ?: Vector2.ZERO
+		val frameIndex = appearancePart?.frameIndex
 
 		if (sprite != null) {
-			// Play the sprite first to get the right frame count.
-			animatedSprite.play(sprite)
-			val frameCount = animatedSprite.frames?.getFrameCount(sprite) ?: 1
-			animatedSprite.frame = Random.nextLong(0, frameCount)
+			// Set the sprite animation first to get the right frame count.
+			animatedSprite.animation = sprite
+
+			if (frameIndex != null) {
+				animatedSprite.stop()
+				animatedSprite.frame = frameIndex
+			} else {
+				val frameCount = animatedSprite.frames?.getFrameCount(sprite) ?: 1
+				animatedSprite.frame = Random.nextLong(0, frameCount)
+				animatedSprite.play()
+			}
 
 			animatedSprite.position += offset
 			animatedSprite.visible = true

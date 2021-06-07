@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/walls.png-09e9ee4dfb50fd98b2b47095588b7339.stex"
+path="res://.import/grass_stone_wall.png-35763f7719ed79b735098f70427dfd59.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/main/resources/sprites/features/walls.png"
-dest_files=[ "res://.import/walls.png-09e9ee4dfb50fd98b2b47095588b7339.stex" ]
+source_file="res://src/main/resources/sprites/features/grass_stone_wall.png"
+dest_files=[ "res://.import/grass_stone_wall.png-35763f7719ed79b735098f70427dfd59.stex" ]
 
 [params]
 

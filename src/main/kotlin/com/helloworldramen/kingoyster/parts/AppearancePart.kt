@@ -10,8 +10,8 @@ class AppearancePart(
     val color: Color = Color.white,
     val sprite: String? = null,
     val offset: Vector2 = Vector2.ZERO,
-    val weightedFrameIndices: WeightedCollection<Int> = WeightedCollection(),
-    val frameIndex: Int? = weightedFrameIndices.sample(), // Used for randomizing static sprite appearances.
+    val weightedFrameIndices: WeightedCollection<Long> = WeightedCollection(),
+    val frameIndex: Long? = weightedFrameIndices.sample(), // Used for randomizing static sprite appearances.
     val isAnimated: Boolean = frameIndex == null
 ) : Part {
 

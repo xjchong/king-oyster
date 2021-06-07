@@ -7,6 +7,7 @@ import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.ElementType
+import com.helloworldramen.kingoyster.utilities.WeightedCollection
 import godot.core.Color
 import godot.core.Vector2
 
@@ -51,7 +52,13 @@ object FeatureFactory {
                     ascii = '#',
                     color = Color.white,
                     sprite = "grass_stone_wall",
-                    offset = Vector2(0, 8)
+                    offset = Vector2(0, 8),
+                    weightedFrameIndices = WeightedCollection(
+                        500 to 0, 50 to 1, 50 to 2,
+                        50 to 3, 50 to 4, 50 to 5,
+                        50 to 6, 50 to 7, 50 to 8,
+                        50 to 9, 50 to 10, 50 to 11
+                    )
                 ),
                 PhysicalPart(
                     isPassable = false,
