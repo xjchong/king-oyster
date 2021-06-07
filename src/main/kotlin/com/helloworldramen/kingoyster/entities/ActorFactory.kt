@@ -4,6 +4,7 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.DamageType
+import com.helloworldramen.kingoyster.parts.combat.ResistancesPart
 import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
 
 object ActorFactory {
@@ -58,6 +59,15 @@ object ActorFactory {
                 isCorporeal = false
             ),
             MovementPart(),
+            ResistancesPart(
+                cutResFactor = 0.0,
+                bashResFactor = 0.0,
+                stabResFactor = 0.0,
+                magicResFactor = 1.5,
+                fireResFactor = 1.5,
+                iceResFactor = 1.5,
+                voltResFactor = 1.5
+            ),
             SensoryPart(
                 visionRange = 4
             )
