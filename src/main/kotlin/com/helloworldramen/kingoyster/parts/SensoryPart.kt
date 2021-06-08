@@ -11,6 +11,7 @@ class SensoryPart(
 ) : Part {
     var visiblePositions: List<Position> = listOf()
         private set
+    var isOmniscient: Boolean = false // FOR DEBUG ONLY! :)
 
     private constructor(visionRange: Int, visiblePositions: List<Position>): this(visionRange) {
         this.visiblePositions = visiblePositions.toList()
@@ -21,6 +22,11 @@ class SensoryPart(
     }
 
     override fun update(context: Context, partOwner: Entity) {
+        if (isOmniscient) {
+            updateAsOmniscient(context)
+            return
+        }
+
         val world = context.world
         val currentPosition = world[partOwner] ?: return
         val nextVisiblePositions: MutableList<Position> = mutableListOf()
@@ -36,6 +42,14 @@ class SensoryPart(
             })
 
         visiblePositions = nextVisiblePositions
+    }
+
+    private fun updateAsOmniscient(context: Context) {
+        val world = context.world
+
+        if (visiblePositions.size >= world.width * world.height) return
+
+        visiblePositions = Position(world.width - 1, world.height - 1).map { it }
     }
 }
 

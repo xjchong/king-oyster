@@ -48,7 +48,9 @@ __meta__ = {
 
 [node name="FloorBucket" type="YSort" parent="FloorRect"]
 
-[node name="TileBucket" type="YSort" parent="FloorRect"]
+[node name="EntityBucket" type="YSort" parent="FloorRect"]
+
+[node name="MemoryBucket" type="YSort" parent="FloorRect"]
 
 [node name="TelegraphBucket" type="YSort" parent="."]
 

@@ -13,6 +13,7 @@ import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.eventbus.events.PlayerToastEvent
 import com.helloworldramen.kingoyster.parts.*
+import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.health
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.eventaudio.EventAudio
@@ -159,9 +160,27 @@ class GameScene : Node2D(), EventBusSubscriber {
 		val hasWeapon = player.weapon() != null
 
 		when {
-			event.isActionPressed("debug") -> {
-				worldScene.fadeOut()
-				shouldLoadNewLevel = true
+			Input.isActionPressed("debug") -> {
+				when {
+					event.isActionPressed("ui_accept") -> {
+						worldScene.fadeOut()
+						shouldLoadNewLevel = true
+					}
+					event.isActionPressed("ui_up") -> {
+						player.respondToAction(Heal(context, player, 9999))
+					}
+					event.isActionPressed("square") -> {
+						player.find<SensoryPart>()?.run {
+							isOmniscient = !isOmniscient
+							update(context, player)
+						}
+					}
+					event.isActionPressed("triangle") -> {
+						player.find<PhysicalPart>()?.run {
+							isCorporeal = !isCorporeal
+						}
+					}
+				}
 				return
 			}
 			Input.isActionPressed("left_modifier") -> {

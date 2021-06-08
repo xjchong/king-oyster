@@ -30,7 +30,8 @@ import godot.global.GD
 class WorldScene : Node2D(), EventBusSubscriber {
 
 	private val floorBucket: YSort by lazy { getNodeAs("FloorRect/FloorBucket")!! }
-	private val tileBucket: YSort by lazy { getNodeAs("FloorRect/TileBucket")!! }
+	private val entityBucket: YSort by lazy { getNodeAs("FloorRect/EntityBucket")!! }
+	private val memoryBucket: YSort by lazy { getNodeAs("FloorRect/MemoryBucket")!! }
 	private val telegraphBucket: YSort by lazy { getNodeAs("TelegraphBucket")!! }
 	private val flashBucket: YSort by lazy { getNodeAs("FlashBucket")!! }
 	private val blackoutRect: ColorRect by lazy { getNodeAs("BlackoutRect")!! }
@@ -91,7 +92,8 @@ class WorldScene : Node2D(), EventBusSubscriber {
 		val world = context.world
 
 		floorBucket.freeChildren()
-		tileBucket.freeChildren()
+		entityBucket.freeChildren()
+		memoryBucket.freeChildren()
 		telegraphBucket.freeChildren()
 		flashBucket.freeChildren()
 		sceneForEntity.clear()
@@ -102,7 +104,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 			// Add the entities for this position.
 			world[position]?.forEach { entity ->
 				packedEntityScene?.instanceAs<EntityScene>()?.let {
-					tileBucket.addChild(it)
+					entityBucket.addChild(it)
 					it.bind(context, entity)
 					sceneForEntity[entity] = it
 				}
@@ -110,14 +112,14 @@ class WorldScene : Node2D(), EventBusSubscriber {
 				// Also add scenes for entities that are not explicitly visible.
 				entity.find<WeaponSlotPart>()?.weapon?.let { weapon ->
 					packedEntityScene?.instanceAs<EntityScene>()?.let {
-						tileBucket.addChild(it)
+						entityBucket.addChild(it)
 						it.bind(context, weapon)
 						sceneForEntity[weapon] = it
 					}
 				}
 				entity.find<ItemSlotPart>()?.item?.let { item ->
 					packedEntityScene?.instanceAs<EntityScene>()?.let {
-						tileBucket.addChild(it)
+						entityBucket.addChild(it)
 						it.bind(context, item)
 						sceneForEntity[item] = it
 					}
@@ -150,7 +152,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 
 			// Setup the memory for this position.
 			packedMemoryScene?.instanceAs<MemoryScene>()?.let { memoryScene ->
-				tileBucket.addChild(memoryScene)
+				memoryBucket.addChild(memoryScene)
 				memoryScene.bind(context.player, position)
 				memoryScene.position = calculateNodePosition(position)
 			}
