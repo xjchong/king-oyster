@@ -175,7 +175,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 
 	private fun animateWeaponAttack(positions: Set<Position>) {
 		positions.forEach {
-			flashOverlayForPosition[it]?.showFlash(Color.white)
+			flashOverlayForPosition[it]?.showFlash(Color(1, 1, 1, 0.8))
 		}
 	}
 
