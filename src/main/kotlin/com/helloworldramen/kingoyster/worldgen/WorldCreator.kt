@@ -52,12 +52,12 @@ object WorldCreator {
             90 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SmorgasbordPopulation(0.7)),
             80 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation(0.7)),
             30 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.CRAMPED, SmorgasbordPopulation(0.7)),
-            20 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.PILLARS, SmorgasbordPopulation(0.7)),
+            20 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.MANY_PILLARS, SmorgasbordPopulation(0.7)),
             10 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SlimesPopulation()),
         ),
         5 to WeightedCollection(
             100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.STANDARD, SmorgasbordPopulation(0.7)),
-            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.PILLARS, SmorgasbordPopulation(0.7)),
+            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.MANY_PILLARS, SmorgasbordPopulation(0.7)),
             100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation(0.7)),
             80 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SmorgasbordPopulation(0.7)),
 
@@ -90,10 +90,11 @@ object WorldCreator {
         9 to WeightedCollection(
             100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.BIG_ROOMS, SmorgasbordPopulation()),
             90 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation()),
-            20 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.PILLARS, SmorgasbordPopulation()),
+            20 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MANY_PILLARS, SmorgasbordPopulation()),
         ),
         10 to WeightedCollection(
-            100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.COURTYARD, SmorgasbordPopulation(1.2)),
+            100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.ONLY_PILLARS, SmorgasbordPopulation(1.2)),
+            30 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.COURTYARD, SmorgasbordPopulation(1.5)),
         )
     )
 

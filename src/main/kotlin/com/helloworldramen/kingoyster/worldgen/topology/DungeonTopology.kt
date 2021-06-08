@@ -288,6 +288,17 @@ class DungeonTopology(
             pillarRemovalPercent = 80.percentChance(),
             borderWidth = 2
         )
+        val MANY_PILLARS = DungeonTopology(
+            roomAttemptsPercent = 0.3,
+            roomMeanWidthPercent = 0.08,
+            roomMeanHeightPercent = 0.08,
+            roomWidthStandardDeviationPercent = 0.04,
+            roomHeightStandardDeviationPercent = 0.04,
+            cyclePercent = 50.percentChance(),
+            extraDoorPercent = 10.percentChance(),
+            maxExtraDoorsPercent = 10.percentChance(),
+            pillarRemovalPercent = 50.percentChance(),
+        )
         val MANY_ROOMS = DungeonTopology(
             roomAttemptsPercent = 0.2,
             roomMeanWidthPercent = 0.2,
@@ -312,6 +323,11 @@ class DungeonTopology(
             pillarRemovalPercent = 80.percentChance(),
             shouldRemoveDeadEnds = false
         )
+        val ONLY_PILLARS = DungeonTopology(
+            roomAttemptsPercent = 0.0,
+            cyclePercent = 100.percentChance(),
+            pillarRemovalPercent = 7.percentChance(),
+        )
         val OPEN = DungeonTopology(
             roomAttemptsPercent = 0.6,
             roomMeanWidthPercent = 0.08,
@@ -322,17 +338,6 @@ class DungeonTopology(
             extraDoorPercent = 5.percentChance(),
             maxExtraDoorsPercent = 10.percentChance(),
             pillarRemovalPercent = 100.percentChance(),
-        )
-        val PILLARS = DungeonTopology(
-            roomAttemptsPercent = 0.3,
-            roomMeanWidthPercent = 0.08,
-            roomMeanHeightPercent = 0.08,
-            roomWidthStandardDeviationPercent = 0.04,
-            roomHeightStandardDeviationPercent = 0.04,
-            cyclePercent = 50.percentChance(),
-            extraDoorPercent = 10.percentChance(),
-            maxExtraDoorsPercent = 10.percentChance(),
-            pillarRemovalPercent = 50.percentChance(),
         )
     }
 }
