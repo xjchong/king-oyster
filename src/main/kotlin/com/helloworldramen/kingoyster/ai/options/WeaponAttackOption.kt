@@ -25,8 +25,8 @@ class WeaponAttackOption(
         if (direction == null) return false
 
         val attackPattern = entity.weapon()?.weaponAttackPattern() ?: entity.defaultAttackPattern()
-        val positions = attackPattern.calculateDamageForPosition(context, entity, direction).keys.toList()
-        val payload = TelegraphPayload(WeaponAttack(context, entity, direction), positions)
+        val telegraphedPositions = attackPattern.telegraphPositions(context, entity, direction)
+        val payload = TelegraphPayload(WeaponAttack(context, entity, direction), telegraphedPositions)
         val telegraphInfo = TelegraphInfo(entity, 1, listOf(payload))
 
         return entity.respondToAction(Telegraph(context, entity, telegraphInfo))

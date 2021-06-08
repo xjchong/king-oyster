@@ -28,12 +28,21 @@ class LongswordAttackPattern(
         entity: Entity,
         direction: Direction
     ): Map<Position, DamageInfo> {
-        val currentPosition = context.positionOf(entity) ?: return mapOf()
-        val damageInfo = DamageInfo(powerFactor, damageType, elementType)
+        return getHitPositions(context, entity, direction).associateWith {
+            DamageInfo(powerFactor, damageType, elementType)
+        }
+    }
 
-        return mapOf(
-            currentPosition + direction.vector to damageInfo,
-            currentPosition + (direction.vector * 2) to damageInfo
+    override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        return listOfNotNull(context.positionOf(entity)?.withRelative(direction.vector))
+    }
+
+    private fun getHitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        val currentPosition = context.positionOf(entity) ?: return listOf()
+
+        return listOf(
+            currentPosition + direction.vector,
+            currentPosition + (direction.vector * 2)
         )
     }
 }

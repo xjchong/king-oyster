@@ -23,7 +23,7 @@ class GreatswordAttackPattern(
             return false
         }
 
-        return getHitPositions(currentPosition, direction).any { position ->
+        return getHitPositions(context, entity, direction).any { position ->
             context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
         }
     }
@@ -33,18 +33,22 @@ class GreatswordAttackPattern(
         entity: Entity,
         direction: Direction
     ): Map<Position, DamageInfo> {
-        val currentPosition = context.positionOf(entity) ?: return mapOf()
-
-        return getHitPositions(currentPosition, direction).associateWith {
+        return getHitPositions(context, entity, direction).associateWith {
             DamageInfo(powerFactor, damageType, elementType)
         }
     }
 
-    private fun getHitPositions(origin: Position, direction: Direction): List<Position> {
+    override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        return getHitPositions(context, entity, direction)
+    }
+
+    private fun getHitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        val currentPosition = context.positionOf(entity) ?: return listOf()
+
         return listOf(
-            origin.withRelative(direction.vector),
-            origin.withRelative(-1, 1).rotated(origin, direction),
-            origin.withRelative(1, 1).rotated(origin, direction)
+            currentPosition.withRelative(direction.vector),
+            currentPosition.withRelative(-1, 1).rotated(currentPosition, direction),
+            currentPosition.withRelative(1, 1).rotated(currentPosition, direction)
         )
     }
 }

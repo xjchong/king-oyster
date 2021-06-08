@@ -16,7 +16,6 @@ import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.floor.FloorScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
 import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
-import com.helloworldramen.kingoyster.utilities.WeightedCollection
 import com.helloworldramen.kingoyster.worldgen.metadata.WorldFlavor
 import godot.*
 import godot.annotation.RegisterClass
@@ -26,7 +25,6 @@ import godot.core.Vector2
 import godot.extensions.getNodeAs
 import godot.extensions.instanceAs
 import godot.global.GD
-import kotlin.random.Random
 
 @RegisterClass
 class WorldScene : Node2D(), EventBusSubscriber {

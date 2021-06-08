@@ -28,6 +28,25 @@ class RapierAttackPattern(
         }
     }
 
+    override fun calculateDamageForPosition(
+        context: Context,
+        entity: Entity,
+        direction: Direction
+    ): Map<Position, DamageInfo> {
+        return getHitPositions(context, entity, direction).associateWith {
+            DamageInfo(powerFactor, damageType, elementType)
+        }
+    }
+
+    override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        val currentPosition = context.positionOf(entity) ?: return listOf()
+
+        return listOf(
+            currentPosition.withRelative(direction.vector),
+            currentPosition.withRelative(direction.vector * 2)
+        )
+    }
+
     override fun followupPath(context: Context, entity: Entity, direction: Direction): List<Position> {
         // Move to the square next to the user.
         val currentPosition = context.positionOf(entity) ?: return listOf()
@@ -40,28 +59,11 @@ class RapierAttackPattern(
         }
     }
 
-    override fun calculateDamageForPosition(
-        context: Context,
-        entity: Entity,
-        direction: Direction
-    ): Map<Position, DamageInfo> {
-        return getHitPositions(context, entity, direction).associateWith {
-            DamageInfo(powerFactor, damageType, elementType)
-        }
-    }
-
     private fun getHitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
-        val currentPosition = context.positionOf(entity) ?: return listOf()
-        val hitPosition = listOf(
-            currentPosition.withRelative(direction.vector),
-            currentPosition.withRelative(direction.vector * 2)).firstOrNull { position ->
+        val hitPosition = telegraphPositions(context, entity, direction).firstOrNull { position ->
             context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
         }
 
-        return if (hitPosition != null) {
-            listOf(hitPosition)
-        } else {
-            listOf()
-        }
+        return listOfNotNull(hitPosition)
     }
 }

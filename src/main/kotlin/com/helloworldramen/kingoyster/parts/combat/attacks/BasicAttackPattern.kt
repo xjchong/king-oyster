@@ -17,10 +17,9 @@ open class BasicAttackPattern(
 ) : AttackPattern() {
 
     override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
-        val currentPosition = context.positionOf(entity) ?: return false
-        val nextPosition = currentPosition.withRelative(direction.vector)
+        val hitPosition = getHitPosition(context, entity, direction) ?: return false
 
-        return (context.entitiesAt(nextPosition)?.any { it.isEnemyOf(entity) } == true)
+        return (context.entitiesAt(hitPosition)?.any { it.isEnemyOf(entity) } == true)
     }
 
     override fun calculateDamageForPosition(
@@ -28,9 +27,18 @@ open class BasicAttackPattern(
         entity: Entity,
         direction: Direction
     ): Map<Position, DamageInfo> {
-        val currentPosition = context.positionOf(entity) ?: return mapOf()
-        val damageInfo = DamageInfo(powerFactor, damageType, elementType)
+        val hitPosition = getHitPosition(context, entity, direction) ?: return mapOf()
 
-        return mapOf(currentPosition + direction.vector to damageInfo)
+        return mapOf(hitPosition to DamageInfo(powerFactor, damageType, elementType))
+    }
+
+    override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        return listOfNotNull(getHitPosition(context, entity, direction))
+    }
+
+    private fun getHitPosition(context: Context, entity: Entity, direction: Direction): Position? {
+        val currentPosition = context.positionOf(entity) ?: return null
+
+        return currentPosition + direction.vector
     }
 }
