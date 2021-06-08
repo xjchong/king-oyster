@@ -5,15 +5,12 @@ import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageType
-import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
-import com.helloworldramen.kingoyster.parts.combat.attacks.DaggerAttackPattern
-import com.helloworldramen.kingoyster.parts.combat.attacks.GreatswordAttackPattern
-import com.helloworldramen.kingoyster.parts.combat.attacks.LongswordAttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attacks.*
 import godot.core.Color
 
 object WeaponFactory {
 
-    fun newDagger(): EntityFactoryFn = {
+    fun dagger(): EntityFactoryFn = {
         Entity(
             name = "dagger",
             parts = listOf(
@@ -34,7 +31,7 @@ object WeaponFactory {
         )
     }
 
-    fun newLongsword(): EntityFactoryFn = {
+    fun longsword(): EntityFactoryFn = {
         Entity(
             name = "longsword",
             parts = listOf(
@@ -55,7 +52,7 @@ object WeaponFactory {
         )
     }
 
-    fun newGreatsword(): EntityFactoryFn = {
+    fun greatsword(): EntityFactoryFn = {
         Entity(
             name = "greatsword",
             parts = listOf(
@@ -69,6 +66,28 @@ object WeaponFactory {
                     throwInfo = DamageInfo(
                         powerFactor = 3.0,
                         damageType = DamageType.Cut,
+                    ),
+                    maxDurability = 8
+                )
+            )
+        )
+    }
+
+    fun rapier(): EntityFactoryFn = {
+        Entity(
+            name = "rapier",
+            parts = listOf(
+                AppearancePart(
+                    ascii = '|',
+                    color = Color.yellow,
+                    sprite = "weapons",
+                    frameIndex = 3
+                ),
+                WeaponPart(
+                    attackPattern = RapierAttackPattern(1.2),
+                    throwInfo = DamageInfo(
+                        powerFactor = 2.4,
+                        damageType = DamageType.Stab
                     ),
                     maxDurability = 8
                 )

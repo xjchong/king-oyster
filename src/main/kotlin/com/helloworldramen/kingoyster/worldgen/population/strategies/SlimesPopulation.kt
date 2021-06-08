@@ -14,9 +14,9 @@ class SlimesPopulation: PopulationStrategy(
         30 to PopulationRule(ActorFactory.redSlime()),
     ).withDensity(0.1),
     PopulationTemplate(
-        100 to PopulationRule(WeaponFactory.newDagger()),
-        100 to PopulationRule(WeaponFactory.newLongsword()),
-        100 to PopulationRule(WeaponFactory.newGreatsword()),
+        100 to PopulationRule(WeaponFactory.dagger()),
+        100 to PopulationRule(WeaponFactory.longsword()),
+        100 to PopulationRule(WeaponFactory.greatsword()),
     ).withCount(6, 12),
     PopulationTemplate(StairsPopulationRule())
         .withCount(1)

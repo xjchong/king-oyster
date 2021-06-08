@@ -38,10 +38,9 @@ class GreatswordAttackPattern(
         direction: Direction
     ): Map<Position, DamageInfo> {
         val currentPosition = context.positionOf(entity) ?: return mapOf()
-        val damageInfo = DamageInfo(powerFactor, damageType, elementType)
 
         return getHitPositions(currentPosition, direction).associateWith {
-            damageInfo
+            DamageInfo(powerFactor, damageType, elementType)
         }
     }
 

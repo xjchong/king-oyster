@@ -162,9 +162,9 @@ object ActorFactory {
                 ),
                 WeaponSlotPart(
                     EntityTable(
-                        5 to WeaponFactory.newDagger(),
-                        4 to WeaponFactory.newLongsword(),
-                        3 to WeaponFactory.newGreatsword(),
+                        5 to WeaponFactory.dagger(),
+                        4 to WeaponFactory.longsword(),
+                        3 to WeaponFactory.greatsword(),
                         88 to EntityTable.NULL
                     ).generate()
                 ),

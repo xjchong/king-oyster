@@ -57,7 +57,9 @@ class CombatPart(
     }
 
     private fun Entity.respondToWeaponAttack(action: WeaponAttack): Boolean {
-        val (context, _, direction) = action
+        val (context, actor, direction) = action
+        if (this != actor) return false
+
         val weapon = weapon()
         val attackPattern = weapon?.weaponAttackPattern() ?: defaultAttackPattern()
 
@@ -77,6 +79,14 @@ class CombatPart(
             context.world.respondToActions(position,
                 Damage(context, this, amount, damageInfo.damageType, damageInfo.elementType)
             )
+        }
+
+        val followupPath = attackPattern.followupPath(context, this, direction)
+
+        for (followPosition in followupPath) {
+            if (!this.respondToAction(Move(context, this, followPosition, timeFactor = 0.0))) {
+                break
+            }
         }
 
         return true

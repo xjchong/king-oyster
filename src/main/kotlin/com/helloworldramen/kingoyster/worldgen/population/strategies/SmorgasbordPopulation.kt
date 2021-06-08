@@ -16,11 +16,13 @@ class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
         .withDensity(0.01 * densityFactor),
     PopulationTemplate(PopulationRule(ActorFactory.ghost()))
         .withCount(1 * densityFactor, 2 * densityFactor),
-    PopulationTemplate(PopulationRule(WeaponFactory.newDagger()))
+    PopulationTemplate(PopulationRule(WeaponFactory.dagger()))
         .withCount(2 * densityFactor, 4 * densityFactor),
-    PopulationTemplate(PopulationRule(WeaponFactory.newLongsword()))
+    PopulationTemplate(PopulationRule(WeaponFactory.longsword()))
         .withCount(2 * densityFactor, 4 * densityFactor),
-    PopulationTemplate(PopulationRule(WeaponFactory.newGreatsword()))
+    PopulationTemplate(PopulationRule(WeaponFactory.greatsword()))
+        .withCount(2 * densityFactor, 4 * densityFactor),
+    PopulationTemplate(PopulationRule(WeaponFactory.rapier()))
         .withCount(2 * densityFactor, 4 * densityFactor),
     PopulationTemplate(StairsPopulationRule()).withCount(1)
 )
