@@ -8,7 +8,6 @@ import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.ElementType
-import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
 import com.helloworldramen.kingoyster.utilities.WeightedCollection
 import godot.core.Color
 import godot.core.Vector2
@@ -37,14 +36,17 @@ object FeatureFactory {
         )
     }
 
-    fun door(): EntityFactoryFn = {
+    fun door(isHorizontal: Boolean): EntityFactoryFn = {
         Entity(
             name = "door",
             parts = listOf(
                 AppearancePart(
                     ascii = '+',
-                    color = Color.orange
+                    color = Color.orange,
+                    sprite = if (isHorizontal) "door_horizontal" else "door_vertical",
+                    offset = Vector2(0, if (isHorizontal) 2 else 8)
                 ),
+                CombatPart(20),
                 PhysicalPart(
                     isPassable = false,
                     doesBlockVision = true
