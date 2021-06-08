@@ -22,7 +22,8 @@ object FeatureFactory {
                 AppearancePart(
                     ascii = '~',
                     color = Color.brown,
-                    sprite = "chest"
+                    sprite = "chests",
+                    frameIndex = 0
                 ),
                 CombatPart(5),
                 ItemSlotPart(
