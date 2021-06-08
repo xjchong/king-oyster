@@ -5,6 +5,7 @@ import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.DamageType
+import com.helloworldramen.kingoyster.parts.combat.ElementType
 import com.helloworldramen.kingoyster.parts.combat.ResistancesPart
 import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
 import godot.core.Color
@@ -184,37 +185,14 @@ object ActorFactory {
         )
     }
 
-    fun blueSlime(): EntityFactoryFn = slime("blue")
-    fun redSlime(): EntityFactoryFn = slime("red")
-
-    private fun slime(color: String): EntityFactoryFn = {
-        val name = when (color) {
-            "red" -> "red slime"
-            else -> "blue slime"
-        }
-
-        val asciiColor = when (color) {
-            "red" -> Color.red
-            else -> Color.lightgreen
-        }
-
-        val sprite = when (color) {
-            "red" -> "red_slime"
-            else -> "blue_slime"
-        }
-
-        val puddle = when(color) {
-            "red" -> FeatureFactory.firePuddle()
-            else -> FeatureFactory.healingPuddle()
-        }
-
+    fun blueSlime(): EntityFactoryFn = {
         Entity(
-            name = name,
+            name = "blue slime",
             parts = listOf(
                 AppearancePart(
                     ascii = 's',
-                    color = asciiColor,
-                    sprite = sprite,
+                    color = Color.lightblue,
+                    sprite = "blue_slime",
                     offset = Vector2(0, -2)
                 ),
                 CombatPart(
@@ -229,7 +207,7 @@ object ActorFactory {
                 ),
                 ItemSlotPart(
                     EntityTable(
-                        30 to puddle,
+                        30 to FeatureFactory.healingPuddle(),
                         70 to EntityTable.NULL
                     ).generate()
                 ),
@@ -237,6 +215,51 @@ object ActorFactory {
                     isPassable = false
                 ),
                 MovementPart(),
+                SensoryPart(
+                    visionRange = 4
+                ),
+                TelegraphPart()
+            ),
+            timeFactor = 1.0
+        )
+    }
+
+    fun redSlime(): EntityFactoryFn = {
+        Entity(
+            name = "red slime",
+            parts = listOf(
+                AppearancePart(
+                    ascii = 's',
+                    color = Color.red,
+                    sprite = "red_slime",
+                    offset = Vector2(0, -2)
+                ),
+                CombatPart(
+                    maxHealth = 20,
+                    maxMana = 0,
+                    power = 4,
+                    defaultAttackPattern = BasicAttackPattern(
+                        powerFactor = 1.0,
+                        elementType = ElementType.Fire
+                    )
+                ),
+                FactionPart(
+                    Faction.Monster,
+                    enemies = setOf(Faction.Player, Faction.Goblin)
+                ),
+                ItemSlotPart(
+                    EntityTable(
+                        30 to FeatureFactory.firePuddle(),
+                        70 to EntityTable.NULL
+                    ).generate()
+                ),
+                MovementPart(),
+                PhysicalPart(
+                    isPassable = false
+                ),
+                ResistancesPart(
+                    fireResFactor = 0.0
+                ),
                 SensoryPart(
                     visionRange = 4
                 ),
