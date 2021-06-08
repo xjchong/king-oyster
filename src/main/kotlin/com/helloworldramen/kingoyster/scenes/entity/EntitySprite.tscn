@@ -731,3 +731,4 @@ position = Vector2( 16, 16 )
 scale = Vector2( 2, 2 )
 frames = SubResource( 37 )
 animation = "weapons"
+speed_scale = 1.5
