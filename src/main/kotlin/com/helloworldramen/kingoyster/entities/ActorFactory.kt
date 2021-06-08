@@ -53,6 +53,48 @@ object ActorFactory {
         )
     }
 
+    fun debug(): EntityFactoryFn = {
+        Entity(
+            name = "player",
+            parts = listOf(
+                AppearancePart(
+                    ascii = '@',
+                    color = Color.gold,
+                    sprite = "knight"
+                ),
+                CombatPart(
+                    maxHealth = 100,
+                    maxMana = 4,
+                    power = 10,
+                    defaultAttackPattern = BasicAttackPattern(
+                        powerFactor = 0.5,
+                        damageType = DamageType.Bash
+                    )
+                ),
+                ItemSlotPart(),
+                WeaponSlotPart(),
+                FactionPart(Faction.None,
+                    enemies = setOf(
+                        Faction.Goblin,
+                        Faction.Monster,
+                        Faction.Spirit
+                    )
+                ),
+                PhysicalPart(
+                    isPassable = false,
+                    isCorporeal = false
+                ),
+                MemoryPart(),
+                MovementPart(),
+                SensoryPart(
+                    visionRange = 10
+                )
+            ),
+            timeFactor = 1.0,
+            isPlayer = true
+        )
+    }
+
     fun ghost(): EntityFactoryFn = {
         Entity(
             name = "ghost",

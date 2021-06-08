@@ -10,13 +10,14 @@ class DungeonTopology(
     private val roomAttemptsPercent: Double = 0.2,
     private val roomMeanWidthPercent: Double = 0.25,
     private val roomMeanHeightPercent: Double = 0.25,
-    private val roomWidthStandardDeviationPercent: Double = 0.0,
-    private val roomHeightStandardDeviationPercent: Double = 0.0,
+    private val roomWidthStandardDeviationPercent: Double = 0.05,
+    private val roomHeightStandardDeviationPercent: Double = 0.05,
     private val cyclePercent: Probability = 5.percentChance(),
     private val extraDoorPercent: Probability = 5.percentChance(),
     private val maxExtraDoorsPercent: Probability = 4.percentChance(),
     private val pillarRemovalPercent: Probability = 50.percentChance(),
-    private val shouldRemoveDeadEnds: Boolean = true
+    private val shouldRemoveDeadEnds: Boolean = true,
+    private val borderWidth: Int = 1
 ): TopologyStrategy() {
 
     private var regionIds: MutableMap<Position, Int> = mutableMapOf()
@@ -116,6 +117,13 @@ class DungeonTopology(
         regionIds[startPos] = nextRegionId
 
         for (direction in directions) {
+            val midPos = when (direction) {
+                'e' -> startPos.withRelativeX(1)
+                's' -> startPos.withRelativeY(1)
+                'w' -> startPos.withRelativeX(-1)
+                else -> startPos.withRelativeY(-1)
+            }
+
             val endPos = when (direction) {
                 'e' -> startPos.withRelativeX(2)
                 's' -> startPos.withRelativeY(2)
@@ -123,7 +131,7 @@ class DungeonTopology(
                 else -> startPos.withRelativeY(-2)
             }
 
-            val couldCreateCycle = regionIds[endPos] == nextRegionId && Math.random() < cyclePercent
+            val couldCreateCycle = regionIds[endPos] == nextRegionId && get(midPos) != TopologyType.Floor && Math.random() < cyclePercent
 
             if (isWall(endPos) && !endPos.isOutOfBounds(this) || couldCreateCycle) {
                 startPos.forRange(endPos) { pos ->
@@ -232,10 +240,99 @@ class DungeonTopology(
     }
 
     private fun TopologyMap.area(): Int {
-        return width * height
+        return (width - ((borderWidth - 1) * 2)) * (height - ((borderWidth - 1) * 2))
+    }
+
+    override fun Position.isOutOfBounds(topologyMap: TopologyMap): Boolean {
+        return x <= borderWidth - 1
+                || y <= borderWidth - 1
+                || x >= topologyMap.width - borderWidth
+                || y >= topologyMap.height - borderWidth
     }
 
     companion object {
         private const val WALL_REGION_ID = -1
+
+        val STANDARD = DungeonTopology()
+        val BIG_ROOMS = DungeonTopology(
+            roomAttemptsPercent = 0.6,
+            roomMeanWidthPercent = 0.4,
+            roomMeanHeightPercent = 0.4,
+            roomWidthStandardDeviationPercent = 0.1,
+            roomHeightStandardDeviationPercent = 0.1,
+            cyclePercent = 10.percentChance(),
+            extraDoorPercent = 2.percentChance(),
+            maxExtraDoorsPercent = 2.percentChance(),
+            pillarRemovalPercent = 75.percentChance()
+        )
+        val COURTYARD = DungeonTopology(
+            roomAttemptsPercent = 0.8,
+            roomMeanWidthPercent = 0.7,
+            roomMeanHeightPercent = 0.7,
+            roomWidthStandardDeviationPercent = 0.1,
+            roomHeightStandardDeviationPercent = 0.1,
+            cyclePercent = 10.percentChance(),
+            extraDoorPercent = 2.percentChance(),
+            maxExtraDoorsPercent = 2.percentChance(),
+            pillarRemovalPercent = 75.percentChance()
+        )
+        val CRAMPED = DungeonTopology(
+            roomAttemptsPercent = 0.3,
+            roomMeanWidthPercent = 0.3,
+            roomMeanHeightPercent = 0.3,
+            roomWidthStandardDeviationPercent = 0.04,
+            roomHeightStandardDeviationPercent = 0.04,
+            cyclePercent = 6.percentChance(),
+            extraDoorPercent = 2.percentChance(),
+            maxExtraDoorsPercent = 4.percentChance(),
+            pillarRemovalPercent = 80.percentChance(),
+            borderWidth = 2
+        )
+        val MANY_ROOMS = DungeonTopology(
+            roomAttemptsPercent = 0.2,
+            roomMeanWidthPercent = 0.2,
+            roomMeanHeightPercent = 0.2,
+            roomWidthStandardDeviationPercent = 0.0,
+            roomHeightStandardDeviationPercent = 0.0,
+            cyclePercent = 60.percentChance(),
+            extraDoorPercent = 5.percentChance(),
+            maxExtraDoorsPercent = 4.percentChance(),
+            pillarRemovalPercent = 70.percentChance(),
+            shouldRemoveDeadEnds = false
+        )
+        val MAZE = DungeonTopology(
+            roomAttemptsPercent = 0.08,
+            roomMeanWidthPercent = 0.08,
+            roomMeanHeightPercent = 0.08,
+            roomWidthStandardDeviationPercent = 0.2,
+            roomHeightStandardDeviationPercent = 0.2,
+            cyclePercent = 5.percentChance(),
+            extraDoorPercent = 10.percentChance(),
+            maxExtraDoorsPercent = 10.percentChance(),
+            pillarRemovalPercent = 80.percentChance(),
+            shouldRemoveDeadEnds = false
+        )
+        val OPEN = DungeonTopology(
+            roomAttemptsPercent = 0.6,
+            roomMeanWidthPercent = 0.08,
+            roomMeanHeightPercent = 0.08,
+            roomWidthStandardDeviationPercent = 0.02,
+            roomHeightStandardDeviationPercent = 0.02,
+            cyclePercent = 30.percentChance(),
+            extraDoorPercent = 5.percentChance(),
+            maxExtraDoorsPercent = 10.percentChance(),
+            pillarRemovalPercent = 100.percentChance(),
+        )
+        val PILLARS = DungeonTopology(
+            roomAttemptsPercent = 0.3,
+            roomMeanWidthPercent = 0.08,
+            roomMeanHeightPercent = 0.08,
+            roomWidthStandardDeviationPercent = 0.04,
+            roomHeightStandardDeviationPercent = 0.04,
+            cyclePercent = 50.percentChance(),
+            extraDoorPercent = 10.percentChance(),
+            maxExtraDoorsPercent = 10.percentChance(),
+            pillarRemovalPercent = 50.percentChance(),
+        )
     }
 }

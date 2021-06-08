@@ -159,6 +159,11 @@ class GameScene : Node2D(), EventBusSubscriber {
 		val hasWeapon = player.weapon() != null
 
 		when {
+			event.isActionPressed("debug") -> {
+				worldScene.fadeOut()
+				shouldLoadNewLevel = true
+				return
+			}
 			Input.isActionPressed("left_modifier") -> {
 				when {
 					event.isDirectionPressed() -> performMovementDirectionSkill(event.direction())

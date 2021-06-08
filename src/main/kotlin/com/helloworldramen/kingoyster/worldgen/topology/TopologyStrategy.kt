@@ -40,7 +40,7 @@ abstract class TopologyStrategy {
         }
     }
 
-    protected fun Position.isOutOfBounds(topologyMap: TopologyMap): Boolean {
+    protected open fun Position.isOutOfBounds(topologyMap: TopologyMap): Boolean {
         return x <= 0 || y <= 0 || x >= topologyMap.width - 1 || y >= topologyMap.height - 1
     }
 }
