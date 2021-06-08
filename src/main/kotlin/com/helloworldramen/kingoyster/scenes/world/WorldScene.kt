@@ -30,8 +30,8 @@ import godot.global.GD
 class WorldScene : Node2D(), EventBusSubscriber {
 
 	private val floorBucket: YSort by lazy { getNodeAs("FloorRect/FloorBucket")!! }
-	private val entityBucket: YSort by lazy { getNodeAs("FloorRect/EntityBucket")!! }
-	private val memoryBucket: YSort by lazy { getNodeAs("FloorRect/MemoryBucket")!! }
+	private val entityBucket: YSort by lazy { getNodeAs("FloorRect/YSort/EntityBucket")!! }
+	private val memoryBucket: YSort by lazy { getNodeAs("FloorRect/YSort/MemoryBucket")!! }
 	private val telegraphBucket: YSort by lazy { getNodeAs("TelegraphBucket")!! }
 	private val flashBucket: YSort by lazy { getNodeAs("FlashBucket")!! }
 	private val blackoutRect: ColorRect by lazy { getNodeAs("BlackoutRect")!! }
