@@ -19,17 +19,13 @@ class Context(var world: World, var player: Entity = Entity.UNKNOWN, var level: 
     fun findDropPosition(position: Position): Position {
         if (!position.isOccupied()) return position
 
-        val adjacentNeighbors = position.neighborsShuffled()
-        val unoccupiedAdjacentNeighbor = adjacentNeighbors.firstOrNull {
-            !it.isOccupied()
-        }
+        val adjacentNeighbors = position.neighborsShuffled().filter { !it.isOccupied() }
+        val unoccupiedAdjacentNeighbor = adjacentNeighbors.firstOrNull()
 
         if (unoccupiedAdjacentNeighbor != null) return unoccupiedAdjacentNeighbor
 
-        val diagonalNeighbors = position.diagonalNeighbors().shuffled()
-        val unoccupiedDiagonalNeighbor = diagonalNeighbors.firstOrNull {
-            !it.isOccupied()
-        }
+        val diagonalNeighbors = position.diagonalNeighbors().shuffled().filter { !it.isOccupied() }
+        val unoccupiedDiagonalNeighbor = diagonalNeighbors.firstOrNull()
 
         if (unoccupiedDiagonalNeighbor != null) return unoccupiedDiagonalNeighbor
 
