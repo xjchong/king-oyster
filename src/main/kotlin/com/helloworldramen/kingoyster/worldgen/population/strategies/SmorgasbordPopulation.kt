@@ -11,8 +11,8 @@ import com.helloworldramen.kingoyster.worldgen.population.rules.StairsPopulation
 class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
     PopulationTemplate(
         100 to PopulationRule(ActorFactory.goblin()),
-        100 to PopulationRule(ActorFactory.blueSlime()),
-        100 to PopulationRule(ActorFactory.redSlime()),
+        70 to PopulationRule(ActorFactory.blueSlime()),
+        30 to PopulationRule(ActorFactory.redSlime()),
     ).withDensity(0.1 * densityFactor),
     PopulationTemplate(PopulationRule(ActorFactory.ghost()))
         .withCount(1 * densityFactor, 2 * densityFactor),
