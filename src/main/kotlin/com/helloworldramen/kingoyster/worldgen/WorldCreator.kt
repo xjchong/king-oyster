@@ -42,57 +42,54 @@ object WorldCreator {
             20 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SmorgasbordPopulation(0.5)),
         ),
         3 to WeightedCollection(
-            80 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.STANDARD, SmorgasbordPopulation(0.6)),
-            60 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation(0.6)),
             100 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SmorgasbordPopulation(0.6)),
+            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.STANDARD, SmorgasbordPopulation(0.6)),
+            80 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.CRAMPED, SmorgasbordPopulation(0.5)),
+            60 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation(0.6)),
         ),
         4 to WeightedCollection(
             90 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.STANDARD, SmorgasbordPopulation(0.7)),
-            20 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.CRAMPED, SmorgasbordPopulation(0.7)),
-            20 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.CRAMPED, SlimesPopulation()),
-            100 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SmorgasbordPopulation(0.7)),
-            30 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SlimesPopulation()),
+            90 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SmorgasbordPopulation(0.7)),
+            80 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation(0.7)),
+            30 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.CRAMPED, SmorgasbordPopulation(0.7)),
+            20 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.PILLARS, SmorgasbordPopulation(0.7)),
+            10 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SlimesPopulation()),
+        ),
+        5 to WeightedCollection(
+            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.STANDARD, SmorgasbordPopulation(0.7)),
+            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.PILLARS, SmorgasbordPopulation(0.7)),
+            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation(0.7)),
+            80 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SmorgasbordPopulation(0.7)),
 
+            100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.STANDARD, SmorgasbordPopulation(0.8)),
             90 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.BIG_ROOMS, SmorgasbordPopulation(0.8)),
             60 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MANY_ROOMS, SmorgasbordPopulation(0.8)),
             30 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MAZE, SmorgasbordPopulation(0.8)),
-            100 to WorldKit(WorldFlavor.LUSH_GRASS, DrunkTopology(), SmorgasbordPopulation(0.8)),
-            30 to WorldKit(WorldFlavor.LUSH_GRASS, DrunkTopology(), SlimesPopulation())
-        ),
-        5 to WeightedCollection(
-            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.PILLARS, SmorgasbordPopulation(0.7)),
-            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation(0.7)),
-
-            100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MANY_ROOMS, SmorgasbordPopulation(0.8)),
-            30 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.BIG_ROOMS, SmorgasbordPopulation(0.8)),
-            20 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.PILLARS, SmorgasbordPopulation(0.8)),
+            10 to WorldKit(WorldFlavor.LUSH_GRASS, DrunkTopology(), SlimesPopulation())
         ),
         6 to WeightedCollection(
-            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology(), SmorgasbordPopulation(0.7)),
-            70 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.PILLARS, SmorgasbordPopulation(0.7)),
-            10 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.PILLARS, SlimesPopulation()),
-            20 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SmorgasbordPopulation(0.7)),
-            10 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SlimesPopulation()),
-
             100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MANY_ROOMS, SmorgasbordPopulation(0.8)),
-            100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MAZE, SmorgasbordPopulation(0.8)),
-            20 to WorldKit(WorldFlavor.LUSH_GRASS, DrunkTopology(), SmorgasbordPopulation(0.8)),
+            90 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.BIG_ROOMS, SmorgasbordPopulation(0.8)),
+            40 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MAZE, SmorgasbordPopulation(0.8)),
             10 to WorldKit(WorldFlavor.LUSH_GRASS, DrunkTopology(), SlimesPopulation()),
         ),
         7 to WeightedCollection(
-            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.CRAMPED, SmorgasbordPopulation(0.8)),
-            20 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation(0.8)),
-
-            100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.BIG_ROOMS, SmorgasbordPopulation(0.9)),
-            20 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation(0.9)),
+            100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MANY_ROOMS, SmorgasbordPopulation(0.9)),
+            90 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.BIG_ROOMS, SmorgasbordPopulation(0.9)),
+            50 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MAZE, SmorgasbordPopulation(0.9)),
+            40 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation(0.9)),
+            10 to WorldKit(WorldFlavor.LUSH_GRASS, DrunkTopology(), SlimesPopulation()),
         ),
         8 to WeightedCollection(
-            30 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MANY_ROOMS, SmorgasbordPopulation(0.9)),
+            100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MANY_ROOMS, SmorgasbordPopulation(0.9)),
             100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.BIG_ROOMS, SmorgasbordPopulation(0.9)),
-            10 to WorldKit(WorldFlavor.LUSH_GRASS, DrunkTopology(), SlimesPopulation())
+            60 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation(0.9)),
+            50 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MAZE, SmorgasbordPopulation(0.9)),
+            10 to WorldKit(WorldFlavor.LUSH_GRASS, DrunkTopology(), SlimesPopulation()),
         ),
         9 to WeightedCollection(
-            100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MANY_ROOMS, SmorgasbordPopulation()),
+            100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.BIG_ROOMS, SmorgasbordPopulation()),
+            90 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation()),
             20 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.PILLARS, SmorgasbordPopulation()),
         ),
         10 to WeightedCollection(
