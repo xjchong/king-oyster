@@ -4,11 +4,7 @@ import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
-import com.helloworldramen.kingoyster.parts.MovementPart
-import com.helloworldramen.kingoyster.parts.combat.AttackPattern
-import com.helloworldramen.kingoyster.parts.combat.DamageInfo
-import com.helloworldramen.kingoyster.parts.combat.DamageType
-import com.helloworldramen.kingoyster.parts.combat.ElementType
+import com.helloworldramen.kingoyster.parts.combat.*
 import com.helloworldramen.kingoyster.parts.isEnemyOf
 import com.helloworldramen.kingoyster.parts.isPassable
 
@@ -23,7 +19,7 @@ class GreatswordAttackPattern(
         val forwardPosition = currentPosition.withRelative(direction.vector)
 
         // The square in front of the user must be passable or attackable.
-        if (context.entitiesAt(forwardPosition)?.any { !it.isPassable() && !it.has<MovementPart>() } != false) {
+        if (context.entitiesAt(forwardPosition)?.all { it.isPassable() || it.has<CombatPart>() } != true) {
             return false
         }
 
