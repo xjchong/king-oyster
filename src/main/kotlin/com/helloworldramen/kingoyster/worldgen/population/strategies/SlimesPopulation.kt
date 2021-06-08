@@ -19,4 +19,5 @@ class SlimesPopulation: PopulationStrategy(
         100 to PopulationRule(WeaponFactory.newGreatsword()),
     ).withCount(6, 12),
     PopulationTemplate(StairsPopulationRule())
+        .withCount(1)
 )
