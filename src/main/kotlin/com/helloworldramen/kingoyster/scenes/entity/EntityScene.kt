@@ -266,6 +266,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	fun animateOnHeal(amount: Int) {
+		animationPlayer.play("on_heal")
 		toast(amount.toString(), Color.mediumseagreen, ToastTextScene.MEDIUM_CONFIG)
 	}
 
@@ -286,7 +287,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	}
 
 	fun animateOpen() {
-		animationPlayer.play("open")
+		animationPlayer.play("on_open")
 	}
 
 	fun animateTake(taken: Entity) {
