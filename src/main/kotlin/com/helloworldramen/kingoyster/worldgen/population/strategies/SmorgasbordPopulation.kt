@@ -1,6 +1,7 @@
 package com.helloworldramen.kingoyster.worldgen.population.strategies
 
 import com.helloworldramen.kingoyster.entities.ActorFactory
+import com.helloworldramen.kingoyster.entities.ItemFactory
 import com.helloworldramen.kingoyster.entities.WeaponFactory
 import com.helloworldramen.kingoyster.worldgen.population.PopulationRule
 import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
@@ -21,5 +22,8 @@ class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
         100 to PopulationRule(WeaponFactory.greatsword()),
         100 to PopulationRule(WeaponFactory.rapier()),
     ).withCount(8 * densityFactor, 16 * densityFactor),
+    PopulationTemplate(
+        100 to PopulationRule(ItemFactory.medicine()),
+    ).withCount(0 * densityFactor, 2 * densityFactor),
     PopulationTemplate(StairsPopulationRule()).withCount(1)
 )
