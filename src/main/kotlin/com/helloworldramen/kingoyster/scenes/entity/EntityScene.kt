@@ -174,7 +174,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 				}
 				is OpenEvent -> {
 					if (event.openable == entity) {
-						animatePulse()
+						animateOpen()
 					}
 				}
 				is PlayerToastEvent -> {
@@ -283,6 +283,10 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	fun animateDrop(dropped: Entity) {
 		toast("-${dropped.name}", Color.gray, ToastTextScene.LONG_REVERSE_CONFIG)
+	}
+
+	fun animateOpen() {
+		animationPlayer.play("open")
 	}
 
 	fun animateTake(taken: Entity) {
