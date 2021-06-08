@@ -15,8 +15,8 @@ class World(val width: Int, val height: Int) {
     private val allEntities: MutableList<Entity> = mutableListOf()
     private val updateableEntities: MutableList<Entity> = mutableListOf()
 
-    operator fun get(position: Position): List<Entity>? = entitiesForPosition[position]
-    operator fun get(x: Int, y: Int): List<Entity>? = entitiesForPosition[Position(x, y)]
+    operator fun get(position: Position): List<Entity>? = entitiesForPosition[position]?.toList()
+    operator fun get(x: Int, y: Int): List<Entity>? = entitiesForPosition[Position(x, y)]?.toList()
     operator fun get(entity: Entity): Position? = positionForEntity[entity]
 
     fun add(entity: Entity, position: Position? = null, index: Int? = null): Boolean {
