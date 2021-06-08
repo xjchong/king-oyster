@@ -5,13 +5,36 @@ import com.helloworldramen.kingoyster.actions.Heal
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*
+import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.ElementType
+import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
 import com.helloworldramen.kingoyster.utilities.WeightedCollection
 import godot.core.Color
 import godot.core.Vector2
 
 object FeatureFactory {
+
+    fun chest(): EntityFactoryFn = {
+        Entity(
+            name = "chest",
+            parts = listOf(
+                AppearancePart(
+                    ascii = '~',
+                    color = Color.brown,
+                    sprite = "chest"
+                ),
+                CombatPart(5),
+                ItemSlotPart(
+                    item = EntityTable(
+                        100 to ItemFactory.medicine()
+                    ).generate()
+                ),
+                OpenablePart(),
+                PhysicalPart(isPassable = true)
+            )
+        )
+    }
 
     fun door(): EntityFactoryFn = {
         Entity(

@@ -9,13 +9,14 @@ import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.*
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attacks.NoAttackPattern
 import kotlin.math.roundToInt
 
 class CombatPart(
     var maxHealth: Int,
-    var maxMana: Int,
-    var power: Int,
-    var defaultAttackPattern: AttackPattern,
+    var maxMana: Int = 0,
+    var power: Int = 0,
+    var defaultAttackPattern: AttackPattern = NoAttackPattern(),
     health: Int = maxHealth,
     var mana: Int = maxMana,
 ) : Part {

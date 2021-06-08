@@ -1,4 +1,4 @@
-[gd_scene load_steps=172 format=2]
+[gd_scene load_steps=174 format=2]
 
 [ext_resource path="res://src/main/resources/sprites/actors/goblin.png" type="Texture" id=1]
 [ext_resource path="res://src/main/resources/sprites/features/grass_stone_wall.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://src/main/resources/sprites/features/stone_stairs_up.png" type="Texture" id=9]
 [ext_resource path="res://src/main/resources/sprites/actors/red_slime.png" type="Texture" id=10]
 [ext_resource path="res://src/main/resources/sprites/features/old_stone_wall.png" type="Texture" id=11]
+[ext_resource path="res://src/main/resources/sprites/features/chest.png" type="Texture" id=12]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -488,6 +489,10 @@ region = Rect2( 72, 0, 18, 18 )
 atlas = ExtResource( 10 )
 region = Rect2( 90, 0, 18, 18 )
 
+[sub_resource type="AtlasTexture" id=162]
+atlas = ExtResource( 12 )
+region = Rect2( 0, 0, 16, 16 )
+
 [sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 16, 16 )
@@ -665,6 +670,11 @@ animations = [ {
 "name": "red_slime",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 162 ) ],
+"loop": true,
+"name": "chest",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ) ],
 "loop": true,
 "name": "goblin",
@@ -730,5 +740,5 @@ __meta__ = {
 position = Vector2( 16, 16 )
 scale = Vector2( 2, 2 )
 frames = SubResource( 37 )
-animation = "weapons"
+animation = "chest"
 speed_scale = 1.5

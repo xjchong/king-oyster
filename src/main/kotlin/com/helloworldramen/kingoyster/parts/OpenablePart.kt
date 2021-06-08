@@ -25,6 +25,12 @@ class OpenablePart() : Part {
     private fun Entity.respondToOpen(action: Open): Boolean {
         val (context, actor) = action
 
+        val actorPosition = context.positionOf(actor) ?: return false
+        val currentPosition = context.positionOf(this) ?: return false
+
+        // Containers should be stepped on before opening. Doors can be opened when adjacent.
+        if (actorPosition != currentPosition && this.isPassable()) return false
+
         respondToAction(DropWeapon(context, this))
         respondToAction(DropItem(context, this))
 

@@ -253,8 +253,8 @@ class GameScene : Node2D(), EventBusSubscriber {
 		val actionPosition = direction.vector + currentPosition
 
 		if (player.time > context.world.currentTime // Don't read any direction input when not player's turn.
-			|| context.world.respondToActions(actionPosition, Open(context, player)) != null
 			|| player.respondToAction(WeaponAttack(context, player, direction))
+			|| context.world.respondToActions(actionPosition, Open(context, player)) != null
 			|| player.respondToAction(Move(context, player, actionPosition))
 		) return
 
@@ -269,6 +269,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 			when {
 				currentPosition == null -> return
 				world.respondToActions(currentPosition,
+					Open(this, player),
 					Take(this, player),
 					Ascend(this, player)) != null -> return
 				else -> playerScene?.toast("?", Color.lightgray, ToastTextScene.SHORT_CONFIG)
