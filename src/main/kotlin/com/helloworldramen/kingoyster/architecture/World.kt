@@ -20,82 +20,92 @@ class World(val width: Int, val height: Int) {
     operator fun get(entity: Entity): Position? = positionForEntity[entity]
 
     fun add(entity: Entity, position: Position? = null, index: Int? = null): Boolean {
-        if (allEntities.contains(entity)) return false
+        synchronized(this) {
+            if (allEntities.contains(entity)) return false
 
-        allEntities.add(entity)
+            allEntities.add(entity)
 
-        if (entity.timeFactor > 0.0) {
-            entity.time = currentTime
-            updateableEntities.add(entity)
-        }
-
-        if (position != null) {
-            entitiesForPosition[position]?.let {
-                if (index != null) {
-                    it.add(index, entity)
-                } else {
-                    it.add(entity)
-                }
-                positionForEntity[entity] = position
+            if (entity.timeFactor > 0.0) {
+                entity.time = currentTime
+                updateableEntities.add(entity)
             }
-        }
 
-        return true
+            if (position != null) {
+                entitiesForPosition[position]?.let {
+                    if (index != null) {
+                        it.add(index, entity)
+                    } else {
+                        it.add(entity)
+                    }
+                    positionForEntity[entity] = position
+                }
+            }
+
+            return true
+        }
     }
 
     fun move(entity: Entity, position: Position?, index: Int? = null): Boolean {
-        if (position != null && !allEntities.contains(entity)) {
-            add(entity, position, index)
-        }
-        val currentPosition = positionForEntity[entity]
-        if (currentPosition == position) return true
-        if (currentPosition != null && entitiesForPosition[currentPosition]?.remove(entity) != true) return false
+        synchronized(this) {
+            if (position != null && !allEntities.contains(entity)) {
+                add(entity, position, index)
+            }
+            val currentPosition = positionForEntity[entity]
+            if (currentPosition == position) return true
+            if (currentPosition != null && entitiesForPosition[currentPosition]?.remove(entity) != true) return false
 
-        return when {
-            position == null -> {
-                positionForEntity.remove(entity)
-                true
-            }
-            entitiesForPosition[position]?.add(entity) == true -> {
-                positionForEntity[entity] = position
-                true
-            }
-            else -> {
-                entitiesForPosition[currentPosition]?.add(entity)
-                false
+            return when {
+                position == null -> {
+                    positionForEntity.remove(entity)
+                    true
+                }
+                entitiesForPosition[position]?.add(entity) == true -> {
+                    positionForEntity[entity] = position
+                    true
+                }
+                else -> {
+                    entitiesForPosition[currentPosition]?.add(entity)
+                    false
+                }
             }
         }
     }
 
     fun remove(entity: Entity): Boolean {
-        val currentPosition = positionForEntity[entity] ?: return false
-        if (entitiesForPosition[currentPosition]?.remove(entity) != true) return false
+        synchronized(this) {
+            val currentPosition = positionForEntity[entity] ?: return false
+            if (entitiesForPosition[currentPosition]?.remove(entity) != true) return false
 
-        positionForEntity.remove(entity)?.let {
-            entitiesForPosition[it]?.remove(entity)
+            positionForEntity.remove(entity)?.let {
+                entitiesForPosition[it]?.remove(entity)
+            }
+            updateableEntities.remove(entity)
+            allEntities.remove(entity)
+
+            return true
         }
-        updateableEntities.remove(entity)
-        allEntities.remove(entity)
-
-        return true
     }
 
     fun removeAll(position: Position): List<Entity>? {
-        val entities = entitiesForPosition[position]?.toList() ?: return null
-        val removedEntities = mutableListOf<Entity>()
+        synchronized(this) {
+            val entities = entitiesForPosition[position]?.toList() ?: return null
+            val removedEntities = mutableListOf<Entity>()
 
-        for (entity in entities) {
-            if (remove(entity)) removedEntities.add(entity)
+            for (entity in entities) {
+                if (remove(entity)) removedEntities.add(entity)
+            }
+
+            return removedEntities
         }
-
-        return removedEntities
     }
 
     fun clear() {
-        entitiesForPosition.values.forEach { it.clear() }
-        positionForEntity.clear()
-        updateableEntities.clear()
-        allEntities.clear()
+        synchronized(this) {
+            entitiesForPosition.values.forEach { it.clear() }
+            positionForEntity.clear()
+            updateableEntities.clear()
+            allEntities.clear()
+        }
     }
 
     fun next(): Entity? {
