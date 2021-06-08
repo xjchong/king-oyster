@@ -23,6 +23,7 @@ import com.helloworldramen.kingoyster.scenes.screenshake.ScreenShake
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
 import com.helloworldramen.kingoyster.worldgen.WorldCreator
+import com.helloworldramen.kingoyster.worldgen.metadata.WorldFlavor
 import godot.Input
 import godot.InputEvent
 import godot.Label
@@ -76,7 +77,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	@RegisterFunction
 	override fun _ready() {
 		val player = ActorFactory.player()()
-		val world = WorldCreator.create(1, player, null)
+		val (world, worldFlavor) = WorldCreator.create(1, player, null)
 
 		listMenuScene.pauseMode = PAUSE_MODE_PROCESS
 		eventAudio.pauseMode = PAUSE_MODE_PROCESS
@@ -85,15 +86,15 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 		context = Context(world, player)
 
-		bind(context)
+		bind(context, worldFlavor)
 	}
 
 	override fun _onDestroy() {
 		EventBus.unregister(this)
 	}
 
-	private fun bind(context: Context) {
-		playerScene = worldScene.bind(context)
+	private fun bind(context: Context, worldFlavor: WorldFlavor) {
+		playerScene = worldScene.bind(context, worldFlavor)
 		hudScene.bind(context.player)
 		eventAudio.bind(context)
 		updateFloorLabel()
@@ -107,10 +108,10 @@ class GameScene : Node2D(), EventBusSubscriber {
 			shouldLoadNewLevel = false
 			with(context) {
 				player.find<MemoryPart>()?.clear()
-				val newWorld = WorldCreator.create(level, player, positionOf(player))
+				val (newWorld, newWorldFlavor) = WorldCreator.create(level, player, positionOf(player))
 				context.world = newWorld
 
-				bind(this)
+				bind(this, newWorldFlavor)
 			}
 		} else if (needsFadeIn && !worldScene.isAnimating) {
 			needsFadeIn = false

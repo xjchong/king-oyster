@@ -1,15 +1,12 @@
 package com.helloworldramen.kingoyster.worldgen.topology
 
-import com.helloworldramen.kingoyster.entities.FeatureFactory
-import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
-import com.helloworldramen.kingoyster.architecture.World
 import com.helloworldramen.kingoyster.utilities.Probability
 import com.helloworldramen.kingoyster.utilities.percentChance
 import java.util.*
 import kotlin.math.roundToInt
 
-class DungeonTopologyStrategy(
+class DungeonTopology(
     private val roomAttemptsPercent: Double = 0.2,
     private val roomMeanWidthPercent: Double = 0.25,
     private val roomMeanHeightPercent: Double = 0.25,
@@ -20,16 +17,15 @@ class DungeonTopologyStrategy(
     private val maxExtraDoorsPercent: Probability = 4.percentChance(),
     private val pillarRemovalPercent: Probability = 50.percentChance(),
     private val shouldRemoveDeadEnds: Boolean = true
-
 ): TopologyStrategy() {
 
     private var regionIds: MutableMap<Position, Int> = mutableMapOf()
     private var nextRegionId: Int = 0
     private var mergedRegionIds: MutableSet<MutableSet<Int>> = mutableSetOf()
 
-    override fun generate(width: Int, height: Int, playerPosition: Position?): World {
-        return World(width, height).apply {
-            fill(WALL_REGION_ID) { FeatureFactory.wall()() }
+    override fun generateTopologyMap(width: Int, height: Int, playerPosition: Position?): TopologyMap {
+        return TopologyMap(width, height).apply {
+            fill(WALL_REGION_ID, TopologyType.Wall)
 
             placeRooms(
                 (area() * roomAttemptsPercent).roundToInt(),
@@ -58,15 +54,15 @@ class DungeonTopologyStrategy(
         return (Random().nextGaussian() * standardDeviation) + mu
     }
 
-    private fun World.fill(regionId: Int, fn: () -> Entity) {
+    private fun TopologyMap.fill(regionId: Int, type: TopologyType) {
         Position(width - 1, height - 1).forEach {
-            add(fn(), it)
+            set(it, type)
             regionIds[it] = regionId
         }
     }
 
-    private fun World.placeRooms(attempts: Int, meanWidth: Int, meanHeight: Int,
-                                 widthStandardDeviation: Double, heightStandardDeviation: Double) {
+    private fun TopologyMap.placeRooms(attempts: Int, meanWidth: Int, meanHeight: Int,
+                                       widthStandardDeviation: Double, heightStandardDeviation: Double) {
         repeat(attempts) {
             val x = getOdd((Math.random() * width).roundToInt())
             val y = getOdd((Math.random() * height).roundToInt())
@@ -80,18 +76,18 @@ class DungeonTopologyStrategy(
         }
     }
 
-    private fun World.placeRoom(x: Int, y: Int, roomWidth: Int, roomHeight: Int) {
+    private fun TopologyMap.placeRoom(x: Int, y: Int, roomWidth: Int, roomHeight: Int) {
         val origin = Position(x, y)
 
         origin.forRange(origin.withRelative(roomWidth - 1, roomHeight - 1)) {
-            removeAll(it)
+            set(it, TopologyType.Floor)
             regionIds[it] = nextRegionId
         }
     }
 
-    private fun World.isRoomSafe(x: Int, y: Int, roomWidth: Int, roomHeight: Int): Boolean {
+    private fun TopologyMap.isRoomSafe(x: Int, y: Int, roomWidth: Int, roomHeight: Int): Boolean {
         val origin = Position(x, y)
-        if (isOutOfBounds(origin)) return false
+        if (origin.isOutOfBounds(this)) return false
         if (roomWidth < 2 || roomHeight < 2) return false // Room is too small.
         if ((x + roomWidth >= width) || (y + roomHeight >= height)) return false
 
@@ -102,7 +98,7 @@ class DungeonTopologyStrategy(
         return true
     }
 
-    private fun World.placeCorridors(cyclePercent: Double) {
+    private fun TopologyMap.placeCorridors(cyclePercent: Double) {
         for (x in (1 until width - 1) step 2) {
             for (y in (1 until height - 1) step 2) {
                 val pos = Position(x, y)
@@ -114,9 +110,9 @@ class DungeonTopologyStrategy(
         }
     }
 
-    private fun World.placeCorridorFrom(startPos: Position, cyclePercent: Double) {
+    private fun TopologyMap.placeCorridorFrom(startPos: Position, cyclePercent: Double) {
         val directions = mutableListOf('e', 's', 'w', 'n').shuffled()
-        removeAll(startPos)
+        set(startPos, TopologyType.Floor)
         regionIds[startPos] = nextRegionId
 
         for (direction in directions) {
@@ -129,9 +125,9 @@ class DungeonTopologyStrategy(
 
             val couldCreateCycle = regionIds[endPos] == nextRegionId && Math.random() < cyclePercent
 
-            if (isWall(endPos) && !isOutOfBounds(endPos) || couldCreateCycle) {
+            if (isWall(endPos) && !endPos.isOutOfBounds(this) || couldCreateCycle) {
                 startPos.forRange(endPos) { pos ->
-                    removeAll(pos)
+                    set(pos, TopologyType.Floor)
                     regionIds[pos] = nextRegionId
                 }
 
@@ -140,7 +136,7 @@ class DungeonTopologyStrategy(
         }
     }
 
-    private fun World.placeDoors(extraDoorPercent: Double, maxExtraDoors: Int) {
+    private fun TopologyMap.placeDoors(extraDoorPercent: Double, maxExtraDoors: Int) {
         val positions = getAllWallPositions() // Only walls can be connectors, so iterate through them randomly.
         var extraDoorsCount = 0
 
@@ -171,28 +167,25 @@ class DungeonTopologyStrategy(
             }
 
             if (needsMerge) {
-                removeAll(pos)
-                add(FeatureFactory.door()(), pos)
+                set(pos, TopologyType.Door)
                 if (isDisjoint) mergedRegionIds.add(adjacentRegions)
             } else if (canCreateExtra) {
-                removeAll(pos)
-                add(FeatureFactory.door()(), pos)
+                set(pos, TopologyType.Door)
                 extraDoorsCount++
             }
         }
     }
 
-    private fun World.removeDeadEnds() {
+    private fun TopologyMap.removeDeadEnds() {
         Position(width - 1, height - 1).forEach {
             removeDeadEnd(it)
         }
     }
 
-    private fun World.removeDeadEnd(position: Position) {
+    private fun TopologyMap.removeDeadEnd(position: Position) {
         if (!isDeadEnd(position)) return
 
-        removeAll(position)
-        add(FeatureFactory.wall()(), position)
+        set(position, TopologyType.Wall)
         regionIds[position] = WALL_REGION_ID
 
         position.neighbors().forEach {
@@ -200,7 +193,7 @@ class DungeonTopologyStrategy(
         }
     }
 
-    private fun World.isDeadEnd(position: Position): Boolean {
+    private fun TopologyMap.isDeadEnd(position: Position): Boolean {
         if (isWall(position)) return false
 
         return position.neighbors()
@@ -208,10 +201,10 @@ class DungeonTopologyStrategy(
             .size > 2
     }
 
-    private fun World.removePillars(removalPercent: Double) {
+    private fun TopologyMap.removePillars(removalPercent: Double) {
         for (wallPos in getAllWallPositions()) {
             if (Math.random() < removalPercent && wallPos.neighbors().none { isWallOrDoor(it) }) {
-                removeAll(wallPos)
+                set(wallPos, TopologyType.Floor)
             }
         }
     }
@@ -219,27 +212,26 @@ class DungeonTopologyStrategy(
     /**
      * Get all the wall positions on the given level, excluding the outermost border of walls.
      */
-    private fun World.getAllWallPositions(shouldShuffle: Boolean = true): List<Position> {
+    private fun TopologyMap.getAllWallPositions(shouldShuffle: Boolean = true): List<Position> {
         val wallPositions = Position(width - 1, height - 1).toList().filter {
-            !isOutOfBounds(it) && isWall(it)
+            !it.isOutOfBounds(this) && isWall(it)
         }
 
         return if (shouldShuffle) wallPositions.shuffled() else wallPositions
     }
 
-    private fun World.isWall(position: Position): Boolean {
-        return get(position)?.any { it.name == "wall" } ?: false
+    private fun TopologyMap.isWall(position: Position): Boolean {
+        return get(position) == TopologyType.Wall
     }
 
-    private fun World.isWallOrDoor(position: Position): Boolean {
-        return get(position)?.any { it.name == "wall" || it.name == "door" } ?: false
+    private fun TopologyMap.isWallOrDoor(position: Position): Boolean {
+        return when (get(position)) {
+            TopologyType.Wall, TopologyType.Door -> true
+            else -> false
+        }
     }
 
-    private fun World.isOutOfBounds(position: Position): Boolean {
-        return position.x <= 0 || position.y <= 0 || position.x >= width - 1 || position.y >= height - 1
-    }
-
-    private fun World.area(): Int {
+    private fun TopologyMap.area(): Int {
         return width * height
     }
 

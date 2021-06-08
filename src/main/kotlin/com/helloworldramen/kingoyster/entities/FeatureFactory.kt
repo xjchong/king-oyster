@@ -44,14 +44,14 @@ object FeatureFactory {
         )
     }
 
-    fun wall(): EntityFactoryFn = {
+    fun wall(sprite: String): EntityFactoryFn = {
         Entity(
             name = "wall",
             parts = listOf(
                 AppearancePart(
                     ascii = '#',
                     color = Color.white,
-                    sprite = "grass_stone_wall",
+                    sprite = sprite,
                     offset = Vector2(0, 8),
                     weightedFrameIndices = WeightedCollection(
                         500 to 0, 50 to 1, 50 to 2,

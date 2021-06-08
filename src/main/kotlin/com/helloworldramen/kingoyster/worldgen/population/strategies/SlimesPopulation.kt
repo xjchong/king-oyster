@@ -8,7 +8,7 @@ import com.helloworldramen.kingoyster.worldgen.population.PopulationTemplate
 import com.helloworldramen.kingoyster.worldgen.population.rules.StairsPopulationRule
 
 
-class SlimesPopulationStrategy: PopulationStrategy(
+class SlimesPopulation: PopulationStrategy(
     PopulationTemplate(
         70 to PopulationRule(ActorFactory.blueSlime()),
         30 to PopulationRule(ActorFactory.redSlime()),

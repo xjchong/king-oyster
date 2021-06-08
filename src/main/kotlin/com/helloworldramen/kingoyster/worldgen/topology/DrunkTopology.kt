@@ -4,41 +4,39 @@ import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
 import com.helloworldramen.kingoyster.entities.FeatureFactory
 
-class DrunkTopologyStrategy(private val clearPercentage: Double = DEFAULT_CLEAR_PERCENTAGE) : TopologyStrategy() {
+class DrunkTopology(private val clearPercentage: Double = DEFAULT_CLEAR_PERCENTAGE) : TopologyStrategy() {
 
-    override fun generate(width: Int, height: Int, playerPosition: Position?): World {
-        return World(width, height).apply {
-            fill { FeatureFactory.wall()() }
+    override fun generateTopologyMap(width: Int, height: Int, playerPosition: Position?): TopologyMap {
+        return TopologyMap(width, height).apply {
+            fill(TopologyType.Wall)
             drunkWalk(this, clearPercentage, Position(width / 2, height / 2))
         }
     }
 
-    private fun drunkWalk(world: World, clearPercentage: Double, startingPosition: Position) {
+    private fun drunkWalk(topologyMap: TopologyMap, clearPercentage: Double, startingPosition: Position) {
         var currentPosition = startingPosition
         var clearCount = 1
         var currentWalkLength = 0
-        val maxWalkLength = world.width * world.height
-        val worldArea = world.width * world.height
+        val maxWalkLength = topologyMap.width * topologyMap.height
+        val worldArea = topologyMap.width * topologyMap.height
         val vectors = listOf(
             Position(0, 1), Position(0, -1),
             Position(1, 0), Position(-1, 0)
         )
 
-        world.removeAll(currentPosition)
+        topologyMap[currentPosition] = TopologyType.Floor
 
         while (clearCount / worldArea.toDouble() < clearPercentage) {
             val nextPosition = currentPosition.withRelative(vectors.random())
-            if (nextPosition.isOutOfBounds(world)) continue
-
+            if (nextPosition.isOutOfBounds(topologyMap)) continue
             currentPosition = nextPosition
             currentWalkLength++
 
-            if (world[currentPosition]?.isNullOrEmpty() == true) {
-                continue
-            } else {
-                world.removeAll(currentPosition)
-                clearCount++
-            }
+            val currentType = topologyMap[currentPosition] ?: continue
+            if (currentType == TopologyType.Floor) continue
+
+            topologyMap[currentPosition] = TopologyType.Floor
+            clearCount++
 
             if (currentWalkLength >= maxWalkLength) {
                 currentPosition = startingPosition

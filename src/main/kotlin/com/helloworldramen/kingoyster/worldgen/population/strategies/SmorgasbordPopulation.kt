@@ -7,7 +7,7 @@ import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
 import com.helloworldramen.kingoyster.worldgen.population.PopulationTemplate
 import com.helloworldramen.kingoyster.worldgen.population.rules.StairsPopulationRule
 
-class SmorgasbordPopulationStrategy(densityFactor: Double = 1.0) : PopulationStrategy(
+class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
     PopulationTemplate(PopulationRule(ActorFactory.goblin()))
         .withDensity(0.04 * densityFactor),
     PopulationTemplate(PopulationRule(ActorFactory.blueSlime()))

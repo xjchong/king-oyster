@@ -17,6 +17,7 @@ import com.helloworldramen.kingoyster.scenes.floor.FloorScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
 import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
 import com.helloworldramen.kingoyster.utilities.WeightedCollection
+import com.helloworldramen.kingoyster.worldgen.metadata.WorldFlavor
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -47,6 +48,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 	private var flashOverlayForPosition: MutableMap<Position, TileOverlayScene> = mutableMapOf()
 
 	private var context: Context = Context.UNKNOWN
+	private var flavor: WorldFlavor = WorldFlavor.DRY_GRASS
 
 	val isAnimating: Boolean
 		get() = animationPlayer.isPlaying()
@@ -85,10 +87,10 @@ class WorldScene : Node2D(), EventBusSubscriber {
 		}
 	}
 
-	fun bind(context: Context): EntityScene? {
+	fun bind(context: Context, flavor: WorldFlavor): EntityScene? {
 		this.context = context
+		this.flavor = flavor
 		val world = context.world
-		val floorSprite = if (Random.nextBoolean()) "dry_grass_floor" else "lush_grass_floor"
 
 		floorBucket.freeChildren()
 		tileBucket.freeChildren()
@@ -127,13 +129,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 			// Setup the floor for this position.
 			packedFloorScene?.instanceAs<FloorScene>()?.let { floorScene ->
 				floorBucket.addChild(floorScene)
-				floorScene.bind(floorSprite, WeightedCollection(
-					550 to 0, 30 to 1, 30 to 2, 30 to 3,
-					25 to 4, 25 to 5, 25 to 6, 25 to 7,
-					25 to 8, 25 to 9, 25 to 10, 25 to 11,
-					25 to 12, 25 to 13, 25 to 14, 25 to 15,
-					25 to 16, 25 to 17, 25 to 18, 25 to 19
-				))
+				floorScene.bind(flavor.floorFlavor.sprite, flavor.floorFlavor.weightedFrameIndices)
 				floorScene.position = calculateNodePosition(position)
 			}
 

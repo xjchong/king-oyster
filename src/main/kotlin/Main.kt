@@ -31,7 +31,7 @@ class ConsoleGameEngine : EventBusSubscriber {
 
     fun run() {
         val player = ActorFactory.player()()
-        val world = WorldCreator.create(1, player, null)
+        val (world, _) = WorldCreator.create(1, player, null)
         val context = Context(world, player)
 
         while (true) {
