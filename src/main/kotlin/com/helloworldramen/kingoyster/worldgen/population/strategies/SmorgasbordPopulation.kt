@@ -23,7 +23,7 @@ class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
         100 to PopulationRule(WeaponFactory.greatsword()),
         100 to PopulationRule(WeaponFactory.rapier()),
         100 to PopulationRule(WeaponFactory.scythe()),
-    ).withCount(8 * densityFactor, 16 * densityFactor),
+    ).withCount(3 * densityFactor, 6 * densityFactor),
     PopulationTemplate(
         100 to PopulationRule(ItemFactory.medicine()),
     ).withCount(0 * densityFactor, 2 * densityFactor),

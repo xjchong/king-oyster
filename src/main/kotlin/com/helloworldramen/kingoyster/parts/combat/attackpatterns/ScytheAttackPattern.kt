@@ -1,5 +1,6 @@
 package com.helloworldramen.kingoyster.parts.combat.attackpatterns
 
+import com.helloworldramen.kingoyster.actions.Move
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Entity
@@ -17,14 +18,22 @@ class ScytheAttackPattern(
     override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
         val currentPosition = context.positionOf(entity) ?: return false
         val forwardPosition = currentPosition.withRelative(direction.vector)
+        val willStepForward = context.entitiesAt(forwardPosition)?.all { it.isPassable() } == true
+        val attackPosition = if (willStepForward) forwardPosition else currentPosition
 
-        if (context.entitiesAt(forwardPosition)?.all { it.isPassable() || it.has<CombatPart>() } != true) {
+        if (context.entitiesAt(attackPosition + direction.vector)?.all { it.isPassable() || it.has<CombatPart>() } != true) {
             return false
         }
 
-        return getHitPositions(context, entity, direction).any { position ->
+        return getHitPositions(attackPosition, direction).any { position ->
             context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
         }
+    }
+
+    override fun beforeEffect(context: Context, entity: Entity, direction: Direction) {
+        val currentPosition = context.positionOf(entity) ?: return
+
+        entity.respondToAction(Move(context, entity, currentPosition + direction.vector, timeFactor = 0.0))
     }
 
     override fun calculateDamageForPosition(
@@ -32,7 +41,8 @@ class ScytheAttackPattern(
         entity: Entity,
         direction: Direction
     ): Map<Position, DamageInfo> {
-        val hitPositions = getHitPositions(context, entity, direction)
+        val currentPosition = context.positionOf(entity) ?: return mapOf()
+        val hitPositions = getHitPositions(currentPosition, direction)
         val landedHitCount = hitPositions.sumBy { position ->
             if (context.entitiesAt(position)?.any { it.has<CombatPart>() } == true) 1 else 0
         }
@@ -53,13 +63,14 @@ class ScytheAttackPattern(
     }
 
     override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
-        return getHitPositions(context, entity, direction)
+        val currentPosition = context.positionOf(entity) ?: return listOf()
+
+        return getHitPositions(currentPosition, direction)
     }
 
-    private fun getHitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
-        val currentPosition = context.positionOf(entity) ?: return listOf()
-        val behindPosition = currentPosition - direction.vector
-        val allNeighbors = currentPosition.neighbors() + currentPosition.diagonalNeighbors()
+    private fun getHitPositions(attackPosition: Position, direction: Direction): List<Position> {
+        val behindPosition = attackPosition - direction.vector
+        val allNeighbors = attackPosition.neighbors() + attackPosition.diagonalNeighbors()
 
         return allNeighbors.filter { it != behindPosition }
     }
