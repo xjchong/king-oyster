@@ -4,10 +4,7 @@ import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
-import com.helloworldramen.kingoyster.parts.combat.AttackPattern
-import com.helloworldramen.kingoyster.parts.combat.DamageInfo
-import com.helloworldramen.kingoyster.parts.combat.DamageType
-import com.helloworldramen.kingoyster.parts.combat.ElementType
+import com.helloworldramen.kingoyster.parts.combat.*
 import com.helloworldramen.kingoyster.parts.isEnemyOf
 
 class LongswordAttackPattern(
@@ -28,8 +25,19 @@ class LongswordAttackPattern(
         entity: Entity,
         direction: Direction
     ): Map<Position, DamageInfo> {
+        val hitPositions = getHitPositions(context, entity, direction)
+        val landedHitCount = hitPositions.sumBy { position ->
+            if (context.entitiesAt(position)?.any { it.has<CombatPart>() } == true) 1 else 0
+        }
+
+        // Longsword does more damage depending on how many hits landed.
+        val landedFactor = when {
+            landedHitCount >= 2 -> 2.0
+            else -> 1.0
+        }
+
         return getHitPositions(context, entity, direction).associateWith {
-            DamageInfo(powerFactor, damageType, elementType)
+            DamageInfo(powerFactor * landedFactor, damageType, elementType)
         }
     }
 

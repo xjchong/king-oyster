@@ -39,9 +39,9 @@ class GreatswordAttackPattern(
         }
 
         // Greatsword increases in damage the more things are hit.
-        val landedFactor = when (landedHitCount) {
-            3 -> 2.0
-            2 -> 1.5
+        val landedFactor = when {
+            landedHitCount >= 3 -> 2.0
+            landedHitCount == 2 -> 1.5
             else -> 1.0
         }
 
