@@ -256,7 +256,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 0, 2, 0.5, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=12]
 resource_name = "on_open"
 length = 0.3
 tracks/0/type = "value"
@@ -296,7 +296,7 @@ tracks/2/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( -4, -4 ), Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=13]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath("AppearanceNode2D:scale")
@@ -347,7 +347,7 @@ tracks/3/keys = {
 "values": [ 500 ]
 }
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=14]
 length = 0.6
 loop = true
 tracks/0/type = "value"
@@ -398,8 +398,8 @@ anims/on_break = SubResource( 8 )
 anims/on_damage = SubResource( 9 )
 anims/on_death = SubResource( 10 )
 anims/on_heal = SubResource( 11 )
-anims/on_open = SubResource( 14 )
-anims/pulse = SubResource( 12 )
+anims/on_open = SubResource( 12 )
+anims/pulse = SubResource( 13 )
 
 [node name="FlashAnimator" type="AnimationPlayer" parent="."]
-anims/flash = SubResource( 13 )
+anims/flash = SubResource( 14 )
