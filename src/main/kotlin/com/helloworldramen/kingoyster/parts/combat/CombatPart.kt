@@ -66,6 +66,8 @@ class CombatPart(
 
         if (!attackPattern.isUsable(context, this, direction)) return false
 
+        attackPattern.beforeEffect(context, this, direction)
+
         val damageForPosition = attackPattern.calculateDamageForPosition(context, this, direction)
 
         weapon()?.respondToAction(DamageWeapon(context, this, this, 1))
@@ -82,13 +84,7 @@ class CombatPart(
             )
         }
 
-        val followupPath = attackPattern.followupPath(context, this, direction)
-
-        for (followPosition in followupPath) {
-            if (!this.respondToAction(Move(context, this, followPosition, timeFactor = 0.0))) {
-                break
-            }
-        }
+        attackPattern.afterEffect(context, this, direction)
 
         return true
     }

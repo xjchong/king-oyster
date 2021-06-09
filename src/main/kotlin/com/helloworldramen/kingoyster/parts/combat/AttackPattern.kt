@@ -10,6 +10,6 @@ abstract class AttackPattern {
     abstract fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean
     abstract fun calculateDamageForPosition(context: Context, entity: Entity, direction: Direction): Map<Position, DamageInfo>
     abstract fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position>
-    open fun followupPath(context: Context, entity: Entity, direction: Direction): List<Position> { return listOf() }
+    open fun beforeEffect(context: Context, entity: Entity, direction: Direction) {}
     open fun afterEffect(context: Context, entity: Entity, direction: Direction) {}
 }

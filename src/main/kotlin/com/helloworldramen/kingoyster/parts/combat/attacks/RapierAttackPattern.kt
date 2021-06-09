@@ -1,5 +1,6 @@
 package com.helloworldramen.kingoyster.parts.combat.attacks
 
+import com.helloworldramen.kingoyster.actions.Move
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Entity
@@ -8,6 +9,7 @@ import com.helloworldramen.kingoyster.parts.combat.*
 import com.helloworldramen.kingoyster.parts.isEnemyOf
 import com.helloworldramen.kingoyster.parts.isPassable
 
+// Necrodancer inspired weapon.
 class RapierAttackPattern(
     private val powerFactor: Double,
     private val damageType: DamageType = DamageType.Stab,
@@ -33,8 +35,13 @@ class RapierAttackPattern(
         entity: Entity,
         direction: Direction
     ): Map<Position, DamageInfo> {
+        val currentPosition = context.positionOf(entity) ?: return mapOf()
+
         return getHitPositions(context, entity, direction).associateWith {
-            DamageInfo(powerFactor, damageType, elementType)
+            // Rapier does more damage when lunging.
+            val distanceFactor = if (currentPosition.distanceFrom(it) > 1) 1.5 else 1.0
+
+            DamageInfo(powerFactor * distanceFactor, damageType, elementType)
         }
     }
 
@@ -47,7 +54,15 @@ class RapierAttackPattern(
         )
     }
 
-    override fun followupPath(context: Context, entity: Entity, direction: Direction): List<Position> {
+    override fun afterEffect(context: Context, entity: Entity, direction: Direction) {
+        val followupPath = getFollowupPath(context, entity, direction)
+
+        for (followPosition in followupPath) {
+            if (!entity.respondToAction(Move(context, entity, followPosition, timeFactor = 0.0))) break
+        }
+    }
+
+    private fun getFollowupPath(context: Context, entity: Entity, direction: Direction): List<Position> {
         // Move to the square next to the user.
         val currentPosition = context.positionOf(entity) ?: return listOf()
         val nextPosition = currentPosition + direction.vector
