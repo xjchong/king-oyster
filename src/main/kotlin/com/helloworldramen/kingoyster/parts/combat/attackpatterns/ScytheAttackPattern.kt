@@ -38,13 +38,13 @@ class ScytheAttackPattern(
         }
 
         val landedFactor = when {
-            landedHitCount >= 7 -> 0.5
-            landedHitCount == 6 -> 0.6
-            landedHitCount == 5 -> 0.7
-            landedHitCount == 4 -> 0.8
-            landedHitCount == 3 -> 0.9
-            landedHitCount == 2 -> 1.0
-            else -> 1.2
+            landedHitCount >= 7 -> 6.2
+            landedHitCount == 6 -> 4.8
+            landedHitCount == 5 -> 3.6
+            landedHitCount == 4 -> 2.6
+            landedHitCount == 3 -> 1.8
+            landedHitCount == 2 -> 1.2
+            else -> 0.8
         }
 
         return hitPositions.associateWith {
