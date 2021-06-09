@@ -5,9 +5,8 @@ import com.helloworldramen.kingoyster.utilities.BGM
 import com.helloworldramen.kingoyster.utilities.SFX
 import com.helloworldramen.kingoyster.scenes.game.GameScene
 import com.helloworldramen.kingoyster.scenes.optionsmenu.OptionsMenuScene
-import godot.InputEvent
-import godot.Label
-import godot.MarginContainer
+import com.helloworldramen.kingoyster.utilities.Settings
+import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.extensions.getNodeAs
@@ -19,6 +18,7 @@ class MainMenuScene : MarginContainer() {
 	private val startSelector: Label by lazy { getNodeAs("$ITEMS_VBOX_PATH/StartItem/StartSelector")!! }
 	private val optionsSelector: Label by lazy { getNodeAs("$ITEMS_VBOX_PATH/OptionsItem/OptionsSelector")!! }
 	private val exitSelector: Label by lazy { getNodeAs("$ITEMS_VBOX_PATH/ExitItem/ExitSelector")!! }
+	private val backgroundRect: ColorRect by lazy { getNodeAs("BackgroundRect")!! }
 
 	private val selectors: List<Label> by lazy { listOf(startSelector, optionsSelector, exitSelector) }
 	private var selectedIndex = 0
@@ -31,6 +31,7 @@ class MainMenuScene : MarginContainer() {
 	override fun _ready() {
 		selectedIndex = 0
 		audio.playLoop(BGM.MAIN_MENU)
+		backgroundRect.color = Settings.BACKGROUND_COLOR
 	}
 
 	@RegisterFunction

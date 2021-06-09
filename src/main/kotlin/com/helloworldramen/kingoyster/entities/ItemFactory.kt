@@ -18,7 +18,8 @@ object ItemFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = '!',
-                    color = Color.mediumseagreen
+                    color = Color.mediumseagreen,
+                    sprite = "medicine"
                 ),
                 ItemPart(
                     uses = 1,

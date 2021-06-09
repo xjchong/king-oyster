@@ -39,6 +39,16 @@ visible = false
 
 [node name="HUDLayer" type="CanvasLayer" parent="."]
 
+[node name="LetterBoxRect" type="ColorRect" parent="HUDLayer"]
+margin_top = 544.0
+margin_right = 544.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 0, 56 )
+color = Color( 0.247059, 0.247059, 0.247059, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="FloorLabel" type="Label" parent="HUDLayer"]
 margin_left = 16.0
 margin_top = 556.0

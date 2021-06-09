@@ -9,7 +9,7 @@ import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.OpenEvent
 
-class OpenablePart() : Part {
+class OpenablePart : Part {
 
     override fun copy(): Part {
         return OpenablePart()

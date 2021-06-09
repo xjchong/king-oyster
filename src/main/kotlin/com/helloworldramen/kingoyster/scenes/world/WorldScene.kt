@@ -16,6 +16,7 @@ import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.floor.FloorScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
 import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
+import com.helloworldramen.kingoyster.utilities.Settings
 import com.helloworldramen.kingoyster.worldgen.metadata.WorldFlavor
 import godot.*
 import godot.annotation.RegisterClass
@@ -65,6 +66,8 @@ class WorldScene : Node2D(), EventBusSubscriber {
 	@RegisterFunction
 	override fun _ready() {
 		EventBus.register(this, WeaponAttackEvent::class)
+
+		blackoutRect.color = Settings.BACKGROUND_COLOR
 	}
 
 	@RegisterFunction

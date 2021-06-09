@@ -4,6 +4,7 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.entity.EntitySprite
+import com.helloworldramen.kingoyster.utilities.Settings
 import godot.ColorRect
 import godot.Label
 import godot.Node2D
@@ -26,6 +27,11 @@ class MemoryScene : Node2D() {
 	private var worldPosition: Position = Position(0, 0)
 
 	private var lastState: MemoryState = MemoryState.Unknown
+
+	@RegisterFunction
+	override fun _ready() {
+		memoryRect.color = Settings.BACKGROUND_COLOR
+	}
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
@@ -101,8 +107,12 @@ class MemoryScene : Node2D() {
 	}
 
 	private fun tweenModulate(alpha: Double) {
+		val finalColor = Settings.BACKGROUND_COLOR.apply {
+			a = alpha
+		}
+
 		tween.interpolateProperty(memoryRect, NodePath("color"),
-			initialVal = memoryRect.color, finalVal = Color(0.0, 0.0, 0.0, alpha),
+			initialVal = memoryRect.color, finalVal = finalColor,
 			duration = 0.18, Tween.TRANS_QUAD, Tween.EASE_IN
 		)
 		tween.start()

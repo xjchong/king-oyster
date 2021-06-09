@@ -23,12 +23,10 @@ import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.screenshake.ScreenShake
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
+import com.helloworldramen.kingoyster.utilities.Settings
 import com.helloworldramen.kingoyster.worldgen.WorldCreator
 import com.helloworldramen.kingoyster.worldgen.metadata.WorldFlavor
-import godot.Input
-import godot.InputEvent
-import godot.Label
-import godot.Node2D
+import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.Color
@@ -45,6 +43,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private val hudScene: HUDScene by lazy { getNodeAs("HUDScene")!! }
 	private var playerScene: EntityScene? = null
 
+	private val letterBoxRect: ColorRect by lazy { getNodeAs("HUDLayer/LetterBoxRect")!! }
 	private val floorLabel: Label by lazy { getNodeAs("HUDLayer/FloorLabel")!! }
 
 	private var context: Context = Context.UNKNOWN
@@ -83,6 +82,8 @@ class GameScene : Node2D(), EventBusSubscriber {
 		listMenuScene.pauseMode = PAUSE_MODE_PROCESS
 		eventAudio.pauseMode = PAUSE_MODE_PROCESS
 
+		letterBoxRect.color = Settings.BACKGROUND_COLOR
+
 		EventBus.register(this, AscendEvent::class, GameOverEvent::class, DamageEvent::class)
 
 		context = Context(world, player)
@@ -105,6 +106,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
+		// Handle loading a new level.
 		if (shouldLoadNewLevel && !worldScene.isAnimating) {
 			shouldLoadNewLevel = false
 			with(context) {

@@ -1,10 +1,13 @@
 package com.helloworldramen.kingoyster.utilities
 
 import godot.ConfigFile
+import godot.core.Color
 import godot.core.GodotError
 import godot.core.memory.GodotStatic
 
 object Settings : GodotStatic {
+
+    val BACKGROUND_COLOR = Color(0.02, 0.12, 0.12)
 
     private const val CONFIG_PATH = "user://settings.cfg"
     private val configFile = ConfigFile().apply { load(CONFIG_PATH) }

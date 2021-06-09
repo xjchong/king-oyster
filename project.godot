@@ -35,6 +35,11 @@ _global_script_classes=[ {
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/eventaudio/EventAudio.kt"
 }, {
 "base": "Node2D",
+"class": "com_helloworldramen_kingoyster_scenes_floor_FloorScene",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/floor/FloorScene.kt"
+}, {
+"base": "Node2D",
 "class": "com_helloworldramen_kingoyster_scenes_game_GameScene",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/game/GameScene.kt"
@@ -105,6 +110,7 @@ _global_script_class_icons={
 "com_helloworldramen_kingoyster_scenes_entity_EntityScene": "",
 "com_helloworldramen_kingoyster_scenes_entity_EntitySprite": "",
 "com_helloworldramen_kingoyster_scenes_eventaudio_EventAudio": "",
+"com_helloworldramen_kingoyster_scenes_floor_FloorScene": "",
 "com_helloworldramen_kingoyster_scenes_game_GameScene": "",
 "com_helloworldramen_kingoyster_scenes_health_HealthScene": "",
 "com_helloworldramen_kingoyster_scenes_hud_HUDScene": "",
@@ -212,5 +218,5 @@ debug={
 
 [rendering]
 
-environment/default_clear_color=Color( 0, 0, 0, 1 )
+environment/default_clear_color=Color( 0.0196078, 0.117647, 0.117647, 1 )
 environment/default_environment="res://default_env.tres"

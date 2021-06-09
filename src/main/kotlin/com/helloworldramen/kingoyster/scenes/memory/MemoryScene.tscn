@@ -37,13 +37,4 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="FogRect" type="ColorRect" parent="."]
-visible = false
-margin_right = 32.0
-margin_bottom = 32.0
-color = Color( 0, 0, 0, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="Tween" type="Tween" parent="."]

@@ -27,7 +27,7 @@ margin_bottom = 8.0
 value = 50.0
 texture_over = ExtResource( 3 )
 texture_progress = ExtResource( 4 )
-tint_progress = Color( 0.266667, 0.901961, 0.247059, 1 )
+tint_progress = Color( 0.419608, 0.905882, 0.807843, 1 )
 nine_patch_stretch = true
 __meta__ = {
 "_edit_use_anchors_": false
