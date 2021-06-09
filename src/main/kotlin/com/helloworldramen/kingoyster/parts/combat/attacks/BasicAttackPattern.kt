@@ -11,9 +11,9 @@ import com.helloworldramen.kingoyster.parts.combat.ElementType
 import com.helloworldramen.kingoyster.parts.isEnemyOf
 
 open class BasicAttackPattern(
-    private val powerFactor: Double = 0.0,
-    private val damageType: DamageType = DamageType.Special,
-    private val elementType: ElementType = ElementType.None
+    protected val powerFactor: Double = 0.0,
+    protected val damageType: DamageType = DamageType.Special,
+    protected val elementType: ElementType = ElementType.None
 ) : AttackPattern() {
 
     override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
@@ -36,7 +36,7 @@ open class BasicAttackPattern(
         return listOfNotNull(getHitPosition(context, entity, direction))
     }
 
-    private fun getHitPosition(context: Context, entity: Entity, direction: Direction): Position? {
+    protected fun getHitPosition(context: Context, entity: Entity, direction: Direction): Position? {
         val currentPosition = context.positionOf(entity) ?: return null
 
         return currentPosition + direction.vector

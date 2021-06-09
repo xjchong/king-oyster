@@ -20,9 +20,9 @@ object WeaponFactory {
                     sprite = "dagger"
                 ),
                 WeaponPart(
-                    attackPattern = DaggerAttackPattern(1.0),
+                    attackPattern = DaggerAttackPattern(1.5),
                     throwInfo = DamageInfo(
-                        powerFactor = 6.0,
+                        powerFactor = 4.0,
                         damageType = DamageType.Stab,
                     ),
                     maxDurability = 10
@@ -84,9 +84,9 @@ object WeaponFactory {
                     frameIndex = 3
                 ),
                 WeaponPart(
-                    attackPattern = RapierAttackPattern(1.2),
+                    attackPattern = RapierAttackPattern(1.5),
                     throwInfo = DamageInfo(
-                        powerFactor = 2.4,
+                        powerFactor = 2.0,
                         damageType = DamageType.Stab
                     ),
                     maxDurability = 8

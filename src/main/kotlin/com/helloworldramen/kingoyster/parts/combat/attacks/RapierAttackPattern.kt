@@ -39,7 +39,7 @@ class RapierAttackPattern(
 
         return getHitPositions(context, entity, direction).associateWith {
             // Rapier does more damage when lunging.
-            val distanceFactor = if (currentPosition.distanceFrom(it) > 1) 2.0 else 1.0
+            val distanceFactor = if (currentPosition.distanceFrom(it) > 1) 2.0 else 0.8
 
             DamageInfo(powerFactor * distanceFactor, damageType, elementType)
         }
