@@ -33,8 +33,20 @@ class GreatswordAttackPattern(
         entity: Entity,
         direction: Direction
     ): Map<Position, DamageInfo> {
-        return getHitPositions(context, entity, direction).associateWith {
-            DamageInfo(powerFactor, damageType, elementType)
+        val hitPositions = getHitPositions(context, entity, direction)
+        val landedHitCount = hitPositions.sumBy { position ->
+            if (context.entitiesAt(position)?.any { it.has<CombatPart>() } == true) 1 else 0
+        }
+
+        // Greatsword increases in damage the more things are hit.
+        val landedFactor = when (landedHitCount) {
+            3 -> 2.0
+            2 -> 1.5
+            else -> 1.0
+        }
+
+        return hitPositions.associateWith {
+            DamageInfo(powerFactor * landedFactor, damageType, elementType)
         }
     }
 
