@@ -2,6 +2,9 @@ package com.helloworldramen.kingoyster.architecture
 
 class World(val width: Int, val height: Int) {
 
+    val entities: List<Entity>
+        get() = allEntities.toList()
+
     val currentTime: Double
         get() = next()?.time ?: 0.0
 

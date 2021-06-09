@@ -3,6 +3,9 @@ package com.helloworldramen.kingoyster.worldgen
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
+import com.helloworldramen.kingoyster.parts.AscendablePart
+import com.helloworldramen.kingoyster.parts.combat.CombatPart
+import com.helloworldramen.kingoyster.parts.isPassable
 import com.helloworldramen.kingoyster.utilities.WeightedCollection
 import com.helloworldramen.kingoyster.worldgen.metadata.WorldFlavor
 import com.helloworldramen.kingoyster.worldgen.topology.DrunkTopology
@@ -18,6 +21,9 @@ object WorldCreator {
 
     const val DEFAULT_WORLD_WIDTH = 17
     const val DEFAULT_WORLD_HEIGHT = 17
+
+    private const val MAX_CREATION_ATTEMPTS = 500
+    private const val MIN_FLOOR_PERCENT = 0.3
 
     data class WorldKit(
         val worldFlavor: WorldFlavor,
@@ -99,14 +105,17 @@ object WorldCreator {
     )
 
     fun create(level: Int, player: Entity, playerPosition: Position?): Pair<World, WorldFlavor> {
-        val (worldFlavor, topologyStrategy, populationStrategy, width, height) = KITS_FOR_LEVEL[level]?.sample() ?: DEFAULT_KIT
+        repeat(MAX_CREATION_ATTEMPTS) {
+            val (worldFlavor, topologyStrategy, populationStrategy, width, height) = KITS_FOR_LEVEL[level]?.sample() ?: DEFAULT_KIT
+            val (world, flavor) = topologyStrategy.terraform(worldFlavor, width, height, playerPosition)
 
-        val (world, flavor) = topologyStrategy.terraform(worldFlavor, width, height, playerPosition)
+            world.addPlayer(player, playerPosition)
+            populationStrategy.populate(world, player)
 
-        world.addPlayer(player, playerPosition)
-        populationStrategy.populate(world, player)
+            if (world.isValid(player)) return Pair(world, flavor)
+        }
 
-        return Pair(world, flavor)
+        return Pair(World(DEFAULT_WORLD_WIDTH, DEFAULT_WORLD_HEIGHT), WorldFlavor.DRY_GRASS)
     }
 
     private fun World.addPlayer(player: Entity, playerPosition: Position?) {
@@ -120,5 +129,22 @@ object WorldCreator {
 
             add(player, randomEmptyPosition)
         }
+    }
+
+    private fun World.isValid(player: Entity): Boolean {
+        // The player must exist in the world.
+        if (get(player) == null) return false
+
+        // An exit (stairs) must exist in the world.
+        if (entities.none { it.has<AscendablePart>() }) return false
+
+        val floorCount = Position(width - 1, height - 1).map { position ->
+            if (get(position)?.all { it.isPassable() || it.has<CombatPart>() } == true) 1 else 0
+        }.sum()
+
+        // There should be at least some ground.
+        if (floorCount < (width * height) * MIN_FLOOR_PERCENT) return false
+
+        return true
     }
 }
