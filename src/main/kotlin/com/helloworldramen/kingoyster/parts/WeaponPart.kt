@@ -11,7 +11,7 @@ import com.helloworldramen.kingoyster.eventbus.events.DamageWeaponEvent
 import com.helloworldramen.kingoyster.eventbus.events.TakeWeaponEvent
 import com.helloworldramen.kingoyster.parts.combat.AttackPattern
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
-import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.BasicAttackPattern
 
 class WeaponPart(
     val attackPattern: AttackPattern = BasicAttackPattern(),

@@ -5,7 +5,7 @@ import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageType
-import com.helloworldramen.kingoyster.parts.combat.attacks.*
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.*
 import godot.core.Color
 
 object WeaponFactory {
@@ -46,7 +46,7 @@ object WeaponFactory {
                         powerFactor = 3.0,
                         damageType = DamageType.Cut,
                     ),
-                    maxDurability = 9
+                    maxDurability = 8
                 )
             )
         )
@@ -88,6 +88,28 @@ object WeaponFactory {
                     throwInfo = DamageInfo(
                         powerFactor = 2.0,
                         damageType = DamageType.Stab
+                    ),
+                    maxDurability = 8
+                )
+            )
+        )
+    }
+
+    fun scythe(): EntityFactoryFn = {
+        Entity(
+            name = "scythe",
+            parts = listOf(
+                AppearancePart(
+                    ascii = '7',
+                    color = Color.purple,
+                    sprite = "weapons",
+                    frameIndex = 19
+                ),
+                WeaponPart(
+                    attackPattern = ScytheAttackPattern(1.5),
+                    throwInfo = DamageInfo(
+                        powerFactor = 2.0,
+                        damageType = DamageType.Cut
                     ),
                     maxDurability = 8
                 )

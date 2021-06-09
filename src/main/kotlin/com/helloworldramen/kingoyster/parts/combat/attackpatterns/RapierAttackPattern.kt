@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.parts.combat.attacks
+package com.helloworldramen.kingoyster.parts.combat.attackpatterns
 
 import com.helloworldramen.kingoyster.actions.Move
 import com.helloworldramen.kingoyster.architecture.Context

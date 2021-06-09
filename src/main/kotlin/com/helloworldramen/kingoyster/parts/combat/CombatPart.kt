@@ -8,8 +8,8 @@ import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.*
 import com.helloworldramen.kingoyster.parts.*
-import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
-import com.helloworldramen.kingoyster.parts.combat.attacks.NoAttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.BasicAttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.NoAttackPattern
 import kotlin.math.roundToInt
 
 class CombatPart(

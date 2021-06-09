@@ -7,7 +7,7 @@ import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.ElementType
 import com.helloworldramen.kingoyster.parts.combat.ResistancesPart
-import com.helloworldramen.kingoyster.parts.combat.attacks.BasicAttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.BasicAttackPattern
 import godot.core.Color
 import godot.core.Vector2
 
