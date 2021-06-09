@@ -26,9 +26,10 @@ class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
     ).withCount(3 * densityFactor, 6 * densityFactor),
     PopulationTemplate(
         100 to PopulationRule(ItemFactory.medicine()),
-    ).withCount(0 * densityFactor, 2 * densityFactor),
+        100 to PopulationRule({ null })
+    ).withCount(0 * densityFactor, 1 * densityFactor),
     PopulationTemplate(
         100 to PopulationRule(FeatureFactory.chest()),
-    ).withCount(0 * densityFactor, 2 * densityFactor),
+    ).withCount(0 * densityFactor, 1 * densityFactor),
     PopulationTemplate(StairsPopulationRule()).withCount(1)
 )

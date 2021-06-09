@@ -39,7 +39,9 @@ open class PopulationTemplate private constructor(
         repeat(count) {
             rules.sample()?.let { rule ->
                 world.randomPositionWhere { rule.predicate(world, it, player) }?.let { position ->
-                    world.add(rule.entityFactoryFn(), position)
+                    rule.entityFactoryFn()?.let { entity ->
+                        world.add(entity, position)
+                    }
                 }
             }
         }
