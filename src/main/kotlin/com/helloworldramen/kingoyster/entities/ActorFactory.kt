@@ -177,7 +177,8 @@ object ActorFactory {
                 ),
                 MovementPart(),
                 SensoryPart(
-                    visionRange = 7
+                    visionRange = 7,
+                    canHavePlayerSense = true
                 ),
                 TelegraphPart()
             ),

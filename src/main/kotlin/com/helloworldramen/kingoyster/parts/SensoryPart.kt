@@ -7,24 +7,31 @@ import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.utilities.ShadowCasting
 
 class SensoryPart(
-    var visionRange: Int
+    var visionRange: Int,
+    var canHavePlayerSense: Boolean = false,
+    var hasPlayerSense: Boolean = false
 ) : Part {
-    var visiblePositions: List<Position> = listOf()
+    var visiblePositions: Set<Position> = setOf()
         private set
     var isOmniscient: Boolean = false // FOR DEBUG ONLY! :)
 
-    private constructor(visionRange: Int, visiblePositions: List<Position>): this(visionRange) {
-        this.visiblePositions = visiblePositions.toList()
+    private constructor(visionRange: Int, canHavePlayerSense: Boolean, hasPlayerSense: Boolean,
+                        visiblePositions: Set<Position>): this(visionRange, canHavePlayerSense, hasPlayerSense) {
+        this.visiblePositions = visiblePositions.toSet()
     }
 
     override fun copy(): Part {
-        return SensoryPart(visionRange, visiblePositions)
+        return SensoryPart(visionRange, canHavePlayerSense, hasPlayerSense, visiblePositions)
     }
 
     override fun update(context: Context, partOwner: Entity) {
         if (isOmniscient) {
             updateAsOmniscient(context)
             return
+        }
+
+        if (canHavePlayerSense) {
+            handlePlayerSense(context, partOwner)
         }
 
         val world = context.world
@@ -41,7 +48,30 @@ class SensoryPart(
                 memoryPart?.remember(context, visiblePosition)
             })
 
-        visiblePositions = nextVisiblePositions
+        if (hasPlayerSense) {
+            context.positionOf(context.player)?.let { nextVisiblePositions.add(it) }
+        }
+
+        visiblePositions = nextVisiblePositions.toSet()
+    }
+
+    /**
+     * Player sense allows an entity to see where the player is without having actual line of sight
+     * (i.e., with shadow casting). This is useful for allowing an entity to chase a player that is just a little out
+     * of sight. However, the entity should only be able to do this after sensing the player, i.e., having seen
+     * the player.
+     */
+    private fun handlePlayerSense(context: Context, partOwner: Entity) {
+        if (hasPlayerSense) return
+
+        val playerPosition = context.positionOf(context.player) ?: return
+        val currentPosition = context.positionOf(partOwner) ?: return
+
+        if (playerPosition.distanceFrom(currentPosition) > visionRange) return
+
+        if (visiblePositions.contains(playerPosition)) {
+            hasPlayerSense = true
+        }
     }
 
     private fun updateAsOmniscient(context: Context) {
@@ -49,8 +79,8 @@ class SensoryPart(
 
         if (visiblePositions.size >= world.width * world.height) return
 
-        visiblePositions = Position(world.width - 1, world.height - 1).map { it }
+        visiblePositions = Position(world.width - 1, world.height - 1).map { it }.toSet()
     }
 }
 
-fun Entity.visiblePositions(): List<Position> = find<SensoryPart>()?.visiblePositions ?: listOf()
+fun Entity.visiblePositions(): Set<Position> = find<SensoryPart>()?.visiblePositions ?: setOf()
