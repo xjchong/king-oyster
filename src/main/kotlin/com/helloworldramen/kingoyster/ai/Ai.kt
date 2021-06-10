@@ -1,9 +1,6 @@
 package com.helloworldramen.kingoyster.ai
 
-import com.helloworldramen.kingoyster.ai.considerations.ConstantConsideration
-import com.helloworldramen.kingoyster.ai.considerations.HasWeaponConsideration
-import com.helloworldramen.kingoyster.ai.considerations.VisibleAlliesConsideration
-import com.helloworldramen.kingoyster.ai.considerations.OwnHealthConsideration
+import com.helloworldramen.kingoyster.ai.considerations.*
 import com.helloworldramen.kingoyster.ai.curves.LinearCurve
 import com.helloworldramen.kingoyster.ai.reasoners.HighestValueReasoner
 import com.helloworldramen.kingoyster.ai.reasoners.PurelyRandomReasoner
@@ -40,13 +37,14 @@ object Ai {
                     ConstantConsideration(0.8),
                 ),
                 TakeWeaponStrategy(
-                    HasWeaponConsideration(0.0, 1.0),
+                    DoesSelfHaveWeaponConsideration(0.0, 1.0),
                     ConstantConsideration(0.9)
                 ),
                 FleeFromEnemyStrategy(
                     OwnHealthConsideration(LinearCurve(2.0, 0.5)),
                     VisibleAlliesConsideration(LinearCurve(1.0, 0.3)),
-                    HasWeaponConsideration(0.8, 1.0)
+                    DoesSelfHaveWeaponConsideration(0.8, 1.0),
+                    DoesTargetHaveWeaponConsideration(1.0, 0.5)
                 ),
                 WanderStrategy(
                     ConstantConsideration(0.5)
@@ -60,13 +58,14 @@ object Ai {
                     ConstantConsideration(0.8),
                 ),
                 TakeWeaponStrategy(
-                    HasWeaponConsideration(0.0, 1.0),
+                    DoesSelfHaveWeaponConsideration(0.0, 1.0),
                     ConstantConsideration(0.9)
                 ),
                 FleeFromEnemyStrategy(
                     OwnHealthConsideration(LinearCurve(1.0, 0.5)),
                     VisibleAlliesConsideration(LinearCurve(1.0, 0.6)),
-                    HasWeaponConsideration(0.5, 0.8)
+                    DoesSelfHaveWeaponConsideration(0.5, 0.8),
+                    DoesTargetHaveWeaponConsideration(1.0, 0.5)
                 ),
                 WanderStrategy(
                     ConstantConsideration(0.5)

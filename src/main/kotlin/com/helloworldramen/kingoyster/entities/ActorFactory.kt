@@ -197,7 +197,7 @@ object ActorFactory {
                     offset = Vector2(0, -4)
                 ),
                 CombatPart(
-                    maxHealth = 60,
+                    maxHealth = 80,
                     maxMana = 0,
                     power = 10,
                     defaultAttackPattern = BasicAttackPattern(
@@ -207,16 +207,16 @@ object ActorFactory {
                 ),
                 ItemSlotPart(
                     EntityTable(
-                        10 to ItemFactory.medicine(),
-                        90 to EntityTable.NULL
+                        30 to ItemFactory.medicine(),
+                        70 to EntityTable.NULL
                     ).generate()
                 ),
                 WeaponSlotPart(
                     EntityTable(
                         15 to WeaponFactory.dagger(),
-                        24 to WeaponFactory.longsword(),
-                        23 to WeaponFactory.greatsword(),
-                        38 to EntityTable.NULL
+                        30 to WeaponFactory.longsword(),
+                        30 to WeaponFactory.greatsword(),
+                        25 to EntityTable.NULL
                     ).generate()
                 ),
                 FactionPart(Faction.Goblin,
