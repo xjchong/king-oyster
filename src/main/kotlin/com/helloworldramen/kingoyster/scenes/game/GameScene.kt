@@ -52,6 +52,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private var isUpdating: Boolean = false
 	private var needsFadeIn: Boolean = false
 	private var shouldLoadNewLevel: Boolean = false
+	private var shouldFreezeEnemies: Boolean = false // For debug purposes.
 
 	override fun receiveEvent(event: Event) {
 		when (event) {
@@ -146,10 +147,10 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 			if (context.world.next() != nextEntity) continue
 
-			if (nextEntity.isPlayer) {
-				break
-			} else {
-				Ai.actForEntity(context, nextEntity)
+			when {
+				nextEntity.isPlayer -> break
+				shouldFreezeEnemies -> nextEntity.idle(context.world)
+				else -> Ai.actForEntity(context, nextEntity)
 			}
 		}
 
@@ -167,6 +168,9 @@ class GameScene : Node2D(), EventBusSubscriber {
 					event.isActionPressed("ui_accept") -> {
 						worldScene.fadeOut()
 						shouldLoadNewLevel = true
+					}
+					event.isActionPressed("ui_cancel") -> {
+						shouldFreezeEnemies = !shouldFreezeEnemies
 					}
 					event.isActionPressed("ui_up") -> {
 						player.respondToAction(Heal(context, player, 9999))
