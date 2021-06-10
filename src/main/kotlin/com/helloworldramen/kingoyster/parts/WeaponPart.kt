@@ -9,7 +9,7 @@ import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DamageWeaponEvent
 import com.helloworldramen.kingoyster.eventbus.events.TakeWeaponEvent
-import com.helloworldramen.kingoyster.parts.combat.AttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.AttackPattern
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.BasicAttackPattern
 

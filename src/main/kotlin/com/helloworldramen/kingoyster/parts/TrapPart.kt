@@ -6,7 +6,7 @@ import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.TriggerTrapEvent
 
-class TrapPart(private val effect: (context: Context, entity: Entity) -> Boolean, uses: Int = 1) : Part {
+class TrapPart(private val effect: (context: Context, trap: Entity, entity: Entity) -> Boolean, uses: Int = 1) : Part {
 
     var uses: Int = uses
         private set
@@ -17,7 +17,7 @@ class TrapPart(private val effect: (context: Context, entity: Entity) -> Boolean
 
     fun trigger(context: Context, partOwner: Entity, triggerer: Entity): Boolean {
         if (partOwner.find<TrapPart>() != this) return false
-        if (!effect(context, triggerer)) return false
+        if (!effect(context, partOwner, triggerer)) return false
 
         if (--uses <= 0) {
             context.world.remove(partOwner)

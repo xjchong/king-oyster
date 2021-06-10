@@ -8,8 +8,11 @@ import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.*
 import com.helloworldramen.kingoyster.parts.*
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.AttackPattern
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.BasicAttackPattern
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.NoAttackPattern
+import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
+import com.helloworldramen.kingoyster.parts.combat.statuseffects.StatusEffect
 import kotlin.math.roundToInt
 
 class CombatPart(
@@ -18,14 +21,38 @@ class CombatPart(
     var power: Int = 0,
     var defaultAttackPattern: AttackPattern = NoAttackPattern(),
     health: Int = maxHealth,
-    var mana: Int = maxMana,
+    mana: Int = maxMana,
+    statusEffects: List<StatusEffect> = listOf()
 ) : Part {
 
     var health: Int = health
         private set
 
+    var mana: Int = mana
+        private set
+
+    var statusEffects: List<StatusEffect> = statusEffects
+        private set
+
     override fun copy(): Part {
-        return CombatPart(maxHealth, maxMana, power, defaultAttackPattern, health, mana)
+        return CombatPart(maxHealth, maxMana, power, defaultAttackPattern, health, mana, statusEffects.toList())
+    }
+
+    override fun update(context: Context, partOwner: Entity) {
+        statusEffects.forEach {
+            it.onTick(context, partOwner)
+            it.turnsRemaining--
+        }
+
+        val (expiredEffects, runningEffects) = statusEffects.partition {
+            it.turnsRemaining <= 0
+        }
+
+        statusEffects = runningEffects
+
+        expiredEffects.forEach {
+            it.onExpire(context, partOwner)
+        }
     }
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
@@ -33,6 +60,7 @@ class CombatPart(
             is Damage -> partOwner.respondToDamage(action)
             is Heal ->partOwner.respondToHeal(action)
             is WeaponAttack -> partOwner.respondToWeaponAttack(action)
+            is ReceiveStatusEffect -> partOwner.respondToReceiveStatusEffect(action)
             else -> false
         }
     }
@@ -107,6 +135,18 @@ class CombatPart(
 
         return true
     }
+
+    private fun Entity.respondToReceiveStatusEffect(action: ReceiveStatusEffect): Boolean {
+        val (context, actor, _, effect) = action
+
+        if (actor != this) return false
+
+        statusEffects = statusEffects + listOf(effect)
+
+        effect.onApply(context, actor)
+
+        return true
+    }
 }
 
 fun Entity.maxHealth(): Int = find<CombatPart>()?.maxHealth ?: 0
@@ -118,3 +158,4 @@ fun Entity.defaultAttackPattern(): AttackPattern {
     return find<CombatPart>()?.defaultAttackPattern ?: BasicAttackPattern()
 }
 fun Entity.isKillable(): Boolean = has<CombatPart>()
+fun Entity.isBurning(): Boolean = find<CombatPart>()?.statusEffects?.any { it is BurnStatusEffect } ?: false

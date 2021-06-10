@@ -1,13 +1,12 @@
 package com.helloworldramen.kingoyster.entities
 
-import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.actions.Heal
+import com.helloworldramen.kingoyster.actions.ReceiveStatusEffect
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
-import com.helloworldramen.kingoyster.parts.combat.DamageType
-import com.helloworldramen.kingoyster.parts.combat.ElementType
+import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
 import com.helloworldramen.kingoyster.utilities.WeightedCollection
 import godot.core.Color
 import godot.core.Vector2
@@ -104,7 +103,7 @@ object FeatureFactory {
                     sprite = "blue_puddle",
                     offset = Vector2(0, -2)
                 ),
-                TrapPart({ context, entity ->
+                TrapPart({ context, _, entity ->
                     entity.respondToAction(Heal(context, entity, 5))
 
                     true
@@ -121,12 +120,10 @@ object FeatureFactory {
                     ascii = '^',
                     color = Color.red,
                 ),
-                TrapPart({ context, entity ->
+                TrapPart({ context, trap, entity ->
                     entity.respondToAction(
-                        Damage(context, Entity.UNKNOWN, 10,
-                            damageType = DamageType.Special,
-                            elementType = ElementType.Fire
-                        ))
+                        ReceiveStatusEffect(context, entity, trap,
+                            BurnStatusEffect(2, 5)))
 
                     true
                 })

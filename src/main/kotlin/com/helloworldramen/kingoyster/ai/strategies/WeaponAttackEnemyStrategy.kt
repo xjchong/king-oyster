@@ -5,7 +5,7 @@ import com.helloworldramen.kingoyster.ai.architecture.AiConsideration
 import com.helloworldramen.kingoyster.ai.architecture.AiOption
 import com.helloworldramen.kingoyster.ai.options.WeaponAttackOption
 import com.helloworldramen.kingoyster.architecture.Direction
-import com.helloworldramen.kingoyster.parts.combat.AttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.AttackPattern
 import com.helloworldramen.kingoyster.parts.combat.defaultAttackPattern
 import com.helloworldramen.kingoyster.parts.isEnemyOf
 import com.helloworldramen.kingoyster.parts.weapon
