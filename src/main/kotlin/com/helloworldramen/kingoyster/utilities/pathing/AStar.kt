@@ -10,13 +10,17 @@ private data class AStarPosition(val x: Int, val y: Int) {
         return Pair(x, y)
     }
 
-    fun neighbors(): List<AStarPosition> {
-        return listOf(
+    fun neighbors(shouldShuffle: Boolean): List<AStarPosition> {
+        val positions = listOf(
             AStarPosition(x, y - 1),
             AStarPosition(x + 1, y),
             AStarPosition(x, y + 1),
             AStarPosition(x - 1, y)
         )
+
+        return if (shouldShuffle) {
+            positions.shuffled()
+        } else positions
     }
 }
 
@@ -30,9 +34,10 @@ object AStar {
         start: Pair<Int, Int>,
         goal: Pair<Int, Int>,
         cost: (from: Pair<Int, Int>, to: Pair<Int, Int>) -> Double,
-        heuristic: (from: Pair<Int, Int>, to: Pair<Int, Int>, cost: Double) -> Double
+        heuristic: (from: Pair<Int, Int>, to: Pair<Int, Int>, cost: Double) -> Double,
+        isDeterministic: Boolean
     ): Iterable<Pair<Int, Int>> {
-        return getPath(start.first, start.second, goal.first, goal.second, cost, heuristic)
+        return getPath(start.first, start.second, goal.first, goal.second, cost, heuristic, isDeterministic)
     }
 
     fun getPath(
@@ -41,7 +46,8 @@ object AStar {
         goalX: Int,
         goalY: Int,
         cost: (from: Pair<Int, Int>, to: Pair<Int, Int>) -> Double,
-        heuristic: (from: Pair<Int, Int>, to: Pair<Int, Int>, cost: Double) -> Double
+        heuristic: (from: Pair<Int, Int>, to: Pair<Int, Int>, cost: Double) -> Double,
+        isDeterministic: Boolean
     ): Iterable<Pair<Int, Int>> {
         val start = AStarPosition(startX, startY)
         val goal = AStarPosition(goalX, goalY)
@@ -59,7 +65,7 @@ object AStar {
 
             if (currentPosition == start) break
 
-            for (nextPosition in currentPosition.neighbors().filter {
+            for (nextPosition in currentPosition.neighbors(!isDeterministic).filter {
                 costSoFar[it] == null
             }) {
                 val currentCost = costSoFar[currentPosition] ?: continue

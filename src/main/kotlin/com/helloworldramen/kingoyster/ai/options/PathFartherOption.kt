@@ -7,6 +7,7 @@ import com.helloworldramen.kingoyster.ai.architecture.AiStrategy
 import com.helloworldramen.kingoyster.ai.architecture.AiStrategyContext
 import com.helloworldramen.kingoyster.ai.tag
 import com.helloworldramen.kingoyster.parts.canPass
+import com.helloworldramen.kingoyster.utilities.pathing.Pathing
 
 class PathFartherOption(
     override val parentStrategy: AiStrategy<out AiStrategyContext, GameAiOptionContext>,
@@ -20,13 +21,17 @@ class PathFartherOption(
 
         if (position == null) return false
 
-        val currentPosition = context.positionOf(entity) ?: return false
-        val passableNeighbors = currentPosition.neighborsShuffled().filter { neighbor ->
-            context.entitiesAt(neighbor)?.all { entity.canPass(it) } == true
-        }
+//        val currentPosition = context.positionOf(entity) ?: return false
+        val nextPosition = Pathing.pathAway(context, entity, position) ?: return false
 
-        return passableNeighbors.sortedByDescending { it.distanceFrom(position) }.any { greedyPosition ->
-            entity.respondToAction(Move(context, entity, greedyPosition))
-        }
+        return entity.respondToAction(Move(context, entity, nextPosition))
+//
+//        val passableNeighbors = currentPosition.neighborsShuffled().filter { neighbor ->
+//            context.entitiesAt(neighbor)?.all { entity.canPass(it) } == true
+//        }
+//
+//        return passableNeighbors.sortedByDescending { it.distanceFrom(position) }.any { greedyPosition ->
+//            entity.respondToAction(Move(context, entity, greedyPosition))
+//        }
     }
 }
