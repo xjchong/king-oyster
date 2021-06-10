@@ -117,3 +117,4 @@ fun Entity.power(): Int = find<CombatPart>()?.power ?: 0
 fun Entity.defaultAttackPattern(): AttackPattern {
     return find<CombatPart>()?.defaultAttackPattern ?: BasicAttackPattern()
 }
+fun Entity.isKillable(): Boolean = has<CombatPart>()

@@ -4,12 +4,12 @@ import kotlin.math.ceil
 import kotlin.math.floor
 
 
-private data class Position(val x: Int, val y: Int) {
-    fun withRelativeX(delta: Int): Position {
+private data class ShadowCastPosition(val x: Int, val y: Int) {
+    fun withRelativeX(delta: Int): ShadowCastPosition {
         return copy(x = x + delta)
     }
 
-    fun withRelativeY(delta: Int): Position {
+    fun withRelativeY(delta: Int): ShadowCastPosition {
         return copy(y = y + delta)
     }
 }
@@ -20,7 +20,7 @@ private data class Position(val x: Int, val y: Int) {
  * [Quadrant]s are traversed row by row. For the east and west [Quadrant]s, these
  * "rows" are vertical, not horizontal.
  */
-private class Quadrant(private val cardinal: Int, private val origin: Position) {
+private class Quadrant(private val cardinal: Int, private val origin: ShadowCastPosition) {
 
     companion object {
         const val NORTH = 0
@@ -30,10 +30,10 @@ private class Quadrant(private val cardinal: Int, private val origin: Position) 
     }
 
     /**
-     * Convert a [Position] relative to the current quadrant to a [Position]
+     * Convert a [ShadowCastPosition] relative to the current quadrant to a [ShadowCastPosition]
      * representing an absolute position in the grid.
      */
-    fun transform(position: Position): Position {
+    fun transform(position: ShadowCastPosition): ShadowCastPosition {
         val (row, col) = position
         return when (cardinal) {
             NORTH -> origin.withRelativeX(col).withRelativeY(-row)
@@ -45,7 +45,7 @@ private class Quadrant(private val cardinal: Int, private val origin: Position) 
 }
 
 /**
- * A [Row] represents a segment of [Position]s bound between a start and end slope.
+ * A [Row] represents a segment of [ShadowCastPosition]s bound between a start and end slope.
  * [depth] represents the distance between the row and the [Quadrant]'s origin.
  */
 private class Row(val depth: Int, var startSlope: Double, var endSlope: Double) {
@@ -53,12 +53,12 @@ private class Row(val depth: Int, var startSlope: Double, var endSlope: Double) 
     /**
      * Returns an iterator over the tiles in the row
      */
-    fun positions(): Iterator<Position> {
+    fun positions(): Iterator<ShadowCastPosition> {
         val minCol = roundTiesUp(depth * startSlope)
         val maxCol = roundTiesDown(depth * endSlope)
 
         return (minCol.toInt()..maxCol.toInt()).map {
-            Position(depth, it)
+            ShadowCastPosition(depth, it)
         }.iterator()
     }
 
@@ -98,25 +98,25 @@ object ShadowCasting {
          * from the `scan` function. The positions passed to `reveal` `isOpaque` and `isOpen` are relative to the
          * current [Quadrant]. In contrast, the positions for `isBlocking` and `markVisible` are absolute positions.
          */
-        val origin = Position(originX, originY)
+        val origin = ShadowCastPosition(originX, originY)
         markVisible(originX, originY)
 
         repeat(4) { i ->
             val quadrant = Quadrant(i, origin)
 
-            fun reveal(position: Position) {
+            fun reveal(position: ShadowCastPosition) {
                 val (x, y) = quadrant.transform(position)
                 markVisible(x, y)
             }
 
-            fun isOpaque(position: Position?): Boolean {
+            fun isOpaque(position: ShadowCastPosition?): Boolean {
                 return if (position != null) {
                     val (x, y) = quadrant.transform(position)
                     isBlocking(x, y)
                 } else false
             }
 
-            fun isOpen(position: Position?): Boolean {
+            fun isOpen(position: ShadowCastPosition?): Boolean {
                 return if (position != null) {
                     val (x, y) = quadrant.transform(position)
                     isBlocking(x, y).not()
@@ -126,7 +126,7 @@ object ShadowCasting {
             fun scan(row: Row) {
                 if (row.depth >= radius) return
 
-                var previousPosition: Position? = null
+                var previousPosition: ShadowCastPosition? = null
 
                 for (position in row.positions()) {
                     if (isOpaque(position) || isSymmetric(row, position)) {
@@ -156,14 +156,14 @@ object ShadowCasting {
         }
     }
 
-    private fun isSymmetric(row: Row, position: Position): Boolean {
+    private fun isSymmetric(row: Row, position: ShadowCastPosition): Boolean {
         val (_, y) = position
 
         return (y >= row.depth * row.startSlope
                 && y <= row.depth * row.endSlope)
     }
 
-    private fun getSlope(position: Position): Double {
+    private fun getSlope(position: ShadowCastPosition): Double {
         val rowDepth = position.x.toDouble()
         val col = position.y.toDouble()
         val dividend = (2 * col - 1)

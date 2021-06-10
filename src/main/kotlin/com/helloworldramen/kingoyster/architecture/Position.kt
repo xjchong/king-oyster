@@ -4,6 +4,8 @@ import kotlin.math.*
 
 data class Position(val x: Int = 0, val y: Int = 0) {
 
+    constructor(xy: Pair<Int, Int>): this(xy.first, xy.second)
+
     operator fun plus(position: Position): Position {
         return Position(this.x + position.x, this.y + position.y)
     }
@@ -18,6 +20,10 @@ data class Position(val x: Int = 0, val y: Int = 0) {
 
     operator fun times(scalar: Int): Position {
         return Position(this.x * scalar, this.y * scalar)
+    }
+
+    fun asPair(): Pair<Int, Int> {
+        return Pair(x, y)
     }
 
     fun withX(x: Int): Position {
