@@ -101,6 +101,8 @@ object FeatureFactory {
                 AppearancePart(
                     ascii = '^',
                     color = Color.mediumseagreen,
+                    sprite = "blue_puddle",
+                    offset = Vector2(0, -2)
                 ),
                 TrapPart({ context, entity ->
                     entity.respondToAction(Heal(context, entity, 5))
