@@ -52,6 +52,26 @@ object Ai {
                     ConstantConsideration(0.5)
                 ),
             ))
+            "hobgoblin" -> HighestValueReasoner.prioritize(aiContext, listOf(
+                WeaponAttackEnemyStrategy(
+                    ConstantConsideration(0.9),
+                ),
+                ChaseEnemyStrategy(
+                    ConstantConsideration(0.8),
+                ),
+                TakeWeaponStrategy(
+                    HasWeaponConsideration(0.0, 1.0),
+                    ConstantConsideration(0.9)
+                ),
+                FleeFromEnemyStrategy(
+                    OwnHealthConsideration(LinearCurve(1.0, 0.5)),
+                    VisibleAlliesConsideration(LinearCurve(1.0, 0.6)),
+                    HasWeaponConsideration(0.5, 0.8)
+                ),
+                WanderStrategy(
+                    ConstantConsideration(0.5)
+                ),
+            ))
             "blue slime", "red slime" -> PurelyRandomReasoner.prioritize(aiContext, listOf(
                 WeaponAttackEnemyStrategy(
                     ConstantConsideration(0.5)

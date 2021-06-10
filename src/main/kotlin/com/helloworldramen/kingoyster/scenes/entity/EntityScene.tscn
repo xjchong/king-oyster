@@ -372,7 +372,7 @@ script = ExtResource( 1 )
 
 [node name="HealthScene" parent="AppearanceNode2D" instance=ExtResource( 3 )]
 modulate = Color( 1, 1, 1, 0.627451 )
-position = Vector2( 0, -5 )
+position = Vector2( 0, -6 )
 
 [node name="DurabilityLabel" type="Label" parent="AppearanceNode2D"]
 margin_top = 18.0

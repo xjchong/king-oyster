@@ -237,6 +237,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 		entitySprite.bind(entity)
 		healthScene.bind(entity)
+		healthScene.position = Vector2(0, -6) + (entity.find<AppearancePart>()?.offset ?: Vector2.ZERO)
 		updateDurabilityLabel()
 		setPosition(shouldAnimate = false)
 		resetAppearance()

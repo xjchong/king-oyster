@@ -186,6 +186,56 @@ object ActorFactory {
         )
     }
 
+    fun hobgoblin(): EntityFactoryFn = {
+        Entity(
+            name = "hobgoblin",
+            parts = listOf(
+                AppearancePart(
+                    ascii = 'g',
+                    color = Color.purple,
+                    sprite = "hobgoblin",
+                    offset = Vector2(0, -4)
+                ),
+                CombatPart(
+                    maxHealth = 60,
+                    maxMana = 0,
+                    power = 10,
+                    defaultAttackPattern = BasicAttackPattern(
+                        powerFactor = 1.0,
+                        damageType = DamageType.Bash
+                    )
+                ),
+                ItemSlotPart(
+                    EntityTable(
+                        10 to ItemFactory.medicine(),
+                        90 to EntityTable.NULL
+                    ).generate()
+                ),
+                WeaponSlotPart(
+                    EntityTable(
+                        15 to WeaponFactory.dagger(),
+                        24 to WeaponFactory.longsword(),
+                        23 to WeaponFactory.greatsword(),
+                        38 to EntityTable.NULL
+                    ).generate()
+                ),
+                FactionPart(Faction.Goblin,
+                    enemies = setOf(Faction.Player, Faction.Spirit)
+                ),
+                PhysicalPart(
+                    isPassable = false
+                ),
+                MovementPart(),
+                SensoryPart(
+                    visionRange = 7,
+                    canHavePlayerSense = true
+                ),
+                TelegraphPart()
+            ),
+            timeFactor = 1.0
+        )
+    }
+
     fun blueSlime(): EntityFactoryFn = {
         Entity(
             name = "blue slime",

@@ -14,6 +14,7 @@ class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
         100 to PopulationRule(ActorFactory.goblin()),
         70 to PopulationRule(ActorFactory.blueSlime()),
         30 to PopulationRule(ActorFactory.redSlime()),
+        20 to PopulationRule(ActorFactory.hobgoblin()),
     ).withDensity(0.1 * densityFactor),
     PopulationTemplate(PopulationRule(ActorFactory.ghost()))
         .withCount(1 * densityFactor, 2 * densityFactor),
