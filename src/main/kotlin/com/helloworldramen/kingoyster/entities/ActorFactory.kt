@@ -149,7 +149,7 @@ object ActorFactory {
                 CombatPart(
                     maxHealth = 30,
                     maxMana = 0,
-                    power = 5,
+                    power = 8,
                     defaultAttackPattern = BasicAttackPattern(
                         powerFactor = 1.0,
                         damageType = DamageType.Bash
@@ -199,7 +199,7 @@ object ActorFactory {
                 CombatPart(
                     maxHealth = 80,
                     maxMana = 0,
-                    power = 10,
+                    power = 12,
                     defaultAttackPattern = BasicAttackPattern(
                         powerFactor = 1.0,
                         damageType = DamageType.Bash
@@ -249,7 +249,7 @@ object ActorFactory {
                 CombatPart(
                     maxHealth = 20,
                     maxMana = 0,
-                    power = 2,
+                    power = 4,
                     defaultAttackPattern = BasicAttackPattern(1.0)
                 ),
                 FactionPart(
@@ -288,7 +288,7 @@ object ActorFactory {
                 CombatPart(
                     maxHealth = 20,
                     maxMana = 0,
-                    power = 4,
+                    power = 6,
                     defaultAttackPattern = BasicAttackPattern(
                         powerFactor = 1.0,
                         elementType = ElementType.Fire

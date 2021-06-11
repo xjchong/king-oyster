@@ -14,7 +14,7 @@ class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
         100 to PopulationRule(ActorFactory.goblin()),
         70 to PopulationRule(ActorFactory.blueSlime()),
         30 to PopulationRule(ActorFactory.redSlime()),
-        20 to PopulationRule(ActorFactory.hobgoblin()),
+        15 to PopulationRule(ActorFactory.hobgoblin()),
     ).withDensity(0.1 * densityFactor),
     PopulationTemplate(PopulationRule(ActorFactory.ghost()))
         .withCount(1 * densityFactor, 2 * densityFactor),
@@ -22,15 +22,12 @@ class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
         100 to PopulationRule(WeaponFactory.dagger()),
         100 to PopulationRule(WeaponFactory.longsword()),
         100 to PopulationRule(WeaponFactory.greatsword()),
-        100 to PopulationRule(WeaponFactory.rapier()),
-        100 to PopulationRule(WeaponFactory.scythe()),
+        80 to PopulationRule(WeaponFactory.rapier()),
+        60 to PopulationRule(WeaponFactory.scythe()),
     ).withCount(3 * densityFactor, 6 * densityFactor),
     PopulationTemplate(
-        100 to PopulationRule(ItemFactory.medicine()),
+        70 to PopulationRule(FeatureFactory.chest()),
         100 to PopulationRule({ null })
-    ).withCount(0 * densityFactor, 1 * densityFactor),
-    PopulationTemplate(
-        100 to PopulationRule(FeatureFactory.chest()),
     ).withCount(0 * densityFactor, 1 * densityFactor),
     PopulationTemplate(StairsPopulationRule()).withCount(1)
 )
