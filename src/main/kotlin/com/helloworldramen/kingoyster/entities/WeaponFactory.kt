@@ -37,7 +37,7 @@ object WeaponFactory {
             name = "longsword",
             parts = listOf(
                 AppearancePart(
-                    description = "Long attack. Deals more damage for each enemy hit.",
+                    description = "Deep attack. Deals more damage for each enemy hit.",
                     ascii = '|',
                     color = Color.white,
                     sprite = "longsword"
@@ -115,6 +115,29 @@ object WeaponFactory {
                     throwInfo = DamageInfo(
                         powerFactor = 2.0,
                         damageType = DamageType.Cut
+                    ),
+                    maxDurability = 8
+                )
+            )
+        )
+    }
+
+    fun spear(): EntityFactoryFn = {
+        Entity(
+            name = "spear",
+            parts = listOf(
+                AppearancePart(
+                    description = "Long attack. Deals more damage from farther away, and when thrown.",
+                    ascii = '/',
+                    color = Color.brown,
+                    sprite = "weapons",
+                    frameIndex = 10
+                ),
+                WeaponPart(
+                    attackPattern = SpearAttackPattern(1.5),
+                    throwInfo = DamageInfo(
+                        powerFactor = 4.0,
+                        damageType = DamageType.Stab
                     ),
                     maxDurability = 8
                 )

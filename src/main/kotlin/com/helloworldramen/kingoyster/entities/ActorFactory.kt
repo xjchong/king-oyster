@@ -32,7 +32,9 @@ object ActorFactory {
                     )
                 ),
                 ItemSlotPart(),
-                WeaponSlotPart(),
+                WeaponSlotPart(
+                    weapon = WeaponFactory.dagger()()
+                ),
                 FactionPart(Faction.Player,
                     enemies = setOf(
                         Faction.Goblin,
@@ -163,8 +165,9 @@ object ActorFactory {
                 ),
                 WeaponSlotPart(
                     EntityTable(
+                        10 to WeaponFactory.spear(),
+                        8 to WeaponFactory.longsword(),
                         5 to WeaponFactory.dagger(),
-                        4 to WeaponFactory.longsword(),
                         3 to WeaponFactory.greatsword(),
                         88 to EntityTable.NULL
                     ).generate()
@@ -213,9 +216,10 @@ object ActorFactory {
                 ),
                 WeaponSlotPart(
                     EntityTable(
-                        15 to WeaponFactory.dagger(),
                         30 to WeaponFactory.longsword(),
                         30 to WeaponFactory.greatsword(),
+                        30 to WeaponFactory.spear(),
+                        15 to WeaponFactory.dagger(),
                         25 to EntityTable.NULL
                     ).generate()
                 ),

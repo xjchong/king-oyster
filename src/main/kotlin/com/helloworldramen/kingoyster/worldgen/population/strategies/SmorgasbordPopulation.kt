@@ -22,6 +22,7 @@ class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
         100 to PopulationRule(WeaponFactory.dagger()),
         100 to PopulationRule(WeaponFactory.longsword()),
         100 to PopulationRule(WeaponFactory.greatsword()),
+        100 to PopulationRule(WeaponFactory.spear()),
         80 to PopulationRule(WeaponFactory.rapier()),
         60 to PopulationRule(WeaponFactory.scythe()),
     ).withCount(3 * densityFactor, 6 * densityFactor),
