@@ -428,7 +428,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private fun StatusEffect.representation(): String {
 		return when (this) {
 			is BurnStatusEffect -> "[color=#fc5203]burn"
-			is PoisonStatusEffect -> "[color=#713eb5]sick"
+			is PoisonStatusEffect -> "[color=#834acf]sick"
 			else -> "?"
 		} + " [$turnsRemaining][/color]"
 	}
