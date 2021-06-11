@@ -15,6 +15,7 @@ object WeaponFactory {
             name = "dagger",
             parts = listOf(
                 AppearancePart(
+                    description = "Deals more damage in cramped spaces, and when thrown.",
                     ascii = '|',
                     color = Color.gray,
                     sprite = "dagger"
@@ -36,6 +37,7 @@ object WeaponFactory {
             name = "longsword",
             parts = listOf(
                 AppearancePart(
+                    description = "Long attack. Deals more damage for each enemy hit.",
                     ascii = '|',
                     color = Color.white,
                     sprite = "longsword"
@@ -57,6 +59,7 @@ object WeaponFactory {
             name = "greatsword",
             parts = listOf(
                 AppearancePart(
+                    description = "Wide attack. Deals more damage for each enemy hit.",
                     ascii = '|',
                     color = Color.lightblue,
                     sprite = "greatsword"
@@ -78,6 +81,7 @@ object WeaponFactory {
             name = "rapier",
             parts = listOf(
                 AppearancePart(
+                    description = "Lunging attack, lunge deals more damage. Lower thrown damage.",
                     ascii = '|',
                     color = Color.yellow,
                     sprite = "weapons",
@@ -100,6 +104,7 @@ object WeaponFactory {
             name = "scythe",
             parts = listOf(
                 AppearancePart(
+                    description = "Lunging arc attack. Deals more damage for each enemy hit. Lower thrown damage.",
                     ascii = '7',
                     color = Color.purple,
                     sprite = "weapons",

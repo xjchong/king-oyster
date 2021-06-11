@@ -1,11 +1,8 @@
 package com.helloworldramen.kingoyster.scenes.hud
 
 import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.health
-import com.helloworldramen.kingoyster.parts.durability
-import com.helloworldramen.kingoyster.parts.item
-import com.helloworldramen.kingoyster.parts.itemUses
-import com.helloworldramen.kingoyster.parts.weapon
 import com.helloworldramen.kingoyster.scenes.entity.EntitySprite
 import com.helloworldramen.kingoyster.scenes.health.HealthScene
 import godot.Label
@@ -20,13 +17,15 @@ class HUDScene : MarginContainer() {
 	private val healthScene: HealthScene by lazy { getNodeAs("$HEALTH_PREFIX/HealthPanel/HealthScene")!! }
 	private val healthAmountLabel: Label by lazy { getNodeAs("$HEALTH_PREFIX/HealthLabelsContainer/HealthLabelsHBox/HealthAmountLabel")!! }
 
-	private val weaponSprite: EntitySprite by lazy { getNodeAs("$WEAPON_PREFIX/WeaponPanel/WeaponSprite")!! }
-	private val weaponDurabilityLabel: Label by lazy { getNodeAs("$WEAPON_PREFIX/WeaponDurabilityLabel")!! }
-	private val weaponNameLabel: Label by lazy { getNodeAs("$WEAPON_PREFIX/WeaponNameLabel")!! }
+	private val weaponSprite: EntitySprite by lazy { getNodeAs("$WEAPON_PREFIX/WeaponHBox/WeaponPanel/WeaponSprite")!! }
+	private val weaponDurabilityLabel: Label by lazy { getNodeAs("$WEAPON_PREFIX/WeaponHBox/WeaponDurabilityLabel")!! }
+	private val weaponNameLabel: Label by lazy { getNodeAs("$WEAPON_PREFIX/WeaponHBox/WeaponNameLabel")!! }
+	private val weaponDescriptionLabel: Label by lazy { getNodeAs("$WEAPON_PREFIX/WeaponDescriptionLabel")!! }
 
-	private val itemSprite: EntitySprite by lazy { getNodeAs("$ITEM_PREFIX/ItemPanel/ItemSprite")!! }
-	private val itemUsesLabel: Label by lazy { getNodeAs("$ITEM_PREFIX/ItemUsesLabel")!! }
-	private val itemNameLabel: Label by lazy { getNodeAs("$ITEM_PREFIX/ItemNameLabel")!! }
+	private val itemSprite: EntitySprite by lazy { getNodeAs("$ITEM_PREFIX/ItemHBox/ItemPanel/ItemSprite")!! }
+	private val itemUsesLabel: Label by lazy { getNodeAs("$ITEM_PREFIX/ItemHBox/ItemUsesLabel")!! }
+	private val itemNameLabel: Label by lazy { getNodeAs("$ITEM_PREFIX/ItemHBox/ItemNameLabel")!! }
+	private val itemDescriptionLabel: Label by lazy { getNodeAs("$ITEM_PREFIX/ItemDescriptionLabel")!! }
 
 	private var entity: Entity = Entity.UNKNOWN
 
@@ -53,10 +52,12 @@ class HUDScene : MarginContainer() {
 		if (weapon == null) {
 			weaponDurabilityLabel.text = ""
 			weaponNameLabel.text = "(no weapon)"
+			weaponDescriptionLabel.text = ""
 			weaponSprite.hide()
 		} else {
 			weaponDurabilityLabel.text = "(${weapon.durability()})"
 			weaponNameLabel.text = weapon.name.capitalize()
+			weaponDescriptionLabel.text = weapon.description()
 			weaponSprite.bind(weapon)
 			weaponSprite.show()
 		}
@@ -68,10 +69,12 @@ class HUDScene : MarginContainer() {
 		if (item == null) {
 			itemUsesLabel.text = ""
 			itemNameLabel.text = "(no item)"
+			itemDescriptionLabel.text = ""
 			itemSprite.hide()
 		} else {
 			itemUsesLabel.text = "(${item.itemUses()})"
 			itemNameLabel.text = item.name.capitalize()
+			itemDescriptionLabel.text = item.description()
 			itemSprite.bind(item)
 			itemSprite.show()
 		}
@@ -79,7 +82,7 @@ class HUDScene : MarginContainer() {
 
 	companion object {
 		private const val HEALTH_PREFIX = "VBoxContainer/HealthVBox"
-		private const val WEAPON_PREFIX = "VBoxContainer/WeaponContainer/WeaponHBox"
-		private const val ITEM_PREFIX = "VBoxContainer/ItemContainer/ItemHBox"
+		private const val WEAPON_PREFIX = "VBoxContainer/WeaponContainer/WeaponVBox"
+		private const val ITEM_PREFIX = "VBoxContainer/ItemContainer/ItemVBox"
 	}
 }

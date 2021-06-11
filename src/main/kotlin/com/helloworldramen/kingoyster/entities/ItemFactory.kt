@@ -21,6 +21,7 @@ object ItemFactory {
             name = "medicine",
             parts = listOf(
                 AppearancePart(
+                    description = "Restores HP. Potency increases as HP decreases.",
                     ascii = '!',
                     color = Color.mediumseagreen,
                     sprite = "medicine"

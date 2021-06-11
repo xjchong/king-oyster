@@ -1,11 +1,13 @@
 package com.helloworldramen.kingoyster.parts
 
+import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.utilities.WeightedCollection
 import godot.core.Color
 import godot.core.Vector2
 
 class AppearancePart(
+    val description: String = "(no description)",
     val ascii: Char = '?',
     val color: Color = Color.white,
     val sprite: String? = null,
@@ -16,6 +18,8 @@ class AppearancePart(
 ) : Part {
 
     override fun copy(): Part {
-        return AppearancePart(ascii, color, sprite, offset, weightedFrameIndices, frameIndex, isAnimated)
+        return AppearancePart(description, ascii, color, sprite, offset, weightedFrameIndices, frameIndex, isAnimated)
     }
 }
+
+fun Entity.description(): String = find<AppearancePart>()?.description ?: "(no description)"
