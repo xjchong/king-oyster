@@ -7,12 +7,14 @@ import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.ElementType
+import com.helloworldramen.kingoyster.parts.combat.statuseffects.StatusEffect
 import com.helloworldramen.kingoyster.parts.isEnemyOf
 
 open class BasicAttackPattern(
     protected val powerFactor: Double = 0.0,
     protected val damageType: DamageType = DamageType.Special,
-    protected val elementType: ElementType = ElementType.None
+    protected val elementType: ElementType = ElementType.None,
+    protected val statusEffect: StatusEffect? = null
 ) : AttackPattern() {
 
     override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
@@ -28,7 +30,7 @@ open class BasicAttackPattern(
     ): Map<Position, DamageInfo> {
         val hitPosition = getHitPosition(context, entity, direction) ?: return mapOf()
 
-        return mapOf(hitPosition to DamageInfo(powerFactor, damageType, elementType))
+        return mapOf(hitPosition to DamageInfo(powerFactor, damageType, elementType, statusEffect))
     }
 
     override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {

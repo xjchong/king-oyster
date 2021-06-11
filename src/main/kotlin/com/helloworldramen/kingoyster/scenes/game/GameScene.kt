@@ -165,7 +165,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 		val player = context.player
 		val hasWeapon = player.weapon() != null
 
-		when {
+		val shouldUpdate: Boolean = when {
 			Input.isActionPressed("debug") -> {
 				when {
 					event.isActionPressed("ui_accept") -> {
@@ -195,96 +195,106 @@ class GameScene : Node2D(), EventBusSubscriber {
 			Input.isActionPressed("left_modifier") -> {
 				when {
 					event.isDirectionPressed() -> performMovementDirectionSkill(event.direction())
-					event.isActionPressed("ui_accept") -> println("EXAMINE")
-					event.isActionPressed("ui_cancel") -> println("ACCESSORY")
-					event.isActionPressed("triangle") -> println("ABILITY")
+					event.isActionPressed("ui_accept") -> false // EXAMINE
+					event.isActionPressed("ui_cancel") -> false // ACCESSORY
+					event.isActionPressed("triangle") -> false // ABILITY
 					event.isActionPressed("square") -> performItem()
+					else -> false
 				}
 			}
-			Input.isActionPressed("triangle") && event.isDirectionPressed() -> {
-				println("DIRECTED PERSONAL SKILL")
-			}
+			Input.isActionPressed("triangle") && event.isDirectionPressed() -> false // DIRECTED PERSONAL SKILL
 			Input.isActionPressed("square") && event.isDirectionPressed() -> {
 				when {
-					!hasWeapon -> EventBus.post(PlayerToastEvent("No weapon", Color.lightgray))
+					!hasWeapon -> {
+						EventBus.post(PlayerToastEvent("No weapon", Color.lightgray))
+						false
+					}
 					else -> performThrow(event.direction())
 				}
 			}
-			event.isActionPressed("menu") -> println("MENU")
-			event.isActionPressed("ui_cancel", true) -> player.idle(world) // TODO: Make this a guard action.
+			event.isActionPressed("menu") -> false // MENU
+			event.isActionPressed("ui_cancel", true) -> {
+				// TODO: Make this a guard action.
+				player.idle(world)
+				true
+			}
 			event.isActionPressed("ui_accept") -> performStandingActions()
 			event.isDirectionPressed(true) -> performDirectionActions(event.direction(true))
-			else -> return
+			else -> false
 		}
 
-		updateNonPlayerEntities()
+		if (shouldUpdate) {
+			updateNonPlayerEntities()
+		}
 	}
 
-	private fun performItem() {
+	private fun performItem(): Boolean {
 		with (context) {
-			if (player.item() == null) {
+			return if (player.item() == null) {
 				playerScene?.toast("No item", Color.lightgray, ToastTextScene.LONG_CONFIG)
-				return
+				false
 			} else {
-
 				player.respondToAction(UseItem(this, player))
 			}
 		}
 	}
 
-	private fun performThrow(direction: Direction?) {
-		if (direction == null) return
+	private fun performThrow(direction: Direction?): Boolean {
+		if (direction == null) return false
 
 		with (context) {
-	   		player.respondToAction(ThrowWeapon(this, player, direction))
+	   		return player.respondToAction(ThrowWeapon(this, player, direction))
 		}
 	}
 
-	private fun performMovementDirectionSkill(direction: Direction?) {
-		if (direction == null) return
+	private fun performMovementDirectionSkill(direction: Direction?): Boolean {
+		if (direction == null) return false
 
 		val player = context.player
-		val currentPosition = context.positionOf(player) ?: return
+		val currentPosition = context.positionOf(player) ?: return false
 		val furthestPassablePosition = context.straightPathWhile(currentPosition, direction) { position ->
 			val entities = context.entitiesAt(position)
 
 			entities != null && (entities.all { it.isPassable() } || entities.contains(player))
-		}.lastOrNull() ?: return
+		}.lastOrNull() ?: return false
 
-		player.respondToAction(Move(context, player, furthestPassablePosition, MoveType.Charge))
+		return player.respondToAction(Move(context, player, furthestPassablePosition, MoveType.Charge))
 	}
 
-	private fun performDirectionActions(direction: Direction?) {
-		if (direction == null) return
+	private fun performDirectionActions(direction: Direction?): Boolean {
+		if (direction == null) return false
 
 		val player = context.player
-		val currentPosition = context.positionOf(player) ?: return
+		val currentPosition = context.positionOf(player) ?: return false
 		val actionPosition = direction.vector + currentPosition
 
 		// Don't read any direction input when not player's turn.
-		if (player.time > context.world.currentTime) return
+		if (player.time > context.world.currentTime) return false
 
-		if (context.world.respondToActions(actionPosition, Open(context, player)) != null) return
-		if (player.respondToAction(WeaponAttack(context, player, direction))) return
-		if (player.respondToAction(Move(context, player, actionPosition))) return
+		if (context.world.respondToActions(actionPosition, Open(context, player)) != null) return true
+		if (player.respondToAction(WeaponAttack(context, player, direction))) return true
+		if (player.respondToAction(Move(context, player, actionPosition))) return true
 
 		// If we didn't successfully perform a direction action, indicate the failure with a bump animation.
 		worldScene.animateBump(player, direction)
+		return false
 	}
 
-	private fun performStandingActions() {
+	private fun performStandingActions(): Boolean {
 		with(context) {
 			val currentPosition = positionOf(player)
 
 			when {
-				currentPosition == null -> return
+				currentPosition == null -> return false
 				world.respondToActions(currentPosition,
 					Open(this, player),
 					Take(this, player),
-					Ascend(this, player)) != null -> return
+					Ascend(this, player)) != null -> return true
 				else -> playerScene?.toast("?", Color.lightgray, ToastTextScene.SHORT_CONFIG)
 			}
 		}
+
+		return false
 	}
 
 	private fun InputEvent.direction(allowEcho: Boolean = false): Direction? {

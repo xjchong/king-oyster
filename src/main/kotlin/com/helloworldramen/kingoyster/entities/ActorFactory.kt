@@ -8,8 +8,10 @@ import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.ElementType
 import com.helloworldramen.kingoyster.parts.combat.ResistancesPart
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.BasicAttackPattern
+import com.helloworldramen.kingoyster.parts.combat.statuseffects.PoisonStatusEffect
 import godot.core.Color
 import godot.core.Vector2
+import kotlin.random.Random
 
 object ActorFactory {
 
@@ -123,13 +125,18 @@ object ActorFactory {
                 ),
                 MovementPart(),
                 ResistancesPart(
-                    cutResFactor = 0.0,
-                    bashResFactor = 0.0,
-                    stabResFactor = 0.0,
-                    magicResFactor = 1.5,
-                    fireResFactor = 1.5,
-                    iceResFactor = 1.5,
-                    voltResFactor = 1.5
+                    resistanceForDamageType = mapOf(
+                        DamageType.Cut to 0.0,
+                        DamageType.Bash to 0.0,
+                        DamageType.Stab to 0.0,
+                        DamageType.Magic to 1.5,
+                    ),
+                    resistanceForElementType = mapOf(
+                        ElementType.Fire to 1.5,
+                        ElementType.Ice to 1.5,
+                        ElementType.Volt to 1.5,
+                        ElementType.Poison to 0.0
+                    )
                 ),
                 SensoryPart(
                     visionRange = 4
@@ -279,7 +286,7 @@ object ActorFactory {
         )
     }
 
-    fun rat(): EntityFactoryFn = {
+    fun giantRat(): EntityFactoryFn = {
         Entity(
             name = "giant rat",
             parts = listOf(
@@ -289,7 +296,7 @@ object ActorFactory {
                 ),
                 BreederPart(
                     maxChildCount = 3,
-                    entityFactoryFn = rat()
+                    entityFactoryFn = giantRat()
                 ),
                 CombatPart(
                     maxHealth = 24,
@@ -297,7 +304,8 @@ object ActorFactory {
                     power = 6,
                     defaultAttackPattern = BasicAttackPattern(
                         powerFactor = 1.0,
-                        damageType = DamageType.Stab
+                        damageType = DamageType.Stab,
+                        statusEffect = PoisonStatusEffect(1, 0.7, Random.nextInt(10, 25))
                     )
                 ),
                 FactionPart(
@@ -352,7 +360,9 @@ object ActorFactory {
                     isPassable = false
                 ),
                 ResistancesPart(
-                    fireResFactor = 0.0
+                    resistanceForElementType = mapOf(
+                        ElementType.Fire to 0.0
+                    )
                 ),
                 SensoryPart(
                     visionRange = 4

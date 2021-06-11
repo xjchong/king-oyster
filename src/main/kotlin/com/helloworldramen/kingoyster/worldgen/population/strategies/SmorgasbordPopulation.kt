@@ -2,7 +2,6 @@ package com.helloworldramen.kingoyster.worldgen.population.strategies
 
 import com.helloworldramen.kingoyster.entities.ActorFactory
 import com.helloworldramen.kingoyster.entities.FeatureFactory
-import com.helloworldramen.kingoyster.entities.ItemFactory
 import com.helloworldramen.kingoyster.entities.WeaponFactory
 import com.helloworldramen.kingoyster.worldgen.population.PopulationRule
 import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
@@ -14,7 +13,7 @@ class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
         100 to PopulationRule(ActorFactory.goblin()),
         70 to PopulationRule(ActorFactory.blueSlime()),
         30 to PopulationRule(ActorFactory.redSlime()),
-        20 to PopulationRule(ActorFactory.rat()),
+        20 to PopulationRule(ActorFactory.giantRat()),
         15 to PopulationRule(ActorFactory.hobgoblin()),
     ).withDensity(0.1 * densityFactor),
     PopulationTemplate(PopulationRule(ActorFactory.ghost()))

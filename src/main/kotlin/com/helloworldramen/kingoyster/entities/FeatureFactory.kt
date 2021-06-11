@@ -1,11 +1,14 @@
 package com.helloworldramen.kingoyster.entities
 
+import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.actions.Heal
 import com.helloworldramen.kingoyster.actions.ReceiveStatusEffect
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
+import com.helloworldramen.kingoyster.parts.combat.DamageType
+import com.helloworldramen.kingoyster.parts.combat.ElementType
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
 import com.helloworldramen.kingoyster.utilities.WeightedCollection
 import godot.core.Color
@@ -121,9 +124,11 @@ object FeatureFactory {
                     color = Color.red,
                 ),
                 TrapPart({ context, trap, entity ->
+                    val burnEffect = BurnStatusEffect(2, 0.8, 5)
+
                     entity.respondToAction(
-                        ReceiveStatusEffect(context, entity, trap,
-                            BurnStatusEffect(2, 5)))
+                        Damage(context, trap, 10, DamageType.Magic, ElementType.Fire, burnEffect)
+                    )
 
                     true
                 })

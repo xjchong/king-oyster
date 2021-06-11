@@ -14,6 +14,7 @@ import com.helloworldramen.kingoyster.parts.combat.attackpatterns.NoAttackPatter
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.StatusEffect
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 class CombatPart(
     var maxHealth: Int,
@@ -112,7 +113,7 @@ class CombatPart(
             val amount = (power() * damageInfo.powerFactor * breakFactor).roundToInt()
 
             context.world.respondToActions(position,
-                Damage(context, this, amount, damageInfo.damageType, damageInfo.elementType)
+                Damage(context, this, amount, damageInfo.damageType, damageInfo.elementType, damageInfo.statusEffect)
             )
         }
 
@@ -122,11 +123,19 @@ class CombatPart(
     }
 
     private fun Entity.respondToDamage(action: Damage): Boolean {
-        val (context, source, amount, damageType, elementType) = action
+        val (context, source, amount, damageType, elementType, statusEffect) = action
         val finalAmount = (resFactor(damageType, elementType) * amount).roundToInt()
 
         EventBus.post(DamageEvent(source, this, finalAmount))
         modifyHealth(context, this, -finalAmount)
+
+        if (statusEffect != null && health() > 0) {
+            if (Random.nextDouble(1.0) < statusEffect.applyChance(context, this)) {
+                respondToReceiveStatusEffect(
+                    ReceiveStatusEffect(context, this, source, statusEffect)
+                )
+            }
+        }
 
         return true
     }
@@ -163,4 +172,4 @@ fun Entity.defaultAttackPattern(): AttackPattern {
     return find<CombatPart>()?.defaultAttackPattern ?: BasicAttackPattern()
 }
 fun Entity.isKillable(): Boolean = has<CombatPart>()
-fun Entity.isBurning(): Boolean = find<CombatPart>()?.statusEffects?.any { it is BurnStatusEffect } ?: false
+fun Entity.statusEffects(): List<StatusEffect> = find<CombatPart>()?.statusEffects ?: listOf()
