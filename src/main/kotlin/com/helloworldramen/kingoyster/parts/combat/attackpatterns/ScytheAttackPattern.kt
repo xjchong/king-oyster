@@ -64,8 +64,9 @@ class ScytheAttackPattern(
 
     override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
         val currentPosition = context.positionOf(entity) ?: return listOf()
+        val forwardPosition = currentPosition + direction.vector
 
-        return getHitPositions(currentPosition, direction)
+        return getHitPositions(currentPosition, direction) + getHitPositions(forwardPosition, direction)
     }
 
     private fun getHitPositions(attackPosition: Position, direction: Direction): List<Position> {
