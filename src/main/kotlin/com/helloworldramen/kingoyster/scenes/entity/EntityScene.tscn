@@ -1,9 +1,10 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntityScene.kt" type="Script" id=1]
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntitySprite.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/health/HealthScene.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/main/resources/fonts/small_pixel-7.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://src/main/resources/fonts/small_pixel_font.tres" type="DynamicFont" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 4 )
@@ -382,6 +383,23 @@ theme = SubResource( 2 )
 custom_colors/font_color = Color( 0.858824, 0.858824, 0.858824, 1 )
 text = "-1"
 align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StatusNode" type="Node2D" parent="AppearanceNode2D"]
+
+[node name="StatusLabel" type="RichTextLabel" parent="AppearanceNode2D/StatusNode"]
+margin_left = -5.0
+margin_top = -17.0
+margin_right = 53.0
+margin_bottom = -3.0
+rect_scale = Vector2( 0.85, 0.85 )
+custom_fonts/normal_font = ExtResource( 5 )
+bbcode_enabled = true
+bbcode_text = "burn"
+text = "burn"
+scroll_active = false
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -10,7 +10,10 @@ import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.extensions.isVisibleToPlayer
 import com.helloworldramen.kingoyster.eventbus.events.*
 import com.helloworldramen.kingoyster.parts.*
+import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.health
+import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
+import com.helloworldramen.kingoyster.parts.combat.statuseffects.StatusEffect
 import com.helloworldramen.kingoyster.scenes.health.HealthScene
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
@@ -33,6 +36,8 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private val entitySprite: EntitySprite by lazy { getNodeAs("AppearanceNode2D/EntitySprite")!! }
 	private val healthScene: HealthScene by lazy { getNodeAs("AppearanceNode2D/HealthScene")!! }
 	private val durabilityLabel: Label by lazy { getNodeAs("AppearanceNode2D/DurabilityLabel")!! }
+	private val statusNode: Node2D by lazy { getNodeAs("AppearanceNode2D/StatusNode")!! }
+	private val statusLabel: RichTextLabel by lazy { getNodeAs("AppearanceNode2D/StatusNode/StatusLabel")!! }
 	private val tween: Tween by lazy { getNodeAs("Tween")!! }
 	private val animationPlayer: AnimationPlayer by lazy { getNodeAs("AnimationPlayer")!! }
 	private val flashAnimator: AnimationPlayer by lazy { getNodeAs("FlashAnimator")!! }
@@ -48,6 +53,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	private var isProcessingEvents: Boolean = false
 
 	private var isTweening: Boolean = false
+	private var shouldUpdateStatus: Boolean = false
 
 	val isAnimating: Boolean
 		get() = isTweening || animationPlayer.isPlaying()
@@ -70,6 +76,8 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			MoveEvent::class,
 			OpenEvent::class,
 			PlayerToastEvent::class,
+			StatusAppliedEvent::class,
+			StatusExpiredEvent::class,
 			TakeItemEvent::class,
 			TakeWeaponEvent::class,
 			TelegraphEvent::class,
@@ -88,6 +96,10 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
+		if (shouldUpdateStatus) {
+			updateStatusLabel()
+		}
+
 		processEventQueue()
 
 		if (!isAnimating && !isProcessingEvents) {
@@ -182,6 +194,17 @@ class EntityScene : Node2D(), EventBusSubscriber {
 						toast(event.message, event.color, ToastTextScene.LONG_CONFIG)
 					}
 				}
+				is StatusAppliedEvent -> {
+					if (event.owner == entity) {
+						shouldUpdateStatus = true
+					}
+				}
+				is StatusExpiredEvent -> {
+					if (event.owner == entity) {
+						updateStatusLabel()
+						shouldUpdateStatus = false
+					}
+				}
 				is TakeItemEvent -> {
 					if (event.item == entity) {
 						animatePulse()
@@ -235,9 +258,13 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		this.context = context
 		this.entity = entity
 
+		val entitySpriteOffset = entity.find<AppearancePart>()?.offset ?: Vector2.ZERO
+
 		entitySprite.bind(entity)
 		healthScene.bind(entity)
-		healthScene.position = Vector2(0, -6) + (entity.find<AppearancePart>()?.offset ?: Vector2.ZERO)
+		healthScene.position = Vector2(0, -6) + entitySpriteOffset
+		statusNode.position = entitySpriteOffset
+		updateStatusLabel()
 		updateDurabilityLabel()
 		setPosition(shouldAnimate = false)
 		resetAppearance()
@@ -376,6 +403,31 @@ class EntityScene : Node2D(), EventBusSubscriber {
 				durabilityLabel.text = ""
 			}
 		}
+	}
+
+	private fun updateStatusLabel() {
+		val statusEffects = entity.find<CombatPart>()?.statusEffects
+
+		if (statusEffects.isNullOrEmpty()) {
+			statusLabel.hide()
+			return
+		}
+
+		var text = " "
+
+		statusEffects.forEach {
+			text += it.representation()
+		}
+
+		statusLabel.bbcodeText = text
+		statusLabel.show()
+	}
+
+	private fun StatusEffect.representation(): String {
+		return when (this) {
+			is BurnStatusEffect -> "[color=#fc5203]burn"
+			else -> "?"
+		} + " [$turnsRemaining][/color]"
 	}
 
 	private fun resetAppearance() {

@@ -53,6 +53,10 @@ class CombatPart(
         expiredEffects.forEach {
             it.onExpire(context, partOwner)
         }
+
+        if (expiredEffects.isNotEmpty()) {
+            EventBus.post(StatusExpiredEvent(partOwner))
+        }
     }
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
@@ -141,9 +145,10 @@ class CombatPart(
 
         if (actor != this) return false
 
-        statusEffects = statusEffects + listOf(effect)
+        statusEffects = listOf(effect)
 
         effect.onApply(context, actor)
+        EventBus.post(StatusAppliedEvent(this))
 
         return true
     }
