@@ -279,6 +279,45 @@ object ActorFactory {
         )
     }
 
+    fun rat(): EntityFactoryFn = {
+        Entity(
+            name = "giant rat",
+            parts = listOf(
+                AppearancePart(
+                    ascii = 'r',
+                    color = Color.white
+                ),
+                BreederPart(
+                    maxChildCount = 3,
+                    entityFactoryFn = rat()
+                ),
+                CombatPart(
+                    maxHealth = 24,
+                    maxMana =  0,
+                    power = 6,
+                    defaultAttackPattern = BasicAttackPattern(
+                        powerFactor = 1.0,
+                        damageType = DamageType.Stab
+                    )
+                ),
+                FactionPart(
+                    Faction.Monster,
+                    enemies = setOf(Faction.Player)
+                ),
+                ItemSlotPart(),
+                MovementPart(),
+                PhysicalPart(
+                    isPassable = false
+                ),
+                SensoryPart(
+                    visionRange = 6
+                ),
+                TelegraphPart()
+            ),
+            timeFactor = 1.0
+        )
+    }
+
     fun redSlime(): EntityFactoryFn = {
         Entity(
             name = "red slime",

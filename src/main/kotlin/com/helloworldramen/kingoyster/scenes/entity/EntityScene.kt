@@ -87,6 +87,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		)
 		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
 		animationPlayer.animationFinished.connect(this, ::onAnimationFinished)
+		appearance.visible = false
 	}
 
 	@RegisterFunction

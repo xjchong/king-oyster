@@ -4,6 +4,7 @@ import com.helloworldramen.kingoyster.architecture.*
 import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
+import com.helloworldramen.kingoyster.eventbus.events.BreedEvent
 import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
 import com.helloworldramen.kingoyster.extensions.freeChildren
 import com.helloworldramen.kingoyster.extensions.positionsForEach
@@ -55,6 +56,9 @@ class WorldScene : Node2D(), EventBusSubscriber {
 
 	override fun receiveEvent(event: Event) {
 		when (event) {
+			is BreedEvent -> {
+				addEntityScene(event.child)
+			}
 			is WeaponAttackEvent -> {
 				if (event.attacker.isPlayer) {
 					animateWeaponAttack(event.positions)
@@ -65,7 +69,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _ready() {
-		EventBus.register(this, WeaponAttackEvent::class)
+		EventBus.register(this, BreedEvent::class, WeaponAttackEvent::class)
 
 		blackoutRect.color = Settings.BACKGROUND_COLOR
 	}
@@ -106,26 +110,14 @@ class WorldScene : Node2D(), EventBusSubscriber {
 		world.positionsForEach { position ->
 			// Add the entities for this position.
 			world[position]?.forEach { entity ->
-				packedEntityScene?.instanceAs<EntityScene>()?.let {
-					entityBucket.addChild(it)
-					it.bind(context, entity)
-					sceneForEntity[entity] = it
-				}
+				addEntityScene(entity)
 
 				// Also add scenes for entities that are not explicitly visible.
 				entity.find<WeaponSlotPart>()?.weapon?.let { weapon ->
-					packedEntityScene?.instanceAs<EntityScene>()?.let {
-						entityBucket.addChild(it)
-						it.bind(context, weapon)
-						sceneForEntity[weapon] = it
-					}
+					addEntityScene(weapon)
 				}
 				entity.find<ItemSlotPart>()?.item?.let { item ->
-					packedEntityScene?.instanceAs<EntityScene>()?.let {
-						entityBucket.addChild(it)
-						it.bind(context, item)
-						sceneForEntity[item] = it
-					}
+					addEntityScene(item)
 				}
 			}
 
@@ -174,6 +166,14 @@ class WorldScene : Node2D(), EventBusSubscriber {
 
 	fun fadeIn() {
 		animationPlayer.play("fade_in")
+	}
+
+	private fun addEntityScene(entity: Entity) {
+		packedEntityScene?.instanceAs<EntityScene>()?.let {
+			entityBucket.addChild(it)
+			it.bind(context, entity)
+			sceneForEntity[entity] = it
+		}
 	}
 
 	private fun animateWeaponAttack(positions: Set<Position>) {
