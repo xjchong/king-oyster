@@ -107,8 +107,12 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
+		context.player.find<SensoryPart>()?.update(context, context.player)
+
+		if (worldScene.isAnimating) return
+
 		// Handle loading a new level.
-		if (shouldLoadNewLevel && !worldScene.isAnimating) {
+		if (shouldLoadNewLevel) {
 			shouldLoadNewLevel = false
 			with(context) {
 				player.find<MemoryPart>()?.clear()
@@ -117,13 +121,12 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 				bind(this, newWorldFlavor)
 			}
-		} else if (needsFadeIn && !worldScene.isAnimating) {
+		} else if (needsFadeIn) {
 			needsFadeIn = false
 			worldScene.fadeIn()
+		} else {
+			inputQueue.poll()?.let { parseInput(it) }
 		}
-
-		context.player.find<SensoryPart>()?.update(context, context.player)
-		inputQueue.poll()?.let { parseInput(it) }
 	}
 
 	@RegisterFunction
