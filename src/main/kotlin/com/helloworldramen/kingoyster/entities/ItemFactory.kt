@@ -9,6 +9,8 @@ import com.helloworldramen.kingoyster.parts.MoneyPart
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.health
 import com.helloworldramen.kingoyster.parts.combat.maxHealth
+import com.helloworldramen.kingoyster.parts.combat.statusEffects
+import com.helloworldramen.kingoyster.parts.combat.statuseffects.PoisonStatusEffect
 import godot.core.Color
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -21,7 +23,7 @@ object ItemFactory {
             name = "medicine",
             parts = listOf(
                 AppearancePart(
-                    description = "Restores HP. Potency increases as HP decreases.",
+                    description = "Restores HP and cures sickness. Restoration increases as HP decreases.",
                     ascii = '!',
                     color = Color.mediumseagreen,
                     sprite = "medicine"
@@ -40,6 +42,12 @@ object ItemFactory {
                         val maxPotencyThreshold = 0.3
                         val maxPotency = 0.3 * maxHealth
                         val potencyPercent = (-1 * (healthPercent)) + (1 + maxPotencyThreshold)
+
+                        user.statusEffects().forEach {
+                            if (it is PoisonStatusEffect) {
+                                it.turnsRemaining = 0
+                            }
+                        }
 
                         user.respondToAction(Heal(context, user, (maxPotency * potencyPercent).roundToInt()))
 
