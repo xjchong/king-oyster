@@ -16,6 +16,11 @@ sealed class FloorFlavor(
         weightedFrameIndices = STANDARD_FLOOR_WEIGHTS
     )
 
+    object Wood : FloorFlavor(
+        sprite = "wood_floor",
+        weightedFrameIndices = STANDARD_FLOOR_WEIGHTS
+    )
+
     companion object {
 
         private val STANDARD_FLOOR_WEIGHTS: WeightedCollection<Long> = WeightedCollection(

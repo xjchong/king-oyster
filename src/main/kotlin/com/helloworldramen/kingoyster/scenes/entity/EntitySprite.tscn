@@ -1,4 +1,4 @@
-[gd_scene load_steps=213 format=2]
+[gd_scene load_steps=220 format=2]
 
 [ext_resource path="res://src/main/resources/sprites/actors/goblin.png" type="Texture" id=1]
 [ext_resource path="res://src/main/resources/sprites/features/grass_stone_wall.png" type="Texture" id=2]
@@ -17,6 +17,7 @@
 [ext_resource path="res://src/main/resources/sprites/items/medicine.png" type="Texture" id=15]
 [ext_resource path="res://src/main/resources/sprites/features/blue_puddle.png" type="Texture" id=16]
 [ext_resource path="res://src/main/resources/sprites/actors/hobgoblin.png" type="Texture" id=17]
+[ext_resource path="res://src/main/resources/sprites/features/wood_wall.png" type="Texture" id=18]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -45,6 +46,30 @@ region = Rect2( 64, 0, 16, 19 )
 [sub_resource type="AtlasTexture" id=195]
 atlas = ExtResource( 17 )
 region = Rect2( 80, 0, 16, 19 )
+
+[sub_resource type="AtlasTexture" id=196]
+atlas = ExtResource( 18 )
+region = Rect2( 0, 0, 16, 24 )
+
+[sub_resource type="AtlasTexture" id=197]
+atlas = ExtResource( 18 )
+region = Rect2( 16, 0, 16, 24 )
+
+[sub_resource type="AtlasTexture" id=198]
+atlas = ExtResource( 18 )
+region = Rect2( 32, 0, 16, 24 )
+
+[sub_resource type="AtlasTexture" id=199]
+atlas = ExtResource( 18 )
+region = Rect2( 0, 24, 16, 24 )
+
+[sub_resource type="AtlasTexture" id=200]
+atlas = ExtResource( 18 )
+region = Rect2( 16, 24, 16, 24 )
+
+[sub_resource type="AtlasTexture" id=201]
+atlas = ExtResource( 18 )
+region = Rect2( 32, 24, 16, 24 )
 
 [sub_resource type="AtlasTexture" id=184]
 atlas = ExtResource( 16 )
@@ -801,6 +826,11 @@ animations = [ {
 "name": "hobgoblin",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 196 ), SubResource( 197 ), SubResource( 198 ), SubResource( 199 ), SubResource( 200 ), SubResource( 201 ) ],
+"loop": true,
+"name": "wood_wall",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 184 ), SubResource( 184 ), SubResource( 185 ), SubResource( 185 ), SubResource( 186 ), SubResource( 186 ), SubResource( 187 ), SubResource( 187 ), SubResource( 188 ), SubResource( 188 ), SubResource( 189 ), SubResource( 189 ) ],
 "loop": true,
 "name": "blue_puddle",
@@ -906,5 +936,5 @@ __meta__ = {
 position = Vector2( 16, 16 )
 scale = Vector2( 2, 2 )
 frames = SubResource( 183 )
-animation = "hobgoblin"
+animation = "wood_wall"
 speed_scale = 1.5
