@@ -31,7 +31,7 @@ open class PopulationTemplate private constructor(
         val area = world.width * world.height
         val minCountByDensity = (area * (minDensity?.coerceAtLeast(0.0) ?: 0.0)).roundToInt()
         val maxCountByDensity =
-            (area * (maxDensity?.coerceAtLeast(0.0) ?: 1.0)).roundToInt().coerceAtLeast(minCountByDensity)
+            (area * (maxDensity?.coerceAtLeast(0.0) ?: 0.0)).roundToInt().coerceAtLeast(minCountByDensity)
         val minCountDiscrete = minCount?.coerceAtLeast(0) ?: minCountByDensity
         val maxCountDiscrete = (maxCount?.coerceAtLeast(0) ?: maxCountByDensity).coerceAtLeast(minCountDiscrete)
         val count = Random.nextInt(minCountDiscrete..maxCountDiscrete)

@@ -3,6 +3,7 @@ package com.helloworldramen.kingoyster.worldgen
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
+import com.helloworldramen.kingoyster.entities.ActorFactory
 import com.helloworldramen.kingoyster.parts.AscendablePart
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.isPassable
@@ -16,6 +17,7 @@ import com.helloworldramen.kingoyster.worldgen.population.strategies.EmptyPopula
 import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
 import com.helloworldramen.kingoyster.worldgen.population.strategies.SlimesPopulation
 import com.helloworldramen.kingoyster.worldgen.population.strategies.SmorgasbordPopulation
+import com.helloworldramen.kingoyster.worldgen.population.strategies.TestActorPopulation
 
 object WorldCreator {
 

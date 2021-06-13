@@ -318,7 +318,8 @@ object ActorFactory {
                     isPassable = false
                 ),
                 SensoryPart(
-                    visionRange = 6
+                    visionRange = 5,
+                    canHavePlayerSense = true
                 ),
                 TelegraphPart()
             ),

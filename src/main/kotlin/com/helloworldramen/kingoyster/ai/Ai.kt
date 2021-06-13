@@ -84,16 +84,17 @@ object Ai {
             ))
             "giant rat" -> HighestValueReasoner.prioritize(aiContext, listOf(
                 BreedStrategy(
-                    OwnHealthConsideration(LinearCurve(1.0, 0.5)),
                     IsEnemyInSightConsideration(0.0, 1.0),
+                    KnowsPlayerPositionConsideration(1.0, 0.0),
+                    OwnHealthConsideration(LinearCurve(1.0, 0.5)),
                 ),
                 ChaseEnemyStrategy(
-                    ConstantConsideration(0.7),
+                    ConstantConsideration(0.66),
                 ),
                 FleeFromEnemyStrategy(
-                    IsEnemyInSightConsideration(1.0, 0.0),
+                    IsTargetInSightConsideration(1.0, 0.0),
                     OwnHealthConsideration(LinearCurve(1.0, 0.5)),
-                    VisibleAlliesConsideration(LinearCurve(1.0, 0.4)),
+                    VisibleAlliesConsideration(LinearCurve(1.0, 0.2)),
                 ),
                 WanderStrategy(
                     ConstantConsideration(0.65)

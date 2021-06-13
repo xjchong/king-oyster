@@ -7,8 +7,8 @@ import com.helloworldramen.kingoyster.ai.GameAiStrategy
 import com.helloworldramen.kingoyster.ai.architecture.AiConsideration
 import com.helloworldramen.kingoyster.ai.architecture.AiOption
 import com.helloworldramen.kingoyster.ai.options.PathCloserOption
+import com.helloworldramen.kingoyster.parts.SensoryPart
 import com.helloworldramen.kingoyster.parts.isEnemyOf
-import com.helloworldramen.kingoyster.parts.visiblePositions
 
 class ChaseEnemyStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy() {
 
@@ -17,7 +17,8 @@ class ChaseEnemyStrategy(vararg considerations: GameAiConsideration) : GameAiStr
 
     override fun listOptions(strategyContext: GameAiStrategyContext): List<AiOption<GameAiOptionContext>> {
         val (context, chaser) = strategyContext
-        val visiblePositions = chaser.visiblePositions()
+        val sensoryPart = chaser.find<SensoryPart>() ?: return listOf()
+        val visiblePositions = sensoryPart.visiblePositions + listOfNotNull(sensoryPart.playerPosition)
         val enemyAndPosition = visiblePositions.flatMap { visiblePosition ->
             (context.entitiesAt(visiblePosition)?.filter { it.isEnemyOf(chaser) } ?: listOf()).map { enemy ->
                 Pair(enemy, visiblePosition)

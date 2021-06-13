@@ -9,29 +9,25 @@ import com.helloworldramen.kingoyster.utilities.ShadowCasting
 class SensoryPart(
     var visionRange: Int,
     var canHavePlayerSense: Boolean = false,
-    var hasPlayerSense: Boolean = false
+    var playerPosition: Position? = null
 ) : Part {
     var visiblePositions: Set<Position> = setOf()
         private set
     var isOmniscient: Boolean = false // FOR DEBUG ONLY! :)
 
-    private constructor(visionRange: Int, canHavePlayerSense: Boolean, hasPlayerSense: Boolean,
-                        visiblePositions: Set<Position>): this(visionRange, canHavePlayerSense, hasPlayerSense) {
+    private constructor(visionRange: Int, canHavePlayerSense: Boolean, playerPosition: Position?,
+                        visiblePositions: Set<Position>): this(visionRange, canHavePlayerSense, playerPosition) {
         this.visiblePositions = visiblePositions.toSet()
     }
 
     override fun copy(): Part {
-        return SensoryPart(visionRange, canHavePlayerSense, hasPlayerSense, visiblePositions)
+        return SensoryPart(visionRange, canHavePlayerSense, playerPosition, visiblePositions)
     }
 
     override fun update(context: Context, partOwner: Entity) {
         if (isOmniscient) {
             updateAsOmniscient(context)
             return
-        }
-
-        if (canHavePlayerSense) {
-            handlePlayerSense(context, partOwner)
         }
 
         val world = context.world
@@ -48,11 +44,11 @@ class SensoryPart(
                 memoryPart?.remember(context, visiblePosition)
             })
 
-        if (hasPlayerSense) {
-            context.positionOf(context.player)?.let { nextVisiblePositions.add(it) }
-        }
-
         visiblePositions = nextVisiblePositions.toSet()
+
+        if (canHavePlayerSense) {
+            handlePlayerSense(context, partOwner)
+        }
     }
 
     /**
@@ -62,15 +58,15 @@ class SensoryPart(
      * the player.
      */
     private fun handlePlayerSense(context: Context, partOwner: Entity) {
-        if (hasPlayerSense) return
+        val currentPlayerPosition = context.positionOf(context.player) ?: return
 
-        val playerPosition = context.positionOf(context.player) ?: return
-        val currentPosition = context.positionOf(partOwner) ?: return
+        if (playerPosition != null) {
+            playerPosition = currentPlayerPosition
+            return
+        }
 
-        if (playerPosition.distanceFrom(currentPosition) > visionRange) return
-
-        if (visiblePositions.contains(playerPosition)) {
-            hasPlayerSense = true
+        if (visiblePositions.contains(currentPlayerPosition)) {
+            playerPosition = currentPlayerPosition
         }
     }
 
