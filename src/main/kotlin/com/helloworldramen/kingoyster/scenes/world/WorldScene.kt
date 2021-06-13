@@ -18,6 +18,7 @@ import com.helloworldramen.kingoyster.scenes.floor.FloorScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
 import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
 import com.helloworldramen.kingoyster.utilities.Settings
+import com.helloworldramen.kingoyster.worldgen.WorldCreator
 import com.helloworldramen.kingoyster.worldgen.metadata.WorldFlavor
 import godot.*
 import godot.annotation.RegisterClass
@@ -49,7 +50,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 	private var flashOverlayForPosition: MutableMap<Position, TileOverlayScene> = mutableMapOf()
 
 	private var context: Context = Context.UNKNOWN
-	private var flavor: WorldFlavor = WorldFlavor.DRY_GRASS
+	private var flavor: WorldFlavor = WorldFlavor.DEFAULT
 
 	val isAnimating: Boolean
 		get() = animationPlayer.isPlaying()
@@ -71,7 +72,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 	override fun _ready() {
 		EventBus.register(this, BreedEvent::class, WeaponAttackEvent::class)
 
-		blackoutRect.color = Settings.BACKGROUND_COLOR
+		blackoutRect.color = Color.html(flavor.backgroundColor)
 	}
 
 	@RegisterFunction
@@ -98,6 +99,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 		this.flavor = flavor
 		val world = context.world
 
+		blackoutRect.color = Color.html(flavor.backgroundColor)
 		floorBucket.freeChildren()
 		entityBucket.freeChildren()
 		memoryBucket.freeChildren()
@@ -148,7 +150,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 			// Setup the memory for this position.
 			packedMemoryScene?.instanceAs<MemoryScene>()?.let { memoryScene ->
 				memoryBucket.addChild(memoryScene)
-				memoryScene.bind(context.player, position)
+				memoryScene.bind(context.player, position, flavor)
 				memoryScene.position = calculateNodePosition(position)
 			}
 		}

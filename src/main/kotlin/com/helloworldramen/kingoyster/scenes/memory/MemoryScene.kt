@@ -5,6 +5,8 @@ import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.entity.EntitySprite
 import com.helloworldramen.kingoyster.utilities.Settings
+import com.helloworldramen.kingoyster.worldgen.WorldCreator
+import com.helloworldramen.kingoyster.worldgen.metadata.WorldFlavor
 import godot.ColorRect
 import godot.Label
 import godot.Node2D
@@ -25,6 +27,7 @@ class MemoryScene : Node2D() {
 
 	private var entity: Entity = Entity.UNKNOWN
 	private var worldPosition: Position = Position(0, 0)
+	private var worldFlavor: WorldFlavor = WorldFlavor.DEFAULT
 
 	private var lastState: MemoryState = MemoryState.Unknown
 
@@ -43,9 +46,10 @@ class MemoryScene : Node2D() {
 		}
 	}
 
-	fun bind(entity: Entity, worldPosition: Position) {
+	fun bind(entity: Entity, worldPosition: Position, worldFlavor: WorldFlavor) {
 		this.entity = entity
 		this.worldPosition = worldPosition
+		this.worldFlavor = worldFlavor
 		updateAppearance()
 	}
 
@@ -70,7 +74,7 @@ class MemoryScene : Node2D() {
 
 	private fun animateVisible() {
 		entitySprite.hide()
-		tweenModulate(0.0)
+		tweenColorAlpha(0.0)
 	}
 
 	private fun animateMemory() {
@@ -98,16 +102,16 @@ class MemoryScene : Node2D() {
 			}
 		}
 
-		tweenModulate(0.5)
+		tweenColorAlpha(0.5)
 	}
 
 	private fun animateUnknown() {
 		entitySprite.hide()
-		tweenModulate(1.0)
+		tweenColorAlpha(1.0)
 	}
 
-	private fun tweenModulate(alpha: Double) {
-		val finalColor = Settings.BACKGROUND_COLOR.apply {
+	private fun tweenColorAlpha(alpha: Double) {
+		val finalColor = Color.html(worldFlavor.backgroundColor).apply {
 			a = alpha
 		}
 

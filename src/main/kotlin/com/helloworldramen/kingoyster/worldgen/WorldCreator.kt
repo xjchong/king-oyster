@@ -34,7 +34,7 @@ object WorldCreator {
     )
 
     private val DEFAULT_KIT: WorldKit = WorldKit(
-       WorldFlavor.DRY_GRASS, EmptyTopology, EmptyPopulation
+       WorldFlavor.DEFAULT, EmptyTopology, EmptyPopulation
     )
 
     private val KITS_FOR_LEVEL: Map<Int, WeightedCollection<WorldKit>> = mapOf(

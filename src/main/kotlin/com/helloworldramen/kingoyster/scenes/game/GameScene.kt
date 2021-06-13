@@ -30,6 +30,7 @@ import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.Color
+import godot.core.NodePath
 import godot.extensions.getNodeAs
 import java.util.*
 
@@ -39,6 +40,8 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private val eventAudio: EventAudio by lazy { getNodeAs("EventAudio")!! }
 	private val worldScene: WorldScene by lazy { getNodeAs("WorldScene")!! }
 	private val screenShake: ScreenShake by lazy { getNodeAs("Camera2D/ScreenShake")!! }
+	private val tween: Tween by lazy { getNodeAs("Tween")!! }
+	private val backgroundColorRect: ColorRect by lazy { getNodeAs("BackgroundColorRect")!! }
 	private val listMenuScene: ListMenuScene by lazy { getNodeAs("UIScenesBucket/ListMenuScene")!! }
 	private val hudScene: HUDScene by lazy { getNodeAs("HUDScene")!! }
 	private var playerScene: EntityScene? = null
@@ -83,8 +86,6 @@ class GameScene : Node2D(), EventBusSubscriber {
 		listMenuScene.pauseMode = PAUSE_MODE_PROCESS
 		eventAudio.pauseMode = PAUSE_MODE_PROCESS
 
-		letterBoxRect.color = Settings.BACKGROUND_COLOR
-
 		EventBus.register(this, AscendEvent::class, GameOverEvent::class, DamageEvent::class)
 
 		context = Context(world, player)
@@ -97,6 +98,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	}
 
 	private fun bind(context: Context, worldFlavor: WorldFlavor) {
+		updateFlavor(worldFlavor)
 		playerScene = worldScene.bind(context, worldFlavor)
 		hudScene.bind(context.player)
 		eventAudio.bind(context)
@@ -138,6 +140,18 @@ class GameScene : Node2D(), EventBusSubscriber {
 		if (inputQueue.size <= MAX_INPUT_QUEUE_SIZE) {
 			inputQueue.offer(event)
 		}
+	}
+
+	private fun updateFlavor(worldFlavor: WorldFlavor) {
+		tween.interpolateProperty(backgroundColorRect, NodePath("color"),
+			initialVal = backgroundColorRect.color, finalVal = Color.html(worldFlavor.backgroundColor),
+			duration = 0.1
+		)
+		tween.interpolateProperty(letterBoxRect, NodePath("color"),
+			initialVal = letterBoxRect.color, finalVal = Color.html(worldFlavor.backgroundColor),
+			duration = 0.1
+		)
+		tween.start()
 	}
 
 	private fun updateNonPlayerEntities() {

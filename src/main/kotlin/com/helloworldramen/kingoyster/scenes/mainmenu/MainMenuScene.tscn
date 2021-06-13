@@ -3,11 +3,11 @@
 [ext_resource path="res://src/main/resources/fonts/small_pixel-7.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/mainmenu/MainMenuScene.kt" type="Script" id=2]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=1]
 size = 64
 font_data = ExtResource( 1 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=2]
 size = 32
 font_data = ExtResource( 1 )
 
@@ -43,7 +43,7 @@ margin_bottom = 64.0
 [node name="TitleLabel" type="Label" parent="CenterContainer/VBox/TitleCenterContainer"]
 margin_right = 278.0
 margin_bottom = 64.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 text = "King Oyster"
 
 [node name="ItemsMarginContainer" type="MarginContainer" parent="CenterContainer/VBox"]
@@ -64,14 +64,14 @@ custom_constants/separation = 8
 margin_right = 10.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 10, 0 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = ">"
 
 [node name="StartLabel" type="Label" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox/StartItem"]
 margin_left = 18.0
 margin_right = 80.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Start"
 
 [node name="OptionsItem" type="HBoxContainer" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox"]
@@ -84,14 +84,14 @@ custom_constants/separation = 8
 margin_right = 10.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 10, 0 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = ">"
 
 [node name="OptionsLabel" type="Label" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox/OptionsItem"]
 margin_left = 18.0
 margin_right = 100.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Options"
 
 [node name="ExitItem" type="HBoxContainer" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox"]
@@ -104,12 +104,12 @@ custom_constants/separation = 8
 margin_right = 10.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 10, 0 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = ">"
 
 [node name="ExitLabel" type="Label" parent="CenterContainer/VBox/ItemsMarginContainer/ItemsVBox/ExitItem"]
 margin_left = 18.0
 margin_right = 61.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Exit"

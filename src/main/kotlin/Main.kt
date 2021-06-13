@@ -8,9 +8,9 @@ import com.helloworldramen.kingoyster.architecture.*
 import com.helloworldramen.kingoyster.entities.ActorFactory
 import com.helloworldramen.kingoyster.parts.AscendablePart
 import com.helloworldramen.kingoyster.parts.ItemPart
+import com.helloworldramen.kingoyster.utilities.WeightedCollection
 import com.helloworldramen.kingoyster.worldgen.WorldCreator
 import kotlin.system.exitProcess
-
 
 
 class ConsoleGameEngine : EventBusSubscriber {
@@ -20,7 +20,7 @@ class ConsoleGameEngine : EventBusSubscriber {
     }
 
     override fun receiveEvent(event: Event) {
-        when(event) {
+        when (event) {
             is GameOverEvent -> {
                 println("GAME OVER")
                 EventBus.unregister(this)
@@ -52,8 +52,11 @@ class ConsoleGameEngine : EventBusSubscriber {
         fun performDirectionActions(position: Position): Boolean {
             return player.respondToAction(Move(context, player, position)) ||
                     world[position].tryActions(
-                        Open(context, player) // Removed weapon attack because lazy. Can I deprecate this console view yet?
-                    // Or better would be to make a view independent input parser.
+                        Open(
+                            context,
+                            player
+                        ) // Removed weapon attack because lazy. Can I deprecate this console view yet?
+                        // Or better would be to make a view independent input parser.
                     )
         }
 
@@ -91,7 +94,25 @@ class ConsoleGameEngine : EventBusSubscriber {
 }
 
 fun main() {
-    val gameEngine = ConsoleGameEngine()
+//    val gameEngine = ConsoleGameEngine()
+//
+//    gameEngine.run()
 
-    gameEngine.run()
+    val weightedCollection = WeightedCollection(
+        10 to "a", 100 to "b", 100 to "c"
+    )
+
+    var a = 0
+    var b = 0
+    var c = 0
+
+    repeat(1000) {
+        when (weightedCollection.sample()) {
+            "a" -> a++
+            "b" -> b++
+            else -> c++
+        }
+    }
+
+    println("a: $a, b: $b, c: $c")
 }
