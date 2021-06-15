@@ -13,11 +13,8 @@ import com.helloworldramen.kingoyster.worldgen.topology.DrunkTopology
 import com.helloworldramen.kingoyster.worldgen.topology.DungeonTopology
 import com.helloworldramen.kingoyster.worldgen.topology.EmptyTopology
 import com.helloworldramen.kingoyster.worldgen.topology.TopologyStrategy
-import com.helloworldramen.kingoyster.worldgen.population.strategies.EmptyPopulation
 import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
-import com.helloworldramen.kingoyster.worldgen.population.strategies.SlimesPopulation
-import com.helloworldramen.kingoyster.worldgen.population.strategies.SmorgasbordPopulation
-import com.helloworldramen.kingoyster.worldgen.population.strategies.TestActorPopulation
+import com.helloworldramen.kingoyster.worldgen.population.strategies.*
 
 object WorldCreator {
 
@@ -64,18 +61,23 @@ object WorldCreator {
             10 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SlimesPopulation()),
         ),
         5 to WeightedCollection(
-            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.STANDARD, SmorgasbordPopulation(0.7)),
-            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.MANY_PILLARS, SmorgasbordPopulation(0.7)),
-            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation(0.7)),
-            80 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SmorgasbordPopulation(0.7)),
+            100 to WorldKit(WorldFlavor.WOOD, DungeonTopology.MANY_ROOMS, RatsPopulation),
+            100 to WorldKit(WorldFlavor.WOOD, DungeonTopology.STANDARD, RatsPopulation),
 
-            100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.STANDARD, SmorgasbordPopulation(0.8)),
-            90 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.BIG_ROOMS, SmorgasbordPopulation(0.8)),
-            60 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MANY_ROOMS, SmorgasbordPopulation(0.8)),
-            30 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MAZE, SmorgasbordPopulation(0.8)),
-            10 to WorldKit(WorldFlavor.LUSH_GRASS, DrunkTopology(), SlimesPopulation())
+//            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.STANDARD, SmorgasbordPopulation(0.7)),
+//            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.MANY_PILLARS, SmorgasbordPopulation(0.7)),
+//            100 to WorldKit(WorldFlavor.DRY_GRASS, DungeonTopology.OPEN, SmorgasbordPopulation(0.7)),
+//            80 to WorldKit(WorldFlavor.DRY_GRASS, DrunkTopology(), SmorgasbordPopulation(0.7)),
+//
+//            100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.STANDARD, SmorgasbordPopulation(0.8)),
+//            90 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.BIG_ROOMS, SmorgasbordPopulation(0.8)),
+//            60 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MANY_ROOMS, SmorgasbordPopulation(0.8)),
+//            30 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MAZE, SmorgasbordPopulation(0.8)),
+//            10 to WorldKit(WorldFlavor.LUSH_GRASS, DrunkTopology(), SlimesPopulation())
         ),
         6 to WeightedCollection(
+            100 to WorldKit(WorldFlavor.WOOD, DungeonTopology.MANY_ROOMS, RatsPopulation),
+            100 to WorldKit(WorldFlavor.WOOD, DungeonTopology.STANDARD, RatsPopulation),
             100 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MANY_ROOMS, SmorgasbordPopulation(0.8)),
             90 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.BIG_ROOMS, SmorgasbordPopulation(0.8)),
             40 to WorldKit(WorldFlavor.LUSH_GRASS, DungeonTopology.MAZE, SmorgasbordPopulation(0.8)),
