@@ -292,7 +292,8 @@ object ActorFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = 'r',
-                    color = Color.white
+                    color = Color.white,
+                    sprite = "giant_rat"
                 ),
                 BreederPart(
                     maxChildCount = 3,
