@@ -104,29 +104,29 @@ region = Rect2( 16, 24, 16, 24 )
 atlas = ExtResource( 18 )
 region = Rect2( 32, 24, 16, 24 )
 
-[sub_resource type="AtlasTexture" id=22]
+[sub_resource type="AtlasTexture" id=210]
 atlas = ExtResource( 16 )
-region = Rect2( 0, 0, 19, 16 )
+region = Rect2( 0, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=23]
+[sub_resource type="AtlasTexture" id=211]
 atlas = ExtResource( 16 )
-region = Rect2( 19, 0, 19, 16 )
+region = Rect2( 16, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=24]
+[sub_resource type="AtlasTexture" id=212]
 atlas = ExtResource( 16 )
-region = Rect2( 38, 0, 19, 16 )
+region = Rect2( 32, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=25]
+[sub_resource type="AtlasTexture" id=213]
 atlas = ExtResource( 16 )
-region = Rect2( 57, 0, 19, 16 )
+region = Rect2( 48, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=26]
+[sub_resource type="AtlasTexture" id=214]
 atlas = ExtResource( 16 )
-region = Rect2( 76, 0, 19, 16 )
+region = Rect2( 64, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=27]
+[sub_resource type="AtlasTexture" id=215]
 atlas = ExtResource( 16 )
-region = Rect2( 95, 0, 19, 16 )
+region = Rect2( 80, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=28]
 atlas = ExtResource( 6 )
@@ -869,7 +869,7 @@ animations = [ {
 "name": "wood_wall",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 22 ), SubResource( 22 ), SubResource( 23 ), SubResource( 23 ), SubResource( 24 ), SubResource( 24 ), SubResource( 25 ), SubResource( 25 ), SubResource( 26 ), SubResource( 26 ), SubResource( 27 ), SubResource( 27 ) ],
+"frames": [ SubResource( 210 ), SubResource( 211 ), SubResource( 212 ), SubResource( 213 ), SubResource( 214 ), SubResource( 215 ) ],
 "loop": true,
 "name": "blue_puddle",
 "speed": 5.0
@@ -974,5 +974,5 @@ __meta__ = {
 position = Vector2( 16, 16 )
 scale = Vector2( 2, 2 )
 frames = SubResource( 209 )
-animation = "giant_rat"
+animation = "blue_puddle"
 speed_scale = 1.5
