@@ -123,6 +123,9 @@ object FeatureFactory {
                 AppearancePart(
                     ascii = '^',
                     color = Color.red,
+                    sprite = "red_puddle",
+                    offset = Vector2(0, -2),
+                    frameIndex = 0
                 ),
                 TrapPart({ context, trap, entity ->
                     val burnEffect = BurnStatusEffect(2, 0.8, 5)

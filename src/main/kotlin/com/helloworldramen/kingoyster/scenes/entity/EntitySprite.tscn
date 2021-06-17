@@ -1,4 +1,4 @@
-[gd_scene load_steps=229 format=2]
+[gd_scene load_steps=236 format=2]
 
 [ext_resource path="res://src/main/resources/sprites/actors/goblin.png" type="Texture" id=1]
 [ext_resource path="res://src/main/resources/sprites/features/grass_stone_wall.png" type="Texture" id=2]
@@ -19,6 +19,7 @@
 [ext_resource path="res://src/main/resources/sprites/actors/hobgoblin.png" type="Texture" id=17]
 [ext_resource path="res://src/main/resources/sprites/features/wood_wall.png" type="Texture" id=18]
 [ext_resource path="res://src/main/resources/sprites/actors/giant_rat.png" type="Texture" id=19]
+[ext_resource path="res://src/main/resources/sprites/features/red_puddle.png" type="Texture" id=20]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -55,6 +56,30 @@ region = Rect2( 96, 0, 16, 16 )
 [sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 19 )
 region = Rect2( 112, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=216]
+atlas = ExtResource( 20 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=217]
+atlas = ExtResource( 20 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=218]
+atlas = ExtResource( 20 )
+region = Rect2( 32, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=219]
+atlas = ExtResource( 20 )
+region = Rect2( 48, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=220]
+atlas = ExtResource( 20 )
+region = Rect2( 64, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=221]
+atlas = ExtResource( 20 )
+region = Rect2( 80, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=10]
 atlas = ExtResource( 17 )
@@ -859,6 +884,11 @@ animations = [ {
 "name": "giant_rat",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 216 ), SubResource( 217 ), SubResource( 218 ), SubResource( 219 ), SubResource( 220 ), SubResource( 221 ) ],
+"loop": true,
+"name": "red_puddle",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ) ],
 "loop": true,
 "name": "hobgoblin",
@@ -974,5 +1004,5 @@ __meta__ = {
 position = Vector2( 16, 16 )
 scale = Vector2( 2, 2 )
 frames = SubResource( 209 )
-animation = "blue_puddle"
+animation = "red_puddle"
 speed_scale = 1.5
