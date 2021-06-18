@@ -21,7 +21,7 @@ class DiminishingReasoner(private val diminishRate: Double) : GameAiReasoner, Pa
         strategies: List<AiStrategy<GameAiStrategyContext, GameAiOptionContext>>
     ): List<Pair<AiOption<GameAiOptionContext>, Double>> {
         val scoreForOption = generateScoreForOptionParallelized(strategyContext, strategies)
-        var remainingScore = 1000.0
+        var remainingScore = 10000.0
         val weightedOptions = MutableWeightedCollection(
             scoreForOption.map {
                 val score = remainingScore * diminishRate

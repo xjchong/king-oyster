@@ -32,6 +32,8 @@ open class WeightedCollection<T: Any>(entries: List<WeightedEntry<T>>) {
             acc + entry.weight
         }
 
+        if (totalWeight <= 0) return null
+
         val roll = Random.nextInt(totalWeight)
 
         for (entry in entries) {

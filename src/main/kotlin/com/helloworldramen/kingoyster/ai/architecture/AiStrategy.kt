@@ -49,6 +49,6 @@ abstract class AiStrategy<C : AiStrategyContext, O : AiOptionContext> :
             }
         }.joinAll()
 
-        return scoreForOption
+        return scoreForOption.filterNot { it.value <= 0.0 }
     }
 }
