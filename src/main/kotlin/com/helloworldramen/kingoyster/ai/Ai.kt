@@ -2,6 +2,7 @@ package com.helloworldramen.kingoyster.ai
 
 import com.helloworldramen.kingoyster.ai.considerations.*
 import com.helloworldramen.kingoyster.ai.curves.LinearCurve
+import com.helloworldramen.kingoyster.ai.reasoners.DiminishingReasoner
 import com.helloworldramen.kingoyster.ai.reasoners.HighestValueReasoner
 import com.helloworldramen.kingoyster.ai.reasoners.PurelyRandomReasoner
 import com.helloworldramen.kingoyster.ai.strategies.*
@@ -29,7 +30,7 @@ object Ai {
                     ConstantConsideration(0.5)
                 )
             ))
-            "goblin" -> HighestValueReasoner.prioritize(aiContext, listOf(
+            "goblin" -> DiminishingReasoner(0.9).prioritize(aiContext, listOf(
                 WeaponAttackEnemyStrategy(
                     ConstantConsideration(0.9),
                 ),
@@ -82,7 +83,7 @@ object Ai {
                     ConstantConsideration(0.5)
                 )
             ))
-            "giant rat" -> HighestValueReasoner.prioritize(aiContext, listOf(
+            "giant rat" -> DiminishingReasoner(0.7).prioritize(aiContext, listOf(
                 BreedStrategy(
                     IsEnemyInSightConsideration(0.0, 1.0),
                     KnowsPlayerPositionConsideration(1.0, 0.0),
