@@ -258,7 +258,7 @@ object ActorFactory {
                     offset = Vector2(0, -2)
                 ),
                 CombatPart(
-                    maxHealth = 20,
+                    maxHealth = 15,
                     maxMana = 0,
                     power = 4,
                     defaultAttackPattern = BasicAttackPattern(1.0)
@@ -339,7 +339,7 @@ object ActorFactory {
                     offset = Vector2(0, -2)
                 ),
                 CombatPart(
-                    maxHealth = 20,
+                    maxHealth = 15,
                     maxMana = 0,
                     power = 6,
                     defaultAttackPattern = BasicAttackPattern(
