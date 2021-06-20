@@ -33,7 +33,8 @@ object ActorFactory {
                         damageType = DamageType.Bash
                     )
                 ),
-                ItemSlotPart(),
+                ItemSlotPart(
+                ),
                 WeaponSlotPart(
                     weapon = WeaponFactory.dagger()()
                 ),

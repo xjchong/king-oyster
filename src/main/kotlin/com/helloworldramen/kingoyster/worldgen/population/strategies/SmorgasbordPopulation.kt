@@ -7,6 +7,7 @@ import com.helloworldramen.kingoyster.worldgen.population.PopulationRule
 import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
 import com.helloworldramen.kingoyster.worldgen.population.PopulationTemplate
 import com.helloworldramen.kingoyster.worldgen.population.rules.StairsPopulationRule
+import com.helloworldramen.kingoyster.worldgen.population.templates.AssortedItemsPopulationTemplate
 
 class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
     PopulationTemplate(
@@ -30,5 +31,6 @@ class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
         70 to PopulationRule(FeatureFactory.chest()),
         100 to PopulationRule({ null })
     ).withCount(0 * densityFactor, 1 * densityFactor),
+    AssortedItemsPopulationTemplate.withCount(0, 2),
     PopulationTemplate(StairsPopulationRule()).withCount(1)
 )

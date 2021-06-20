@@ -1,16 +1,15 @@
 package com.helloworldramen.kingoyster.entities
 
+import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.actions.Heal
+import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
-import com.helloworldramen.kingoyster.parts.AppearancePart
-import com.helloworldramen.kingoyster.parts.ItemPart
-import com.helloworldramen.kingoyster.parts.MoneyPart
-import com.helloworldramen.kingoyster.parts.combat.CombatPart
-import com.helloworldramen.kingoyster.parts.combat.health
-import com.helloworldramen.kingoyster.parts.combat.maxHealth
-import com.helloworldramen.kingoyster.parts.combat.statusEffects
+import com.helloworldramen.kingoyster.parts.*
+import com.helloworldramen.kingoyster.parts.combat.*
+import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.PoisonStatusEffect
+import com.helloworldramen.kingoyster.parts.combat.statuseffects.StatusEffect
 import godot.core.Color
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -50,6 +49,47 @@ object ItemFactory {
                         }
 
                         user.respondToAction(Heal(context, user, (maxPotency * potencyPercent).roundToInt()))
+
+                        true
+                    }
+                )
+            )
+        )
+    }
+
+    fun scrollOfFire(): EntityFactoryFn = {
+        Entity(
+            name = "fire scroll",
+            parts = listOf(
+                AppearancePart(
+                    description = "Casts beams of fire in all directions.",
+                    ascii = '?',
+                    color = Color.red,
+                ),
+                ItemPart(
+                    uses = 1,
+                    effect = { context, user ->
+                        val userPosition = context.positionOf(user) ?: return@ItemPart false
+
+                        // Find all the positions in each direction until a wall.
+                        for (direction in Direction.all()) {
+                            val path = context.straightPathUntil(userPosition + direction.vector, direction) { position ->
+                                context.entitiesAt(position)?.any {
+                                    !it.isPassable() && !it.has<MovementPart>()
+                                } != false
+                            }
+
+                            path.forEach {
+                                context.world.respondToActions(it, Damage(
+                                    context = context,
+                                    actor = user,
+                                    amount = 25,
+                                    damageType = DamageType.Magic,
+                                    elementType = ElementType.Fire,
+                                    statusEffect = BurnStatusEffect(2, 0.5, 5)
+                                ))
+                            }
+                        }
 
                         true
                     }
