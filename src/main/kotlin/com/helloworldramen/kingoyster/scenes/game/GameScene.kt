@@ -17,6 +17,7 @@ import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.health
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.eventaudio.EventAudio
+import com.helloworldramen.kingoyster.scenes.gameover.GameOverScene
 import com.helloworldramen.kingoyster.scenes.hud.HUDScene
 import com.helloworldramen.kingoyster.scenes.listmenu.ListMenuScene
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
@@ -44,6 +45,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 	private val backgroundColorRect: ColorRect by lazy { getNodeAs("BackgroundColorRect")!! }
 	private val listMenuScene: ListMenuScene by lazy { getNodeAs("UIScenesBucket/ListMenuScene")!! }
 	private val hudScene: HUDScene by lazy { getNodeAs("HUDScene")!! }
+	private val gameOverScene: GameOverScene by lazy { getNodeAs("GameOverScene")!! }
 	private var playerScene: EntityScene? = null
 
 	private val letterBoxRect: ColorRect by lazy { getNodeAs("HUDLayer/LetterBoxRect")!! }
@@ -73,7 +75,11 @@ class GameScene : Node2D(), EventBusSubscriber {
 				}
 			}
 			is GameOverEvent -> {
-				getTree()?.changeScene(MainMenuScene.PATH)
+				if (event.isVictory) {
+					gameOverScene.showWin()
+				} else {
+					gameOverScene.showLose()
+				}
 			}
 		}
 	}
