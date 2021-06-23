@@ -9,22 +9,19 @@ import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.AscendEvent
-import com.helloworldramen.kingoyster.eventbus.events.DamageEvent
+import com.helloworldramen.kingoyster.eventbus.events.DamageEntityEvent
 import com.helloworldramen.kingoyster.eventbus.events.GameOverEvent
 import com.helloworldramen.kingoyster.eventbus.events.PlayerToastEvent
 import com.helloworldramen.kingoyster.parts.*
-import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.health
 import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.eventaudio.EventAudio
 import com.helloworldramen.kingoyster.scenes.gameover.GameOverScene
 import com.helloworldramen.kingoyster.scenes.hud.HUDScene
 import com.helloworldramen.kingoyster.scenes.listmenu.ListMenuScene
-import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import com.helloworldramen.kingoyster.scenes.screenshake.ScreenShake
 import com.helloworldramen.kingoyster.scenes.toasttext.ToastTextScene
 import com.helloworldramen.kingoyster.scenes.world.WorldScene
-import com.helloworldramen.kingoyster.utilities.Settings
 import com.helloworldramen.kingoyster.worldgen.WorldCreator
 import com.helloworldramen.kingoyster.worldgen.metadata.WorldFlavor
 import godot.*
@@ -65,7 +62,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 				worldScene.fadeOut()
 				shouldLoadNewLevel = true
 			}
-			is DamageEvent -> {
+			is DamageEntityEvent -> {
 				if (event.source.isPlayer) {
 					if (event.target.health() <= 0) {
 						screenShake.startMediumShake()
@@ -92,7 +89,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 		listMenuScene.pauseMode = PAUSE_MODE_PROCESS
 		eventAudio.pauseMode = PAUSE_MODE_PROCESS
 
-		EventBus.register(this, AscendEvent::class, GameOverEvent::class, DamageEvent::class)
+		EventBus.register(this, AscendEvent::class, GameOverEvent::class, DamageEntityEvent::class)
 
 		context = Context(world, player)
 
@@ -291,7 +288,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 		// Don't read any direction input when not player's turn.
 		if (player.time > context.world.currentTime) return false
 
-		if (context.world.respondToActions(actionPosition, Open(context, player)) != null) return true
+		if (context.entitiesAt(actionPosition)?.lastOrNull()?.respondToAction(Open(context, player)) == true) return true
 		if (player.respondToAction(WeaponAttack(context, player, direction))) return true
 		if (player.respondToAction(Move(context, player, actionPosition))) return true
 
@@ -306,9 +303,11 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 			when {
 				currentPosition == null -> return false
-				world.respondToActions(currentPosition,
+				tryActions(currentPosition,
 					Open(this, player),
 					Take(this, player),
+				) != null -> return true
+				tryActions(currentPosition,
 					Ascend(this, player)) != null -> return true
 				else -> playerScene?.toast("?", Color.lightgray, ToastTextScene.SHORT_CONFIG)
 			}

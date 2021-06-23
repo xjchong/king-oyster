@@ -68,7 +68,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	override fun _ready() {
 		EventBus.register(this,
 			WeaponAttackEvent::class,
-			DamageEvent::class,
+			DamageEntityEvent::class,
 			DamageWeaponEvent::class,
 			DeathEvent::class,
 			DropItemEvent::class,
@@ -137,7 +137,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 						animateBump(event.direction)
 					}
 				}
-				is DamageEvent -> {
+				is DamageEntityEvent -> {
 					if (event.target == entity) {
 						animateOnDamage(event.value)
 					}

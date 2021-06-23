@@ -47,7 +47,7 @@ class MovementPart : Part {
 
             // And apply damage to neighbors of the destination.
             position.neighbors().forEach {
-                context.world.respondToActions(it, Damage(context, actor, power, DamageType.Bash))
+                context.applyAction(it, Damage(context, actor, power, DamageType.Bash))
             }
 
             this.respondToAction(Damage(context, actor, 1, DamageType.Special))

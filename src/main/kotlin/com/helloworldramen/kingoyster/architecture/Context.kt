@@ -16,6 +16,40 @@ class Context(var world: World, var player: Entity = Entity.UNKNOWN, var level: 
         }
     }
 
+    /**
+     * Applies the action to all entities at the position.
+     */
+    fun applyAction(position: Position, action: Action): Boolean {
+        val entities = entitiesAt(position) ?: return false
+        var didRespond = false
+
+        entities.forEach {
+            val entityDidRespond = it.respondToAction(action)
+
+            if (!didRespond) {
+                didRespond = entityDidRespond
+            }
+        }
+
+        return didRespond
+    }
+
+    /**
+     * Attempts each action on the entities at the position, one entity at a time.
+     * Stops trying actions at the first successful response.
+     */
+    fun tryActions(position: Position, vararg actions: Action): Entity? {
+        val entities = entitiesAt(position) ?: return null
+
+        for (entity in entities) {
+            if (actions.any { it.actor != entity && entity.respondToAction(it) }) {
+                return entity
+            }
+        }
+
+        return null
+    }
+
     fun findDropPosition(position: Position): Position {
         if (!position.isOccupied()) return position
 
@@ -30,13 +64,6 @@ class Context(var world: World, var player: Entity = Entity.UNKNOWN, var level: 
         if (unoccupiedDiagonalNeighbor != null) return unoccupiedDiagonalNeighbor
 
         return (listOf(position) + adjacentNeighbors + diagonalNeighbors).random()
-    }
-
-    private fun Position.isOccupied(): Boolean {
-        return entitiesAt(this)?.any { entity ->
-            entity.has<WeaponPart>() || entity.has<ItemPart>() || entity.has<AscendablePart>()
-                    || (!entity.isPassable() && !entity.has<MovementPart>())
-        } != false
     }
 
     fun straightPathUntil(position: Position, direction: Direction, predicate: (Position) -> Boolean): List<Position> {
@@ -69,6 +96,13 @@ class Context(var world: World, var player: Entity = Entity.UNKNOWN, var level: 
         }
 
         return path
+    }
+
+    private fun Position.isOccupied(): Boolean {
+        return entitiesAt(this)?.any { entity ->
+            entity.has<WeaponPart>() || entity.has<ItemPart>() || entity.has<AscendablePart>()
+                    || (!entity.isPassable() && !entity.has<MovementPart>())
+        } != false
     }
 
     companion object {

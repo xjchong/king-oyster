@@ -70,7 +70,7 @@ class WeaponSlotPart(
             val rawAmount = (power() * throwInfo.powerFactor * breakFactor).roundToInt()
 
             // Damage the entity at the destination.
-            context.world.respondToActions(nearestImpassablePosition,
+            context.tryActions(nearestImpassablePosition,
                 Damage(context, this, rawAmount, throwInfo.damageType, throwInfo.elementType)
             )
         } else {
@@ -107,7 +107,7 @@ class WeaponSlotPart(
         damageForPosition.forEach { (position, damageInfo) ->
             val amount = (power() * damageInfo.powerFactor * breakFactor).roundToInt()
 
-            context.world.respondToActions(position,
+            context.tryActions(position,
                 Damage(context, this, amount, damageInfo.damageType, damageInfo.elementType, damageInfo.statusEffect)
             )
         }

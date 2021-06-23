@@ -7,11 +7,9 @@ import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.*
-import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.AttackPattern
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.BasicAttackPattern
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.NoAttackPattern
-import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.StatusEffect
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -93,7 +91,7 @@ class CombatPart(
         val (context, source, amount, damageType, elementType, statusEffect) = action
         val finalAmount = (resFactor(damageType, elementType) * amount).roundToInt()
 
-        EventBus.post(DamageEvent(source, this, finalAmount))
+        EventBus.post(DamageEntityEvent(source, this, finalAmount))
         modifyHealth(context, this, -finalAmount)
 
         if (statusEffect != null && health() > 0) {

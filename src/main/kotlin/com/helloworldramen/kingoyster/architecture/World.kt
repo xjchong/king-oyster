@@ -123,16 +123,6 @@ class World(val width: Int, val height: Int) {
         return nextEntity
     }
 
-    fun respondToActions(position: Position, vararg actions: Action): Entity? {
-        val entities = get(position) ?: return null
-
-        for (action in actions) {
-            return entities.lastOrNull { it != action.actor && it.respondToAction(action) } ?: continue
-        }
-
-        return null
-    }
-
     private fun normalizeTime() {
         val normalizer = next()?.time ?: return
 

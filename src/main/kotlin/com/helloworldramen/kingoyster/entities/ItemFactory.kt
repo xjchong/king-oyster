@@ -9,11 +9,8 @@ import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.*
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.PoisonStatusEffect
-import com.helloworldramen.kingoyster.parts.combat.statuseffects.StatusEffect
 import godot.core.Color
-import kotlin.math.max
 import kotlin.math.roundToInt
-import kotlin.random.Random
 
 object ItemFactory {
 
@@ -80,7 +77,7 @@ object ItemFactory {
                             }
 
                             path.forEach {
-                                context.world.respondToActions(it, Damage(
+                                context.applyAction(it, Damage(
                                     context = context,
                                     actor = user,
                                     amount = 25,

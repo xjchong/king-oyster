@@ -27,7 +27,7 @@ class EventAudio : Node(), EventBusSubscriber {
 		EventBus.register(this,
 			AscendEvent::class,
 			WeaponAttackEvent::class,
-			DamageEvent::class,
+			DamageEntityEvent::class,
 			DamageWeaponEvent::class,
 			DeathEvent::class,
 			OpenEvent::class,
@@ -50,7 +50,7 @@ class EventAudio : Node(), EventBusSubscriber {
 		when (event) {
 			is AscendEvent -> onAscend(event)
 			is WeaponAttackEvent -> onAttack(event)
-			is DamageEvent -> onDamage(event)
+			is DamageEntityEvent -> onDamageEntity(event)
 			is DamageWeaponEvent -> onDamageWeapon(event)
 			is DeathEvent -> onDeath(event)
 			is OpenEvent -> onDoor(event)
@@ -75,7 +75,7 @@ class EventAudio : Node(), EventBusSubscriber {
 	private fun onAttack(event: WeaponAttackEvent) {
 	}
 
-	private fun onDamage(event: DamageEvent) {
+	private fun onDamageEntity(event: DamageEntityEvent) {
 		if (!event.target.isVisibleToPlayer(context)) return
 
 		audio.play(SFX.HIT_BASH)
