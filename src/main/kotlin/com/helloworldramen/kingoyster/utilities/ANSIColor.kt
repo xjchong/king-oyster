@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.consoleviews
+package com.helloworldramen.kingoyster.utilities
 
 sealed class ANSIColor(val code: String) {
     object BLACK : ANSIColor("\u001b[30m")
