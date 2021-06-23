@@ -5,11 +5,15 @@ import com.helloworldramen.kingoyster.eventbus.Event
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.BreedEvent
+import com.helloworldramen.kingoyster.eventbus.events.DamagePositionEvent
 import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
 import com.helloworldramen.kingoyster.extensions.freeChildren
+import com.helloworldramen.kingoyster.extensions.isVisibleToPlayer
 import com.helloworldramen.kingoyster.extensions.positionsForEach
 import com.helloworldramen.kingoyster.parts.ItemSlotPart
 import com.helloworldramen.kingoyster.parts.WeaponSlotPart
+import com.helloworldramen.kingoyster.parts.combat.DamageType
+import com.helloworldramen.kingoyster.parts.combat.ElementType
 import com.helloworldramen.kingoyster.parts.combat.health
 import com.helloworldramen.kingoyster.parts.telegraphedPositions
 import com.helloworldramen.kingoyster.parts.visiblePositions
@@ -58,9 +62,9 @@ class WorldScene : Node2D(), EventBusSubscriber {
 			is BreedEvent -> {
 				addEntityScene(event.child)
 			}
-			is WeaponAttackEvent -> {
-				if (event.attacker.isPlayer) {
-					animateWeaponAttack(event.positions)
+			is DamagePositionEvent -> {
+				if (event.source?.isPlayer == true) {
+					animateDamage(event.position, event.damageType, event.elementType)
 				}
 			}
 		}
@@ -68,7 +72,7 @@ class WorldScene : Node2D(), EventBusSubscriber {
 
 	@RegisterFunction
 	override fun _ready() {
-		EventBus.register(this, BreedEvent::class, WeaponAttackEvent::class)
+		EventBus.register(this, BreedEvent::class, DamagePositionEvent::class)
 
 		blackoutRect.color = Color.html(flavor.backgroundColor)
 	}
@@ -176,10 +180,10 @@ class WorldScene : Node2D(), EventBusSubscriber {
 		}
 	}
 
-	private fun animateWeaponAttack(positions: Set<Position>) {
-		positions.forEach {
-			flashOverlayForPosition[it]?.showFlash(Color(1, 1, 1, 0.8))
-		}
+	private fun animateDamage(position: Position, damageType: DamageType, elementType: ElementType) {
+		if (!position.isVisibleToPlayer(context)) return
+
+		flashOverlayForPosition[position]?.showFlash(Color(1, 1, 1, 0.8))
 	}
 
 	private fun calculateNodePosition(worldPosition: Position): Vector2 {

@@ -107,7 +107,7 @@ class WeaponSlotPart(
         damageForPosition.forEach { (position, damageInfo) ->
             val amount = (power() * damageInfo.powerFactor * breakFactor).roundToInt()
 
-            context.tryActions(position,
+            context.applyAction(position,
                 Damage(context, this, amount, damageInfo.damageType, damageInfo.elementType, damageInfo.statusEffect)
             )
         }

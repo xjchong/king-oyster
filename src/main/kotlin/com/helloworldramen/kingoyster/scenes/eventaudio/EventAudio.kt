@@ -26,7 +26,6 @@ class EventAudio : Node(), EventBusSubscriber {
 	override fun _ready() {
 		EventBus.register(this,
 			AscendEvent::class,
-			WeaponAttackEvent::class,
 			DamageEntityEvent::class,
 			DamageWeaponEvent::class,
 			DeathEvent::class,
@@ -37,7 +36,8 @@ class EventAudio : Node(), EventBusSubscriber {
 			TakeItemEvent::class,
 			TakeWeaponEvent::class,
 			ThrowWeaponEvent::class,
-			UseItemEvent::class
+			UseItemEvent::class,
+			WeaponAttackEvent::class,
 		)
 	}
 
@@ -49,7 +49,6 @@ class EventAudio : Node(), EventBusSubscriber {
 	override fun receiveEvent(event: Event) {
 		when (event) {
 			is AscendEvent -> onAscend(event)
-			is WeaponAttackEvent -> onAttack(event)
 			is DamageEntityEvent -> onDamageEntity(event)
 			is DamageWeaponEvent -> onDamageWeapon(event)
 			is DeathEvent -> onDeath(event)
@@ -61,6 +60,7 @@ class EventAudio : Node(), EventBusSubscriber {
 			is TakeWeaponEvent -> onTakeWeapon(event)
 			is ThrowWeaponEvent -> onThrowWeapon(event)
 			is UseItemEvent -> onUseItem(event)
+			is WeaponAttackEvent -> onWeaponAttack(event)
 		}
 	}
 
@@ -70,9 +70,6 @@ class EventAudio : Node(), EventBusSubscriber {
 
 	private fun onAscend(event: AscendEvent) {
 		audio.play(SFX.STAIRS)
-	}
-
-	private fun onAttack(event: WeaponAttackEvent) {
 	}
 
 	private fun onDamageEntity(event: DamageEntityEvent) {
@@ -146,5 +143,8 @@ class EventAudio : Node(), EventBusSubscriber {
 		if (!event.user.isVisibleToPlayer(context)) return
 
 		audio.play(SFX.ITEM_BREAK)
+	}
+
+	private fun onWeaponAttack(event: WeaponAttackEvent) {
 	}
 }

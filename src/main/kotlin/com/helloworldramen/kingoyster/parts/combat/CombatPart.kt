@@ -91,7 +91,7 @@ class CombatPart(
         val (context, source, amount, damageType, elementType, statusEffect) = action
         val finalAmount = (resFactor(damageType, elementType) * amount).roundToInt()
 
-        EventBus.post(DamageEntityEvent(source, this, finalAmount))
+        EventBus.post(DamageEntityEvent(source, this, finalAmount, damageType, elementType))
         modifyHealth(context, this, -finalAmount)
 
         if (statusEffect != null && health() > 0) {

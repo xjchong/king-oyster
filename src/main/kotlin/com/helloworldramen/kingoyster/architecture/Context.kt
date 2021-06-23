@@ -1,5 +1,8 @@
 package com.helloworldramen.kingoyster.architecture
 
+import com.helloworldramen.kingoyster.actions.Damage
+import com.helloworldramen.kingoyster.eventbus.EventBus
+import com.helloworldramen.kingoyster.eventbus.events.DamagePositionEvent
 import com.helloworldramen.kingoyster.parts.*
 
 class Context(var world: World, var player: Entity = Entity.UNKNOWN, var level: Int = 1) {
@@ -24,11 +27,30 @@ class Context(var world: World, var player: Entity = Entity.UNKNOWN, var level: 
         var didRespond = false
 
         entities.forEach {
-            val entityDidRespond = it.respondToAction(action)
+            didRespond = if (it.respondToAction(action)) true else didRespond
+        }
 
-            if (!didRespond) {
-                didRespond = entityDidRespond
-            }
+        when (action) {
+            is Damage -> EventBus.post(DamagePositionEvent(
+                source = action.actor,
+                position = position,
+                amount = action.amount,
+                damageType = action.damageType,
+                elementType = action.elementType
+            ))
+        }
+
+        return didRespond
+    }
+
+    /**
+     * Applies the action to all entities at each position.
+     */
+    fun applyAction(positions: List<Position>, action: Action): Boolean {
+        var didRespond = false
+
+        positions.forEach { position ->
+            didRespond = if (applyAction(position, action)) true else didRespond
         }
 
         return didRespond

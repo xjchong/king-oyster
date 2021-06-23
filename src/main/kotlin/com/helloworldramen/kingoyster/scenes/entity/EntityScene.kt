@@ -139,7 +139,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 				}
 				is DamageEntityEvent -> {
 					if (event.target == entity) {
-						animateOnDamage(event.value)
+						animateOnDamage(event.amount)
 					}
 				}
 				is DamageWeaponEvent -> {
