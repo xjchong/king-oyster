@@ -47,16 +47,6 @@ class Entity (
         return true
     }
 
-    // Deprecate this.
-    inline fun <reified P : Part> find(klass: KClass<P>): P? {
-        return parts.find { klass.isInstance(it) } as? P
-    }
-
-    // Deprecate this.
-    inline fun <reified P : Part> has(klass: KClass<P>): Boolean {
-        return parts.any { klass.isInstance(it) }
-    }
-
     inline fun <reified P : Part> find(): P? {
         return parts.find { P::class.isInstance(it) } as? P
     }

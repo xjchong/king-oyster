@@ -26,7 +26,7 @@ class MemoryPart() : Part {
 
     fun remember(context: Context, position: Position) {
         worldMemory[position] = context.world[position]?.filter {
-            !it.has(MovementPart::class)
+            !it.has<MovementPart>()
         }?.map {
             it.copy()
         }

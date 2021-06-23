@@ -33,11 +33,11 @@ class SensoryPart(
         val world = context.world
         val currentPosition = world[partOwner] ?: return
         val nextVisiblePositions: MutableList<Position> = mutableListOf()
-        val memoryPart = partOwner.find(MemoryPart::class)
+        val memoryPart = partOwner.find<MemoryPart>()
 
         ShadowCasting.computeFOV(currentPosition.x, currentPosition.y, visionRange,
             isBlocking = { x, y ->
-                world[x, y]?.any { it.find(PhysicalPart::class)?.doesBlockVision == true } ?: false
+                world[x, y]?.any { it.find<PhysicalPart>()?.doesBlockVision == true } ?: false
             }, markVisible = { x, y ->
                 val visiblePosition = Position(x, y)
                 nextVisiblePositions.add(visiblePosition)

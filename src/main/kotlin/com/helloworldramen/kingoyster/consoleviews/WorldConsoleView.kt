@@ -38,7 +38,7 @@ object WorldConsoleView : EventBusSubscriber {
 
     fun display(world: World, player: Entity? = null) {
         val visiblePositions = player?.visiblePositions() ?: listOf()
-        val worldMemory = player?.find(MemoryPart::class)
+        val worldMemory = player?.find<MemoryPart>()
 
         Position(world.width - 1, world.height - 1).forEach {
             if (it.x == 0) println()
@@ -58,14 +58,6 @@ object WorldConsoleView : EventBusSubscriber {
             print(appearance)
         }
         println()
-
-        player?.let {
-            displayEntityStatus(it)
-        }
-    }
-
-    private fun displayEntityStatus(entity: Entity) {
-//        println("Gil: ${entity.find(InventoryPart::class)?.money ?: 0}")
     }
 
     private fun Entity.appearance(): String {

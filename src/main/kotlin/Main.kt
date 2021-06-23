@@ -63,7 +63,7 @@ class ConsoleGameEngine : EventBusSubscriber {
         return when (readLine()) {
             "take" -> {
                 val item = world[currentPosition]?.last {
-                    it.has(ItemPart::class)
+                    it.has<ItemPart>()
                 }
 
                 item?.respondToAction(Take(context, player)) ?: false
@@ -73,7 +73,7 @@ class ConsoleGameEngine : EventBusSubscriber {
             "s" -> performDirectionActions(currentPosition.south())
             "w" -> performDirectionActions(currentPosition.west())
             "up" -> {
-                val stairs = world[currentPosition]?.firstOrNull { it.has(AscendablePart::class) }
+                val stairs = world[currentPosition]?.firstOrNull { it.has<AscendablePart>() }
                 stairs?.respondToAction(Ascend(context, player)) == true
             }
             "quit" -> exitProcess(2)
