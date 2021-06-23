@@ -1,14 +1,13 @@
 package com.helloworldramen.kingoyster.parts
 
-import com.helloworldramen.kingoyster.actions.Damage
-import com.helloworldramen.kingoyster.actions.DamageWeapon
-import com.helloworldramen.kingoyster.actions.DropWeapon
-import com.helloworldramen.kingoyster.actions.ThrowWeapon
+import com.helloworldramen.kingoyster.actions.*
 import com.helloworldramen.kingoyster.architecture.*
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DropWeaponEvent
 import com.helloworldramen.kingoyster.eventbus.events.ThrowWeaponEvent
+import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
+import com.helloworldramen.kingoyster.parts.combat.defaultAttackPattern
 import com.helloworldramen.kingoyster.parts.combat.power
 import kotlin.math.roundToInt
 
@@ -24,6 +23,7 @@ class WeaponSlotPart(
         return when (action) {
             is DropWeapon -> partOwner.respondToDropWeapon(action)
             is ThrowWeapon -> partOwner.respondToThrowWeapon(action)
+            is WeaponAttack -> partOwner.respondToWeaponAttack(action)
             else -> false
         }
     }
@@ -81,6 +81,38 @@ class WeaponSlotPart(
             // Drop the weapon at the destination.
             context.world.move(weapon, context.findDropPosition(furthestPassablePosition))
         }
+
+        return true
+    }
+
+    private fun Entity.respondToWeaponAttack(action: WeaponAttack): Boolean {
+        val (context, actor, direction) = action
+        if (this != actor) return false
+
+        val weapon = weapon()
+        val attackPattern = weapon?.weaponAttackPattern() ?: defaultAttackPattern()
+
+        if (!attackPattern.isUsable(context, this, direction)) return false
+
+        attackPattern.beforeEffect(context, this, direction)
+
+        val damageForPosition = attackPattern.calculateDamageForPosition(context, this, direction)
+
+        weapon()?.respondToAction(DamageWeapon(context, this, this, 1))
+
+        val breakFactor = if (weapon != null && weapon.durability() <= 0) 2.0 else 1.0
+
+        EventBus.post(WeaponAttackEvent(this, direction, damageForPosition.keys))
+
+        damageForPosition.forEach { (position, damageInfo) ->
+            val amount = (power() * damageInfo.powerFactor * breakFactor).roundToInt()
+
+            context.world.respondToActions(position,
+                Damage(context, this, amount, damageInfo.damageType, damageInfo.elementType, damageInfo.statusEffect)
+            )
+        }
+
+        attackPattern.afterEffect(context, this, direction)
 
         return true
     }

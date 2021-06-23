@@ -64,7 +64,6 @@ class CombatPart(
         return when (action) {
             is Damage -> partOwner.respondToDamage(action)
             is Heal ->partOwner.respondToHeal(action)
-            is WeaponAttack -> partOwner.respondToWeaponAttack(action)
             is ReceiveStatusEffect -> partOwner.respondToReceiveStatusEffect(action)
             else -> false
         }
@@ -88,38 +87,6 @@ class CombatPart(
                 EventBus.post(GameOverEvent(false))
             }
         }
-    }
-
-    private fun Entity.respondToWeaponAttack(action: WeaponAttack): Boolean {
-        val (context, actor, direction) = action
-        if (this != actor) return false
-
-        val weapon = weapon()
-        val attackPattern = weapon?.weaponAttackPattern() ?: defaultAttackPattern()
-
-        if (!attackPattern.isUsable(context, this, direction)) return false
-
-        attackPattern.beforeEffect(context, this, direction)
-
-        val damageForPosition = attackPattern.calculateDamageForPosition(context, this, direction)
-
-        weapon()?.respondToAction(DamageWeapon(context, this, this, 1))
-
-        val breakFactor = if (weapon != null && weapon.durability() <= 0) 2.0 else 1.0
-
-        EventBus.post(WeaponAttackEvent(this, direction, damageForPosition.keys))
-
-        damageForPosition.forEach { (position, damageInfo) ->
-            val amount = (power() * damageInfo.powerFactor * breakFactor).roundToInt()
-
-            context.world.respondToActions(position,
-                Damage(context, this, amount, damageInfo.damageType, damageInfo.elementType, damageInfo.statusEffect)
-            )
-        }
-
-        attackPattern.afterEffect(context, this, direction)
-
-        return true
     }
 
     private fun Entity.respondToDamage(action: Damage): Boolean {

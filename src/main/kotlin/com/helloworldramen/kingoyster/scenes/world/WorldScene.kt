@@ -17,8 +17,6 @@ import com.helloworldramen.kingoyster.scenes.entity.EntityScene
 import com.helloworldramen.kingoyster.scenes.floor.FloorScene
 import com.helloworldramen.kingoyster.scenes.memory.MemoryScene
 import com.helloworldramen.kingoyster.scenes.tileoverlay.TileOverlayScene
-import com.helloworldramen.kingoyster.utilities.Settings
-import com.helloworldramen.kingoyster.worldgen.WorldCreator
 import com.helloworldramen.kingoyster.worldgen.metadata.WorldFlavor
 import godot.*
 import godot.annotation.RegisterClass
