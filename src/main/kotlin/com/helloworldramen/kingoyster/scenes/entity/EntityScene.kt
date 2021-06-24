@@ -13,6 +13,7 @@ import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.health
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
+import com.helloworldramen.kingoyster.parts.combat.statuseffects.ColdStatusEffect
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.PoisonStatusEffect
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.StatusEffect
 import com.helloworldramen.kingoyster.scenes.health.HealthScene
@@ -427,6 +428,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	private fun StatusEffect.representation(): String {
 		return when (this) {
+			is ColdStatusEffect -> "[color=#35dbd6]cold"
 			is BurnStatusEffect -> "[color=#fc5203]burn"
 			is PoisonStatusEffect -> "[color=#834acf]sick"
 			else -> "?"

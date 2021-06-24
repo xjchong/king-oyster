@@ -6,5 +6,6 @@ import com.helloworldramen.kingoyster.worldgen.population.PopulationTemplate
 
 object AssortedItemsPopulationTemplate : PopulationTemplate(
     10 to PopulationRule(ItemFactory.scrollOfFire()),
-    10 to PopulationRule(ItemFactory.scrollOfSickness())
+    10 to PopulationRule(ItemFactory.scrollOfIce()),
+    10 to PopulationRule(ItemFactory.scrollOfSickness()),
 )

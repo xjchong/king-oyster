@@ -11,6 +11,7 @@ import com.helloworldramen.kingoyster.parts.combat.*
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.PoisonStatusEffect
 import com.helloworldramen.kingoyster.parts.MovementPart
+import com.helloworldramen.kingoyster.parts.combat.statuseffects.ColdStatusEffect
 import com.helloworldramen.kingoyster.utilities.FloodFill
 import godot.core.Color
 import kotlin.math.roundToInt
@@ -59,7 +60,7 @@ object ItemFactory {
 
     fun scrollOfFire(): EntityFactoryFn = {
         Entity(
-            name = "fire",
+            name = "fire beams",
             parts = listOf(
                 AppearancePart(
                     description = "Casts beams of fire in all directions.",
@@ -98,9 +99,48 @@ object ItemFactory {
         )
     }
 
+    fun scrollOfIce(): EntityFactoryFn = {
+        Entity(
+            name = "ice beams",
+            parts = listOf(
+                AppearancePart(
+                    description = "Casts beams of ice in all directions.",
+                    ascii = '?',
+                    color = Color.cyan,
+                    sprite = "scrolls",
+                    frameIndex = 1
+                ),
+                ItemPart(
+                    uses = 1,
+                    effect = { context, user ->
+                        val userPosition = context.positionOf(user) ?: return@ItemPart false
+
+                        // Find all the positions in each direction until a wall.
+                        for (direction in Direction.all()) {
+                            val path = context.straightPathUntil(userPosition + direction.vector, direction) { position ->
+                                context.entitiesAt(position)?.any { it.isBarrier() } != false
+                            }
+
+                            context.applyAction(path, Damage(
+                                context = context,
+                                actor = user,
+                                amount = 25,
+                                damageType = DamageType.Magic,
+                                elementType = ElementType.Fire,
+                                statusEffect = ColdStatusEffect(1.0, 10)
+                            ))
+                        }
+
+                        true
+                    }
+                )
+            )
+        )
+    }
+
     fun scrollOfSickness(): EntityFactoryFn = {
         Entity(
-            name = "sickness",
+            name = "poison cloud",
             parts = listOf(
                 AppearancePart(
                     description = "Casts a cloud of sickness around the user.",

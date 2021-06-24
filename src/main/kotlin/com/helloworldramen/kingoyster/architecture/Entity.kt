@@ -1,7 +1,5 @@
 package com.helloworldramen.kingoyster.architecture
 
-import kotlin.reflect.KClass
-
 class Entity (
     val name: String,
     val parts: List<Part> = listOf(),
