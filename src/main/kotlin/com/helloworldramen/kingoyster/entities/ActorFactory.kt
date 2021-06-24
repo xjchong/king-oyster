@@ -1,5 +1,6 @@
 package com.helloworldramen.kingoyster.entities
 
+import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*
@@ -102,6 +103,42 @@ object ActorFactory {
             ),
             timeFactor = 1.0,
             isPlayer = true
+        )
+    }
+
+    fun boar(): EntityFactoryFn = {
+        Entity(
+            name = "boar",
+            parts = listOf(
+                AppearancePart(
+                    ascii = 'B',
+                    color = Color.brown,
+                    sprite = "boar",
+                ),
+                CombatPart(
+                    maxHealth = 30,
+                    maxMana = 0,
+                    power = 12,
+                    defaultAttackPattern = BasicAttackPattern(
+                        powerFactor = 1.0,
+                    )
+                ),
+                FactionPart(
+                    Faction.Monster,
+                    enemies = setOf(Faction.Player)
+                ),
+                PhysicalPart(
+                    isPassable = false
+                ),
+                MovementPart(
+                    attackPattern = ShoulderBashPattern(2.0)
+                ),
+                SensoryPart(
+                    visionRange = 5
+                ),
+                TelegraphPart()
+            ),
+            timeFactor = 1.0
         )
     }
 

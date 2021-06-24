@@ -61,6 +61,7 @@ class CombatPart(
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
         return when (action) {
             is Damage -> partOwner.respondToDamage(action)
+            is DefaultAttack -> partOwner.respondToDefaultAttack(action)
             is Heal ->partOwner.respondToHeal(action)
             is ReceiveStatusEffect -> partOwner.respondToReceiveStatusEffect(action)
             else -> false
@@ -103,6 +104,18 @@ class CombatPart(
         }
 
         return true
+    }
+
+    private fun Entity.respondToDefaultAttack(action: DefaultAttack): Boolean {
+        val (context, actor, direction) = action
+
+        if (this != actor) return false
+
+        return if (defaultAttackPattern.execute(context, actor, direction, power)) {
+            EventBus.post(DefaultAttackEvent(actor, direction))
+
+            true
+        } else false
     }
 
     private fun Entity.respondToHeal(action: Heal): Boolean {

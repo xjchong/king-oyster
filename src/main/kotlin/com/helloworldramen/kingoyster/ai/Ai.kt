@@ -22,6 +22,22 @@ object Ai {
         val aiContext = GameAiStrategyContext(context, entity)
 
         val entityOptionsWithScore = when (entity.name) {
+            "boar" -> DiminishingReasoner(0.7).prioritize(aiContext, listOf(
+                MoveAttackEnemyStrategy(
+                    IsEnemyInSightConsideration(1.0, 0.0),
+                    OwnHealthConsideration(LinearCurve(0.7, 1.0))
+                ),
+                FleeFromEnemyStrategy(
+                    OwnHealthConsideration(LinearCurve(1.0, 0.0))
+                ),
+                WanderStrategy(
+                    IsEnemyInSightConsideration(0.5, 1.0)
+                ),
+                DefaultAttackEnemyStrategy(
+                    IsEnemyInSightConsideration(1.0, 0.0),
+                    OwnHealthConsideration(LinearCurve(0.7, 1.0))
+                ),
+            ))
             "ghost" -> HighestValueReasoner.prioritize(aiContext, listOf(
                 FleeFromEnemyStrategy(
                     ConstantConsideration(0.6)
@@ -32,6 +48,11 @@ object Ai {
             ))
             "goblin" -> DiminishingReasoner(0.9).prioritize(aiContext, listOf(
                 WeaponAttackEnemyStrategy(
+                    DoesSelfHaveWeaponConsideration(1.0, 0.0),
+                    ConstantConsideration(0.9),
+                ),
+                DefaultAttackEnemyStrategy(
+                    DoesSelfHaveWeaponConsideration(0.0, 1.0),
                     ConstantConsideration(0.9),
                 ),
                 ChaseEnemyStrategy(
@@ -53,6 +74,11 @@ object Ai {
             ))
             "hobgoblin" -> HighestValueReasoner.prioritize(aiContext, listOf(
                 WeaponAttackEnemyStrategy(
+                    DoesSelfHaveWeaponConsideration(1.0, 0.0),
+                    ConstantConsideration(0.9),
+                ),
+                DefaultAttackEnemyStrategy(
+                    DoesSelfHaveWeaponConsideration(0.0, 1.0),
                     ConstantConsideration(0.9),
                 ),
                 ChaseEnemyStrategy(
@@ -73,7 +99,7 @@ object Ai {
                 ),
             ))
             "blue slime", "red slime" -> PurelyRandomReasoner.prioritize(aiContext, listOf(
-                WeaponAttackEnemyStrategy(
+                DefaultAttackEnemyStrategy(
                     ConstantConsideration(0.5)
                 ),
                 WanderStrategy(
@@ -100,7 +126,7 @@ object Ai {
                 WanderStrategy(
                     ConstantConsideration(0.65)
                 ),
-                WeaponAttackEnemyStrategy(
+                DefaultAttackEnemyStrategy(
                     ConstantConsideration(0.75)
                 ),
             ))

@@ -36,7 +36,6 @@ class EventAudio : Node(), EventBusSubscriber {
 			TakeWeaponEvent::class,
 			ThrowWeaponEvent::class,
 			UseItemEvent::class,
-			WeaponAttackEvent::class,
 		)
 	}
 
@@ -59,7 +58,6 @@ class EventAudio : Node(), EventBusSubscriber {
 			is TakeWeaponEvent -> onTakeWeapon(event)
 			is ThrowWeaponEvent -> onThrowWeapon(event)
 			is UseItemEvent -> onUseItem(event)
-			is WeaponAttackEvent -> onWeaponAttack(event)
 		}
 	}
 
@@ -143,8 +141,5 @@ class EventAudio : Node(), EventBusSubscriber {
 		if (!event.user.isVisibleToPlayer(context)) return
 
 		audio.play(SFX.ITEM_BREAK)
-	}
-
-	private fun onWeaponAttack(event: WeaponAttackEvent) {
 	}
 }

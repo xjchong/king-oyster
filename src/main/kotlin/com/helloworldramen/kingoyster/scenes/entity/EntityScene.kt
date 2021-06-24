@@ -68,10 +68,10 @@ class EntityScene : Node2D(), EventBusSubscriber {
 	@RegisterFunction
 	override fun _ready() {
 		EventBus.register(this,
-			WeaponAttackEvent::class,
 			DamageEntityEvent::class,
 			DamageWeaponEvent::class,
 			DeathEvent::class,
+			DefaultAttackEvent::class,
 			DropItemEvent::class,
 			DropWeaponEvent::class,
 			HealEvent::class,
@@ -86,6 +86,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			ThrowWeaponEvent::class,
 			TriggerTrapEvent::class,
 			UseItemEvent::class,
+			WeaponAttackEvent::class,
 		)
 		tween.tweenAllCompleted.connect(this, ::onAllTweenCompleted)
 		animationPlayer.animationFinished.connect(this, ::onAnimationFinished)
@@ -133,11 +134,6 @@ class EntityScene : Node2D(), EventBusSubscriber {
 			}
 
 			when (event) {
-				is WeaponAttackEvent -> {
-					if (event.attacker == entity) {
-						animateBump(event.direction)
-					}
-				}
 				is DamageEntityEvent -> {
 					if (event.target == entity) {
 						animateOnDamage(event.amount)
@@ -161,6 +157,11 @@ class EntityScene : Node2D(), EventBusSubscriber {
 				is DeathEvent -> {
 					if (event.entity == entity) {
 						animateOnDeath()
+					}
+				}
+				is DefaultAttackEvent -> {
+					if (event.attacker == entity) {
+						animateBump(event.direction)
 					}
 				}
 				is DropItemEvent -> {
@@ -251,6 +252,11 @@ class EntityScene : Node2D(), EventBusSubscriber {
 						if (item.itemUses() <= 0) {
 							toast("-${item.name}", Color.gray, ToastTextScene.LONG_REVERSE_CONFIG)
 						}
+					}
+				}
+				is WeaponAttackEvent -> {
+					if (event.attacker == entity) {
+						animateBump(event.direction)
 					}
 				}
 			}

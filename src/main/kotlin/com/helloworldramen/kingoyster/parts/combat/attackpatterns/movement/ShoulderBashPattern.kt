@@ -10,7 +10,6 @@ import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.ElementType
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.AttackPattern
-import com.helloworldramen.kingoyster.parts.combat.power
 import com.helloworldramen.kingoyster.parts.isPassable
 
 class ShoulderBashPattern(
@@ -28,7 +27,14 @@ class ShoulderBashPattern(
     }
 
     override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
-        return listOf() // TODO: Implement if enemies will be using this pattern.
+        if (!isUsable(context, entity, direction)) return listOf()
+
+        val attackPath = calculatePath(context, entity, direction)
+        val lastPosition = attackPath.lastOrNull() ?: return listOf()
+
+        return attackPath + (lastPosition.neighbors().filter {
+            it != lastPosition - direction.vector
+        })
     }
 
     override fun calculateDamageForPosition(
@@ -36,13 +42,8 @@ class ShoulderBashPattern(
         entity: Entity,
         direction: Direction
     ): Map<Position, DamageInfo> {
-        val endPosition = calculateEndPosition(context, entity, direction) ?: return mapOf()
-
-        val hitPositions = endPosition.neighbors().filter {
-            it != endPosition - direction.vector
-        }
-
-        return hitPositions.associateWith { DamageInfo(powerFactor, damageType, elementType) }
+        return calculateHitPositions(context, entity, direction)
+            .associateWith { DamageInfo(powerFactor, damageType, elementType) }
     }
 
     override fun beforeEffect(context: Context, entity: Entity, direction: Direction) {
@@ -55,13 +56,23 @@ class ShoulderBashPattern(
         entity.respondToAction(Damage(context, Entity.UNKNOWN, 1, DamageType.Bash))
     }
 
+    private fun calculateHitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        val endPosition = calculateEndPosition(context, entity, direction) ?: return listOf()
+
+        return endPosition.neighbors().filter { it != endPosition - direction.vector }
+    }
+
     private fun calculateEndPosition(context: Context, entity: Entity, direction: Direction): Position? {
-        val currentPosition = context.positionOf(entity) ?: return null
+        return calculatePath(context, entity, direction).lastOrNull()
+    }
+
+    private fun calculatePath(context: Context, entity: Entity, direction: Direction): List<Position> {
+        val currentPosition = context.positionOf(entity) ?: return listOf()
 
         return context.straightPathWhile(currentPosition, direction) { position ->
             val entities = context.entitiesAt(position)
 
             entities != null && (entities.all { it.isPassable() } || entities.contains(entity))
-        }.lastOrNull()
+        }
     }
 }
