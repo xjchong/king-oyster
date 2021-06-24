@@ -124,10 +124,48 @@ object ItemFactory {
                             context.applyAction(path, Damage(
                                 context = context,
                                 actor = user,
-                                amount = 25,
+                                amount = 10,
                                 damageType = DamageType.Magic,
-                                elementType = ElementType.Fire,
+                                elementType = ElementType.Ice,
                                 statusEffect = ColdStatusEffect(1.0, 10)
+                            ))
+                        }
+
+                        true
+                    }
+                )
+            )
+        )
+    }
+
+    fun scrollOfVolt(): EntityFactoryFn = {
+        Entity(
+            name = "volt beams",
+            parts = listOf(
+                AppearancePart(
+                    description = "Casts beams of volt in all directions",
+                    ascii = '?',
+                    color = Color.yellow,
+                    sprite = "scrolls",
+                    frameIndex = 2
+                ),
+                ItemPart(
+                    uses = 1,
+                    effect = { context, user ->
+                        val userPosition = context.positionOf(user) ?: return@ItemPart false
+
+                        // Find all the positions in each direction until a wall.
+                        for (direction in Direction.all()) {
+                            val path = context.straightPathUntil(userPosition + direction.vector, direction) { position ->
+                                context.entitiesAt(position)?.any { it.isBarrier() } != false
+                            }
+
+                            context.applyAction(path, Damage(
+                                context = context,
+                                actor = user,
+                                amount = 40,
+                                damageType = DamageType.Magic,
+                                elementType = ElementType.Volt
                             ))
                         }
 
