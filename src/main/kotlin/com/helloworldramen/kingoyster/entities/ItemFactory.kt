@@ -63,6 +63,8 @@ object ItemFactory {
                     description = "Casts beams of fire in all directions.",
                     ascii = '?',
                     color = Color.red,
+                    sprite = "scrolls",
+                    frameIndex = 0
                 ),
                 ItemPart(
                     uses = 1,
