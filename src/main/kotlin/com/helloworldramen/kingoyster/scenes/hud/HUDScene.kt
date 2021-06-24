@@ -17,12 +17,12 @@ class HUDScene : MarginContainer() {
 	private val healthScene: HealthScene by lazy { getNodeAs("$HEALTH_PREFIX/HealthPanel/HealthScene")!! }
 	private val healthAmountLabel: Label by lazy { getNodeAs("$HEALTH_PREFIX/HealthLabelsContainer/HealthLabelsHBox/HealthAmountLabel")!! }
 
-	private val weaponSprite: EntitySprite by lazy { getNodeAs("$WEAPON_PREFIX/WeaponHBox/WeaponPanel/WeaponSprite")!! }
+	private val weaponSprite: EntitySprite by lazy { getNodeAs("$WEAPON_PREFIX/WeaponHBox/WeaponCenterContainer/WeaponPanel/WeaponSprite")!! }
 	private val weaponDurabilityLabel: Label by lazy { getNodeAs("$WEAPON_PREFIX/WeaponHBox/WeaponDurabilityLabel")!! }
 	private val weaponNameLabel: Label by lazy { getNodeAs("$WEAPON_PREFIX/WeaponHBox/WeaponNameLabel")!! }
 	private val weaponDescriptionLabel: Label by lazy { getNodeAs("$WEAPON_PREFIX/WeaponDescriptionLabel")!! }
 
-	private val itemSprite: EntitySprite by lazy { getNodeAs("$ITEM_PREFIX/ItemHBox/ItemPanel/ItemSprite")!! }
+	private val itemSprite: EntitySprite by lazy { getNodeAs("$ITEM_PREFIX/ItemHBox/ItemCenterContainer/ItemPanel/ItemSprite")!! }
 	private val itemUsesLabel: Label by lazy { getNodeAs("$ITEM_PREFIX/ItemHBox/ItemUsesLabel")!! }
 	private val itemNameLabel: Label by lazy { getNodeAs("$ITEM_PREFIX/ItemHBox/ItemNameLabel")!! }
 	private val itemDescriptionLabel: Label by lazy { getNodeAs("$ITEM_PREFIX/ItemDescriptionLabel")!! }

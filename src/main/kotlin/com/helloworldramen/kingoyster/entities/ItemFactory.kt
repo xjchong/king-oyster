@@ -4,12 +4,14 @@ import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.actions.Heal
 import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.*
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.PoisonStatusEffect
 import com.helloworldramen.kingoyster.parts.MovementPart
+import com.helloworldramen.kingoyster.utilities.FloodFill
 import godot.core.Color
 import kotlin.math.roundToInt
 
@@ -57,7 +59,7 @@ object ItemFactory {
 
     fun scrollOfFire(): EntityFactoryFn = {
         Entity(
-            name = "fire scroll",
+            name = "fire",
             parts = listOf(
                 AppearancePart(
                     description = "Casts beams of fire in all directions.",
@@ -79,16 +81,56 @@ object ItemFactory {
                                 } != false
                             }
 
-                            path.forEach {
-                                context.applyAction(it, Damage(
-                                    context = context,
-                                    actor = user,
-                                    amount = 25,
-                                    damageType = DamageType.Magic,
-                                    elementType = ElementType.Fire,
-                                    statusEffect = BurnStatusEffect(2, 0.5, 5)
-                                ))
-                            }
+                            context.applyAction(path, Damage(
+                                context = context,
+                                actor = user,
+                                amount = 25,
+                                damageType = DamageType.Magic,
+                                elementType = ElementType.Fire,
+                                statusEffect = BurnStatusEffect(2, 0.5, 5)
+                            ))
+                        }
+
+                        true
+                    }
+                )
+            )
+        )
+    }
+
+    fun scrollOfSickness(): EntityFactoryFn = {
+        Entity(
+            name = "sickness",
+            parts = listOf(
+                AppearancePart(
+                    description = "Casts a cloud of sickness around the user.",
+                    ascii = '?',
+                    color = Color.purple,
+                    sprite = "scrolls",
+                    frameIndex = 3
+                ),
+                ItemPart(
+                    uses = 1,
+                    effect = { context, user ->
+                        val userPosition = context.positionOf(user) ?: return@ItemPart false
+                        val cloudSize = 5
+                        val cloudPositions = FloodFill.fill(userPosition.x, userPosition.y, cloudSize) { x, y ->
+                            context.entitiesAt(Position(x, y))?.any { it.isBarrier() } != false
+                        }.map { xy ->
+                            Position(xy)
+                        }.filter { position ->
+                            position != userPosition
+                        }
+
+                        cloudPositions.forEach { position ->
+                            context.applyAction(position, Damage(
+                                context = context,
+                                actor = user,
+                                amount = 1,
+                                damageType = DamageType.Special,
+                                elementType = ElementType.Poison,
+                                statusEffect = PoisonStatusEffect(7, 1.0, 6)
+                            ))
                         }
 
                         true

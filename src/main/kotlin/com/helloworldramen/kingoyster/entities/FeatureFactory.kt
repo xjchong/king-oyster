@@ -9,6 +9,7 @@ import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.ElementType
+import com.helloworldramen.kingoyster.parts.combat.ResistancesPart
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
 import com.helloworldramen.kingoyster.utilities.WeightedCollection
 import godot.core.Color
@@ -49,11 +50,17 @@ object FeatureFactory {
                     offset = Vector2(0, if (isHorizontal) 2 else 8)
                 ),
                 CombatPart(20),
+                OpenablePart(),
                 PhysicalPart(
                     isPassable = false,
-                    doesBlockVision = true
+                    doesBlockVision = true,
+                    isBarrier = true
                 ),
-                OpenablePart()
+                ResistancesPart(
+                    resistanceForElementType = mapOf(
+                        ElementType.Poison to 0.0
+                    )
+                )
             )
         )
     }
@@ -90,7 +97,8 @@ object FeatureFactory {
                 ),
                 PhysicalPart(
                     isPassable = false,
-                    doesBlockVision = true
+                    doesBlockVision = true,
+                    isBarrier = true
                 )
             )
         )
