@@ -25,6 +25,10 @@ open class WeightedCollection<T: Any>(entries: List<WeightedEntry<T>>) {
         return entries.isEmpty()
     }
 
+    fun <R: Any>map(fn: (Int, T) -> R): List<R> {
+        return entries.map { fn(it.weight, it.item) }
+    }
+
     protected fun sampleWeightedEntry(): WeightedEntry<T>? {
         if (entries.isEmpty()) return null
 

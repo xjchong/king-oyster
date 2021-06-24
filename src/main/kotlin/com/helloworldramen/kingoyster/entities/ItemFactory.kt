@@ -247,4 +247,50 @@ object ItemFactory {
             )
         )
     }
+
+    fun scrollOfBanish(): EntityFactoryFn = {
+        Entity(
+            name = "banish",
+            parts = listOf(
+                AppearancePart(
+                    description = "Teleports things around the user to random locations.",
+                    ascii = '?',
+                    color = Color.pink,
+                    sprite = "scrolls",
+                    frameIndex = 5
+                ),
+                ItemPart(
+                    uses = 1,
+                    effect = { context, user ->
+                        val world = context.world
+                        val emptyPositions = Position(world.width - 1, world.height - 1)
+                            .map { it }
+                            .filter { context.entitiesAt(it)?.isEmpty() == true }
+
+                        val currentPosition = context.positionOf(user) ?: return@ItemPart false
+                        val radius = 5
+                        val banishedPositions = FloodFill.fill(currentPosition.x, currentPosition.y, radius) { _, _ ->
+                            false
+                        }.map {
+                            Position(it)
+                        }.filter {
+                            it != currentPosition
+                        }
+
+                        banishedPositions.forEach { position ->
+                            val entities = context.entitiesAt(position) ?: listOf()
+
+                            entities.forEach { entity ->
+                                val teleportPosition = emptyPositions.randomOrNull() ?: position
+
+                                entity.respondToAction(Move(context, entity, teleportPosition, 0.0))
+                            }
+                        }
+
+                        true
+                    }
+                )
+            )
+        )
+    }
 }

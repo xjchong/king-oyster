@@ -1,8 +1,10 @@
 package com.helloworldramen.kingoyster.worldgen.population.strategies
 
 import com.helloworldramen.kingoyster.entities.ActorFactory
+import com.helloworldramen.kingoyster.entities.EntityTable
 import com.helloworldramen.kingoyster.entities.FeatureFactory
 import com.helloworldramen.kingoyster.entities.WeaponFactory
+import com.helloworldramen.kingoyster.extensions.toEntityTable
 import com.helloworldramen.kingoyster.worldgen.population.PopulationRule
 import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
 import com.helloworldramen.kingoyster.worldgen.population.PopulationTemplate
@@ -29,7 +31,9 @@ class SmorgasbordPopulation(densityFactor: Double = 1.0) : PopulationStrategy(
         60 to PopulationRule(WeaponFactory.scythe()),
     ).withCount(3 * densityFactor, 6 * densityFactor),
     PopulationTemplate(
-        70 to PopulationRule(FeatureFactory.chest()),
+        70 to PopulationRule(FeatureFactory.chest(
+            AssortedItemsPopulationTemplate.toEntityTable()
+        )),
         100 to PopulationRule({ null })
     ).withCount(0 * densityFactor, 1 * densityFactor),
     AssortedItemsPopulationTemplate.withCount(0, 2),

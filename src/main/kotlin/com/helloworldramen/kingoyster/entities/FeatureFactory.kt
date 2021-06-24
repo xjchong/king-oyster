@@ -17,7 +17,7 @@ import godot.core.Vector2
 
 object FeatureFactory {
 
-    fun chest(): EntityFactoryFn = {
+    fun chest(itemTable: EntityTable): EntityFactoryFn = {
         Entity(
             name = "chest",
             parts = listOf(
@@ -29,9 +29,7 @@ object FeatureFactory {
                 ),
                 CombatPart(5),
                 ItemSlotPart(
-                    item = EntityTable(
-                        100 to ItemFactory.medicine()
-                    ).generate()
+                    item = itemTable.generate()
                 ),
                 OpenablePart(),
                 PhysicalPart(isPassable = true)
