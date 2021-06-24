@@ -5,7 +5,7 @@ import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageType
-import com.helloworldramen.kingoyster.parts.combat.attackpatterns.*
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.weapon.*
 import godot.core.Color
 
 object WeaponFactory {

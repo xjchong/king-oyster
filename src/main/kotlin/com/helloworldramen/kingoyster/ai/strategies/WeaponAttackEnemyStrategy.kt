@@ -36,13 +36,7 @@ class WeaponAttackEnemyStrategy(vararg considerations: GameAiConsideration) : Ga
 
         return Direction.all().filter{ direction ->
             attackPattern.isUsable(context, attacker, direction)
-        }.associateWith { direction ->
-            attackPattern.calculateDamageForPosition(context, attacker, direction).keys
-        }.filter { (_, positions) ->
-            positions.any { position ->
-                context.entitiesAt(position)?.any { it.isEnemyOf(attacker) } == true
-            }
-        }.keys.map {
+        }.map {
             WeaponAttackOption(this, strategyContext.withDirection(it))
         }
     }

@@ -5,6 +5,7 @@ import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.AttackPattern
 
 class NoAttackPattern : AttackPattern() {
 

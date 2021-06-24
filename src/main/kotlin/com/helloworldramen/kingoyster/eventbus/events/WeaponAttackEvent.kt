@@ -8,5 +8,4 @@ import com.helloworldramen.kingoyster.architecture.Position
 data class WeaponAttackEvent(
     val attacker: Entity,
     val direction: Direction,
-    val positions: Set<Position>
 ) : Event

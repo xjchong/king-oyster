@@ -268,14 +268,8 @@ class GameScene : Node2D(), EventBusSubscriber {
 		if (direction == null) return false
 
 		val player = context.player
-		val currentPosition = context.positionOf(player) ?: return false
-		val furthestPassablePosition = context.straightPathWhile(currentPosition, direction) { position ->
-			val entities = context.entitiesAt(position)
 
-			entities != null && (entities.all { it.isPassable() } || entities.contains(player))
-		}.lastOrNull() ?: return false
-
-		return player.respondToAction(Move(context, player, furthestPassablePosition, MoveType.Charge))
+		return player.respondToAction(MoveAttack(context, player, direction))
 	}
 
 	private fun performDirectionActions(direction: Direction?): Boolean {

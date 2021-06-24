@@ -9,6 +9,7 @@ import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.*
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.PoisonStatusEffect
+import com.helloworldramen.kingoyster.parts.MovementPart
 import godot.core.Color
 import kotlin.math.roundToInt
 

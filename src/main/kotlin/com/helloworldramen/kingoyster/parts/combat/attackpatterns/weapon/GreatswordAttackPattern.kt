@@ -1,13 +1,15 @@
-package com.helloworldramen.kingoyster.parts.combat.attackpatterns
+package com.helloworldramen.kingoyster.parts.combat.attackpatterns.weapon
 
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.parts.combat.*
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.AttackPattern
 import com.helloworldramen.kingoyster.parts.isEnemyOf
+import com.helloworldramen.kingoyster.parts.isPassable
 
-class LongswordAttackPattern(
+class GreatswordAttackPattern(
     private val powerFactor: Double = 0.0,
     private val damageType: DamageType = DamageType.Cut,
     private val elementType: ElementType = ElementType.None
@@ -15,9 +17,16 @@ class LongswordAttackPattern(
 
     override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
         val currentPosition = context.positionOf(entity) ?: return false
-        val nextPosition = currentPosition.withRelative(direction.vector)
+        val forwardPosition = currentPosition.withRelative(direction.vector)
 
-        return (context.entitiesAt(nextPosition)?.any { it.isEnemyOf(entity) } == true)
+        // The square in front of the user must be passable or attackable.
+        if (context.entitiesAt(forwardPosition)?.all { it.isPassable() || it.has<CombatPart>() } != true) {
+            return false
+        }
+
+        return getHitPositions(context, entity, direction).any { position ->
+            context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
+        }
     }
 
     override fun calculateDamageForPosition(
@@ -30,27 +39,29 @@ class LongswordAttackPattern(
             if (context.entitiesAt(position)?.any { it.has<CombatPart>() } == true) 1 else 0
         }
 
-        // Longsword does more damage depending on how many hits landed.
+        // Greatsword increases in damage the more things are hit.
         val landedFactor = when {
-            landedHitCount >= 2 -> 2.0
+            landedHitCount >= 3 -> 2.0
+            landedHitCount == 2 -> 1.5
             else -> 1.0
         }
 
-        return getHitPositions(context, entity, direction).associateWith {
+        return hitPositions.associateWith {
             DamageInfo(powerFactor * landedFactor, damageType, elementType)
         }
     }
 
     override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
-        return listOfNotNull(context.positionOf(entity)?.withRelative(direction.vector))
+        return getHitPositions(context, entity, direction)
     }
 
     private fun getHitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
         val currentPosition = context.positionOf(entity) ?: return listOf()
 
         return listOf(
-            currentPosition + direction.vector,
-            currentPosition + (direction.vector * 2)
+            currentPosition.withRelative(direction.vector),
+            currentPosition.withRelative(-1, 1).rotated(currentPosition, direction),
+            currentPosition.withRelative(1, 1).rotated(currentPosition, direction)
         )
     }
 }

@@ -1,6 +1,5 @@
 package com.helloworldramen.kingoyster.scenes.eventaudio
 
-import com.helloworldramen.kingoyster.actions.MoveType
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.extensions.isVisibleToPlayer
 import com.helloworldramen.kingoyster.eventbus.Event
@@ -127,10 +126,11 @@ class EventAudio : Node(), EventBusSubscriber {
 	private fun onMove(event: MoveEvent) {
 		if (!event.entity.isPlayer) return
 
-		when (event.type) {
-			MoveType.Charge -> audio.play(SFX.HIT_SWOOSH_CUT)
-			MoveType.Default -> audio.play(SFX.MOVE_STEP)
-		}
+		audio.play(SFX.MOVE_STEP)
+	}
+
+	private fun onMoveAttack() {
+
 	}
 
 	private fun onThrowWeapon(event: ThrowWeaponEvent) {

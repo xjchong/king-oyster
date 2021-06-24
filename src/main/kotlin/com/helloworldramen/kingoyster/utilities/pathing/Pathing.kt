@@ -6,6 +6,7 @@ import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.extensions.asPosition
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.isKillable
+import com.helloworldramen.kingoyster.parts.MovementPart
 import com.helloworldramen.kingoyster.utilities.AStar
 
 object Pathing {

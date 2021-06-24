@@ -94,27 +94,16 @@ class WeaponSlotPart(
 
         if (!attackPattern.isUsable(context, this, direction)) return false
 
-        attackPattern.beforeEffect(context, this, direction)
-
-        val damageForPosition = attackPattern.calculateDamageForPosition(context, this, direction)
-
         weapon()?.respondToAction(DamageWeapon(context, this, this, 1))
 
         val breakFactor = if (weapon != null && weapon.durability() <= 0) 2.0 else 1.0
+        val power = (power() * breakFactor).roundToInt()
 
-        EventBus.post(WeaponAttackEvent(this, direction, damageForPosition.keys))
+        return if (attackPattern.execute(context, actor, direction, power)) {
+            EventBus.post(WeaponAttackEvent(this, direction))
 
-        damageForPosition.forEach { (position, damageInfo) ->
-            val amount = (power() * damageInfo.powerFactor * breakFactor).roundToInt()
-
-            context.applyAction(position,
-                Damage(context, this, amount, damageInfo.damageType, damageInfo.elementType, damageInfo.statusEffect)
-            )
-        }
-
-        attackPattern.afterEffect(context, this, direction)
-
-        return true
+            true
+        } else false
     }
 
     companion object {

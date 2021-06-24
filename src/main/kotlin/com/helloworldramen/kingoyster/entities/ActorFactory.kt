@@ -9,6 +9,8 @@ import com.helloworldramen.kingoyster.parts.combat.ElementType
 import com.helloworldramen.kingoyster.parts.combat.ResistancesPart
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.BasicAttackPattern
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.PoisonStatusEffect
+import com.helloworldramen.kingoyster.parts.MovementPart
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.movement.ShoulderBashPattern
 import godot.core.Color
 import godot.core.Vector2
 import kotlin.random.Random
@@ -49,7 +51,9 @@ object ActorFactory {
                     isPassable = false
                 ),
                 MemoryPart(),
-                MovementPart(),
+                MovementPart(
+                    attackPattern = ShoulderBashPattern(1.5)
+                ),
                 SensoryPart(
                     visionRange = 10
                 )

@@ -1,26 +1,29 @@
 package com.helloworldramen.kingoyster.parts
 
-import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.actions.Move
-import com.helloworldramen.kingoyster.actions.MoveType
+import com.helloworldramen.kingoyster.actions.MoveAttack
 import com.helloworldramen.kingoyster.architecture.Action
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.eventbus.EventBus
+import com.helloworldramen.kingoyster.eventbus.events.MoveAttackEvent
 import com.helloworldramen.kingoyster.eventbus.events.MoveEvent
-import com.helloworldramen.kingoyster.parts.combat.DamageType
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.AttackPattern
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.NoAttackPattern
 import com.helloworldramen.kingoyster.parts.combat.power
-import kotlin.math.roundToInt
 
-class MovementPart : Part {
+class MovementPart(
+    val attackPattern: AttackPattern = NoAttackPattern()
+) : Part {
 
     override fun copy(): Part {
-        return MovementPart()
+        return MovementPart(attackPattern)
     }
 
     override fun respondToAction(partOwner: Entity, action: Action): Boolean {
         return when(action) {
             is Move -> partOwner.respondToMove(action)
+            is MoveAttack -> partOwner.respondToMoveAttack(action)
             else -> false
         }
     }
@@ -34,29 +37,27 @@ class MovementPart : Part {
         if (entitiesAtPosition.any { !canPass(it) }) return false
         if (!context.world.move(actor, position)) return false
 
-        EventBus.post(MoveEvent(actor, currentPosition, position, action.type))
-
-        if (action.type == MoveType.Charge) {
-            // We successfully moved, so apply impact effect.
-            val power = (power() * 1.5).roundToInt()
-
-            // Apply damage to the destination position.
-            context.world[position]?.forEach {
-                if (it != actor) it.respondToAction(Damage(context, actor, power, DamageType.Bash))
-            }
-
-            // And apply damage to neighbors of the destination.
-            position.neighbors().forEach {
-                context.applyAction(it, Damage(context, actor, power, DamageType.Bash))
-            }
-
-            this.respondToAction(Damage(context, actor, 1, DamageType.Special))
-        }
+        EventBus.post(MoveEvent(actor, currentPosition, position))
 
         entitiesAtPosition.forEach { otherEntity ->
             otherEntity.trigger(context, actor)
         }
 
         return true
+    }
+
+    private fun Entity.respondToMoveAttack(action: MoveAttack): Boolean {
+        val (context, actor, direction) = action
+        val startPosition = context.positionOf(actor) ?: return false
+
+        if (this != actor) return false
+
+        return if (attackPattern.execute(context, actor, direction, power())) {
+            val endPosition = context.positionOf(actor)
+
+            EventBus.post(MoveAttackEvent(actor, direction, startPosition, endPosition))
+
+            true
+        } else false
     }
 }

@@ -2,12 +2,12 @@ package com.helloworldramen.kingoyster.actions
 
 import com.helloworldramen.kingoyster.architecture.*
 
-data class Move(
+data class MoveAttack(
     override val context: Context,
     override val actor: Entity,
-    val position: Position,
-    override val timeFactor: Double = 1.0
+    val direction: Direction
 ) : Action {
 
     override val world: World = context.world
+    override val timeFactor: Double = 1.0
 }

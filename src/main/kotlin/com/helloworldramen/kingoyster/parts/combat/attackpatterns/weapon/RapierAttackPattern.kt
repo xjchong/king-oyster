@@ -1,4 +1,4 @@
-package com.helloworldramen.kingoyster.parts.combat.attackpatterns
+package com.helloworldramen.kingoyster.parts.combat.attackpatterns.weapon
 
 import com.helloworldramen.kingoyster.actions.Move
 import com.helloworldramen.kingoyster.architecture.Context
@@ -6,6 +6,7 @@ import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.parts.combat.*
+import com.helloworldramen.kingoyster.parts.combat.attackpatterns.AttackPattern
 import com.helloworldramen.kingoyster.parts.isEnemyOf
 import com.helloworldramen.kingoyster.parts.isPassable
 

@@ -4,6 +4,7 @@ import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.events.DamagePositionEvent
 import com.helloworldramen.kingoyster.parts.*
+import com.helloworldramen.kingoyster.parts.MovementPart
 
 class Context(var world: World, var player: Entity = Entity.UNKNOWN, var level: Int = 1) {
 
