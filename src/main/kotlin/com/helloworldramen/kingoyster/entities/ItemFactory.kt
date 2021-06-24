@@ -2,6 +2,7 @@ package com.helloworldramen.kingoyster.entities
 
 import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.actions.Heal
+import com.helloworldramen.kingoyster.actions.Move
 import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
@@ -210,6 +211,35 @@ object ItemFactory {
                                 statusEffect = PoisonStatusEffect(7, 1.0, 6)
                             ))
                         }
+
+                        true
+                    }
+                )
+            )
+        )
+    }
+
+    fun scrollOfBlink(): EntityFactoryFn = {
+        Entity(
+            name = "blink",
+            parts = listOf(
+                AppearancePart(
+                    description = "Teleports the user to a random location.",
+                    ascii = '?',
+                    color = Color.blue,
+                    sprite = "scrolls",
+                    frameIndex = 4
+                ),
+                ItemPart(
+                    uses = 1,
+                    effect = { context, user ->
+                        val world = context.world
+                        val nextPosition = Position(world.width - 1, world.height - 1)
+                            .map { it }
+                            .filter { context.entitiesAt(it)?.isEmpty() == true }
+                            .randomOrNull() ?: return@ItemPart false
+
+                        user.respondToAction(Move(context, user, nextPosition, 0.0))
 
                         true
                     }

@@ -9,4 +9,5 @@ object AssortedItemsPopulationTemplate : PopulationTemplate(
     10 to PopulationRule(ItemFactory.scrollOfIce()),
     10 to PopulationRule(ItemFactory.scrollOfVolt()),
     10 to PopulationRule(ItemFactory.scrollOfSickness()),
+    10 to PopulationRule(ItemFactory.scrollOfBlink())
 )
