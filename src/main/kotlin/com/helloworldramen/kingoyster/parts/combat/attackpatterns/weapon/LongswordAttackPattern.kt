@@ -14,6 +14,19 @@ class LongswordAttackPattern(
     private val elementType: ElementType = ElementType.None
 ) : AttackPattern() {
 
+    override fun hitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        val currentPosition = context.positionOf(entity) ?: return listOf()
+
+        return listOf(
+            currentPosition + direction.vector,
+            currentPosition + (direction.vector * 2)
+        )
+    }
+
+    override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        return listOfNotNull(context.positionOf(entity)?.withRelative(direction.vector))
+    }
+
     override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
         val currentPosition = context.positionOf(entity) ?: return false
         val nextPosition = currentPosition.withRelative(direction.vector)
@@ -26,7 +39,7 @@ class LongswordAttackPattern(
         entity: Entity,
         direction: Direction
     ): Map<Position, DamageInfo> {
-        val hitPositions = getHitPositions(context, entity, direction)
+        val hitPositions = hitPositions(context, entity, direction)
         val landedHitCount = hitPositions.sumBy { position ->
             if (context.entitiesAt(position)?.any { it.has<CombatPart>() } == true) 1 else 0
         }
@@ -37,21 +50,8 @@ class LongswordAttackPattern(
             else -> 1.0
         }
 
-        return getHitPositions(context, entity, direction).associateWith {
+        return hitPositions(context, entity, direction).associateWith {
             DamageInfo(powerFactor * landedFactor, damageType, elementType)
         }
-    }
-
-    override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
-        return listOfNotNull(context.positionOf(entity)?.withRelative(direction.vector))
-    }
-
-    private fun getHitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
-        val currentPosition = context.positionOf(entity) ?: return listOf()
-
-        return listOf(
-            currentPosition + direction.vector,
-            currentPosition + (direction.vector * 2)
-        )
     }
 }

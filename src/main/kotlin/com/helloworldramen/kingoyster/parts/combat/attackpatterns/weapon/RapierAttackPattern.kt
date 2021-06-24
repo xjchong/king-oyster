@@ -17,6 +17,24 @@ class RapierAttackPattern(
     private val elementType: ElementType = ElementType.None
 ) : AttackPattern() {
 
+    override fun hitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        val hitPosition = telegraphPositions(context, entity, direction).firstOrNull { position ->
+            context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
+        }
+
+        return listOfNotNull(hitPosition)
+    }
+
+    override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        val currentPosition = context.positionOf(entity) ?: return listOf()
+
+        return listOf(
+            currentPosition.withRelative(direction.vector),
+            currentPosition.withRelative(direction.vector * 2)
+        )
+    }
+
+
     override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
         val currentPosition = context.positionOf(entity) ?: return false
         val nextPosition = currentPosition.withRelative(direction.vector)
@@ -26,7 +44,7 @@ class RapierAttackPattern(
             return false
         }
 
-        return getHitPositions(context, entity, direction).any { position ->
+        return hitPositions(context, entity, direction).any { position ->
             context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
         }
     }
@@ -38,7 +56,7 @@ class RapierAttackPattern(
     ): Map<Position, DamageInfo> {
         val currentPosition = context.positionOf(entity) ?: return mapOf()
 
-        return getHitPositions(context, entity, direction).associateWith {
+        return hitPositions(context, entity, direction).associateWith {
             // Rapier does more damage when lunging.
             val distanceFactor = if (currentPosition.distanceFrom(it) > 1) 2.0 else 0.8
 
@@ -46,14 +64,6 @@ class RapierAttackPattern(
         }
     }
 
-    override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
-        val currentPosition = context.positionOf(entity) ?: return listOf()
-
-        return listOf(
-            currentPosition.withRelative(direction.vector),
-            currentPosition.withRelative(direction.vector * 2)
-        )
-    }
 
     override fun afterEffect(context: Context, entity: Entity, direction: Direction) {
         val followupPath = getFollowupPath(context, entity, direction)
@@ -73,13 +83,5 @@ class RapierAttackPattern(
         } else {
             listOf()
         }
-    }
-
-    private fun getHitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
-        val hitPosition = telegraphPositions(context, entity, direction).firstOrNull { position ->
-            context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
-        }
-
-        return listOfNotNull(hitPosition)
     }
 }

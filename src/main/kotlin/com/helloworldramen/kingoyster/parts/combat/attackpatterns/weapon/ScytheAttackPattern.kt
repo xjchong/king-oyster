@@ -16,6 +16,19 @@ class ScytheAttackPattern(
     private val elementType: ElementType = ElementType.None
 ) : AttackPattern() {
 
+    override fun beforeEffect(context: Context, entity: Entity, direction: Direction) {
+        val currentPosition = context.positionOf(entity) ?: return
+
+        entity.respondToAction(Move(context, entity, currentPosition + direction.vector, timeFactor = 0.0))
+    }
+
+    override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        val currentPosition = context.positionOf(entity) ?: return listOf()
+        val forwardPosition = currentPosition + direction.vector
+
+        return hitPositions(currentPosition, direction) + hitPositions(forwardPosition, direction)
+    }
+
     override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
         val currentPosition = context.positionOf(entity) ?: return false
         val forwardPosition = currentPosition.withRelative(direction.vector)
@@ -26,15 +39,9 @@ class ScytheAttackPattern(
             return false
         }
 
-        return getHitPositions(attackPosition, direction).any { position ->
+        return hitPositions(context, entity, direction).any { position ->
             context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
         }
-    }
-
-    override fun beforeEffect(context: Context, entity: Entity, direction: Direction) {
-        val currentPosition = context.positionOf(entity) ?: return
-
-        entity.respondToAction(Move(context, entity, currentPosition + direction.vector, timeFactor = 0.0))
     }
 
     override fun calculateDamageForPosition(
@@ -42,8 +49,7 @@ class ScytheAttackPattern(
         entity: Entity,
         direction: Direction
     ): Map<Position, DamageInfo> {
-        val currentPosition = context.positionOf(entity) ?: return mapOf()
-        val hitPositions = getHitPositions(currentPosition, direction)
+        val hitPositions = hitPositions(context, entity, direction)
         val landedHitCount = hitPositions.sumBy { position ->
             if (context.entitiesAt(position)?.any { it.has<CombatPart>() } == true) 1 else 0
         }
@@ -63,16 +69,15 @@ class ScytheAttackPattern(
         }
     }
 
-    override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+    override fun hitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
         val currentPosition = context.positionOf(entity) ?: return listOf()
-        val forwardPosition = currentPosition + direction.vector
 
-        return getHitPositions(currentPosition, direction) + getHitPositions(forwardPosition, direction)
+        return hitPositions(currentPosition, direction)
     }
 
-    private fun getHitPositions(attackPosition: Position, direction: Direction): List<Position> {
-        val behindPosition = attackPosition - direction.vector
-        val allNeighbors = attackPosition.neighbors() + attackPosition.diagonalNeighbors()
+    private fun hitPositions(userPosition: Position, direction: Direction): List<Position> {
+        val behindPosition = userPosition - direction.vector
+        val allNeighbors = userPosition.neighbors() + userPosition.diagonalNeighbors()
 
         return allNeighbors.filter { it != behindPosition }
     }

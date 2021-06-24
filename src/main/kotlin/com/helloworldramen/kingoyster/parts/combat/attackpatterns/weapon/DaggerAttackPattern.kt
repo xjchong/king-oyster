@@ -21,7 +21,7 @@ class DaggerAttackPattern(
         entity: Entity,
         direction: Direction
     ): Map<Position, DamageInfo> {
-        val hitPosition = getHitPosition(context, entity, direction) ?: return mapOf()
+        val hitPosition = hitPositions(context, entity, direction).firstOrNull() ?: return mapOf()
         val impassableNeighborsCount = hitPosition.neighbors().filter { position ->
             context.entitiesAt(position)?.any { !it.isPassable() } != false
         }.size

@@ -10,8 +10,9 @@ import kotlin.math.roundToInt
 
 abstract class AttackPattern {
 
-    abstract fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean
+    abstract fun hitPositions(context: Context, entity: Entity, direction: Direction): List<Position>
     abstract fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position>
+    abstract fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean
     protected abstract fun calculateDamageForPosition(context: Context, entity: Entity, direction: Direction): Map<Position, DamageInfo>
     protected open fun beforeEffect(context: Context, entity: Entity, direction: Direction) {}
     protected open fun afterEffect(context: Context, entity: Entity, direction: Direction) {}

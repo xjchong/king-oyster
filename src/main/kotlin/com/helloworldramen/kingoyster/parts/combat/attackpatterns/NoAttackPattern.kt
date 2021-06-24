@@ -17,11 +17,15 @@ class NoAttackPattern : AttackPattern() {
         return mapOf()
     }
 
-    override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
-        return false
-    }
-
     override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
         return listOf()
+    }
+
+    override fun hitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        return listOf()
+    }
+
+    override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
+        return false
     }
 }

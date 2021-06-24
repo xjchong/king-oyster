@@ -17,10 +17,10 @@ open class BasicAttackPattern(
     protected val statusEffect: StatusEffect? = null
 ) : AttackPattern() {
 
-    override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
-        val hitPosition = getHitPosition(context, entity, direction) ?: return false
+    override fun hitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
+        val currentPosition = context.positionOf(entity) ?: return listOf()
 
-        return (context.entitiesAt(hitPosition)?.any { it.isEnemyOf(entity) } == true)
+        return listOf(currentPosition + direction.vector)
     }
 
     override fun calculateDamageForPosition(
@@ -28,18 +28,23 @@ open class BasicAttackPattern(
         entity: Entity,
         direction: Direction
     ): Map<Position, DamageInfo> {
-        val hitPosition = getHitPosition(context, entity, direction) ?: return mapOf()
+        return hitPositions(context, entity, direction).associateWith {
+            DamageInfo(
+                powerFactor = powerFactor,
+                damageType = damageType,
+                elementType = elementType,
+                statusEffect = statusEffect
+            )
+        }
+    }
 
-        return mapOf(hitPosition to DamageInfo(powerFactor, damageType, elementType, statusEffect))
+    override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
+        return hitPositions(context, entity, direction).any { position ->
+            context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
+        }
     }
 
     override fun telegraphPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
-        return listOfNotNull(getHitPosition(context, entity, direction))
-    }
-
-    protected fun getHitPosition(context: Context, entity: Entity, direction: Direction): Position? {
-        val currentPosition = context.positionOf(entity) ?: return null
-
-        return currentPosition + direction.vector
+        return hitPositions(context, entity, direction)
     }
 }
