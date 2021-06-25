@@ -52,7 +52,10 @@ object ActorFactory {
                 ),
                 MemoryPart(),
                 MovementPart(
-                    attackPattern = ShoulderBashPattern(1.5)
+                    attackPattern = ShoulderBashPattern(
+                        powerFactor = 1.5,
+                        staminaCost = 100
+                    )
                 ),
                 SensoryPart(
                     visionRange = 10
@@ -130,7 +133,10 @@ object ActorFactory {
                     isPassable = false
                 ),
                 MovementPart(
-                    attackPattern = ShoulderBashPattern(2.0)
+                    attackPattern = ShoulderBashPattern(
+                        powerFactor = 2.0,
+                        staminaCost = 0
+                    )
                 ),
                 SensoryPart(
                     visionRange = 5

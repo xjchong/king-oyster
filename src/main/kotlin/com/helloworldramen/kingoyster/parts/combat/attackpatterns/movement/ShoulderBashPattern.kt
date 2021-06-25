@@ -1,20 +1,20 @@
 package com.helloworldramen.kingoyster.parts.combat.attackpatterns.movement
 
 import com.helloworldramen.kingoyster.actions.Damage
+import com.helloworldramen.kingoyster.actions.StaminaExpend
 import com.helloworldramen.kingoyster.actions.Move
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Direction
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
-import com.helloworldramen.kingoyster.parts.combat.DamageInfo
-import com.helloworldramen.kingoyster.parts.combat.DamageType
-import com.helloworldramen.kingoyster.parts.combat.ElementType
+import com.helloworldramen.kingoyster.parts.combat.*
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.AttackPattern
 import com.helloworldramen.kingoyster.parts.isBarrier
 import com.helloworldramen.kingoyster.parts.isPassable
 
 class ShoulderBashPattern(
     private val powerFactor: Double,
+    private val staminaCost: Int,
     private val damageType: DamageType = DamageType.Bash,
     private val elementType: ElementType = ElementType.None
 ) : AttackPattern() {
@@ -42,6 +42,8 @@ class ShoulderBashPattern(
     }
 
     override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
+        if (entity.stamina() < staminaCost) return false
+
         val currentPosition = context.positionOf(entity) ?: return false
         val adjacentPosition = currentPosition + direction.vector
         val adjacentEntities = context.entitiesAt(adjacentPosition)
@@ -59,9 +61,11 @@ class ShoulderBashPattern(
     }
 
     override fun beforeEffect(context: Context, entity: Entity, direction: Direction) {
-        val endPosition = calculateEndPosition(context, entity, direction) ?: return
+        entity.respondToAction(StaminaExpend(context, entity, staminaCost))
 
-        entity.respondToAction(Move(context, entity, endPosition, timeFactor = 0.0))
+        calculateEndPosition(context, entity, direction)?.let {
+            entity.respondToAction(Move(context, entity, it, timeFactor = 0.0))
+        }
     }
 
     override fun afterEffect(context: Context, entity: Entity, direction: Direction) {
@@ -78,7 +82,7 @@ class ShoulderBashPattern(
         return context.straightPathWhile(currentPosition, direction) { position ->
             val entities = context.entitiesAt(position)
 
-            entities != null && (entities.all { it.isPassable() } || entities.contains(entity))
+            entities.all { it.isPassable() } || entities.contains(entity)
         }
     }
 }

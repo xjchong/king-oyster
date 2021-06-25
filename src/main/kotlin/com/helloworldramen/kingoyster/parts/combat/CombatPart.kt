@@ -64,6 +64,8 @@ class CombatPart(
             is DefaultAttack -> partOwner.respondToDefaultAttack(action)
             is Heal ->partOwner.respondToHeal(action)
             is ReceiveStatusEffect -> partOwner.respondToReceiveStatusEffect(action)
+            is StaminaExpend -> partOwner.respondToStaminaExpend(action)
+            is StaminaRecover -> partOwner.respondToStaminaRecover(action)
             else -> false
         }
     }
@@ -88,12 +90,26 @@ class CombatPart(
         }
     }
 
+    private fun modifyStamina(context: Context, partOwner: Entity, amount: Int) {
+        if (partOwner.find<CombatPart>() != this) return
+
+        stamina = (stamina + amount).coerceIn(0..maxStamina)
+    }
+
     private fun Entity.respondToDamage(action: Damage): Boolean {
         val (context, source, amount, damageType, elementType, statusEffect) = action
         val finalAmount = (resFactor(damageType, elementType) * amount).roundToInt()
 
         EventBus.post(DamageEntityEvent(source, this, finalAmount, damageType, elementType))
         modifyHealth(context, this, -finalAmount)
+
+        source.respondToAction(
+            StaminaRecover(
+                context = context,
+                actor = source,
+                amount = (finalAmount * 10) / source.power().coerceAtLeast(1)
+            )
+        )
 
         if (statusEffect != null && health() > 0) {
             if (Random.nextDouble(1.0) < statusEffect.applyChance(context, this)) {
@@ -136,6 +152,26 @@ class CombatPart(
 
         effect.onApply(context, actor)
         EventBus.post(StatusAppliedEvent(this))
+
+        return true
+    }
+
+    private fun Entity.respondToStaminaExpend(action: StaminaExpend): Boolean {
+        val (context, actor, amount) = action
+
+        if (actor != this) return false
+
+        modifyStamina(context, actor, -amount)
+
+        return true
+    }
+
+    private fun Entity.respondToStaminaRecover(action: StaminaRecover): Boolean {
+        val (context, actor, amount) = action
+
+        if (actor != this) return false
+
+        modifyStamina(context, actor, amount)
 
         return true
     }
