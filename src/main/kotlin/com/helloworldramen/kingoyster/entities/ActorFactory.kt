@@ -1,6 +1,5 @@
 package com.helloworldramen.kingoyster.entities
 
-import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*
@@ -29,7 +28,7 @@ object ActorFactory {
                 ),
                 CombatPart(
                     maxHealth = 100,
-                    maxMana = 4,
+                    maxStamina = 1000,
                     power = 10,
                     defaultAttackPattern = BasicAttackPattern(
                         powerFactor = 0.5,
@@ -75,7 +74,7 @@ object ActorFactory {
                 ),
                 CombatPart(
                     maxHealth = 100,
-                    maxMana = 4,
+                    maxStamina = 4,
                     power = 10,
                     defaultAttackPattern = BasicAttackPattern(
                         powerFactor = 0.5,
@@ -117,7 +116,7 @@ object ActorFactory {
                 ),
                 CombatPart(
                     maxHealth = 30,
-                    maxMana = 0,
+                    maxStamina = 0,
                     power = 12,
                     defaultAttackPattern = BasicAttackPattern(
                         powerFactor = 1.0,
@@ -153,7 +152,7 @@ object ActorFactory {
                 ),
                 CombatPart(
                     maxHealth = 10,
-                    maxMana = 6,
+                    maxStamina = 6,
                     power = 0,
                     defaultAttackPattern = BasicAttackPattern(0.0)
                 ),
@@ -199,7 +198,7 @@ object ActorFactory {
                 ),
                 CombatPart(
                     maxHealth = 30,
-                    maxMana = 0,
+                    maxStamina = 0,
                     power = 8,
                     defaultAttackPattern = BasicAttackPattern(
                         powerFactor = 1.0,
@@ -250,7 +249,7 @@ object ActorFactory {
                 ),
                 CombatPart(
                     maxHealth = 80,
-                    maxMana = 0,
+                    maxStamina = 0,
                     power = 12,
                     defaultAttackPattern = BasicAttackPattern(
                         powerFactor = 1.0,
@@ -301,7 +300,7 @@ object ActorFactory {
                 ),
                 CombatPart(
                     maxHealth = 15,
-                    maxMana = 0,
+                    maxStamina = 0,
                     power = 4,
                     defaultAttackPattern = BasicAttackPattern(1.0)
                 ),
@@ -343,7 +342,7 @@ object ActorFactory {
                 ),
                 CombatPart(
                     maxHealth = 24,
-                    maxMana =  0,
+                    maxStamina =  0,
                     power = 6,
                     defaultAttackPattern = BasicAttackPattern(
                         powerFactor = 1.0,
@@ -382,7 +381,7 @@ object ActorFactory {
                 ),
                 CombatPart(
                     maxHealth = 15,
-                    maxMana = 0,
+                    maxStamina = 0,
                     power = 6,
                     defaultAttackPattern = BasicAttackPattern(
                         powerFactor = 1.0,

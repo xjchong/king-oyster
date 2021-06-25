@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://src/main/resources/fonts/small_pixel-7.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/health/HealthScene.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/entity/EntitySprite.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/hud/HUDScene.kt" type="Script" id=4]
+[ext_resource path="res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/stamina/StaminaScene.tscn" type="PackedScene" id=5]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -43,7 +44,7 @@ __meta__ = {
 margin_left = 16.0
 margin_right = 240.0
 margin_bottom = 600.0
-custom_constants/separation = 16
+custom_constants/separation = -8
 
 [node name="HealthVBox" type="VBoxContainer" parent="VBoxContainer"]
 margin_right = 224.0
@@ -86,14 +87,58 @@ custom_fonts/font = SubResource( 2 )
 text = "1000"
 align = 2
 
-[node name="WeaponContainer" type="MarginContainer" parent="VBoxContainer"]
-margin_top = 84.0
+[node name="StaminaVBox" type="VBoxContainer" parent="VBoxContainer"]
+margin_top = 60.0
 margin_right = 224.0
-margin_bottom = 161.0
+margin_bottom = 128.0
+
+[node name="StaminaPanel" type="Panel" parent="VBoxContainer/StaminaVBox"]
+margin_right = 224.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+custom_styles/panel = SubResource( 1 )
+
+[node name="StaminaScene" parent="VBoxContainer/StaminaVBox/StaminaPanel" instance=ExtResource( 5 )]
+position = Vector2( 0, 9 )
+scale = Vector2( 7, 5 )
+
+[node name="StaminaLabelsContainer" type="MarginContainer" parent="VBoxContainer/StaminaVBox"]
+margin_top = 36.0
+margin_right = 224.0
+margin_bottom = 68.0
+custom_constants/margin_right = 16
+custom_constants/margin_left = 16
+
+[node name="StaminaLabelsHBox" type="HBoxContainer" parent="VBoxContainer/StaminaVBox/StaminaLabelsContainer"]
+margin_left = 16.0
+margin_right = 208.0
+margin_bottom = 32.0
+
+[node name="StaminaTitleLabel" type="Label" parent="VBoxContainer/StaminaVBox/StaminaLabelsContainer/StaminaLabelsHBox"]
+margin_right = 135.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 2 )
+text = "ST"
+
+[node name="StaminaAmountLabel" type="Label" parent="VBoxContainer/StaminaVBox/StaminaLabelsContainer/StaminaLabelsHBox"]
+margin_left = 139.0
+margin_right = 192.0
+margin_bottom = 32.0
+custom_fonts/font = SubResource( 2 )
+text = "1000"
+align = 2
+
+[node name="WeaponContainer" type="MarginContainer" parent="VBoxContainer"]
+margin_top = 120.0
+margin_right = 224.0
+margin_bottom = 209.0
+custom_constants/margin_top = 12
 
 [node name="WeaponVBox" type="VBoxContainer" parent="VBoxContainer/WeaponContainer"]
+margin_top = 12.0
 margin_right = 224.0
-margin_bottom = 77.0
+margin_bottom = 89.0
 
 [node name="WeaponHBox" type="HBoxContainer" parent="VBoxContainer/WeaponContainer/WeaponVBox"]
 margin_right = 224.0
@@ -142,29 +187,30 @@ text = "Wide attack. Does more damage for each enemy hit."
 autowrap = true
 
 [node name="ItemContainer" type="MarginContainer" parent="VBoxContainer"]
-margin_top = 177.0
+margin_top = 201.0
 margin_right = 224.0
-margin_bottom = 283.0
+margin_bottom = 294.0
+custom_constants/margin_top = 16
 
 [node name="ItemVBox" type="VBoxContainer" parent="VBoxContainer/ItemContainer"]
+margin_top = 16.0
 margin_right = 224.0
-margin_bottom = 106.0
+margin_bottom = 93.0
 
 [node name="ItemHBox" type="HBoxContainer" parent="VBoxContainer/ItemContainer/ItemVBox"]
 margin_right = 224.0
-margin_bottom = 67.0
+margin_bottom = 38.0
 
 [node name="ItemCenterContainer" type="CenterContainer" parent="VBoxContainer/ItemContainer/ItemVBox/ItemHBox"]
 margin_right = 38.0
-margin_bottom = 67.0
+margin_bottom = 38.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ItemPanel" type="Panel" parent="VBoxContainer/ItemContainer/ItemVBox/ItemHBox/ItemCenterContainer"]
-margin_top = 14.0
 margin_right = 38.0
-margin_bottom = 52.0
+margin_bottom = 38.0
 rect_min_size = Vector2( 38, 38 )
 custom_styles/panel = SubResource( 3 )
 
@@ -173,28 +219,29 @@ position = Vector2( 2.88501, 3 )
 
 [node name="ItemUsesLabel" type="Label" parent="VBoxContainer/ItemContainer/ItemVBox/ItemHBox"]
 margin_left = 42.0
-margin_top = 17.0
+margin_top = 3.0
 margin_right = 83.0
-margin_bottom = 49.0
+margin_bottom = 35.0
 custom_fonts/font = SubResource( 2 )
 text = "(10)"
 valign = 1
 
 [node name="ItemNameLabel" type="Label" parent="VBoxContainer/ItemContainer/ItemVBox/ItemHBox"]
 margin_left = 87.0
+margin_top = 3.0
 margin_right = 224.0
-margin_bottom = 67.0
+margin_bottom = 35.0
 size_flags_horizontal = 3
 custom_fonts/font = SubResource( 2 )
-text = "Scroll of sickness"
+text = "Sickness"
 align = 2
 valign = 1
 autowrap = true
 
 [node name="ItemDescriptionLabel" type="Label" parent="VBoxContainer/ItemContainer/ItemVBox"]
-margin_top = 71.0
+margin_top = 42.0
 margin_right = 224.0
-margin_bottom = 106.0
+margin_bottom = 77.0
 custom_fonts/font = SubResource( 4 )
 text = "Restores HP. Potency increases as HP decreases."
 autowrap = true

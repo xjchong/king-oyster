@@ -16,25 +16,25 @@ import kotlin.random.Random
 
 class CombatPart(
     var maxHealth: Int,
-    var maxMana: Int = 0,
+    var maxStamina: Int = 0,
     var power: Int = 0,
     var defaultAttackPattern: AttackPattern = NoAttackPattern(),
     health: Int = maxHealth,
-    mana: Int = maxMana,
+    stamina: Int = maxStamina,
     statusEffects: List<StatusEffect> = listOf()
 ) : Part {
 
     var health: Int = health
         private set
 
-    var mana: Int = mana
+    var stamina: Int = stamina
         private set
 
     var statusEffects: List<StatusEffect> = statusEffects
         private set
 
     override fun copy(): Part {
-        return CombatPart(maxHealth, maxMana, power, defaultAttackPattern, health, mana, statusEffects.toList())
+        return CombatPart(maxHealth, maxStamina, power, defaultAttackPattern, health, stamina, statusEffects.toList())
     }
 
     override fun update(context: Context, partOwner: Entity) {
@@ -143,8 +143,8 @@ class CombatPart(
 
 fun Entity.maxHealth(): Int = find<CombatPart>()?.maxHealth ?: 0
 fun Entity.health(): Int = find<CombatPart>()?.health ?: 0
-fun Entity.maxMana(): Int = find<CombatPart>()?.maxMana ?: 0
-fun Entity.mana(): Int = find<CombatPart>()?.mana ?: 0
+fun Entity.maxStamina(): Int = find<CombatPart>()?.maxStamina ?: 0
+fun Entity.stamina(): Int = find<CombatPart>()?.stamina ?: 0
 fun Entity.power(): Int = find<CombatPart>()?.power ?: 0
 fun Entity.defaultAttackPattern(): AttackPattern {
     return find<CombatPart>()?.defaultAttackPattern ?: BasicAttackPattern()

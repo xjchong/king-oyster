@@ -3,8 +3,10 @@ package com.helloworldramen.kingoyster.scenes.hud
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.health
+import com.helloworldramen.kingoyster.parts.combat.stamina
 import com.helloworldramen.kingoyster.scenes.entity.EntitySprite
 import com.helloworldramen.kingoyster.scenes.health.HealthScene
+import com.helloworldramen.kingoyster.scenes.stamina.StaminaScene
 import godot.Label
 import godot.MarginContainer
 import godot.annotation.RegisterClass
@@ -16,6 +18,9 @@ class HUDScene : MarginContainer() {
 
 	private val healthScene: HealthScene by lazy { getNodeAs("$HEALTH_PREFIX/HealthPanel/HealthScene")!! }
 	private val healthAmountLabel: Label by lazy { getNodeAs("$HEALTH_PREFIX/HealthLabelsContainer/HealthLabelsHBox/HealthAmountLabel")!! }
+
+	private val staminaScene: StaminaScene by lazy { getNodeAs("$STAMINA_PREFIX/StaminaPanel/StaminaScene")!! }
+	private val staminaAmountLabel: Label by lazy { getNodeAs("$STAMINA_PREFIX/StaminaLabelsContainer/StaminaLabelsHBox/StaminaAmountLabel")!! }
 
 	private val weaponSprite: EntitySprite by lazy { getNodeAs("$WEAPON_PREFIX/WeaponHBox/WeaponCenterContainer/WeaponPanel/WeaponSprite")!! }
 	private val weaponDurabilityLabel: Label by lazy { getNodeAs("$WEAPON_PREFIX/WeaponHBox/WeaponDurabilityLabel")!! }
@@ -32,6 +37,7 @@ class HUDScene : MarginContainer() {
 	@RegisterFunction
 	override fun _process(delta: Double) {
 		updateHealth()
+		updateStamina()
 		updateWeapon()
 		updateItem()
 	}
@@ -40,10 +46,15 @@ class HUDScene : MarginContainer() {
 		this.entity = entity
 
 		healthScene.bind(entity, true)
+		staminaScene.bind(entity, true)
 	}
 
 	private fun updateHealth() {
 		healthAmountLabel.text = entity.health().toString()
+	}
+
+	private fun updateStamina() {
+		staminaAmountLabel.text = entity.stamina().toString()
 	}
 
 	private fun updateWeapon() {
@@ -82,6 +93,7 @@ class HUDScene : MarginContainer() {
 
 	companion object {
 		private const val HEALTH_PREFIX = "VBoxContainer/HealthVBox"
+		private const val STAMINA_PREFIX = "VBoxContainer/StaminaVBox"
 		private const val WEAPON_PREFIX = "VBoxContainer/WeaponContainer/WeaponVBox"
 		private const val ITEM_PREFIX = "VBoxContainer/ItemContainer/ItemVBox"
 	}
