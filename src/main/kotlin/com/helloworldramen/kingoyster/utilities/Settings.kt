@@ -1,6 +1,5 @@
 package com.helloworldramen.kingoyster.utilities
 
-import com.helloworldramen.kingoyster.worldgen.metadata.WorldFlavor
 import godot.ConfigFile
 import godot.core.Color
 import godot.core.GodotError

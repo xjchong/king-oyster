@@ -6,7 +6,6 @@ import com.helloworldramen.kingoyster.ai.GameAiOptionContext
 import com.helloworldramen.kingoyster.ai.architecture.AiStrategy
 import com.helloworldramen.kingoyster.ai.architecture.AiStrategyContext
 import com.helloworldramen.kingoyster.ai.tag
-import com.helloworldramen.kingoyster.parts.canPass
 import com.helloworldramen.kingoyster.utilities.pathing.Pathing
 
 class PathFartherOption(

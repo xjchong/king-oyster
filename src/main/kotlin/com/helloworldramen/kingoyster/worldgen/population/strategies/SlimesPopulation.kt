@@ -1,11 +1,9 @@
 package com.helloworldramen.kingoyster.worldgen.population.strategies
 
 import com.helloworldramen.kingoyster.entities.ActorFactory
-import com.helloworldramen.kingoyster.entities.WeaponFactory
 import com.helloworldramen.kingoyster.worldgen.population.PopulationRule
 import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
 import com.helloworldramen.kingoyster.worldgen.population.PopulationTemplate
-import com.helloworldramen.kingoyster.worldgen.population.rules.StairsPopulationRule
 import com.helloworldramen.kingoyster.worldgen.population.templates.AssortedWeaponsPopulationTemplate
 import com.helloworldramen.kingoyster.worldgen.population.templates.StairsPopulationTemplate
 

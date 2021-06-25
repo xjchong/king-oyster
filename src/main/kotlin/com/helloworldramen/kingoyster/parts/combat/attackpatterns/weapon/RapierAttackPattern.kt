@@ -19,7 +19,7 @@ class RapierAttackPattern(
 
     override fun hitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
         val hitPosition = telegraphPositions(context, entity, direction).firstOrNull { position ->
-            context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
+            context.entitiesAt(position).any { it.isEnemyOf(entity) }
         }
 
         return listOfNotNull(hitPosition)
@@ -40,12 +40,12 @@ class RapierAttackPattern(
         val nextPosition = currentPosition.withRelative(direction.vector)
 
         // The square in front of the user must be passable or attackable.
-        if (context.entitiesAt(nextPosition)?.all { it.isPassable() || (it.has<CombatPart>() && it.isEnemyOf(entity)) } != true) {
+        if (!context.entitiesAt(nextPosition).all { it.isPassable() || (it.has<CombatPart>() && it.isEnemyOf(entity)) }) {
             return false
         }
 
         return hitPositions(context, entity, direction).any { position ->
-            context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
+            context.entitiesAt(position).any { it.isEnemyOf(entity) }
         }
     }
 
@@ -78,7 +78,7 @@ class RapierAttackPattern(
         val currentPosition = context.positionOf(entity) ?: return listOf()
         val nextPosition = currentPosition + direction.vector
 
-        return if (context.entitiesAt(nextPosition)?.all { it.isPassable() } == true) {
+        return if (context.entitiesAt(nextPosition).all { it.isPassable() }) {
             listOf(nextPosition)
         } else {
             listOf()

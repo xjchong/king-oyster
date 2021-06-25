@@ -5,7 +5,6 @@ import com.helloworldramen.kingoyster.ai.architecture.AiConsideration
 import com.helloworldramen.kingoyster.ai.architecture.AiOption
 import com.helloworldramen.kingoyster.ai.options.MoveOption
 import com.helloworldramen.kingoyster.parts.canPass
-import com.helloworldramen.kingoyster.parts.isPassable
 
 class WanderStrategy(vararg considerations: GameAiConsideration) : GameAiStrategy() {
 
@@ -16,7 +15,7 @@ class WanderStrategy(vararg considerations: GameAiConsideration) : GameAiStrateg
         val (context, entity) = strategyContext
         val currentPosition = context.positionOf(entity) ?: return listOf()
         val passableNeighbors = currentPosition.neighbors().filter { neighbor ->
-            context.entitiesAt(neighbor)?.all { entity.canPass(it) } == true
+            context.entitiesAt(neighbor).all { entity.canPass(it) }
         }
 
         return passableNeighbors.shuffled().map {

@@ -3,18 +3,20 @@ package com.helloworldramen.kingoyster.worldgen
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
-import com.helloworldramen.kingoyster.entities.ActorFactory
 import com.helloworldramen.kingoyster.parts.AscendablePart
 import com.helloworldramen.kingoyster.parts.combat.CombatPart
 import com.helloworldramen.kingoyster.parts.isPassable
 import com.helloworldramen.kingoyster.utilities.WeightedCollection
 import com.helloworldramen.kingoyster.worldgen.metadata.WorldFlavor
+import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
+import com.helloworldramen.kingoyster.worldgen.population.strategies.EmptyPopulation
+import com.helloworldramen.kingoyster.worldgen.population.strategies.RatsPopulation
+import com.helloworldramen.kingoyster.worldgen.population.strategies.SlimesPopulation
+import com.helloworldramen.kingoyster.worldgen.population.strategies.SmorgasbordPopulation
 import com.helloworldramen.kingoyster.worldgen.topology.DrunkTopology
 import com.helloworldramen.kingoyster.worldgen.topology.DungeonTopology
 import com.helloworldramen.kingoyster.worldgen.topology.EmptyTopology
 import com.helloworldramen.kingoyster.worldgen.topology.TopologyStrategy
-import com.helloworldramen.kingoyster.worldgen.population.PopulationStrategy
-import com.helloworldramen.kingoyster.worldgen.population.strategies.*
 
 object WorldCreator {
 

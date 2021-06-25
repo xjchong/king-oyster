@@ -282,7 +282,7 @@ class GameScene : Node2D(), EventBusSubscriber {
 		// Don't read any direction input when not player's turn.
 		if (player.time > context.world.currentTime) return false
 
-		if (context.entitiesAt(actionPosition)?.lastOrNull()?.respondToAction(Open(context, player)) == true) return true
+		if (context.entitiesAt(actionPosition).lastOrNull()?.respondToAction(Open(context, player)) == true) return true
 		if (player.respondToAction(WeaponAttack(context, player, direction))) return true
 		if (player.respondToAction(Move(context, player, actionPosition))) return true
 

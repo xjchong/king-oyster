@@ -8,8 +8,8 @@ import com.helloworldramen.kingoyster.parts.MovementPart
 
 class Context(var world: World, var player: Entity = Entity.UNKNOWN, var level: Int = 1) {
 
-    fun entitiesAt(position: Position): List<Entity>? {
-        return world[position]
+    fun entitiesAt(position: Position): List<Entity> {
+        return world[position] ?: listOf()
     }
 
     fun positionOf(entity: Entity?): Position? {
@@ -24,7 +24,7 @@ class Context(var world: World, var player: Entity = Entity.UNKNOWN, var level: 
      * Applies the action to all entities at the position.
      */
     fun applyAction(position: Position, action: Action): Boolean {
-        val entities = entitiesAt(position) ?: return false
+        val entities = entitiesAt(position)
         var didRespond = false
 
         entities.forEach {
@@ -62,7 +62,7 @@ class Context(var world: World, var player: Entity = Entity.UNKNOWN, var level: 
      * Stops trying actions at the first successful response.
      */
     fun tryActions(position: Position, vararg actions: Action): Entity? {
-        val entities = entitiesAt(position) ?: return null
+        val entities = entitiesAt(position)
 
         for (entity in entities) {
             if (actions.any { it.actor != entity && entity.respondToAction(it) }) {
@@ -122,10 +122,10 @@ class Context(var world: World, var player: Entity = Entity.UNKNOWN, var level: 
     }
 
     private fun Position.isOccupied(): Boolean {
-        return entitiesAt(this)?.any { entity ->
+        return entitiesAt(this).any { entity ->
             entity.has<WeaponPart>() || entity.has<ItemPart>() || entity.has<AscendablePart>()
                     || (!entity.isPassable() && !entity.has<MovementPart>())
-        } != false
+        }
     }
 
     companion object {

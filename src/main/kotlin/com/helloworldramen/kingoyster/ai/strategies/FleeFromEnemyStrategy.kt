@@ -14,7 +14,7 @@ class FleeFromEnemyStrategy(vararg considerations: GameAiConsideration) : GameAi
         val (context, fleer) = strategyContext
         val visiblePositions = fleer.visiblePositions()
         val enemyAndPosition = visiblePositions.flatMap { visiblePosition ->
-            (context.entitiesAt(visiblePosition)?.filter { fleer.isEnemyOf(it) } ?: listOf()).map { enemy ->
+            context.entitiesAt(visiblePosition).filter { fleer.isEnemyOf(it) }.map { enemy ->
                 Pair(enemy, visiblePosition)
             }
         }

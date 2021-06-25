@@ -21,7 +21,7 @@ class TakeWeaponStrategy(vararg considerations: GameAiConsideration) : GameAiStr
         val actorPosition = context.positionOf(actor)
         val visiblePositions = actor.visiblePositions()
         val weaponAndPosition = visiblePositions.flatMap { visiblePosition ->
-            (context.entitiesAt(visiblePosition)?.filter { it.has<WeaponPart>() } ?: listOf()).map { weapon ->
+            context.entitiesAt(visiblePosition).filter { it.has<WeaponPart>() }.map { weapon ->
                 Pair(weapon, visiblePosition)
             }
         }

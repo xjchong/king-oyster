@@ -31,7 +31,7 @@ class LongswordAttackPattern(
         val currentPosition = context.positionOf(entity) ?: return false
         val nextPosition = currentPosition.withRelative(direction.vector)
 
-        return (context.entitiesAt(nextPosition)?.any { it.isEnemyOf(entity) } == true)
+        return (context.entitiesAt(nextPosition).any { it.isEnemyOf(entity) })
     }
 
     override fun calculateDamageForPosition(
@@ -41,7 +41,7 @@ class LongswordAttackPattern(
     ): Map<Position, DamageInfo> {
         val hitPositions = hitPositions(context, entity, direction)
         val landedHitCount = hitPositions.sumBy { position ->
-            if (context.entitiesAt(position)?.any { it.has<CombatPart>() } == true) 1 else 0
+            if (context.entitiesAt(position).any { it.has<CombatPart>() }) 1 else 0
         }
 
         // Longsword does more damage depending on how many hits landed.

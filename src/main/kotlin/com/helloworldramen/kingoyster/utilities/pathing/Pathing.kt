@@ -48,7 +48,7 @@ object Pathing {
     fun pathAway(context: Context, entity: Entity, avoid: Position): Position? {
         val currentPosition = context.positionOf(entity) ?: return null
         val passableNeighbors = currentPosition.neighborsShuffled().filter { neighbor ->
-            context.entitiesAt(neighbor)?.all { entity.canPass(it) } == true
+            context.entitiesAt(neighbor).all { entity.canPass(it) }
         }
 
         return passableNeighbors.maxByOrNull { it.distanceFrom(avoid) }

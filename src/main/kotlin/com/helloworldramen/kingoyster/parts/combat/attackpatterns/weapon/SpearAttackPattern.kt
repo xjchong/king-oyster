@@ -20,7 +20,7 @@ class SpearAttackPattern(
 
     override fun hitPositions(context: Context, entity: Entity, direction: Direction): List<Position> {
         val hitPosition = telegraphPositions(context, entity, direction).firstOrNull { position ->
-            context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
+            context.entitiesAt(position).any { it.isEnemyOf(entity) }
         }
 
         return listOfNotNull(hitPosition)
@@ -40,12 +40,12 @@ class SpearAttackPattern(
         val nextPosition = currentPosition + direction.vector
 
         // The square in front of the user must be passable or attackable.
-        if (context.entitiesAt(nextPosition)?.all { it.isPassable() || (it.isKillable() && it.isEnemyOf(entity)) } != true) {
+        if (!context.entitiesAt(nextPosition).all { it.isPassable() || (it.isKillable() && it.isEnemyOf(entity)) }) {
             return false
         }
 
         return hitPositions(context, entity, direction).any { position ->
-            context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
+            context.entitiesAt(position).any { it.isEnemyOf(entity) }
         }
     }
 

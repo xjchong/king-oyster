@@ -20,7 +20,7 @@ class ChaseEnemyStrategy(vararg considerations: GameAiConsideration) : GameAiStr
         val sensoryPart = chaser.find<SensoryPart>() ?: return listOf()
         val visiblePositions = sensoryPart.visiblePositions + listOfNotNull(sensoryPart.playerPosition)
         val enemyAndPosition = visiblePositions.flatMap { visiblePosition ->
-            (context.entitiesAt(visiblePosition)?.filter { it.isEnemyOf(chaser) } ?: listOf()).map { enemy ->
+            context.entitiesAt(visiblePosition).filter { it.isEnemyOf(chaser) }.map { enemy ->
                 Pair(enemy, visiblePosition)
             }
         }

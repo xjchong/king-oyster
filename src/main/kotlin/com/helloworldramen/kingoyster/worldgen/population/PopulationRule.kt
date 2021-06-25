@@ -3,7 +3,6 @@ package com.helloworldramen.kingoyster.worldgen.population
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.architecture.World
-import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.extensions.EntityFactoryFnNullable
 
 open class PopulationRule(

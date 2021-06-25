@@ -23,7 +23,7 @@ class DaggerAttackPattern(
     ): Map<Position, DamageInfo> {
         val hitPosition = hitPositions(context, entity, direction).firstOrNull() ?: return mapOf()
         val impassableNeighborsCount = hitPosition.neighbors().filter { position ->
-            context.entitiesAt(position)?.any { !it.isPassable() } != false
+            context.entitiesAt(position).any { !it.isPassable() }
         }.size
 
         // Daggers do more damaged in spaces where the target is surrounded by obstacles.

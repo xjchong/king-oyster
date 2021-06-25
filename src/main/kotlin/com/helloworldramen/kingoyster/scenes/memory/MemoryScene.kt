@@ -5,7 +5,6 @@ import com.helloworldramen.kingoyster.architecture.Position
 import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.scenes.entity.EntitySprite
 import com.helloworldramen.kingoyster.utilities.Settings
-import com.helloworldramen.kingoyster.worldgen.WorldCreator
 import com.helloworldramen.kingoyster.worldgen.metadata.WorldFlavor
 import godot.ColorRect
 import godot.Label

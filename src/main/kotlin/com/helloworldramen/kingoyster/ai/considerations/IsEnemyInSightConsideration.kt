@@ -11,7 +11,7 @@ class IsEnemyInSightConsideration(whenTrue: Double, whenFalse: Double) : Boolean
         val visiblePositions = entity.visiblePositions()
 
         return visiblePositions.any { position ->
-            context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
+            context.entitiesAt(position).any { it.isEnemyOf(entity) }
         }
     }
 }

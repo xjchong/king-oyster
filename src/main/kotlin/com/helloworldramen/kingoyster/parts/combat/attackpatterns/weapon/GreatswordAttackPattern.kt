@@ -34,12 +34,12 @@ class GreatswordAttackPattern(
         val forwardPosition = currentPosition.withRelative(direction.vector)
 
         // The square in front of the user must be passable or attackable.
-        if (context.entitiesAt(forwardPosition)?.all { it.isPassable() || it.has<CombatPart>() } != true) {
+        if (!context.entitiesAt(forwardPosition).all { it.isPassable() || it.has<CombatPart>() }) {
             return false
         }
 
         return hitPositions(context, entity, direction).any { position ->
-            context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
+            context.entitiesAt(position).any { it.isEnemyOf(entity) }
         }
     }
 
@@ -50,7 +50,7 @@ class GreatswordAttackPattern(
     ): Map<Position, DamageInfo> {
         val hitPositions = hitPositions(context, entity, direction)
         val landedHitCount = hitPositions.sumBy { position ->
-            if (context.entitiesAt(position)?.any { it.has<CombatPart>() } == true) 1 else 0
+            if (context.entitiesAt(position).any { it.has<CombatPart>() }) 1 else 0
         }
 
         // Greatsword increases in damage the more things are hit.

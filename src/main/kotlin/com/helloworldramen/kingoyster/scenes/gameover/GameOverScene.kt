@@ -1,6 +1,5 @@
 package com.helloworldramen.kingoyster.scenes.gameover
 
-import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.scenes.mainmenu.MainMenuScene
 import godot.ColorRect
 import godot.InputEvent

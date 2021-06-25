@@ -78,9 +78,9 @@ object ItemFactory {
                         // Find all the positions in each direction until a wall.
                         for (direction in Direction.all()) {
                             val path = context.straightPathUntil(userPosition + direction.vector, direction) { position ->
-                                context.entitiesAt(position)?.any {
+                                context.entitiesAt(position).any {
                                     !it.isPassable() && !it.has<MovementPart>()
-                                } != false
+                                }
                             }
 
                             context.applyAction(path, Damage(
@@ -119,7 +119,7 @@ object ItemFactory {
                         // Find all the positions in each direction until a wall.
                         for (direction in Direction.all()) {
                             val path = context.straightPathUntil(userPosition + direction.vector, direction) { position ->
-                                context.entitiesAt(position)?.any { it.isBarrier() } != false
+                                context.entitiesAt(position).any { it.isBarrier() }
                             }
 
                             context.applyAction(path, Damage(
@@ -158,7 +158,7 @@ object ItemFactory {
                         // Find all the positions in each direction until a wall.
                         for (direction in Direction.all()) {
                             val path = context.straightPathUntil(userPosition + direction.vector, direction) { position ->
-                                context.entitiesAt(position)?.any { it.isBarrier() } != false
+                                context.entitiesAt(position).any { it.isBarrier() }
                             }
 
                             context.applyAction(path, Damage(
@@ -194,7 +194,7 @@ object ItemFactory {
                         val userPosition = context.positionOf(user) ?: return@ItemPart false
                         val cloudSize = 5
                         val cloudPositions = FloodFill.fill(userPosition.x, userPosition.y, cloudSize) { x, y ->
-                            context.entitiesAt(Position(x, y))?.any { it.isBarrier() } != false
+                            context.entitiesAt(Position(x, y)).any { it.isBarrier() }
                         }.map { xy ->
                             Position(xy)
                         }.filter { position ->
@@ -236,7 +236,7 @@ object ItemFactory {
                         val world = context.world
                         val nextPosition = Position(world.width - 1, world.height - 1)
                             .map { it }
-                            .filter { context.entitiesAt(it)?.isEmpty() == true }
+                            .filter { context.entitiesAt(it).isEmpty() }
                             .randomOrNull() ?: return@ItemPart false
 
                         user.respondToAction(Move(context, user, nextPosition, 0.0))
@@ -265,7 +265,7 @@ object ItemFactory {
                         val world = context.world
                         val emptyPositions = Position(world.width - 1, world.height - 1)
                             .map { it }
-                            .filter { context.entitiesAt(it)?.isEmpty() == true }
+                            .filter { context.entitiesAt(it).isEmpty() }
 
                         val currentPosition = context.positionOf(user) ?: return@ItemPart false
                         val radius = 5
@@ -278,7 +278,7 @@ object ItemFactory {
                         }
 
                         banishedPositions.forEach { position ->
-                            val entities = context.entitiesAt(position) ?: listOf()
+                            val entities = context.entitiesAt(position)
 
                             entities.forEach { entity ->
                                 val teleportPosition = emptyPositions.randomOrNull() ?: position

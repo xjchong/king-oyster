@@ -151,7 +151,3 @@ fun Entity.defaultAttackPattern(): AttackPattern {
 }
 fun Entity.isKillable(): Boolean = has<CombatPart>()
 fun Entity.statusEffects(): List<StatusEffect> = find<CombatPart>()?.statusEffects ?: listOf()
-
-inline fun <reified S : StatusEffect> Entity.hasStatusEffect() : Boolean {
-    return statusEffects().any { S::class.isInstance(it) }
-}

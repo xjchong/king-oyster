@@ -22,7 +22,7 @@ class MoveAttackEnemyStrategy(vararg considerations: GameAiConsideration) : Game
 
         return Direction.all().filter { direction ->
             moveAttackPattern.telegraphPositions(context ,attacker, direction).any { position ->
-                context.entitiesAt(position)?.any { it.isEnemyOf(attacker) } == true
+                context.entitiesAt(position).any { it.isEnemyOf(attacker) }
             }
         }.map {
             MoveAttackOption(this, strategyContext.withDirection(it))

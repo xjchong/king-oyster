@@ -31,7 +31,7 @@ class ShoulderBashPattern(
         val currentPosition = context.positionOf(entity) ?: return listOf()
 
         val guaranteedPath = context.straightPathWhile(currentPosition + (direction.vector * 2), direction) { position ->
-            context.entitiesAt(position)?.all { !it.isBarrier() } == true
+            context.entitiesAt(position).all { !it.isBarrier() }
         }
 
         val lastPosition = guaranteedPath.lastOrNull() ?: return listOf()
@@ -44,7 +44,7 @@ class ShoulderBashPattern(
     override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
         val currentPosition = context.positionOf(entity) ?: return false
         val adjacentPosition = currentPosition + direction.vector
-        val adjacentEntities = context.entitiesAt(adjacentPosition) ?: return false
+        val adjacentEntities = context.entitiesAt(adjacentPosition)
 
         return adjacentEntities.all { it.isPassable() }
     }

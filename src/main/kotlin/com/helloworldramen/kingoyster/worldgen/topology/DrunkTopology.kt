@@ -1,8 +1,6 @@
 package com.helloworldramen.kingoyster.worldgen.topology
 
 import com.helloworldramen.kingoyster.architecture.Position
-import com.helloworldramen.kingoyster.architecture.World
-import com.helloworldramen.kingoyster.entities.FeatureFactory
 
 class DrunkTopology(private val clearPercentage: Double = DEFAULT_CLEAR_PERCENTAGE) : TopologyStrategy() {
 

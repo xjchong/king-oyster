@@ -1,7 +1,6 @@
 package com.helloworldramen.kingoyster.worldgen.topology
 
 import com.helloworldramen.kingoyster.architecture.Position
-import com.helloworldramen.kingoyster.architecture.World
 
 object EmptyTopology : TopologyStrategy() {
 

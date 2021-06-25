@@ -2,7 +2,6 @@ package com.helloworldramen.kingoyster.entities
 
 import com.helloworldramen.kingoyster.actions.Damage
 import com.helloworldramen.kingoyster.actions.Heal
-import com.helloworldramen.kingoyster.actions.ReceiveStatusEffect
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*

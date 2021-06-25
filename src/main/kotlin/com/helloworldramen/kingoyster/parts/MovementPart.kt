@@ -32,7 +32,7 @@ class MovementPart(
         val (context, actor, position) = action
         if (actor != this) return false
         val currentPosition = context.positionOf(actor) ?: return false
-        val entitiesAtPosition = context.entitiesAt(position) ?: return false
+        val entitiesAtPosition = context.entitiesAt(position)
 
         if (entitiesAtPosition.any { !canPass(it) }) return false
         if (!context.world.move(actor, position)) return false

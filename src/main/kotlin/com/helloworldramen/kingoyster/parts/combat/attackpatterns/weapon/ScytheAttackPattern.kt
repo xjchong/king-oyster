@@ -32,15 +32,15 @@ class ScytheAttackPattern(
     override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
         val currentPosition = context.positionOf(entity) ?: return false
         val forwardPosition = currentPosition.withRelative(direction.vector)
-        val willStepForward = context.entitiesAt(forwardPosition)?.all { it.isPassable() } == true
+        val willStepForward = context.entitiesAt(forwardPosition).all { it.isPassable() }
         val attackPosition = if (willStepForward) forwardPosition else currentPosition
 
-        if (context.entitiesAt(attackPosition + direction.vector)?.all { it.isPassable() || it.has<CombatPart>() } != true) {
+        if (!context.entitiesAt(attackPosition + direction.vector).all { it.isPassable() || it.has<CombatPart>() }) {
             return false
         }
 
         return hitPositions(context, entity, direction).any { position ->
-            context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
+            context.entitiesAt(position).any { it.isEnemyOf(entity) }
         }
     }
 
@@ -51,7 +51,7 @@ class ScytheAttackPattern(
     ): Map<Position, DamageInfo> {
         val hitPositions = hitPositions(context, entity, direction)
         val landedHitCount = hitPositions.sumBy { position ->
-            if (context.entitiesAt(position)?.any { it.has<CombatPart>() } == true) 1 else 0
+            if (context.entitiesAt(position).any { it.has<CombatPart>() }) 1 else 0
         }
 
         val landedFactor = when {

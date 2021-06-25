@@ -2,7 +2,6 @@ package com.helloworldramen.kingoyster.ai.considerations
 
 import com.helloworldramen.kingoyster.ai.GameAiConsideration
 import com.helloworldramen.kingoyster.ai.GameAiOptionContext
-import com.helloworldramen.kingoyster.ai.GameAiStrategyContext
 import com.helloworldramen.kingoyster.ai.architecture.AiCurve
 import com.helloworldramen.kingoyster.ai.curves.LinearCurve
 

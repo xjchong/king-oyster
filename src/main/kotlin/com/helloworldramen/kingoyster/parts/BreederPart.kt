@@ -36,7 +36,7 @@ class BreederPart(var maxChildCount: Int, val entityFactoryFn: EntityFactoryFn) 
 
         val currentPosition = context.positionOf(this) ?: return false
         val breedPosition = currentPosition.neighborsShuffled().firstOrNull { neighbor ->
-            context.entitiesAt(neighbor)?.all { it.isPassable() } == true
+            context.entitiesAt(neighbor).all { it.isPassable() }
         } ?: return false
         val child = entityFactoryFn()
 

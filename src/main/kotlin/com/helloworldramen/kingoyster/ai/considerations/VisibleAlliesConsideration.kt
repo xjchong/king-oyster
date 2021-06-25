@@ -15,9 +15,9 @@ class VisibleAlliesConsideration(override val curve: AiCurve) : GameAiConsiderat
         val (context, entity) = optionContext
 
         return entity.visiblePositions().filter { visiblePosition ->
-            context.entitiesAt(visiblePosition)?.any { otherEntity ->
+            context.entitiesAt(visiblePosition).any { otherEntity ->
                 entity != otherEntity && entity.isAllyOf(otherEntity)
-            } == true
+            }
         }.size.toDouble()
     }
 }

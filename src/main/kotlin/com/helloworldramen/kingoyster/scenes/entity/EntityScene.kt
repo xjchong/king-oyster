@@ -453,7 +453,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 
 	private fun calculateNodePosition(worldPosition: Position): Vector2 {
 		val defaultPosition = Vector2(worldPosition.x * WorldScene.TILE_SIZE, worldPosition.y * WorldScene.TILE_SIZE)
-		val zIndexOffset = (context.entitiesAt(worldPosition)?.indexOf(entity) ?: 0) / 10.0
+		val zIndexOffset = context.entitiesAt(worldPosition).indexOf(entity) / 10.0
 
 		return defaultPosition + Vector2(0, zIndexOffset)
 	}

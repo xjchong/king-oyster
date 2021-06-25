@@ -40,7 +40,7 @@ open class BasicAttackPattern(
 
     override fun isUsable(context: Context, entity: Entity, direction: Direction): Boolean {
         return hitPositions(context, entity, direction).any { position ->
-            context.entitiesAt(position)?.any { it.isEnemyOf(entity) } == true
+            context.entitiesAt(position).any { it.isEnemyOf(entity) }
         }
     }
 

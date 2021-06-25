@@ -58,7 +58,7 @@ class WeaponSlotPart(
         // Remove the weapon from inventory.
         this@WeaponSlotPart.weapon = null
 
-        if (context.entitiesAt(nearestImpassablePosition)?.any { it.has<CombatPart>() } == true) {
+        if (context.entitiesAt(nearestImpassablePosition).any { it.has<CombatPart>() }) {
             EventBus.post(ThrowWeaponEvent(this, weapon, currentPosition, nearestImpassablePosition))
 
             // Drop the weapon at the destination.

@@ -6,7 +6,6 @@ import com.helloworldramen.kingoyster.eventbus.EventBus
 import com.helloworldramen.kingoyster.eventbus.EventBusSubscriber
 import com.helloworldramen.kingoyster.eventbus.events.BreedEvent
 import com.helloworldramen.kingoyster.eventbus.events.DamagePositionEvent
-import com.helloworldramen.kingoyster.eventbus.events.WeaponAttackEvent
 import com.helloworldramen.kingoyster.extensions.freeChildren
 import com.helloworldramen.kingoyster.extensions.isVisibleToPlayer
 import com.helloworldramen.kingoyster.extensions.positionsForEach
