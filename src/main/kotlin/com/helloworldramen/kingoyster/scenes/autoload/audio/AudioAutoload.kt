@@ -56,7 +56,8 @@ class AudioAutoload : Node() {
 	}
 
 	fun play(sfxPath: String) {
-		sfxPathQueue.offer(sfxPath)
+		// Limit how many times the same sound effect will attempt to play simultaneously..
+		if (!sfxPathQueue.contains(sfxPath)) sfxPathQueue.offer(sfxPath)
 	}
 
 	/**
