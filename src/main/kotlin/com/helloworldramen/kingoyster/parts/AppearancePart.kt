@@ -3,15 +3,13 @@ package com.helloworldramen.kingoyster.parts
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.utilities.WeightedCollection
-import godot.core.Color
-import godot.core.Vector2
 
 class AppearancePart(
     val description: String = "(no description)",
     val ascii: Char = '?',
-    val color: Color = Color.white,
+    val color: String = "ffffff",
     val sprite: String? = null,
-    val offset: Vector2 = Vector2.ZERO,
+    val offset: Pair<Int, Int> = Pair(0, 0),
     val weightedFrameIndices: WeightedCollection<Long> = WeightedCollection(),
     val frameIndex: Long? = weightedFrameIndices.sample(), // Used for randomizing static sprite appearances.
     val isAnimated: Boolean = frameIndex == null

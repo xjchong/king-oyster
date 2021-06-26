@@ -1,5 +1,8 @@
 package com.helloworldramen.kingoyster.architecture
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+
 class Entity (
     val name: String,
     val parts: List<Part> = listOf(),
@@ -13,6 +16,12 @@ class Entity (
 
     fun copy(): Entity {
         return Entity(name, parts.map { it.copy() }, timeFactor, time)
+    }
+
+    fun serialize(shouldPrettyPrint: Boolean = false): String {
+        return if (shouldPrettyPrint) {
+            GsonBuilder().setPrettyPrinting().create().toJson(this)
+        } else Gson().toJson(this)
     }
 
     fun respondToAction(action: Action): Boolean {

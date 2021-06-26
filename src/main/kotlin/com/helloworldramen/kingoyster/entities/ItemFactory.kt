@@ -13,8 +13,8 @@ import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffec
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.PoisonStatusEffect
 import com.helloworldramen.kingoyster.parts.MovementPart
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.ColdStatusEffect
+import com.helloworldramen.kingoyster.utilities.ColorX11
 import com.helloworldramen.kingoyster.utilities.FloodFill
-import godot.core.Color
 import kotlin.math.roundToInt
 
 object ItemFactory {
@@ -26,7 +26,7 @@ object ItemFactory {
                 AppearancePart(
                     description = "Restores HP and cures sickness. Restoration increases as HP decreases.",
                     ascii = '!',
-                    color = Color.mediumseagreen,
+                    color = ColorX11.mediumSeaGreen,
                     sprite = "medicine"
                 ),
                 ItemPart(
@@ -66,7 +66,7 @@ object ItemFactory {
                 AppearancePart(
                     description = "Casts beams of fire in all directions.",
                     ascii = '?',
-                    color = Color.red,
+                    color = ColorX11.red,
                     sprite = "scrolls",
                     frameIndex = 0
                 ),
@@ -107,7 +107,7 @@ object ItemFactory {
                 AppearancePart(
                     description = "Casts beams of ice in all directions.",
                     ascii = '?',
-                    color = Color.cyan,
+                    color = ColorX11.cyan,
                     sprite = "scrolls",
                     frameIndex = 1
                 ),
@@ -146,7 +146,7 @@ object ItemFactory {
                 AppearancePart(
                     description = "Casts beams of volt in all directions",
                     ascii = '?',
-                    color = Color.yellow,
+                    color = ColorX11.yellow,
                     sprite = "scrolls",
                     frameIndex = 2
                 ),
@@ -184,7 +184,7 @@ object ItemFactory {
                 AppearancePart(
                     description = "Casts a cloud of sickness around the user.",
                     ascii = '?',
-                    color = Color.purple,
+                    color = ColorX11.purple,
                     sprite = "scrolls",
                     frameIndex = 3
                 ),
@@ -226,7 +226,7 @@ object ItemFactory {
                 AppearancePart(
                     description = "Teleports the user to a random location.",
                     ascii = '?',
-                    color = Color.blue,
+                    color = ColorX11.blue,
                     sprite = "scrolls",
                     frameIndex = 4
                 ),
@@ -255,7 +255,7 @@ object ItemFactory {
                 AppearancePart(
                     description = "Teleports things around the user to random locations.",
                     ascii = '?',
-                    color = Color.pink,
+                    color = ColorX11.pink,
                     sprite = "scrolls",
                     frameIndex = 5
                 ),

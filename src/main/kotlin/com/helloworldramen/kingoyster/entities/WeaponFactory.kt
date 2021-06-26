@@ -6,7 +6,7 @@ import com.helloworldramen.kingoyster.parts.*
 import com.helloworldramen.kingoyster.parts.combat.DamageInfo
 import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.weapon.*
-import godot.core.Color
+import com.helloworldramen.kingoyster.utilities.ColorX11
 
 object WeaponFactory {
 
@@ -17,7 +17,7 @@ object WeaponFactory {
                 AppearancePart(
                     description = "Deals more damage in cramped spaces, and when thrown.",
                     ascii = '|',
-                    color = Color.gray,
+                    color = ColorX11.gray,
                     sprite = "dagger"
                 ),
                 WeaponPart(
@@ -39,7 +39,7 @@ object WeaponFactory {
                 AppearancePart(
                     description = "Deep attack. Deals more damage for each enemy hit.",
                     ascii = '|',
-                    color = Color.white,
+                    color = ColorX11.white,
                     sprite = "longsword"
                 ),
                 WeaponPart(
@@ -61,7 +61,7 @@ object WeaponFactory {
                 AppearancePart(
                     description = "Wide attack. Deals more damage for each enemy hit.",
                     ascii = '|',
-                    color = Color.lightblue,
+                    color = ColorX11.lightBlue,
                     sprite = "greatsword"
                 ),
                 WeaponPart(
@@ -83,7 +83,7 @@ object WeaponFactory {
                 AppearancePart(
                     description = "Lunging attack, lunge deals more damage. Lower thrown damage.",
                     ascii = '|',
-                    color = Color.yellow,
+                    color = ColorX11.yellow,
                     sprite = "weapons",
                     frameIndex = 3
                 ),
@@ -106,7 +106,7 @@ object WeaponFactory {
                 AppearancePart(
                     description = "Lunging arc attack. Deals more damage for each enemy hit. Lower thrown damage.",
                     ascii = '7',
-                    color = Color.purple,
+                    color = ColorX11.purple,
                     sprite = "weapons",
                     frameIndex = 19
                 ),
@@ -129,7 +129,7 @@ object WeaponFactory {
                 AppearancePart(
                     description = "Long attack. Deals more damage from farther away, and when thrown.",
                     ascii = '/',
-                    color = Color.brown,
+                    color = ColorX11.brown,
                     sprite = "weapons",
                     frameIndex = 10
                 ),

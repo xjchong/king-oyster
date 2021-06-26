@@ -267,7 +267,7 @@ class EntityScene : Node2D(), EventBusSubscriber {
 		this.context = context
 		this.entity = entity
 
-		val entitySpriteOffset = entity.find<AppearancePart>()?.offset ?: Vector2.ZERO
+		val entitySpriteOffset = entity.find<AppearancePart>()?.offset?.let { Vector2(it.first, it.second) } ?: Vector2.ZERO
 
 		entitySprite.bind(entity)
 		healthScene.bind(entity)

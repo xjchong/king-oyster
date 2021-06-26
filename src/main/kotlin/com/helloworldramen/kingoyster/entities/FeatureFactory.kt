@@ -10,9 +10,8 @@ import com.helloworldramen.kingoyster.parts.combat.DamageType
 import com.helloworldramen.kingoyster.parts.combat.ElementType
 import com.helloworldramen.kingoyster.parts.combat.ResistancesPart
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
+import com.helloworldramen.kingoyster.utilities.ColorX11
 import com.helloworldramen.kingoyster.utilities.WeightedCollection
-import godot.core.Color
-import godot.core.Vector2
 
 object FeatureFactory {
 
@@ -22,7 +21,7 @@ object FeatureFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = '~',
-                    color = Color.brown,
+                    color = ColorX11.brown,
                     sprite = "chests",
                     frameIndex = 0
                 ),
@@ -42,9 +41,9 @@ object FeatureFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = '+',
-                    color = Color.orange,
+                    color = ColorX11.orange,
                     sprite = if (isHorizontal) "door_horizontal" else "door_vertical",
-                    offset = Vector2(0, if (isHorizontal) 2 else 8)
+                    offset = Pair(0, if (isHorizontal) 2 else 8)
                 ),
                 CombatPart(20),
                 OpenablePart(),
@@ -68,7 +67,7 @@ object FeatureFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = '<',
-                    color = Color.white,
+                    color = ColorX11.white,
                     sprite = "stone_stairs_up"
                 ),
                 AscendablePart()
@@ -82,9 +81,9 @@ object FeatureFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = '#',
-                    color = Color.white,
+                    color = ColorX11.white,
                     sprite = sprite,
-                    offset = Vector2(0, 8),
+                    offset = Pair(0, 8),
                     weightedFrameIndices = WeightedCollection(
                         500 to 0, 50 to 1, 50 to 2,
                         50 to 3, 50 to 4, 50 to 5,
@@ -107,9 +106,9 @@ object FeatureFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = '^',
-                    color = Color.mediumseagreen,
+                    color = ColorX11.mediumSeaGreen,
                     sprite = "blue_puddle",
-                    offset = Vector2(0, -2),
+                    offset = Pair(0, -2),
                     frameIndex = 0
                 ),
                 TrapPart({ context, _, entity ->
@@ -127,9 +126,9 @@ object FeatureFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = '^',
-                    color = Color.red,
+                    color = ColorX11.red,
                     sprite = "red_puddle",
-                    offset = Vector2(0, -2),
+                    offset = Pair(0, -2),
                     frameIndex = 0
                 ),
                 TrapPart({ context, trap, entity ->

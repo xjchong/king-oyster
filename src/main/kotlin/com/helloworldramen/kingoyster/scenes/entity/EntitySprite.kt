@@ -2,6 +2,7 @@ package com.helloworldramen.kingoyster.scenes.entity
 
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.parts.AppearancePart
+import com.helloworldramen.kingoyster.utilities.ColorX11
 import godot.AnimatedSprite
 import godot.Label
 import godot.Node2D
@@ -31,9 +32,9 @@ class EntitySprite : Node2D() {
 
 		val appearancePart = entity?.find<AppearancePart>()
 		val ascii = appearancePart?.ascii ?: ' '
-		val color = appearancePart?.color ?: Color.white
+		val color = Color.html(appearancePart?.color ?: ColorX11.white)
 		val sprite = appearancePart?.sprite
-		val offset = appearancePart?.offset ?: Vector2.ZERO
+		val offset = appearancePart?.offset?.let { Vector2(it.first, it.second) } ?: Vector2.ZERO
 		val frameIndex = appearancePart?.frameIndex
 
 		if (sprite != null) {

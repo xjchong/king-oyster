@@ -11,8 +11,7 @@ import com.helloworldramen.kingoyster.parts.combat.attackpatterns.BasicAttackPat
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.PoisonStatusEffect
 import com.helloworldramen.kingoyster.parts.MovementPart
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.movement.ShoulderBashPattern
-import godot.core.Color
-import godot.core.Vector2
+import com.helloworldramen.kingoyster.utilities.ColorX11
 import kotlin.random.Random
 
 object ActorFactory {
@@ -23,7 +22,7 @@ object ActorFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = '@',
-                    color = Color.gold,
+                    color = ColorX11.gold,
                     sprite = "knight"
                 ),
                 CombatPart(
@@ -72,7 +71,7 @@ object ActorFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = '@',
-                    color = Color.gold,
+                    color = ColorX11.gold,
                     sprite = "knight"
                 ),
                 CombatPart(
@@ -114,7 +113,7 @@ object ActorFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = 'B',
-                    color = Color.brown,
+                    color = ColorX11.brown,
                     sprite = "boar",
                 ),
                 CombatPart(
@@ -153,7 +152,7 @@ object ActorFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = 'G',
-                    color = Color.darkblue,
+                    color = ColorX11.darkBlue,
                     sprite = "ghost"
                 ),
                 CombatPart(
@@ -199,7 +198,7 @@ object ActorFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = 'g',
-                    color = Color.darkred,
+                    color = ColorX11.darkRed,
                     sprite = "goblin"
                 ),
                 CombatPart(
@@ -249,9 +248,9 @@ object ActorFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = 'g',
-                    color = Color.purple,
+                    color = ColorX11.purple,
                     sprite = "hobgoblin",
-                    offset = Vector2(0, -4)
+                    offset = Pair(0, -4)
                 ),
                 CombatPart(
                     maxHealth = 80,
@@ -300,9 +299,9 @@ object ActorFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = 's',
-                    color = Color.lightblue,
+                    color = ColorX11.lightBlue,
                     sprite = "blue_slime",
-                    offset = Vector2(0, -2)
+                    offset = Pair(0, -2)
                 ),
                 CombatPart(
                     maxHealth = 15,
@@ -339,7 +338,7 @@ object ActorFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = 'r',
-                    color = Color.white,
+                    color = ColorX11.white,
                     sprite = "giant_rat"
                 ),
                 BreederPart(
@@ -381,9 +380,9 @@ object ActorFactory {
             parts = listOf(
                 AppearancePart(
                     ascii = 's',
-                    color = Color.red,
+                    color = ColorX11.red,
                     sprite = "red_slime",
-                    offset = Vector2(0, -2)
+                    offset = Pair(0, -2)
                 ),
                 CombatPart(
                     maxHealth = 15,
