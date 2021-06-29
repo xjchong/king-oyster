@@ -38,6 +38,17 @@ object Ai {
                     OwnHealthConsideration(LinearCurve(0.7, 1.0))
                 ),
             ))
+            "bomb" -> DiminishingReasoner(0.7).prioritize(aiContext, listOf(
+                ChaseEnemyStrategy(
+                    ConstantConsideration(0.9)
+                ),
+                DefaultAttackEnemyStrategy(
+                    IsEnemyInSightConsideration(1.0, 0.0)
+                ),
+                WanderStrategy(
+                    IsEnemyInSightConsideration(0.0, 0.8)
+                )
+            ))
             "ghost" -> HighestValueReasoner.prioritize(aiContext, listOf(
                 FleeFromEnemyStrategy(
                     ConstantConsideration(0.6)

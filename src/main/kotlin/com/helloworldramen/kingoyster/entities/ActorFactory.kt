@@ -11,6 +11,7 @@ import com.helloworldramen.kingoyster.parts.combat.attackpatterns.BasicAttackPat
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.PoisonStatusEffect
 import com.helloworldramen.kingoyster.parts.MovementPart
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.movement.ShoulderBashPattern
+import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
 import com.helloworldramen.kingoyster.utilities.ColorX11
 import kotlin.random.Random
 
@@ -139,6 +140,47 @@ object ActorFactory {
                 ),
                 SensoryPart(
                     visionRange = 5
+                ),
+                TelegraphPart()
+            ),
+            timeFactor = 1.0
+        )
+    }
+
+    fun bomb(): EntityFactoryFn = {
+        Entity(
+            name = "bomb",
+            parts = listOf(
+                AppearancePart(
+                    ascii = 'b',
+                    color = ColorX11.orangeRed,
+                    sprite = "bomb"
+                ),
+                CombatPart(
+                    maxHealth = 30,
+                    power = 10,
+                    defaultAttackPattern = BasicAttackPattern(
+                        powerFactor = 1.0,
+                        damageType = DamageType.Magic,
+                        elementType = ElementType.Fire,
+                        statusEffect = BurnStatusEffect(
+                            potency = 2,
+                            baseChance = 0.7,
+                            turnsRemaining = 4
+                        )
+                    )
+                ),
+                FactionPart(
+                    faction = Faction.Monster,
+                    enemies = setOf(Faction.Player),
+                    allies = setOf(Faction.Spirit)
+                ),
+                PhysicalPart(
+                    isPassable = false,
+                ),
+                MovementPart(),
+                SensoryPart(
+                    visionRange = 4
                 ),
                 TelegraphPart()
             ),
