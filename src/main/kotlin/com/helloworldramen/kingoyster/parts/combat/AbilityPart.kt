@@ -7,7 +7,7 @@ import com.helloworldramen.kingoyster.architecture.Part
 import com.helloworldramen.kingoyster.parts.combat.abilities.Ability
 
 class AbilityPart(
-    private val ability: Ability
+    val ability: Ability
 ) : Part {
 
     override fun copy(): Part {
@@ -29,3 +29,5 @@ class AbilityPart(
         return false
     }
 }
+
+fun Entity.ability(): Ability? = find<AbilityPart>()?.ability

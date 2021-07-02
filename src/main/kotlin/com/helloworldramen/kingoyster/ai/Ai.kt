@@ -43,11 +43,15 @@ object Ai {
                     ConstantConsideration(0.9)
                 ),
                 DefaultAttackEnemyStrategy(
-                    IsEnemyInSightConsideration(1.0, 0.0)
+                    IsEnemyInSightConsideration(1.0, 0.0),
+                    OwnHealthConsideration(LinearCurve(0.0, 2.0))
                 ),
                 WanderStrategy(
-                    IsEnemyInSightConsideration(0.0, 0.8)
-                )
+                    IsEnemyInSightConsideration(0.2, 0.8)
+                ),
+                UseAbilityStrategy(
+                    OwnHealthConsideration(LinearCurve(2.0, 0.0))
+                ),
             ))
             "ghost" -> HighestValueReasoner.prioritize(aiContext, listOf(
                 FleeFromEnemyStrategy(

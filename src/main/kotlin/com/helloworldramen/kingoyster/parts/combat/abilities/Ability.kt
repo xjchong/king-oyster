@@ -2,9 +2,11 @@ package com.helloworldramen.kingoyster.parts.combat.abilities
 
 import com.helloworldramen.kingoyster.architecture.Context
 import com.helloworldramen.kingoyster.architecture.Entity
+import com.helloworldramen.kingoyster.architecture.Position
 
 abstract class Ability {
 
+    abstract fun telegraphPositions(context: Context, entity: Entity, user: Entity): List<Position>
     abstract fun isUsable(context: Context, entity: Entity, user: Entity): Boolean
     protected abstract fun effect(context: Context, entity: Entity, user: Entity)
 

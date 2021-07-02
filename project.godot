@@ -44,6 +44,11 @@ _global_script_classes=[ {
 "language": "Kotlin",
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/game/GameScene.kt"
 }, {
+"base": "MarginContainer",
+"class": "com_helloworldramen_kingoyster_scenes_gameover_GameOverScene",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/gameover/GameOverScene.kt"
+}, {
 "base": "Node2D",
 "class": "com_helloworldramen_kingoyster_scenes_health_HealthScene",
 "language": "Kotlin",
@@ -85,6 +90,11 @@ _global_script_classes=[ {
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/screenshake/ScreenShake.kt"
 }, {
 "base": "Node2D",
+"class": "com_helloworldramen_kingoyster_scenes_stamina_StaminaScene",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/stamina/StaminaScene.kt"
+}, {
+"base": "Node2D",
 "class": "com_helloworldramen_kingoyster_scenes_tileoverlay_TileOverlayScene",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/com/helloworldramen/kingoyster/scenes/tileoverlay/TileOverlayScene.kt"
@@ -112,6 +122,7 @@ _global_script_class_icons={
 "com_helloworldramen_kingoyster_scenes_eventaudio_EventAudio": "",
 "com_helloworldramen_kingoyster_scenes_floor_FloorScene": "",
 "com_helloworldramen_kingoyster_scenes_game_GameScene": "",
+"com_helloworldramen_kingoyster_scenes_gameover_GameOverScene": "",
 "com_helloworldramen_kingoyster_scenes_health_HealthScene": "",
 "com_helloworldramen_kingoyster_scenes_hud_HUDScene": "",
 "com_helloworldramen_kingoyster_scenes_listmenu_ListMenuScene": "",
@@ -120,6 +131,7 @@ _global_script_class_icons={
 "com_helloworldramen_kingoyster_scenes_memory_MemoryScene": "",
 "com_helloworldramen_kingoyster_scenes_optionsmenu_OptionsMenuScene": "",
 "com_helloworldramen_kingoyster_scenes_screenshake_ScreenShake": "",
+"com_helloworldramen_kingoyster_scenes_stamina_StaminaScene": "",
 "com_helloworldramen_kingoyster_scenes_tileoverlay_TileOverlayScene": "",
 "com_helloworldramen_kingoyster_scenes_tileselection_TileSelectionScene": "",
 "com_helloworldramen_kingoyster_scenes_toasttext_ToastTextScene": "",
