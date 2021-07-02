@@ -3,13 +3,11 @@ package com.helloworldramen.kingoyster.entities
 import com.helloworldramen.kingoyster.architecture.Entity
 import com.helloworldramen.kingoyster.extensions.EntityFactoryFn
 import com.helloworldramen.kingoyster.parts.*
-import com.helloworldramen.kingoyster.parts.combat.CombatPart
-import com.helloworldramen.kingoyster.parts.combat.DamageType
-import com.helloworldramen.kingoyster.parts.combat.ElementType
-import com.helloworldramen.kingoyster.parts.combat.ResistancesPart
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.BasicAttackPattern
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.PoisonStatusEffect
 import com.helloworldramen.kingoyster.parts.MovementPart
+import com.helloworldramen.kingoyster.parts.combat.*
+import com.helloworldramen.kingoyster.parts.combat.abilities.SelfDestructAbility
 import com.helloworldramen.kingoyster.parts.combat.attackpatterns.movement.ShoulderBashPattern
 import com.helloworldramen.kingoyster.parts.combat.statuseffects.BurnStatusEffect
 import com.helloworldramen.kingoyster.utilities.ColorX11
@@ -151,6 +149,12 @@ object ActorFactory {
         Entity(
             name = "bomb",
             parts = listOf(
+                AbilityPart(
+                    ability = SelfDestructAbility(
+                        amount = 50,
+                        elementType = ElementType.Fire
+                    )
+                ),
                 AppearancePart(
                     ascii = 'b',
                     color = ColorX11.orangeRed,
