@@ -269,7 +269,10 @@ class GameScene : Node2D(), EventBusSubscriber {
 
 		val player = context.player
 
-		return player.respondToAction(MoveAttack(context, player, direction))
+		return if (!player.respondToAction(MoveAttack(context, player, direction))) {
+			playerScene?.toast("Low ST", Color.lightgray, ToastTextScene.LONG_CONFIG)
+			false
+		} else true
 	}
 
 	private fun performDirectionActions(direction: Direction?): Boolean {
